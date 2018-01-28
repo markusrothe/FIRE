@@ -13,12 +13,17 @@ namespace blocks
         : m_sceneComponents()
         , m_cam(glm::vec3(0, 100, -20), 45, 2, 10000, 1200, 600)
     {
-        SetupScene(materialManager, renderableManager, keyHandler);
         keyHandler.AddListener(&m_cam);
     }
 
-    void SceneManager::SetupScene(MaterialManager const& materialManager, RenderableManager& renderableManager, KeyHandler& keyHandler)
+    Camera const& SceneManager::GetCam() const
     {
+        return m_cam;
+    }
+
+    void SceneManager::AddSceneComponent(std::shared_ptr<SceneComponent> const& sceneComponent)
+    {
+        m_sceneComponents.push_back(sceneComponent);
     }
 
     void SceneManager::Update()
