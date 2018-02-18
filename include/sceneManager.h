@@ -15,15 +15,16 @@ namespace blocks
     class SceneManager
     {
     public:
-        SceneManager(MaterialManager const& materialManager, KeyHandler& keyHandler,
-            RenderableManager& renderableManager);
+        SceneManager(MaterialManager const& materialManager, KeyHandler& keyHandler, RenderableManager& renderableManager);
 
-        void SetupScene(MaterialManager const& materialManager, RenderableManager& renderableManager, KeyHandler& keyHandler);
+        Camera const& GetCam() const;
+
+        void AddSceneComponent(std::shared_ptr<SceneComponent> const& sceneComponent);
 
         void Update();
 
     private:
-        std::vector<std::unique_ptr<SceneComponent> > m_sceneComponents;
+        std::vector<std::shared_ptr<SceneComponent> > m_sceneComponents;
         Camera m_cam;
     };
 }
