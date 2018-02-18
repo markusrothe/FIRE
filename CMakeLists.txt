@@ -14,6 +14,7 @@ if (MSVC AND (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 19.11))
   message("Add flag to disable warnings from gtest -  _SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING")
 endif()
 
+
 option(gtest_force_shared_crt "" ON)
 option(BUILD_GTEST "" ON)
 
