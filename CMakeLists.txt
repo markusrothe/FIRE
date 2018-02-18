@@ -8,6 +8,15 @@ else()
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+if (MSVC AND (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 19.11))
+  # VS 2017 : Disable warnings from from gtest code, using deprecated code related to TR1 
+  add_definitions(-D_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING)
+  message("Add flag to disable warnings from gtest -  _SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING")
+endif()
+
+option(gtest_force_shared_crt "" ON)
+option(BUILD_GTEST "" ON)
+
 add_subdirectory(externals/gtest)
 add_subdirectory(externals/glfw-3.2.1)
 add_subdirectory(externals/glew-2.1.0/build/cmake)
