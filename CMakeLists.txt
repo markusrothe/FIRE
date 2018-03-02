@@ -37,6 +37,7 @@ set(header_files
   ./include/compileMaterial.h 
   ./include/renderableManager.h
   ./include/renderable.h
+  ./include/scene.h
   ./include/sceneComponent.h
   ./include/sceneManager.h 
   ./include/keyhandler.h
@@ -60,6 +61,7 @@ set(src_files
   ./src/compileMaterial.cpp
   ./src/renderable.cpp
   ./src/renderableManager.cpp
+  ./src/scene.cpp
   ./src/sceneManager.cpp
   ./src/keyhandler.cpp
   ./src/window.cpp

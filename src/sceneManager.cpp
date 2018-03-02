@@ -10,7 +10,7 @@ namespace blocks
 {
     SceneManager::SceneManager(MaterialManager const& materialManager, KeyHandler& keyHandler
                                , RenderableManager& renderableManager)
-        : m_sceneComponents()
+        : m_scenes()
         , m_cam(glm::vec3(0, 100, -20), 45, 2, 10000, 1200, 600)
     {
         keyHandler.AddListener(&m_cam);
@@ -21,18 +21,22 @@ namespace blocks
         return m_cam;
     }
 
-    void SceneManager::AddSceneComponent(std::shared_ptr<SceneComponent> const& sceneComponent)
+    Scene* SceneManager::CreateScene(std::string const& name)
     {
-        m_sceneComponents.push_back(sceneComponent);
+        auto scene = std::make_unique<Scene>(name);
+        auto const scenePtr = scene.get();
+        m_scenes.push_back(std::move(scene));
+
+        return scenePtr;
     }
 
     void SceneManager::Update()
     {
         m_cam.Update();
 
-        for (auto& sceneComponent : m_sceneComponents)
+        for (auto& scene : m_scenes)
         {
-            sceneComponent->Update();
+            scene->Update();
         }
     }
 }

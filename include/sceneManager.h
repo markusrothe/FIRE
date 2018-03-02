@@ -3,6 +3,7 @@
 
 #include "camera.h"
 #include "sceneComponent.h"
+#include "scene.h"
 #include <vector>
 #include <memory>
 
@@ -19,12 +20,12 @@ namespace blocks
 
         Camera const& GetCam() const;
 
-        void AddSceneComponent(std::shared_ptr<SceneComponent> const& sceneComponent);
+        Scene* CreateScene(std::string const& name);
 
         void Update();
 
     private:
-        std::vector<std::shared_ptr<SceneComponent> > m_sceneComponents;
+        std::vector<std::unique_ptr<Scene> > m_scenes;
         Camera m_cam;
     };
 }
