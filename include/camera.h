@@ -18,7 +18,7 @@ namespace blocks
         Transform& GetTransform();
 
         void Update();
-        
+
     private:
         // Inherited via KeyHandlerListener
         virtual void Notify(int key, int action) override;

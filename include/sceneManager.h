@@ -9,24 +9,15 @@
 
 namespace blocks
 {
-    class MaterialManager;
-    class KeyHandler;
-    class RenderableManager;
-
     class SceneManager
     {
     public:
-        SceneManager(MaterialManager const& materialManager, KeyHandler& keyHandler, RenderableManager& renderableManager);
-
-        Camera const& GetCam() const;
-
         Scene* CreateScene(std::string const& name);
 
         void Update();
 
     private:
         std::vector<std::unique_ptr<Scene> > m_scenes;
-        Camera m_cam;
     };
 }
 
