@@ -34,3 +34,15 @@ TEST_F(VertexDeclarationTest, AddedSectionsShouldBeRetrievable)
 
     EXPECT_TRUE(std::end(vDeclSections) != foundSectionIt);
 }
+
+TEST_F(VertexDeclarationTest, AddedSectionsShouldNotBeModified)
+{
+    m_vDecl.AddSection("TEST", 2, 0, 3);
+    auto vDecl = m_vDecl.GetSection("TEST");
+
+    ASSERT_TRUE(vDecl != std::end(m_vDecl.GetSections()));
+    EXPECT_EQ(2, vDecl->m_numElements);
+    EXPECT_EQ(0, vDecl->m_stride);
+    EXPECT_EQ(3, vDecl->m_offset);    
+}
+

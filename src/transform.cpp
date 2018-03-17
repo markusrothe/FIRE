@@ -25,7 +25,7 @@ namespace blocks
         auto rotation = glm::mat4_cast(m_orientation);
         auto translation = glm::translate(glm::mat4x4(1.0f), m_position);
         auto scale = glm::scale(glm::mat4x4(1.0f), m_scale);
-        return  scale * rotation * translation;
+        return scale * rotation * translation;
     }
 
     glm::vec3 Transform::GetPosition() const

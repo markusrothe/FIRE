@@ -4,7 +4,9 @@ include_directories(
 )
 
 set(test_sources 
-    ./vertexDeclarationTest.cpp
+  ./vertexDeclarationTest.cpp
+  ./transformTest.cpp
+  ./tokenizeTest.cpp
 )
 
 add_executable(engine_tests ${test_sources})
