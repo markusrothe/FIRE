@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.0)
 
 project(engine)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 if (MSVC)
   add_compile_options(/W4)
 else()
