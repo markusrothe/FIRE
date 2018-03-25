@@ -1,5 +1,6 @@
 #include "scene.h"
 
+
 namespace blocks
 {
     Scene::Scene(std::string const& name)
@@ -23,3 +24,4 @@ namespace blocks
     }
 
 } // namespace blocks
+ 
