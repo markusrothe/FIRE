@@ -11,9 +11,9 @@ namespace blocks
     Texture::Texture()
         : m_textureBinding(0)
     {
-        
+
     }
-    
+
     Texture::Texture(std::string const imageFilePath, bool cubemap)
         : m_textureBinding(0)
         , m_texOffset(texOffset++)

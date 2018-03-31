@@ -24,6 +24,7 @@ add_subdirectory(externals/googletest)
 add_subdirectory(externals/glfw-3.2.1)
 add_subdirectory(externals/glew-2.1.0/build/cmake)
 add_subdirectory(externals/glm-0.9.9-a2)
+add_subdirectory(externals/freetype-2.9)
 
 set(header_files
   ./include/assets.h
@@ -86,9 +87,10 @@ target_include_directories (engine PUBLIC
   ${OPENGL_INCLUDE_DIR} 
   externals/glew-2.1.0/include
   externals/stb_image/
+  externals/freetype-2/include
 )
 
-target_link_libraries(engine glfw ${OPENGL_gl_LIBRARY} glew glm)
+target_link_libraries(engine glfw ${OPENGL_gl_LIBRARY} glew glm freetype)
 
 target_compile_features(engine PRIVATE cxx_lambda_init_captures)
 
