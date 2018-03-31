@@ -20,7 +20,7 @@ endif()
 option(gtest_force_shared_crt "" ON)
 option(BUILD_GTEST "" ON)
 
-add_subdirectory(externals/gtest)
+add_subdirectory(externals/googletest)
 add_subdirectory(externals/glfw-3.2.1)
 add_subdirectory(externals/glew-2.1.0/build/cmake)
 add_subdirectory(externals/glm-0.9.9-a2)
