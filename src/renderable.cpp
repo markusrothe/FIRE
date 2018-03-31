@@ -60,10 +60,6 @@ namespace blocks
         BindShaderAttributes(vertexDecl, m_material->GetShaderID());
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         m_ibo = GenerateIndexBuffer(indexData);
-
-        std::cout << "m_vao = " << m_vao << std::endl;
-        std::cout << "m_vbo = " << m_vbo << std::endl;
-        std::cout << "m_ibo = " << m_ibo << std::endl;        
     }
 
     std::string Renderable::GetName() const

@@ -55,10 +55,10 @@ namespace blocks
                 m_yawAngle = speed;
                 break;
             case GLFW_KEY_Q:
-                m_pitchAngle = speed;
+                m_move += speed * m_transform.GetUpVector();
                 break;
             case GLFW_KEY_E:
-                m_pitchAngle = -speed;
+                m_move -= speed * m_transform.GetUpVector();
                 break;
             default:
                 break;
