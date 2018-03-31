@@ -37,27 +37,28 @@ namespace blocks
 
     void Camera::Notify(int key, int action)
     {
+        auto const speed = 100.0f;
         if ( action == GLFW_PRESS )
         {
             switch (key)
             {
             case GLFW_KEY_W:
-                m_move += m_transform.GetForwardVector();
+                m_move += speed * m_transform.GetForwardVector();
                 break;
             case GLFW_KEY_S:
-                m_move -= m_transform.GetForwardVector();
+                m_move -= speed * m_transform.GetForwardVector();
                 break;
             case GLFW_KEY_A:
-                m_yawAngle = -1.0f;
+                m_yawAngle = -speed;
                 break;
             case GLFW_KEY_D:
-                m_yawAngle = 1.0f;
+                m_yawAngle = speed;
                 break;
             case GLFW_KEY_Q:
-                m_pitchAngle = 1.0f;
+                m_pitchAngle = speed;
                 break;
             case GLFW_KEY_E:
-                m_pitchAngle = -1.0f;
+                m_pitchAngle = -speed;
                 break;
             default:
                 break;
@@ -71,10 +72,10 @@ namespace blocks
         }
     }
 
-    void Camera::Update()
+    void Camera::Update(double deltaTime)
     {
-        m_transform.Translate(m_move);
-        m_transform.Yaw(m_yawAngle);
-        m_transform.Pitch(m_pitchAngle);
+        m_transform.Translate(static_cast<float>(deltaTime) * m_move);
+        m_transform.Yaw(deltaTime * m_yawAngle);
+        m_transform.Pitch(deltaTime * m_pitchAngle);
     }
 }

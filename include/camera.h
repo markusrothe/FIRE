@@ -17,7 +17,7 @@ namespace blocks
 
         Transform& GetTransform();
 
-        void Update();
+        void Update(double deltaTime);
 
     private:
         // Inherited via KeyHandlerListener
