@@ -14,18 +14,21 @@ namespace blocks
     {
     public:
         explicit SceneManager(std::string const& materialConfigPath);
-        
-        Scene* CreateScene(std::string const& name);
+
+        Scene& CreateScene(std::string const& name);
+
+        RenderableManager& GetRenderableManager();
+        MaterialManager& GetMaterialManager();
+        FontManager& GetFontManager();
 
         void Update();
-
         void Render();
-        
+
     private:
         MaterialManager m_materialManager;
         RenderableManager m_renderableManager;
         FontManager m_fontManager;
-        
+
         std::vector<std::unique_ptr<Scene> > m_scenes;
     };
 }

@@ -49,6 +49,7 @@ set(header_files
   ./include/texture.h
   ./include/vertexDeclaration.h
   ./include/transform.h
+  ./include/fontManager.h
   )
 
 set(src_files
@@ -71,6 +72,7 @@ set(src_files
   ./src/texture.cpp
   ./src/vertexDeclaration.cpp
   ./src/transform.cpp
+  ./src/fontManager.cpp
 )
 
 include_directories(

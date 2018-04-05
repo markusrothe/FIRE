@@ -16,15 +16,31 @@ namespace blocks
     {
 
     }
-    
-    Scene* SceneManager::CreateScene(std::string const& name)
+
+    RenderableManager& SceneManager::GetRenderableManager()
+    {
+        return m_renderableManager;
+    }
+
+    MaterialManager& SceneManager::GetMaterialManager()
+    {
+        return m_materialManager;
+    }
+
+    FontManager& SceneManager::GetFontManager()
+    {
+        return m_fontManager;
+    }
+
+    Scene& SceneManager::CreateScene(std::string const& name)
     {
         auto scene = std::make_unique<Scene>(name);
-        
-        auto const scenePtr = scene.get();
         m_scenes.push_back(std::move(scene));
 
-        return scenePtr;
+        auto const it = std::find_if(std::begin(m_scenes), std::end(m_scenes)
+            , [&](std::unique_ptr<Scene> const& scene) { return name.compare(scene->GetName()) == 0; });
+
+        return *(*it);
     }
 
     void SceneManager::Update()

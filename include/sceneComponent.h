@@ -8,7 +8,6 @@ namespace blocks
     public:
         virtual ~SceneComponent() {}
 
-        virtual void RegisterSceneManager(SceneManager* const){};
         virtual void Update() = 0;
     };
 }
