@@ -35,15 +35,17 @@ namespace blocks
             {
                 auto attribLocation = glGetAttribLocation(shaderID, vertexDeclSection.m_attributeName.c_str());
                 glEnableVertexAttribArray(attribLocation);
-                glVertexAttribPointer(attribLocation, vertexDeclSection.m_numElements, GL_FLOAT, GL_FALSE, vertexDeclSection.m_stride, (const GLvoid*)vertexDeclSection.m_offset);
+                glVertexAttribPointer(attribLocation, vertexDeclSection.m_numElements, GL_FLOAT
+                                      , GL_FALSE, vertexDeclSection.m_stride, (const GLvoid*) vertexDeclSection.m_offset);
             }
         }
 
     } // namespace
 
     Renderable::Renderable(std::string const name, VertexDeclaration const& vertexDecl
-        , void* vertexData, size_t dataSize, std::vector<unsigned int> const& indexData, Material const* material, Texture* texture
-        , std::function<void(void)> const& uniformFunction)
+                           , void* vertexData, size_t dataSize, std::vector<unsigned int> const& indexData
+                           , Material const* material, Texture* texture
+                           , std::function<void(void)> const& uniformFunction)
         : m_name(name)
         , m_material(material)
         , m_texture(texture)

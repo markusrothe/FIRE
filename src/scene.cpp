@@ -12,7 +12,11 @@ namespace blocks
 
     void Scene::AddSceneComponent(std::unique_ptr<SceneComponent>& sceneComponent)
     {
-        m_sceneComponents.push_back(std::move(sceneComponent));
+        if(sceneComponent)
+        {            
+            m_sceneComponents.push_back(std::move(sceneComponent));
+        }
+
     }
 
     void Scene::Update()
