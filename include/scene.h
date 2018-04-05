@@ -15,7 +15,8 @@ namespace blocks
     public:
         explicit Scene(std::string const& name);
 
-        void AddSceneComponent(std::unique_ptr<SceneComponent>& sceneComponent);
+        std::string GetName() const;
+        void AddSceneComponent(std::unique_ptr<SceneComponent>&& sceneComponent);
 
         void Update();
 

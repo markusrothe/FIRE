@@ -85,20 +85,42 @@ namespace blocks
         glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
     }
 
-    CharTexture::CharTexture(char const c)
+    CharTexture::CharTexture(int bitmapWidth, int bitmapRows, int bitmapLeft, int bitmapTop, int offsetToNextGlyph, void* pixels)
         : Texture(0)
+        , m_size(bitmapWidth, bitmapRows)
+        , m_bearing(bitmapLeft, bitmapTop)
+        , m_offsetToNextGlyph(offsetToNextGlyph)
     {
-        
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+        glGenTextures(1, &m_binding);
+        glBindTexture(GL_TEXTURE_2D, m_binding);
+        glTexImage2D(
+            GL_TEXTURE_2D,
+            0,
+            GL_RED,
+            bitmapWidth,
+            bitmapRows,
+            0,
+            GL_RED,
+            GL_UNSIGNED_BYTE,
+            pixels
+        );
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     }
 
     void CharTexture::Bind()
     {
-
+        glBindTexture(GL_TEXTURE_2D, m_binding);
     }
 
     void CharTexture::Unbind()
     {
-
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     

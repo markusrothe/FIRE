@@ -42,13 +42,12 @@ namespace blocks
     class CharTexture : public Texture
     {
     public:
-        explicit CharTexture(char const c);
-        
+        CharTexture(int bitmapWidth, int bitmapRows, int bitmapLeft, int bitmapTop, int offsetToNextGlyph, void* pixels);
+
         virtual void Bind() override;
         virtual void Unbind() override;
 
     private:
-        char m_char;
         glm::ivec2 m_size;
         glm::ivec2 m_bearing;
         unsigned int m_offsetToNextGlyph;
