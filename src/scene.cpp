@@ -10,9 +10,18 @@ namespace blocks
 
     }
 
-    void Scene::AddSceneComponent(std::unique_ptr<SceneComponent>& sceneComponent)
+    std::string Scene::GetName() const
     {
-        m_sceneComponents.push_back(std::move(sceneComponent));
+        return m_name;
+    }
+
+    void Scene::AddSceneComponent(std::unique_ptr<SceneComponent>&& sceneComponent)
+    {
+        if(sceneComponent)
+        {            
+            m_sceneComponents.push_back(std::move(sceneComponent));
+        }
+
     }
 
     void Scene::Update()

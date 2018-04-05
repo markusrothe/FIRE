@@ -4,6 +4,7 @@
 #include "mesh.h"
 #include "material.h"
 #include "texture.h"
+#include <memory>
 
 namespace blocks
 {   
@@ -11,7 +12,7 @@ namespace blocks
     {
         Mesh m_mesh;
         Material const* m_material;
-        Texture m_texture;
+        std::unique_ptr<Texture> m_texture;
     };   
 }
 

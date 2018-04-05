@@ -16,7 +16,6 @@ namespace blocks
         std::string GetName() const;
         Assets& GetAssets();
         Transform& GetTransform();
-        glm::mat4x4 const& GetModelMatrix() const;        
 
     private:
         std::string const m_name;

@@ -49,6 +49,7 @@ set(header_files
   ./include/texture.h
   ./include/vertexDeclaration.h
   ./include/transform.h
+  ./include/fontManager.h
   )
 
 set(src_files
@@ -71,6 +72,7 @@ set(src_files
   ./src/texture.cpp
   ./src/vertexDeclaration.cpp
   ./src/transform.cpp
+  ./src/fontManager.cpp
 )
 
 include_directories(
@@ -87,7 +89,7 @@ target_include_directories (engine PUBLIC
   ${OPENGL_INCLUDE_DIR} 
   externals/glew-2.1.0/include
   externals/stb_image/
-  externals/freetype-2/include
+  externals/freetype-2.9/include
 )
 
 target_link_libraries(engine glfw ${OPENGL_gl_LIBRARY} glew glm freetype)

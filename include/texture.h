@@ -3,24 +3,54 @@
 
 #include <string>
 #include <GL/glew.h>
+#include <glm/glm.hpp>
 
 namespace blocks
 {
     class Texture
     {
-    public:
-        Texture();
-        Texture(std::string const imageFilePath, bool cubemap);
+    public:        
+        virtual void Bind() = 0;
+        virtual void Unbind() = 0;
 
-        void Bind();
-        void Unbind();
-
-        GLuint GetBindingID() const;
+        GLuint GetBinding() const { return m_binding; }
         
+    protected:
+        explicit Texture(GLuint binding);
+        
+        GLuint m_binding;
+    };
+
+    class ImageTexture : public Texture
+    {
+    public:
+        explicit ImageTexture(std::string const& imageFilePath);
+        
+        virtual void Bind() override;
+        virtual void Unbind() override;
+    };
+
+    class CubemapTexture : public Texture
+    {
+    public:
+        explicit CubemapTexture(std::string const& imageFilePath);
+        
+        virtual void Bind() override;
+        virtual void Unbind() override;
+    };
+
+    class CharTexture : public Texture
+    {
+    public:
+        CharTexture(int bitmapWidth, int bitmapRows, int bitmapLeft, int bitmapTop, int offsetToNextGlyph, void* pixels);
+
+        virtual void Bind() override;
+        virtual void Unbind() override;
+
     private:
-        GLuint m_textureBinding;
-        unsigned int m_texOffset;
-        bool m_cubemap;
+        glm::ivec2 m_size;
+        glm::ivec2 m_bearing;
+        unsigned int m_offsetToNextGlyph;
     };
 }
 
