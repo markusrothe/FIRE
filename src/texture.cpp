@@ -92,7 +92,7 @@ namespace blocks
         , m_offsetToNextGlyph(offsetToNextGlyph)
     {
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
+        glEnable(GL_TEXTURE_2D);
         glGenTextures(1, &m_binding);
         glBindTexture(GL_TEXTURE_2D, m_binding);
         glTexImage2D(
@@ -123,5 +123,13 @@ namespace blocks
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
-    
+    glm::ivec2 const& CharTexture::GetSize() const
+    {
+        return m_size;
+    }
+
+    glm::ivec2 const& CharTexture::GetBearing() const
+    {
+        return m_bearing;
+    }
 } // namespace blocks

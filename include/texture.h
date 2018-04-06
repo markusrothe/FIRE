@@ -44,6 +44,9 @@ namespace blocks
     public:
         CharTexture(int bitmapWidth, int bitmapRows, int bitmapLeft, int bitmapTop, int offsetToNextGlyph, void* pixels);
 
+        glm::ivec2 const& GetSize() const;
+        glm::ivec2 const& GetBearing() const;
+
         virtual void Bind() override;
         virtual void Unbind() override;
 

@@ -16,7 +16,7 @@ namespace blocks
         }
 
         FT_Face face;
-        if (FT_New_Face(ft, "fonts/arial.ttf", 0, &face))
+        if (FT_New_Face(ft, "fonts/calibri.ttf", 0, &face))
         {
             std::cout << "ERROR::FREETYPE: Failed to load font.\n";
         }
@@ -24,7 +24,7 @@ namespace blocks
         // TODO: magic numbers!
         FT_Set_Pixel_Sizes(face, 0, 48);
 
-        for (unsigned long i = 0; i < 128; ++i)
+        for (auto i = 0; i < 128; ++i)
         {
             if (FT_Load_Char(face, i, FT_LOAD_RENDER))
             {
@@ -43,5 +43,12 @@ namespace blocks
 
         FT_Done_Face(face);
         FT_Done_FreeType(ft);
+    }
+
+    CharTexture const* FontManager::GetCharTexture(char c) const
+    {
+        auto const it = m_charTextures.find(c);
+
+        return (it != m_charTextures.end()) ? &(it->second) : nullptr;
     }
 }
