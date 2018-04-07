@@ -16,7 +16,7 @@ namespace blocks
         }
 
         FT_Face face;
-        if (FT_New_Face(ft, "fonts/calibri.ttf", 0, &face))
+        if (FT_New_Face(ft, "fonts/Hack-Regular.ttf", 0, &face))
         {
             std::cout << "ERROR::FREETYPE: Failed to load font.\n";
         }
