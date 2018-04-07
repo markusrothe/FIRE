@@ -33,6 +33,8 @@ set(header_files
   ./include/material.h
   ./include/tokenize.h
   ./include/mesh.h
+  ./include/meshFactory.h
+  ./include/meshUtilities.h
   ./include/camera.h
   ./include/entity.h
   ./include/materialMap.h
@@ -58,6 +60,8 @@ set(src_files
   ./src/material.cpp
   ./src/tokenize.cpp
   ./src/mesh.cpp
+  ./src/meshFactory.cpp
+  ./src/meshUtilities.cpp
   ./src/camera.cpp
   ./src/entity.cpp
   ./src/materialMap.cpp

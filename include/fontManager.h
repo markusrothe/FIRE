@@ -11,7 +11,7 @@ namespace blocks
     public:
         FontManager();
 
-        CharTexture const* GetCharTexture(char c) const;
+        CharTexture* GetCharTexture(char c);
 
     private:
 

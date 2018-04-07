@@ -89,7 +89,7 @@ namespace blocks
         : Texture(0)
         , m_size(bitmapWidth, bitmapRows)
         , m_bearing(bitmapLeft, bitmapTop)
-        , m_offsetToNextGlyph(offsetToNextGlyph)
+        , m_offsetToNextGlyph(offsetToNextGlyph >> 6)
     {
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         glEnable(GL_TEXTURE_2D);
@@ -131,5 +131,10 @@ namespace blocks
     glm::ivec2 const& CharTexture::GetBearing() const
     {
         return m_bearing;
+    }
+
+    unsigned int CharTexture::GetOffsetToNextGlyph() const
+    {
+        return m_offsetToNextGlyph;
     }
 } // namespace blocks

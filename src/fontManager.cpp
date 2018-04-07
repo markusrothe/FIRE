@@ -45,9 +45,9 @@ namespace blocks
         FT_Done_FreeType(ft);
     }
 
-    CharTexture const* FontManager::GetCharTexture(char c) const
+    CharTexture* FontManager::GetCharTexture(char c)
     {
-        auto const it = m_charTextures.find(c);
+        auto it = m_charTextures.find(c);
 
         return (it != m_charTextures.end()) ? &(it->second) : nullptr;
     }

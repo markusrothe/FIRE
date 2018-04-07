@@ -46,6 +46,7 @@ namespace blocks
 
         glm::ivec2 const& GetSize() const;
         glm::ivec2 const& GetBearing() const;
+        unsigned int GetOffsetToNextGlyph() const;
 
         virtual void Bind() override;
         virtual void Unbind() override;
