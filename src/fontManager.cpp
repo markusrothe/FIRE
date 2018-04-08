@@ -16,15 +16,15 @@ namespace blocks
         }
 
         FT_Face face;
-        if (FT_New_Face(ft, "fonts/Hack-Regular.ttf", 0, &face))
+        if (FT_New_Face(ft, "fonts/FreeSerif.ttf", 0, &face))
         {
             std::cout << "ERROR::FREETYPE: Failed to load font.\n";
         }
 
         // TODO: magic numbers!
-        FT_Set_Pixel_Sizes(face, 0, 48);
+        FT_Set_Pixel_Sizes(face, 0, 30);
 
-        for (auto i = 0; i < 128; ++i)
+        for (unsigned int i = 0; i < 128; ++i)
         {
             if (FT_Load_Char(face, i, FT_LOAD_RENDER))
             {

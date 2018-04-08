@@ -40,6 +40,7 @@ namespace blocks
     
     void ImageTexture::Bind()
     {
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, m_binding);
     }
 
@@ -77,6 +78,7 @@ namespace blocks
 
     void CubemapTexture::Bind()
     {
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_CUBE_MAP, m_binding);
     }
 
@@ -91,10 +93,13 @@ namespace blocks
         , m_bearing(bitmapLeft, bitmapTop)
         , m_offsetToNextGlyph(offsetToNextGlyph >> 6)
     {
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);        
         glEnable(GL_TEXTURE_2D);
+        
         glGenTextures(1, &m_binding);
         glBindTexture(GL_TEXTURE_2D, m_binding);
+        
         glTexImage2D(
             GL_TEXTURE_2D,
             0,
@@ -107,14 +112,15 @@ namespace blocks
             pixels
         );
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     }
 
     void CharTexture::Bind()
     {
+        glActiveTexture(GL_TEXTURE0);        
         glBindTexture(GL_TEXTURE_2D, m_binding);
     }
 

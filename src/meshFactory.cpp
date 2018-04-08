@@ -36,8 +36,12 @@ namespace blocks
             std::vector<unsigned int> indices;
             std::vector<glm::vec2> texCoords;
 
-            auto const x = tex->GetBearing().x + screenX;
-            auto const y = screenY - (tex->GetSize().y - tex->GetBearing().y);
+            // Cast to int to avoid unsigned overflows and the
+            // billboards to cover half the screen due to that overflow.
+            // This is especially true if screenY == 0. The baseline of the char glyph
+            // would move below the screen and come out back on top of the screen
+            auto const x = static_cast<int>(tex->GetBearing().x + screenX);
+            auto const y = static_cast<int>(screenY - (tex->GetSize().y - tex->GetBearing().y));
 
             auto const w = tex->GetSize().x;
             auto const h = tex->GetSize().y;
