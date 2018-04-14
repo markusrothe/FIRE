@@ -44,7 +44,7 @@ namespace blocks
         FT_Done_Face(face);
         FT_Done_FreeType(ft);
     }
-
+  
     CharTexture* FontManager::GetCharTexture(char c)
     {
         auto it = m_charTextures.find(c);

@@ -10,11 +10,9 @@ namespace blocks
     {
     public:
         FontManager();
-
         CharTexture* GetCharTexture(char c);
 
     private:
-
         std::unordered_map<char, CharTexture> m_charTextures;
     };
 }

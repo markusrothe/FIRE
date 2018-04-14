@@ -143,4 +143,5 @@ namespace blocks
     {
         return m_offsetToNextGlyph;
     }
+
 } // namespace blocks
