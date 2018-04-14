@@ -3,8 +3,8 @@
 
 #include "assets.h"
 #include "transform.h"
+#include "glmForward.h"
 #include <string>
-#include <glm/glm.hpp>
 
 namespace blocks
 {

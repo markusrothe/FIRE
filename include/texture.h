@@ -3,7 +3,8 @@
 
 #include <string>
 #include <GL/glew.h>
-#include <glm/glm.hpp>
+#include "glmForward.h"
+
 
 namespace blocks
 {
@@ -39,10 +40,23 @@ namespace blocks
         virtual void Unbind() override;
     };
 
+    class CubemapTexture : public Texture
+    {
+    public:
+        explicit CubemapTexture(std::string const& imageFilePath);
+        
+        virtual void Bind() override;
+        virtual void Unbind() override;
+    };
+
     class CharTexture : public Texture
     {
     public:
         CharTexture(int bitmapWidth, int bitmapRows, int bitmapLeft, int bitmapTop, int offsetToNextGlyph, void* pixels);
+
+        glm::ivec2 const& GetSize() const;
+        glm::ivec2 const& GetBearing() const;
+        unsigned int GetOffsetToNextGlyph() const;
 
         virtual void Bind() override;
         virtual void Unbind() override;

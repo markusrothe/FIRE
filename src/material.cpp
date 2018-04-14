@@ -1,6 +1,5 @@
 #include "material.h"
-
-#include <glm/gtc/type_ptr.hpp>
+#include "glmForward.h"
 
 namespace blocks
 {

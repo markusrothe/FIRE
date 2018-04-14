@@ -7,6 +7,24 @@ set(test_sources
   ./vertexDeclarationTest.cpp
   ./transformTest.cpp
   ./tokenizeTest.cpp
+  ./entityTest.cpp
+  ./fontManagerTest.cpp
+  ./keyHandlerListenerTest.cpp
+  ./keyHandlerTest.cpp
+  ./materialConfigTest.cpp
+  ./materialManagerTest.cpp
+  ./materialMapTest.cpp
+  ./meshTest.cpp
+  ./meshUtilitiesTest.cpp
+  ./renderableManagerTest.cpp
+  ./renderableTest.cpp
+  ./sceneManagerTest.cpp
+  ./sceneTest.cpp
+  ./shaderTest.cpp
+  ./tokenizeTest.cpp
+  ./transformTest.cpp
+  ./vertexDeclarationTest.cpp
+  ./windowTest.cpp
 )
 
 add_executable(engine_tests ${test_sources})
