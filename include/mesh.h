@@ -1,7 +1,7 @@
 #ifndef blocks_mesh_h
 #define blocks_mesh_h
 
-#include <glm/glm.hpp>
+#include "glmForward.h"
 #include <vector>
 
 namespace blocks

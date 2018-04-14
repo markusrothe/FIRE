@@ -1,8 +1,7 @@
 #ifndef blocks_transform_h
 #define blocks_transform_h
 
-#include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
+#include "glmForward.h"
 
 namespace blocks
 {

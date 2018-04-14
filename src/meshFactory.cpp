@@ -1,7 +1,8 @@
 #include "meshFactory.h"
 #include "texture.h"
 #include <vector>
-#include <glm/glm.hpp>
+
+#include "glmForward.h"
 #include <utility>
 
 namespace blocks

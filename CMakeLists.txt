@@ -52,6 +52,7 @@ set(header_files
   ./include/vertexDeclaration.h
   ./include/transform.h
   ./include/fontManager.h
+  ./include/glmForward.h
   )
 
 set(src_files
