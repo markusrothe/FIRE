@@ -40,15 +40,6 @@ namespace blocks
         virtual void Unbind() override;
     };
 
-    class CubemapTexture : public Texture
-    {
-    public:
-        explicit CubemapTexture(std::string const& imageFilePath);
-        
-        virtual void Bind() override;
-        virtual void Unbind() override;
-    };
-
     class CharTexture : public Texture
     {
     public:
