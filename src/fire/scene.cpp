@@ -2,8 +2,7 @@
 
 namespace Fire
 {
-
-    Scene::Scene(std::string_view const& sceneName)
+    Scene::Scene(std::string const& sceneName)
         : m_name(sceneName)
     {
     }

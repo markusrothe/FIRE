@@ -11,7 +11,7 @@ int main(int, char**)
     
     Fire::SceneManager sceneManager(root);
     Fire::Scene& mainScene = sceneManager.CreateScene("mainScene");
-    Fire::Renderer renderer(root, sceneManager):
+    Fire::Renderer renderer(root, sceneManager);
         
     while (true)
     {

@@ -3,6 +3,9 @@
 
 namespace Fire
 {
+    class Root;
+    class SceneManager;
+    
     class Renderer
     {
     public:

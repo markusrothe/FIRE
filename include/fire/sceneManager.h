@@ -1,7 +1,7 @@
 #ifndef fire_scenemanager_h
 #define fire_scenemanager_h
 
-#include <string_view>
+#include <string>
 #include <vector>
 
 namespace Fire
@@ -14,7 +14,9 @@ namespace Fire
     public:
         explicit SceneManager(Root const& root);
 
-        Scene& CreateScene(std::string_view const& sceneName);
+        Scene& CreateScene(std::string const& sceneName);
+
+        void Update();
     private:
         Root const& m_root;
         std::vector<Scene> m_scenes;

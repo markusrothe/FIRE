@@ -1,17 +1,17 @@
 #ifndef fire_root_h
 #define fire_root_h
 
-#include <string_view>
+#include <string>
 
 namespace Fire
 {
     class Root
     {
     public:
-        Root(std::string_view const& windowName, unsigned int windowWidth, unsigned int windowHeight);
+        Root(std::string const& windowName, unsigned int windowWidth, unsigned int windowHeight);
               
     private:
-        std::string_view const m_windowName;
+        std::string const m_windowName;
         unsigned int m_windowWidth;
         unsigned int m_windowHeight;
     };

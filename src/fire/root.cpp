@@ -2,7 +2,7 @@
 
 namespace Fire
 {
-    Root::Root(std::string_view const& windowName
+    Root::Root(std::string const& windowName
                , unsigned int windowWidth
                , unsigned int windowHeight)
         : m_windowName(windowName)
