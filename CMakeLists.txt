@@ -103,3 +103,5 @@ target_compile_features(engine PRIVATE cxx_lambda_init_captures)
 
 enable_testing()
 add_subdirectory(test)
+
+add_subdirectory(examples)
