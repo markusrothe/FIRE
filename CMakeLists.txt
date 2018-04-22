@@ -4,12 +4,6 @@ project(engine)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-if (MSVC)
-  add_compile_options(/W4)
-else()
-  add_compile_options(-Wall -Wextra -Wpedantic)
-endif()
-
 if (MSVC AND (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 19.11))
   # VS 2017 : Disable warnings from from gtest code, using deprecated code related to TR1 
   add_definitions(-D_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING)
@@ -48,9 +42,15 @@ add_library(engine
   ${src_files} ${header_files}
 )
 
+if (MSVC)
+  target_compile_options(engine PUBLIC /W4)
+else()
+  target_compile_options(engine PUBLIC -Wall -Wextra -Wpedantic)
+endif()
+
 find_package(OpenGL REQUIRED)
 
-target_include_directories (engine PUBLIC
+target_include_directories (engine SYSTEM PUBLIC
   ${OPENGL_INCLUDE_DIR} 
   externals/glew-2.1.0/include
   externals/stb_image/
