@@ -7,5 +7,9 @@ namespace Fire
     {
         
     }
-    
+
+    std::string Scene::GetName() const
+    {
+        return m_name;
+    }    
 } // namespace Fire

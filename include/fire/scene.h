@@ -10,6 +10,7 @@ namespace Fire
     public:
         explicit Scene(std::string const& sceneName);
 
+        std::string GetName() const;
     private:
         std::string const m_name;
     };
