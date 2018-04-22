@@ -1,5 +1,7 @@
 # FIRE - FIRE is (yet another) Rendering Engine
 
+[![Build Status](https://travis-ci.org/markusrothe/FIRE.svg?branch=master)](https://travis-ci.org/markusrothe/FIRE)
+
 ## Introduction ##
 FIRE is (yet another) rendering engine to create 2D/3D games.
 It is still a work in progress and by no means ready for meaningful usage, yet.
