@@ -6,12 +6,12 @@ namespace Fire
         : m_root(root)
         , m_sceneManager(sceneManager)
     {
-        
+
     }
-    
+
     void Renderer::Render()
     {
-        
+
     }
-    
+
 } // namespace Fire

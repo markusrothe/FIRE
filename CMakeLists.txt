@@ -62,6 +62,6 @@ target_link_libraries(engine glfw ${OPENGL_gl_LIBRARY} glew glm freetype)
 target_compile_features(engine PRIVATE cxx_lambda_init_captures)
 
 enable_testing()
-#add_subdirectory(test)
+add_subdirectory(test)
 
 add_subdirectory(examples)

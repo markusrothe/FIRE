@@ -8,7 +8,7 @@ namespace Fire
 {
     class Root;
     class Scene;
-    
+
     class SceneManager
     {
     public:
@@ -21,7 +21,7 @@ namespace Fire
         Root const& m_root;
         std::vector<Scene> m_scenes;
     };
-    
+
 } // namespace Fire
 
 #endif
