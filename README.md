@@ -8,10 +8,11 @@ It is still a work in progress and by no means ready for meaningful usage, yet.
 CMake Version 3.0 or higher
 
 ## How to build ##
-   After cloning inside the cloned directoy
+   After cloning inside the cloned directoy do:
    
+```   
    mkdir build
    cd build
    cmake ../build
    make
-
+```
