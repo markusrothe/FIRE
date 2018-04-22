@@ -8,7 +8,9 @@ before_install:
     - sudo apt-get install xorg-dev libglu1-mesa-dev
 
 script:
-    - cmake .
+    - mkdir build
+    - cd build
+    - cmake ..
     - cmake --build .
     
     
