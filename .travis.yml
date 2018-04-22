@@ -10,7 +10,7 @@ before_install:
 script:
     - mkdir build
     - cd build
-    - CXX=/usr/bin/g++-5 CC=/usr/bin/gcc-5 cmake ..
+    - CXX=/usr/bin/g++-7 CC=/usr/bin/gcc-7 cmake ..
     - cmake --build .
     
     
