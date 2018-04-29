@@ -26,6 +26,7 @@ set(header_files
   ./include/fire/windowFactory.h
   ./include/fire/scene.h
   ./include/fire/sceneManager.h
+  ./include/fire/sceneComponent.h
   ./include/fire/renderContext.h
   ./include/fire/glRenderContext.h
   )
@@ -36,6 +37,7 @@ set(src_files
   ./src/fire/windowFactory.cpp
   ./src/fire/scene.cpp
   ./src/fire/sceneManager.cpp
+  ./src/fire/sceneComponent.cpp
   ./src/fire/glRenderContext.cpp
   )
 
