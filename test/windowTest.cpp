@@ -12,38 +12,37 @@ namespace
     auto const windowWidth = 200;
     auto const windowHeight = 300;
 
-    
     class RenderContextMock : public Fire::RenderContext
     {
     public:
         virtual ~RenderContextMock(){}
-        
-        MOCK_METHOD0(InitializeContext, void());
-        MOCK_METHOD0(SetWindowHints, void());
+
+        MOCK_METHOD0(ShouldClose, bool());
         MOCK_METHOD0(PollEvents, void());
         MOCK_METHOD0(SwapBuffers, void());
     };
-    
+
     class WindowTest : public ::testing::Test
     {
     public:
         WindowTest()
             : m_renderContextMock(std::make_unique<RenderContextMock>())
             , m_renderContext(m_renderContextMock.get())
-            , m_window(std::make_unique<Fire::Window>(windowName, windowWidth, windowHeight, std::move(m_renderContextMock)))
+            , m_window(std::make_unique<Fire::Window>(windowName, windowWidth
+                                                      , windowHeight, std::move(m_renderContextMock)))
         {
-            
+
         }
-        
+
     private:
         std::unique_ptr<RenderContextMock> m_renderContextMock;
-        
+
     protected:
         RenderContextMock* m_renderContext;
         std::unique_ptr<Fire::Window> m_window;
-    
+
     };
-    
+
 } // namespace
 
 TEST_F(WindowTest, WindowsHaveAName)
@@ -73,9 +72,19 @@ TEST_F(WindowTest, WindowsSupportBufferSwapping)
     m_window->SwapBuffers();
 }
 
-/*
-TEST(WindowTest, WindowsMustBeClosable)
+TEST_F(WindowTest, WindowsCanBePolledForEvents)
 {
-    
+    ASSERT_TRUE(m_renderContext);
+    EXPECT_CALL(*m_renderContext, PollEvents()).Times(1);
+    m_window->PollEvents();
 }
-*/
+
+TEST_F(WindowTest, WindowsCanDetectIfTheyShouldClose)
+{
+    ASSERT_TRUE(m_renderContext);
+    EXPECT_CALL(*m_renderContext, ShouldClose()).Times(1).WillOnce(::testing::Return(true));
+    EXPECT_TRUE(m_window->ShouldClose());
+
+    EXPECT_CALL(*m_renderContext, ShouldClose()).Times(1).WillOnce(::testing::Return(false));
+    EXPECT_FALSE(m_window->ShouldClose());
+}

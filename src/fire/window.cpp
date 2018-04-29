@@ -44,5 +44,15 @@ namespace Fire
     {
         m_renderContext->SwapBuffers();
     }
-         
+
+    void Window::PollEvents()
+    {
+        m_renderContext->PollEvents();
+    }
+
+    bool Window::ShouldClose()
+    {
+        return m_renderContext->ShouldClose();
+    }
+    
 } // namespace Fire

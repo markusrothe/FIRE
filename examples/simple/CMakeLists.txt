@@ -15,4 +15,4 @@ target_include_directories(simple_example PUBLIC
 
 target_link_libraries(simple_example engine)
 
-target_compile_features(engine PRIVATE cxx_lambda_init_captures)
+target_compile_features(simple_example PRIVATE cxx_lambda_init_captures)

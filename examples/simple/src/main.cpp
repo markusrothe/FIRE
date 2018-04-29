@@ -1,22 +1,29 @@
-
+#include "fire/windowFactory.h"
+#include "fire/window.h"
+#include <memory>
 
 int main(int, char**)
 {
-    /*auto const windowWidth = 1200u;
-    auto const windowHeight = 800u; */
+    auto const windowWidth = 1200u;
+    auto const windowHeight = 800u;
     
-    //Fire::Window window("WindowName", windowWidth, windowHeight);
+    auto window = Fire::WindowFactory::CreateGLWindow("name", windowWidth, windowHeight);
     
-    /*    Fire::SceneManager sceneManager;
+    /*
+      Fire::SceneManager sceneManager;
     
     Fire::Scene mainScene("sceneName");
     sceneManager.AddScene(mainScene);
     
     Fire::Renderer renderer(window, sceneManager);
-
-    while (true)
+    */
+    
+    while (!window->ShouldClose())
     {
-        sceneManager.Update();
-        renderer.Render();
-        }*/
+        window->PollEvents();
+        /*sceneManager.Update();
+          renderer.Render();*/
+
+        window->SwapBuffers();
+    }
 }

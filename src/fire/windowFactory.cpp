@@ -11,7 +11,7 @@ namespace Fire
                                                , unsigned int windowWidth
                                                , unsigned int windowHeight)
         {
-            auto renderContext = std::make_unique<GLRenderContext>();
+            auto renderContext = std::make_unique<GLRenderContext>(windowName, windowWidth, windowHeight);
             return std::make_unique<Window>(windowName, windowWidth, windowHeight, std::move(renderContext));
         }        
         

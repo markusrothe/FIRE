@@ -2,22 +2,26 @@
 #define fire_glrendercontext_h
 
 #include "renderContext.h"
+#include <GLFW/glfw3.h>
+#include <string>
 
 namespace Fire
 {
     class GLRenderContext : public RenderContext
     {
     public:
-        GLRenderContext();
+        GLRenderContext(std::string const& name, unsigned int width, unsigned int height);
 
         virtual ~GLRenderContext(){}
-        virtual void InitializeContext() override;
-
-        virtual void SetWindowHints() override;
 
         virtual void PollEvents() override;
         
-        virtual void SwapBuffers() override;       
+        virtual void SwapBuffers() override;
+
+        virtual bool ShouldClose() override;
+        
+    private:
+        GLFWwindow* m_window;
     };
 }
 

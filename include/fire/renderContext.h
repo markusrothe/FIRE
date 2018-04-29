@@ -7,13 +7,12 @@ namespace Fire
     {
     public:
         virtual ~RenderContext() {}
-        virtual void InitializeContext() = 0;
-
-        virtual void SetWindowHints() = 0;
 
         virtual void PollEvents() = 0;
         
         virtual void SwapBuffers() = 0;
+
+        virtual bool ShouldClose() = 0;
     };
 }
 

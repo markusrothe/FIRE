@@ -23,6 +23,8 @@ namespace Fire
         RenderContext* GetRenderContext() const;
         
         void SwapBuffers();
+        void PollEvents();
+        bool ShouldClose();
         
     private:
         std::string const m_windowName;
