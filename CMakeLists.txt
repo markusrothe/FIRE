@@ -22,16 +22,21 @@ add_subdirectory(externals/freetype-2.9)
 
 set(header_files
   ./include/fire/renderer.h
-  ./include/fire/root.h
+  ./include/fire/window.h
+  ./include/fire/windowFactory.h
   ./include/fire/scene.h
   ./include/fire/sceneManager.h
+  ./include/fire/renderContext.h
+  ./include/fire/glRenderContext.h
   )
 
 set(src_files
   ./src/fire/renderer.cpp
-  ./src/fire/root.cpp
+  ./src/fire/window.cpp
+  ./src/fire/windowFactory.cpp
   ./src/fire/scene.cpp
   ./src/fire/sceneManager.cpp
+  ./src/fire/glRenderContext.cpp
   )
 
 include_directories(
@@ -45,7 +50,7 @@ add_library(engine
 if (MSVC)
   target_compile_options(engine PUBLIC /W4)
 else()
-  target_compile_options(engine PUBLIC -Wall -Wextra -Wpedantic)
+  target_compile_options(engine PUBLIC -Wall -Wextra -Wpedantic -std=c++17)
 endif()
 
 find_package(OpenGL REQUIRED)

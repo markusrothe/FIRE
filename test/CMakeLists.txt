@@ -5,11 +5,20 @@ include_directories(
 
 set(test_sources
   ./sceneTest.cpp
+  ./windowTest.cpp
 )
 
 add_executable(engine_tests ${test_sources})
 
-target_link_libraries(engine_tests gtest_main engine)
+if (MSVC)
+  target_compile_options(engine_tests PUBLIC /W4)
+else()
+  target_compile_options(engine_tests PUBLIC -Wall -Wextra -Wpedantic -std=c++17)
+endif()
+
+target_compile_features(engine_tests PRIVATE cxx_lambda_init_captures)
+
+target_link_libraries(engine_tests gtest_main engine gmock)
 
 add_custom_command (
   TARGET engine_tests POST_BUILD
