@@ -44,7 +44,7 @@ TEST_F(SceneTest, ScenesHaveAName)
     EXPECT_EQ(m_scene.GetName(), sceneName);
 }
 
-TEST(SceneTestStandalone, SceneHaveGenereicNamesIfEmptyNameIsProvided)
+TEST(SceneTestStandalone, SceneHaveGenericNamesIfAnEmptyNameIsProvided)
 {
     Fire::Scene scene("");
 
@@ -68,7 +68,7 @@ TEST_F(SceneTest, NullPtrSceneComponentsAreNotAddedToScenes)
     EXPECT_EQ(m_scene.GetSceneComponents().size(), 0u);
 }
 
-TEST_F(SceneTest, ScenesCanBeUpdated)
+TEST_F(SceneTest, UpdatingASceneUpdatesItsSceneComponents)
 {
     SceneComponentMock sceneComponent;
     m_scene.AddSceneComponent(&sceneComponent);

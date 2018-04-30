@@ -28,6 +28,7 @@ set(header_files
   ./include/fire/sceneManager.h
   ./include/fire/sceneComponent.h
   ./include/fire/renderContext.h
+  ./include/fire/renderable.h
   ./include/fire/glRenderContext.h
   )
 
@@ -39,6 +40,7 @@ set(src_files
   ./src/fire/sceneManager.cpp
   ./src/fire/sceneComponent.cpp
   ./src/fire/glRenderContext.cpp
+  ./src/fire/renderable.cpp
   )
 
 include_directories(

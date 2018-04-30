@@ -11,6 +11,10 @@ int main(int, char**)
     auto window = Fire::WindowFactory::CreateGLWindow("name", windowWidth, windowHeight);
 
     Fire::Scene mainScene("sceneName");
+
+
+
+
     /*
     Fire::SceneManager sceneManager;
 

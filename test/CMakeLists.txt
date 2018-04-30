@@ -6,6 +6,7 @@ include_directories(
 set(test_sources
   ./sceneTest.cpp
   ./windowTest.cpp
+  ./renderableTest.cpp
 )
 
 add_executable(engine_tests ${test_sources})
