@@ -7,6 +7,7 @@ set(test_sources
   ./sceneTest.cpp
   ./windowTest.cpp
   ./renderableTest.cpp
+  ./vertexDataTest.cpp
 )
 
 add_executable(engine_tests ${test_sources})

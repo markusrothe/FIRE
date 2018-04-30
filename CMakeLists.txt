@@ -30,6 +30,8 @@ set(header_files
   ./include/fire/renderContext.h
   ./include/fire/renderable.h
   ./include/fire/glRenderContext.h
+  ./include/fire/vertexData.h
+  ./include/fire/vertexDeclaration.h
   )
 
 set(src_files
@@ -41,6 +43,8 @@ set(src_files
   ./src/fire/sceneComponent.cpp
   ./src/fire/glRenderContext.cpp
   ./src/fire/renderable.cpp
+  ./src/fire/vertexData.cpp
+  ./src/fire/vertexDeclaration.cpp
   )
 
 include_directories(
