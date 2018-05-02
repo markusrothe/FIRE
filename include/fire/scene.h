@@ -7,6 +7,7 @@
 namespace Fire
 {
     class SceneComponent;
+    class Renderable;
 
     class Scene
     {
@@ -20,6 +21,7 @@ namespace Fire
         std::vector<SceneComponent*> const& GetSceneComponents() const;
 
         void Update();
+        std::vector<Renderable*> GetRenderables() const;
     private:
         std::vector<SceneComponent*> m_sceneComponents;
         std::string const m_name;

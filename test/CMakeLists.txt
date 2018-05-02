@@ -7,6 +7,7 @@ set(test_sources
   ./sceneTest.cpp
   ./windowTest.cpp
   ./renderableTest.cpp
+  ./rendererTest.cpp
   ./vertexDataTest.cpp
 )
 

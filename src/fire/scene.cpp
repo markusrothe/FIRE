@@ -61,4 +61,19 @@ namespace Fire
         }
     }
 
+    std::vector<Renderable*> Scene::GetRenderables() const
+    {
+        std::vector<Renderable*> renderables;
+        
+        for (auto sceneComponent : m_sceneComponents)
+        {
+            for (auto renderable : sceneComponent->GetRenderables())
+            {
+                renderables.push_back(renderable);
+            }
+        }
+        
+        return renderables;
+    }
+
 } // namespace Fire

@@ -50,3 +50,19 @@ TEST_F(RenderableTest, RenderablesContainTheirVertexDeclaration)
     
     EXPECT_EQ(sectionIter->m_offset, sectionOffset);
 }
+
+TEST(RenderableTestStandalone, RenderablesAreConstructedFromVertexData)
+{
+    Fire::Renderable(renderableName, vertexData, vertexDeclaration);
+}
+
+
+/**
+   CanBeMarkedForReupload
+   ContainReferencesToTextures
+   ContainReferencesToMaterials
+   ContainRenderingMetaInfo
+   CreateVertexBuffer
+   CreateIndexBuffer
+   CreateVertexArrayObjects
+*/

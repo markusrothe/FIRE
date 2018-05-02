@@ -1,21 +1,16 @@
 #ifndef fire_renderer_h
 #define fire_renderer_h
 
+#include <vector>
+
 namespace Fire
 {
-    class Root;
-    class SceneManager;
-
+    class Renderable;
+    
     class Renderer
     {
     public:
-        Renderer(Root const& root, SceneManager const& sceneManager);
-
-        void Render();
-
-    private:
-        Root const& m_root;
-        SceneManager const& m_sceneManager;
+        void Render(std::vector<Renderable*> const& renderables);
     };
 
 } // namespace Fire
