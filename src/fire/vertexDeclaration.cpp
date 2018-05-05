@@ -1,9 +1,19 @@
 #include "vertexDeclaration.h"
+#include "findByName.h"
 #include <algorithm>
-
+#include <functional>
 
 namespace Fire
 {
+    VertexDeclarationSection::VertexDeclarationSection()
+        : m_attributeName("")
+        , m_numElements(0)
+        , m_stride(0)
+        , m_offset(0)
+    {
+
+    }
+
     VertexDeclarationSection::VertexDeclarationSection(
         std::string const& name, unsigned int numElements
         , unsigned int stride, unsigned int offset)
@@ -12,30 +22,19 @@ namespace Fire
         , m_stride(stride)
         , m_offset(offset)
     {
-        
+
     }
-    
-    void VertexDeclaration::AddSection(std::string const& name, unsigned int numElements
-                                       , unsigned int stride, unsigned int offset)
+
+    void VertexDeclaration::AddSection(std::string const& name, unsigned int numElements,
+                                       unsigned int stride, unsigned int offset)
     {
         m_sections.emplace_back(name, numElements, stride, offset);
     }
 
-    VertexDeclarationSections const& VertexDeclaration::GetSections() const
+    VertexDeclarationSection VertexDeclaration::GetSection(std::string const& name) const
     {
-        return m_sections;
-    }
-
-    VertexDeclarationSections::const_iterator const
-    VertexDeclaration::GetSection(std::string const& name) const
-    {
-        return std::find_if(
-            std::cbegin(m_sections), std::cend(m_sections),
-            [&name](auto const& section)
-            {
-                return section.m_attributeName.compare(name) == 0;
+        return FindByName(m_sections, name, [](auto section){
+                return section.m_attributeName;
             });
-        
     }
-    
 }

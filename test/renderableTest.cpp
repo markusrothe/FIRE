@@ -43,12 +43,9 @@ TEST_F(RenderableTest, RenderablesHaveAName)
 
 TEST_F(RenderableTest, RenderablesContainTheirVertexDeclaration)
 {
-    auto const& vDecl = m_renderable.GetVertexDeclaration();
-    auto const sectionIter = vDecl.GetSection(sectionName);
+    auto const vDeclSection = m_renderable.GetVertexDeclaration().GetSection(sectionName);
     
-    ASSERT_TRUE(sectionIter != std::end(vDecl.GetSections()));
-    
-    EXPECT_EQ(sectionIter->m_offset, sectionOffset);
+    EXPECT_EQ(vDeclSection.m_offset, sectionOffset);
 }
 
 TEST(RenderableTestStandalone, RenderablesAreConstructedFromVertexData)

@@ -34,11 +34,13 @@ namespace
     public:
         SceneTest()
             : m_scene(sceneName)
+            , m_sceneComponentMock()
         {
 
         }
 
         Fire::Scene m_scene;
+        SceneComponentMock m_sceneComponentMock;
     };
 
 } // namespace
@@ -51,13 +53,12 @@ TEST_F(SceneTest, ScenesHaveAName)
 TEST(SceneTestStandalone, SceneHaveGenericNamesIfAnEmptyNameIsProvided)
 {
     Fire::Scene scene("");
-
     EXPECT_EQ(scene.GetName(), "scene_generic_0");
 }
 
 TEST_F(SceneTest, SceneComponentsCanBeAddedToScenes)
 {
-    std::string const name = "testName";
+    auto const name = "testName";
 
     SceneComponentStub sceneComponentStub(name);
     m_scene.AddSceneComponent(&sceneComponentStub);
@@ -68,24 +69,26 @@ TEST_F(SceneTest, SceneComponentsCanBeAddedToScenes)
 TEST_F(SceneTest, NullPtrSceneComponentsAreNotAddedToScenes)
 {
     m_scene.AddSceneComponent(nullptr);
+    EXPECT_EQ(m_scene.GetNumOfSceneComponents(), 0);
+}
 
-    EXPECT_EQ(m_scene.GetSceneComponents().size(), 0u);
+TEST_F(SceneTest, ScenesDontHaveSceneComponentsUponCreation)
+{
+    EXPECT_EQ(m_scene.GetNumOfSceneComponents(), 0);
 }
 
 TEST_F(SceneTest, UpdatingASceneUpdatesItsSceneComponents)
 {
-    SceneComponentMock sceneComponent;
-    m_scene.AddSceneComponent(&sceneComponent);
+    m_scene.AddSceneComponent(&m_sceneComponentMock);
 
-    EXPECT_CALL(sceneComponent, Update()).Times(1);
+    EXPECT_CALL(m_sceneComponentMock, Update()).Times(1);
     m_scene.Update();
 }
 
 TEST_F(SceneTest, ScenesCanBeQueriedForRenderablesOfSceneComponents)
 {
-    SceneComponentMock sceneComponent;
-    m_scene.AddSceneComponent(&sceneComponent);
+    m_scene.AddSceneComponent(&m_sceneComponentMock);
 
-    EXPECT_CALL(sceneComponent, GetRenderables()).Times(1);
+    EXPECT_CALL(m_sceneComponentMock, GetRenderables()).Times(1);
     m_scene.GetRenderables();
 }

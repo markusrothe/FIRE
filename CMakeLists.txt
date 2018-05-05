@@ -32,6 +32,7 @@ set(header_files
   ./include/fire/glRenderContext.h
   ./include/fire/vertexData.h
   ./include/fire/vertexDeclaration.h
+  ./include/fire/findByName.h
   )
 
 set(src_files

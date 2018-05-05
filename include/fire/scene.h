@@ -1,6 +1,7 @@
 #ifndef fire_scene_h
 #define fire_scene_h
 
+#include <functional>
 #include <string>
 #include <vector>
 
@@ -18,11 +19,12 @@ namespace Fire
 
         void AddSceneComponent(SceneComponent* sceneComponent);
         SceneComponent* GetSceneComponent(std::string const& name) const;
-        std::vector<SceneComponent*> const& GetSceneComponents() const;
+        unsigned int GetNumOfSceneComponents() const;
 
         void Update();
         std::vector<Renderable*> GetRenderables() const;
     private:
+        
         std::vector<SceneComponent*> m_sceneComponents;
         std::string const m_name;
     };

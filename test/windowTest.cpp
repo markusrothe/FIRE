@@ -62,29 +62,39 @@ TEST_F(WindowTest, WindowsHaveAHeight)
 
 TEST_F(WindowTest, WindowsInitialzeARenderContext)
 {
-    ASSERT_TRUE(m_window->GetRenderContext() != nullptr);
+    EXPECT_TRUE(m_window->GetRenderContext() != nullptr);
 }
 
-TEST_F(WindowTest, WindowsSupportBufferSwapping)
+TEST_F(WindowTest, WindowsSupportBufferSwappingOfTheRenderContext)
 {
-    ASSERT_TRUE(m_renderContext);
-    EXPECT_CALL(*m_renderContext, SwapBuffers()).Times(1);
+    EXPECT_CALL(*m_renderContext, SwapBuffers())
+        .Times(1);
+    
     m_window->SwapBuffers();
 }
 
-TEST_F(WindowTest, WindowsCanBePolledForEvents)
+TEST_F(WindowTest, WindowsCanBePolledForEventsOnTheRenderContext)
 {
-    ASSERT_TRUE(m_renderContext);
-    EXPECT_CALL(*m_renderContext, PollEvents()).Times(1);
+    EXPECT_CALL(*m_renderContext, PollEvents())
+        .Times(1);
+    
     m_window->PollEvents();
 }
 
-TEST_F(WindowTest, WindowsCanDetectIfTheyShouldClose)
+TEST_F(WindowTest, WindowsShouldCloseIfTheRenderContextCloses)
 {
-    ASSERT_TRUE(m_renderContext);
-    EXPECT_CALL(*m_renderContext, ShouldClose()).Times(1).WillOnce(::testing::Return(true));
+    EXPECT_CALL(*m_renderContext, ShouldClose())
+        .Times(1)
+        .WillOnce(::testing::Return(true));
+    
     EXPECT_TRUE(m_window->ShouldClose());
+}
 
-    EXPECT_CALL(*m_renderContext, ShouldClose()).Times(1).WillOnce(::testing::Return(false));
+TEST_F(WindowTest, WindowsShouldNotCloseIfTheRenderContextDoesNotClose)
+{
+    EXPECT_CALL(*m_renderContext, ShouldClose())
+        .Times(1)
+        .WillOnce(::testing::Return(false));
+    
     EXPECT_FALSE(m_window->ShouldClose());
 }

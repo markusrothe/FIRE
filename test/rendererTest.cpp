@@ -28,5 +28,3 @@ TEST_F(RendererTest, RendererCanRenderRenderables)
     m_renderer.Render(renderableVec);    
 }
 
-
-

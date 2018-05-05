@@ -8,6 +8,8 @@ namespace Fire
 {
     struct VertexDeclarationSection
     {
+        VertexDeclarationSection();
+        
         VertexDeclarationSection(std::string const& name, unsigned int numElements
                                  , unsigned int stride, unsigned int offset);
 
@@ -16,8 +18,6 @@ namespace Fire
         unsigned int m_stride;
         unsigned int m_offset;
     };
-
-    typedef std::vector<VertexDeclarationSection> VertexDeclarationSections;
     
     class VertexDeclaration
     {
@@ -25,16 +25,12 @@ namespace Fire
         void AddSection(std::string const& attributeName
                         , unsigned int size
                         , unsigned int stride
-                        , unsigned int offset);
-                
-        VertexDeclarationSections const& GetSections() const;
+                        , unsigned int offset);               
 
-        VertexDeclarationSections::const_iterator const GetSection(
-            std::string const& name) const;
-        
+        VertexDeclarationSection GetSection(std::string const& name) const;        
         
     private:
-        VertexDeclarationSections m_sections;
+        std::vector<VertexDeclarationSection> m_sections;
     };
 } // namespace Fire
 

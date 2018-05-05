@@ -1,3 +1,4 @@
+#include "findByName.h"
 #include "scene.h"
 #include "sceneComponent.h"
 #include <algorithm>
@@ -14,6 +15,7 @@ namespace
         ss << genericName << count++;
         return ss.str();
     }
+    
 } // namespace
 
 namespace Fire
@@ -39,18 +41,14 @@ namespace Fire
 
     SceneComponent* Scene::GetSceneComponent(std::string const& name) const
     {
-        auto const foundIt = std::find_if(std::cbegin(m_sceneComponents), std::cend(m_sceneComponents)
-            , [&name](SceneComponent const* const sceneComponent)
-        {
-            return sceneComponent ? (name.compare(sceneComponent->GetName()) == 0) : false;
-        });
-
-        return (foundIt != std::cend(m_sceneComponents)) ? *foundIt : nullptr;
+        return FindByName(m_sceneComponents, name, [](auto sceneComponent){
+                return sceneComponent ? sceneComponent->GetName() : "";
+            });        
     }
 
-    std::vector<SceneComponent*> const& Scene::GetSceneComponents() const
+    unsigned int Scene::GetNumOfSceneComponents() const
     {
-        return m_sceneComponents;
+        return m_sceneComponents.size();
     }
 
     void Scene::Update()
@@ -75,5 +73,4 @@ namespace Fire
         
         return renderables;
     }
-
 } // namespace Fire

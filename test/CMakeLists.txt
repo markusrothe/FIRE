@@ -4,6 +4,7 @@ include_directories(
 )
 
 set(test_sources
+  ./findByNameTest.cpp
   ./sceneTest.cpp
   ./windowTest.cpp
   ./renderableTest.cpp
