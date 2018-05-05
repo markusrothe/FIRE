@@ -10,14 +10,23 @@ namespace
 {
     Fire::VertexData vertexData;
     Fire::VertexDeclaration vertexDecl;
-    Fire::Renderable renderable("name", vertexData, vertexDecl); 
+    Fire::Renderable renderable("name", vertexData, vertexDecl);
+
+    class RendererTest : public ::testing::Test
+    {
+    public:
+
+        Fire::Renderer m_renderer;
+    };
+    
 } // namespace 
 
-TEST(Renderer, CanRenderRenderables)
+TEST_F(RendererTest, RendererCanRenderRenderables)
 {
-    Fire::Renderer renderer;
     std::vector<Fire::Renderable*> renderableVec;
     renderableVec.push_back(&renderable);
-    renderer.Render(renderableVec);    
+    m_renderer.Render(renderableVec);    
 }
+
+
 
