@@ -6,22 +6,20 @@
 
 namespace Fire
 {
-    class VertexData;
+    struct VertexData;
     
     class Renderable
     {
     public:
-        Renderable(std::string const& name
-                   , VertexData const& vertexData
-                   , VertexDeclaration const& vertexDeclaration);
-
+        explicit Renderable(std::string const& name);
         std::string GetName() const;
 
+        void SetVertexDeclaration(VertexDeclaration const& vDecl);
         VertexDeclaration const& GetVertexDeclaration() const;
         
     private:
         std::string const m_name;
-        VertexDeclaration const m_vDecl;
+        VertexDeclaration m_vDecl;
     };
 } // namespace Fire
 

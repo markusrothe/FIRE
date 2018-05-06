@@ -2,11 +2,9 @@
 
 namespace Fire
 {
-    Renderable::Renderable(std::string const& name, VertexData const& vertexData, VertexDeclaration const& vertexDeclaration)
+    Renderable::Renderable(std::string const& name)
         : m_name(name)
-        , m_vDecl(vertexDeclaration)
     {
-        (void) vertexData;
     }
 
     std::string Renderable::GetName() const
@@ -14,6 +12,11 @@ namespace Fire
         return m_name;
     }
 
+    void Renderable::SetVertexDeclaration(VertexDeclaration const& vDecl)
+    {
+        m_vDecl = vDecl;
+    }
+    
     VertexDeclaration const& Renderable::GetVertexDeclaration() const
     {
         return m_vDecl;

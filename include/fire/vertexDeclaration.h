@@ -13,7 +13,7 @@ namespace Fire
         VertexDeclarationSection(std::string const& name, unsigned int numElements
                                  , unsigned int stride, unsigned int offset);
 
-        std::string const m_attributeName;
+        std::string m_attributeName;
         unsigned int m_numElements;
         unsigned int m_stride;
         unsigned int m_offset;

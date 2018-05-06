@@ -10,7 +10,7 @@ namespace
 {
     Fire::VertexData vertexData;
     Fire::VertexDeclaration vertexDecl;
-    Fire::Renderable renderable("name", vertexData, vertexDecl);
+    Fire::Renderable renderable("name");
 
     class RendererTest : public ::testing::Test
     {
