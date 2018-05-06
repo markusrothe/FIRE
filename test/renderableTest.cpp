@@ -1,5 +1,6 @@
 #include "fire/renderable.h"
 #include "fire/vertexDeclaration.h"
+#include "fire/vertexData.h"
 #include <gtest/gtest.h>
 #include <string>
 
@@ -41,6 +42,7 @@ namespace Fire
     }
 } // namespace Fire
 
+
 TEST_F(RenderableTest, RenderablesHaveAName)
 {
     EXPECT_EQ(m_renderable.GetName(), NAME);
@@ -61,17 +63,21 @@ TEST_F(RenderableTest, SettingAVertexDeclarationOverridesThePreviousOne)
     auto const attributeName("attr");    
     Fire::VertexDeclarationSection const section(attributeName, 4, 3, 2);
     
-    auto const attributeName2("attr2");
-    Fire::VertexDeclarationSection const newSection(attributeName2, 9, 21, 5);
+    auto const attributeNameOther("other");
+    Fire::VertexDeclarationSection const otherSection(attributeNameOther, 9, 21, 5);
     
     SetVertexDeclarationWithSection(section);
-    SetVertexDeclarationWithSection(newSection);
+    SetVertexDeclarationWithSection(otherSection);
 
-    EXPECT_EQ(m_renderable.GetVertexDeclaration().GetSection(attributeName2), newSection);
+    EXPECT_EQ(m_renderable.GetVertexDeclaration().GetSection(attributeNameOther), otherSection);
+}
+
+TEST_F(RenderableTest, RenderablesHaveVertexData)
+{
+    EXPECT_NE(&m_renderable.GetVertexData(), nullptr);
 }
 
 /**
-   VertexDataCanBeUpdated
    CanBeMarkedForReupload
    ContainReferencesToTextures
    ContainReferencesToMaterials

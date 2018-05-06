@@ -22,7 +22,6 @@ namespace Fire
     };
 } // namespace Fire
 
-
 int main(int, char**)
 {
     auto const windowWidth = 1200u;

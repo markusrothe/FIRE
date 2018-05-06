@@ -4,6 +4,8 @@ namespace Fire
 {
     Renderable::Renderable(std::string const& name)
         : m_name(name)
+        , m_vDecl{}
+        , m_vData{}
     {
     }
 
@@ -20,6 +22,11 @@ namespace Fire
     VertexDeclaration const& Renderable::GetVertexDeclaration() const
     {
         return m_vDecl;
+    }
+    
+    VertexData& Renderable::GetVertexData()
+    {
+        return m_vData;
     }
     
 } // namespace Fire
