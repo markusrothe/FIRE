@@ -97,3 +97,11 @@ TEST_F(VertexDataTest, AddedColorsAreStored)
     m_vertexData.AddColor(DUMMY);
     ExpectContainerContainsOneOf(m_vertexData.GetColors(), DUMMY);
 }
+
+TEST_F(VertexDataTest, DirtyFlagCanBeReset)
+{
+    EXPECT_FALSE(m_vertexData.IsDirty());
+    m_vertexData.AddColor(DUMMY);
+    m_vertexData.ClearDirtyFlag();
+    EXPECT_FALSE(m_vertexData.IsDirty());
+}
