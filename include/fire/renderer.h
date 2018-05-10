@@ -2,15 +2,27 @@
 #define fire_renderer_h
 
 #include <vector>
+#include <memory>
 
 namespace Fire
 {
     class Renderable;
+    class RenderingDelegate;
+    class Binder;
     
     class Renderer
     {
     public:
+        Renderer(std::unique_ptr<RenderingDelegate>&& renderingDelegate,
+                 std::unique_ptr<Binder>&& textureBinder,
+                 std::unique_ptr<Binder>&& materialBinder);
+        
         void Render(std::vector<Renderable*> const& renderables);
+
+    private:
+        std::unique_ptr<RenderingDelegate> const m_renderingDelegate;
+        std::unique_ptr<Binder> const m_textureBinder;
+        std::unique_ptr<Binder> const m_materialBinder;
     };
 
 } // namespace Fire

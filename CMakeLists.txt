@@ -29,10 +29,12 @@ set(header_files
   ./include/fire/sceneComponent.h
   ./include/fire/renderContext.h
   ./include/fire/renderable.h
+  ./include/fire/renderingDelegate.h
   ./include/fire/glRenderContext.h
   ./include/fire/vertexData.h
   ./include/fire/vertexDeclaration.h
   ./include/fire/findByName.h
+  ./include/fire/binder.h
   )
 
 set(src_files

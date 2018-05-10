@@ -40,7 +40,6 @@ namespace
     protected:
         RenderContextMock* m_renderContext;
         std::unique_ptr<Fire::Window> m_window;
-
     };
 
 } // namespace

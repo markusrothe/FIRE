@@ -12,22 +12,16 @@ namespace
     {
     public:
         RenderableTest() : m_renderable(NAME) {}
-        Fire::Renderable m_renderable;
-     
-        void SetVertexDeclarationWithSection(std::string const attributeName, unsigned int size,
-                                             unsigned int stride, unsigned int offset)
-        {
-            Fire::VertexDeclaration vDecl;
-            vDecl.AddSection(attributeName, size, stride, offset);
-            m_renderable.SetVertexDeclaration(vDecl);
-        }
 
         void SetVertexDeclarationWithSection(Fire::VertexDeclarationSection const& section)
         {
             Fire::VertexDeclaration vDecl;
             vDecl.AddSection(section.m_attributeName, section.m_numElements, section.m_stride, section.m_offset);
             m_renderable.SetVertexDeclaration(vDecl);
-        }                
+        }
+
+    protected:
+        Fire::Renderable m_renderable;
     };    
 } // namespace
 

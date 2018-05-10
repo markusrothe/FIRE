@@ -3,6 +3,8 @@
 #include "fire/scene.h"
 #include "fire/sceneComponent.h"
 #include "fire/renderer.h"
+#include "fire/renderingDelegate.h"
+#include "fire/binder.h"
 #include <memory>
 #include <vector>
 
@@ -20,6 +22,22 @@ namespace Fire
             return std::vector<Renderable*>();
         }
     };
+
+    class RenderingDelegateStub : public RenderingDelegate
+    {
+    public:
+        ~RenderingDelegateStub(){}
+        virtual void Render(Renderable*) override {}
+    };
+
+    class TextureBinder : public Binder
+    {
+    public:
+        ~TextureBinder(){}
+
+        virtual void Bind(Renderable*) const override {}
+        virtual void Unbind(Renderable*) const override {}
+    };
 } // namespace Fire
 
 int main(int, char**)
@@ -33,8 +51,15 @@ int main(int, char**)
 
     auto sceneComp = std::make_unique<Fire::QuadSceneComponent>();
     mainScene.AddSceneComponent(sceneComp.get());
-  
-    Fire::Renderer renderer;
+
+    std::unique_ptr<Fire::RenderingDelegate> renderingDelegate = std::make_unique<Fire::RenderingDelegateStub>();
+
+    std::unique_ptr<Fire::Binder> texBinder = std::make_unique<Fire::TextureBinder>();
+
+    // TODO: use real materialBinder class
+    std::unique_ptr<Fire::Binder> materialBinder = std::make_unique<Fire::TextureBinder>();
+    
+    Fire::Renderer renderer(std::move(renderingDelegate), std::move(texBinder), std::move(materialBinder));
 
     while (!window->ShouldClose())
     {
