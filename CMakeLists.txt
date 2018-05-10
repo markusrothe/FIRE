@@ -35,6 +35,8 @@ set(header_files
   ./include/fire/vertexDeclaration.h
   ./include/fire/findByName.h
   ./include/fire/binder.h
+  ./include/fire/material.h
+  ./include/fire/uniformFunction.h
   )
 
 set(src_files
@@ -48,6 +50,7 @@ set(src_files
   ./src/fire/renderable.cpp
   ./src/fire/vertexData.cpp
   ./src/fire/vertexDeclaration.cpp
+  ./src/fire/material.cpp
   )
 
 include_directories(

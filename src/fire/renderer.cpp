@@ -1,5 +1,6 @@
 #include "renderer.h"
 #include "renderingDelegate.h"
+#include "renderable.h"
 #include "binder.h"
 
 namespace Fire
@@ -20,6 +21,9 @@ namespace Fire
         {
             m_textureBinder->Bind(renderable);
             m_materialBinder->Bind(renderable);
+            
+            renderable->GetUniformFunction()();
+            
             m_renderingDelegate->Render(renderable);
             m_materialBinder->Unbind(renderable);
             m_textureBinder->Unbind(renderable);

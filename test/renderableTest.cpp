@@ -1,6 +1,7 @@
 #include "fire/renderable.h"
 #include "fire/vertexDeclaration.h"
 #include "fire/vertexData.h"
+#include "fire/material.h"
 #include <gtest/gtest.h>
 #include <string>
 
@@ -68,7 +69,32 @@ TEST_F(RenderableTest, SettingAVertexDeclarationOverridesThePreviousOne)
 
 TEST_F(RenderableTest, RenderablesHaveVertexData)
 {
-    EXPECT_NE(&m_renderable.GetVertexData(), nullptr);
+    EXPECT_NE(&(m_renderable.GetVertexData()), nullptr);
+}
+
+TEST_F(RenderableTest, RenderablesHaveAMaterial)
+{
+    EXPECT_NE(m_renderable.GetMaterial(), nullptr);
+}
+
+TEST_F(RenderableTest, RenderablesHaveTheDefaultMaterialIfNoneProvided)
+{
+    auto material = m_renderable.GetMaterial();
+    EXPECT_STREQ(material->GetName().c_str(), "simple");
+}
+
+TEST_F(RenderableTest, RenderablesHaveAUniformFunction)
+{
+    auto func = m_renderable.GetUniformFunction();
+    func();
+}
+
+TEST_F(RenderableTest, RenderablesCanAcceptNewUniformFunctions)
+{
+    auto called = false;
+    m_renderable.SetUniformFunction([&called](){ called = true; });
+    m_renderable.GetUniformFunction()();
+    EXPECT_TRUE(called);
 }
 
 /**

@@ -35,9 +35,9 @@ namespace
     {
     public:
         RendererTest()
-            : m_renderingDelegateMock(std::make_unique<RenderingDelegateMock>())
-            , m_textureBinderMock(std::make_unique<BinderMock>())
-            , m_materialBinderMock(std::make_unique<BinderMock>())
+            : m_renderingDelegateMock(std::make_unique<NiceMock<RenderingDelegateMock>>())
+            , m_textureBinderMock(std::make_unique<NiceMock<BinderMock>>())
+            , m_materialBinderMock(std::make_unique<NiceMock<BinderMock>>())
             , m_renderingDelegate(m_renderingDelegateMock.get())
             , m_textureBinder(m_textureBinderMock.get())
             , m_materialBinder(m_materialBinderMock.get())
@@ -84,9 +84,9 @@ namespace
         }
 
     private:
-        std::unique_ptr<RenderingDelegateMock> m_renderingDelegateMock;
-        std::unique_ptr<BinderMock> m_textureBinderMock;
-        std::unique_ptr<BinderMock> m_materialBinderMock;
+        std::unique_ptr<NiceMock<RenderingDelegateMock> > m_renderingDelegateMock;
+        std::unique_ptr<NiceMock<BinderMock> > m_textureBinderMock;
+        std::unique_ptr<NiceMock<BinderMock> > m_materialBinderMock;
         
     protected:
         RenderingDelegateMock* m_renderingDelegate;
@@ -126,8 +126,13 @@ TEST_F(RendererTest, UnbindsMaterialsAfterRendering)
 
 TEST_F(RendererTest, UploadsUniformsBeforeRendering)
 {
+    bool uniformFunctionCalled = false;
     
-}
+    testRenderable.SetUniformFunction([&uniformFunctionCalled](){
+        uniformFunctionCalled = true;
+        });
 
-/*
-      EXPECT_CALL(m_textureBinder, Unbind()).Times(1);*/
+    Render(&testRenderable);
+
+    EXPECT_TRUE(uniformFunctionCalled);
+}
