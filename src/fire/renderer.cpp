@@ -13,7 +13,12 @@ namespace Fire
         , m_materialBinder(std::move(materialBinder))
     {        
     }
-    
+
+    Renderer::~Renderer()
+    {
+        
+    }
+
     void Renderer::Render(std::vector<Renderable*> const& renderables)
     {
         for(auto renderable : renderables)

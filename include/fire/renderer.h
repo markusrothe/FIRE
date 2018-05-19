@@ -16,6 +16,8 @@ namespace Fire
         Renderer(std::unique_ptr<RenderingDelegate>&& renderingDelegate,
                  std::unique_ptr<Binder>&& textureBinder,
                  std::unique_ptr<Binder>&& materialBinder);
+
+        ~Renderer();
         
         void Render(std::vector<Renderable*> const& renderables);
 

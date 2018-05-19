@@ -22,6 +22,7 @@ add_subdirectory(externals/freetype-2.9)
 
 set(header_files
   ./include/fire/renderer.h
+  ./include/fire/rendererFactory.h
   ./include/fire/window.h
   ./include/fire/windowFactory.h
   ./include/fire/scene.h
@@ -43,6 +44,7 @@ set(header_files
 
 set(src_files
   ./src/fire/renderer.cpp
+  ./src/fire/rendererFactory.cpp
   ./src/fire/window.cpp
   ./src/fire/windowFactory.cpp
   ./src/fire/scene.cpp
