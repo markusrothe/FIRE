@@ -10,6 +10,7 @@ set(test_sources
   ./renderableTest.cpp
   ./rendererTest.cpp
   ./vertexDataTest.cpp
+  ./materialTest.cpp
 )
 
 add_executable(engine_tests ${test_sources})

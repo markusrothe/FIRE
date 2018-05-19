@@ -11,8 +11,7 @@ namespace Fire
         : m_renderingDelegate(std::move(renderingDelegate))
         , m_textureBinder(std::move(textureBinder))
         , m_materialBinder(std::move(materialBinder))
-    {
-        
+    {        
     }
     
     void Renderer::Render(std::vector<Renderable*> const& renderables)
@@ -20,11 +19,10 @@ namespace Fire
         for(auto renderable : renderables)
         {
             m_textureBinder->Bind(renderable);
-            m_materialBinder->Bind(renderable);
-            
-            renderable->GetUniformFunction()();
+            m_materialBinder->Bind(renderable);           
             
             m_renderingDelegate->Render(renderable);
+            
             m_materialBinder->Unbind(renderable);
             m_textureBinder->Unbind(renderable);
         }

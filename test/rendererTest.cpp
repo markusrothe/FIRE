@@ -53,28 +53,16 @@ namespace
 
         void ExpectBindBeforeRendering(BinderMock* binder, Fire::Renderable* renderable)
         {
+            InSequence ensureSequentialExpectations;
             EXPECT_CALL(*binder, Bind(renderable)).Times(1);
             ExpectRenderCall(renderable);
         }
 
         void ExpectUnbindAfterRendering(BinderMock* binder, Fire::Renderable* renderable)
         {
+            InSequence ensureSequentialExpectations;
             ExpectRenderCall(renderable);
             EXPECT_CALL(*binder, Unbind(renderable)).Times(1);
-        }
-
-        void CheckBindBeforeRendering(BinderMock* binder)
-        {
-            InSequence ensureSequentialExpectations;
-            ExpectBindBeforeRendering(binder, &testRenderable);
-            Render(&testRenderable);
-        }
-
-        void CheckUnbindAfterRendering(BinderMock* binder)
-        {
-            InSequence ensureSequentialExpectations;
-            ExpectUnbindAfterRendering(binder, &testRenderable);
-            Render(&testRenderable);
         }
 
         void Render(Fire::Renderable* renderable)
@@ -106,33 +94,24 @@ TEST_F(RendererTest, CanRenderRenderables)
 
 TEST_F(RendererTest, BindsTexturesBeforeRendering)
 {
-    CheckBindBeforeRendering(m_textureBinder);
+    ExpectBindBeforeRendering(m_textureBinder, &testRenderable);
+    Render(&testRenderable);
 }
 
 TEST_F(RendererTest, UnbindsTexturesAfterRendering)
 {
-    CheckUnbindAfterRendering(m_textureBinder);
+    ExpectUnbindAfterRendering(m_textureBinder, &testRenderable);
+    Render(&testRenderable);
 }
 
 TEST_F(RendererTest, BindsMaterialsBeforeRendering)
 {
-    CheckBindBeforeRendering(m_materialBinder);
+    ExpectBindBeforeRendering(m_materialBinder, &testRenderable);
+    Render(&testRenderable);
 }
 
 TEST_F(RendererTest, UnbindsMaterialsAfterRendering)
 {
-    CheckUnbindAfterRendering(m_materialBinder);
-}
-
-TEST_F(RendererTest, UploadsUniformsBeforeRendering)
-{
-    bool uniformFunctionCalled = false;
-    
-    testRenderable.SetUniformFunction([&uniformFunctionCalled](){
-        uniformFunctionCalled = true;
-        });
-
+    ExpectUnbindAfterRendering(m_materialBinder, &testRenderable);
     Render(&testRenderable);
-
-    EXPECT_TRUE(uniformFunctionCalled);
 }

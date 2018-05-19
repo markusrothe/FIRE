@@ -80,7 +80,7 @@ TEST_F(RenderableTest, RenderablesHaveAMaterial)
 TEST_F(RenderableTest, RenderablesHaveTheDefaultMaterialIfNoneProvided)
 {
     auto material = m_renderable.GetMaterial();
-    EXPECT_STREQ(material->GetName().c_str(), "simple");
+    EXPECT_EQ(material->GetName(), std::string("simple"));
 }
 
 TEST_F(RenderableTest, RenderablesHaveAUniformFunction)

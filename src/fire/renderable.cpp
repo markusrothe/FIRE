@@ -5,7 +5,7 @@ namespace Fire
 {
     namespace
     {
-        Material dummy;
+        Material dummy("");
     } // namespace
     
     Renderable::Renderable(std::string const& name)
