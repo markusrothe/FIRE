@@ -1,0 +1,9 @@
+* TODO Shader class
+* TODO Material Simple (Default) Material
+* TODO Camera class
+* TODO Input handling
+* TODO Image Texture class (erbt von Texture base class)
+* TODO MaterialBinder class
+* TODO RenderingDelegate Derived class
+* TODO Simple example ausbauen zum Triangle rendern
+ 

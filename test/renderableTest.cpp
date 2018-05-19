@@ -97,7 +97,9 @@ TEST_F(RenderableTest, RenderablesCanAcceptNewUniformFunctions)
     EXPECT_TRUE(called);
 }
 
+
 /**
+   MaterialCanBeSet
    CanBeMarkedForReupload
    ContainReferencesToTextures
    ContainReferencesToMaterials

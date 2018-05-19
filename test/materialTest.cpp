@@ -45,3 +45,8 @@ TEST_F(MaterialTest, SupportsUnbinding)
     EXPECT_FALSE(m_material.IsBound());
 }
 
+/*
+  ContainsAShader
+  DefaultMaterialUsesSimpleShader
+  
+ */

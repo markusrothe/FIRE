@@ -9,10 +9,10 @@
 
 namespace Fire
 {
-    class QuadSceneComponent : public SceneComponent
+    class TriSceneComponent : public SceneComponent
     {
     public:
-        std::string GetName() const override { return "quadcomp"; }
+        std::string GetName() const override { return "tricomp"; }
 
         void Update() override {}
 
@@ -34,7 +34,7 @@ int main(int, char**)
 
     Fire::Scene mainScene("sceneName");
 
-    auto sceneComp = std::make_unique<Fire::QuadSceneComponent>();
+    auto sceneComp = std::make_unique<Fire::TriSceneComponent>();
     mainScene.AddSceneComponent(sceneComp.get());
 
     auto renderer = Fire::RendererFactory::CreateRenderer();
