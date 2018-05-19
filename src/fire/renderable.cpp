@@ -1,5 +1,6 @@
 #include "renderable.h"
 #include "material.h"
+#include "texture.h"
 
 namespace Fire
 {
@@ -49,5 +50,15 @@ namespace Fire
     UniformFunction Renderable::GetUniformFunction() const
     {
         return m_uniformFunction;
+    }
+
+    void Renderable::AddTexture(Texture* tex)
+    {
+        m_texture = tex;
+    }
+    
+    Texture* Renderable::GetTexture() const
+    {
+        return m_texture;
     }
 } // namespace Fire

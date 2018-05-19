@@ -4,11 +4,13 @@
 #include "vertexDeclaration.h"
 #include "vertexData.h"
 #include "uniformFunction.h"
+
 #include <string>
 
 namespace Fire
 {
     class Material;
+    class Texture;
     class Renderable
     {
     public:
@@ -23,12 +25,16 @@ namespace Fire
 
         void SetUniformFunction(UniformFunction func);
         UniformFunction GetUniformFunction() const;
+
+        void AddTexture(Texture* tex);
+        Texture* GetTexture() const;
         
     private:
         std::string const m_name;
         VertexDeclaration m_vDecl;
         VertexData m_vData;
         UniformFunction m_uniformFunction;
+        Texture* m_texture;
     };
 } // namespace Fire
 
