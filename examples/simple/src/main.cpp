@@ -12,6 +12,12 @@ namespace Fire
     class TriSceneComponent : public SceneComponent
     {
     public:
+        TriSceneComponent()
+        {
+
+        }
+        
+        
         std::string GetName() const override { return "tricomp"; }
 
         void Update() override {}
@@ -20,6 +26,9 @@ namespace Fire
         {
             return std::vector<Renderable*>();
         }
+
+        
+        
     };
 
     

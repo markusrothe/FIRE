@@ -40,6 +40,9 @@ set(header_files
   ./include/fire/uniformFunction.h
   ./include/fire/textureBinder.h
   ./include/fire/texture.h
+  ./include/fire/shader.h
+  ./include/fire/shaderCompiler.h
+  ./include/fire/glslShaderCompiler.h
   )
 
 set(src_files
@@ -56,6 +59,8 @@ set(src_files
   ./src/fire/vertexDeclaration.cpp
   ./src/fire/material.cpp
   ./src/fire/textureBinder.cpp
+  ./src/fire/shader.cpp
+  ./src/fire/glslShaderCompiler.cpp
   )
 
 include_directories(
