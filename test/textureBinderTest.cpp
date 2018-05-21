@@ -37,7 +37,7 @@ namespace
 TEST_F(TextureBinderTest, BindsATexture)
 {    
     m_texBinder.Bind(&renderable);
-
+    
     EXPECT_TRUE(texture.Bound());
 }
 

@@ -10,7 +10,7 @@ namespace Fire
         {
             return;
         }
-        
+
         auto tex = renderable->GetTexture();
         if (tex)
         {
@@ -24,7 +24,7 @@ namespace Fire
         {
             return;
         }
-        
+
         auto tex = renderable->GetTexture();
         if (tex && tex->Bound())
         {

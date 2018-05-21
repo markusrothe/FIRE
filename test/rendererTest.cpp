@@ -30,7 +30,7 @@ namespace
         MOCK_CONST_METHOD1(Bind, void(Fire::Renderable*));
         MOCK_CONST_METHOD1(Unbind, void(Fire::Renderable*));
     };
-
+    
     class RendererTest : public Test
     {
     public:
