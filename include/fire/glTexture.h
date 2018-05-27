@@ -1,6 +1,9 @@
 #ifndef fire_gltexture_h
 #define fire_gltexture_h
 
+#include "texture.h"
+#include <GL/glew.h>
+
 namespace Fire
 {
     class GLTexture : public Texture
@@ -14,8 +17,8 @@ namespace Fire
         
     private:
         unsigned int const m_slot;
-        GLenum const textureTarget;
-        GLuint const m_id;
+        GLenum const m_textureTarget;
+        GLuint m_id;
         bool m_bound;
     };
 } // namespace Fire

@@ -1,4 +1,4 @@
-#include "texture.h"
+#include "glTexture.h"
 
 namespace Fire
 {
@@ -18,16 +18,16 @@ namespace Fire
         }
     } // namespace
     
-    GLTexture(unsigned int slot, TextureType target)
+    GLTexture::GLTexture(unsigned int slot, TextureType target)
         : m_slot(slot)
-        , m_target(MapTextureTarget(target))
+        , m_textureTarget(MapTextureTarget(target))
         , m_id(0)
         , m_bound(false)
     {
-        if (m_target != GL_NONE)
+        if (m_textureTarget != GL_NONE)
         {
             glActiveTexture(GL_TEXTURE0 + m_slot);
-            glEnable(m_target);
+            glEnable(m_textureTarget);
             glGenTextures(1, &m_id);
             /* TODO: 
                glBindTexture(GL_TEXTURE_2D, m_binding);
@@ -45,27 +45,27 @@ namespace Fire
         }
     }
         
-    void Bind() override
+    void GLTexture::Bind()
     {
-        if (m_target != GL_NONE)
+        if (m_textureTarget != GL_NONE)
         {
             glActiveTexture(GL_TEXTURE0 + m_slot);
-            glBindTexture(m_target, m_id);
+            glBindTexture(m_textureTarget, m_id);
             m_bound = true;
         }       
     }
     
-    void Unbind() override
+    void GLTexture::Unbind()
     {
-        if (m_target != GL_NONE)
+        if (m_textureTarget != GL_NONE)
         {
             glActiveTexture(GL_TEXTURE0 + m_slot);
-            glBindTexture(m_target, 0);
+            glBindTexture(m_textureTarget, 0);
             m_bound = false;
         }
     }
     
-    bool Bound() const override
+    bool GLTexture::Bound() const
     {
         return m_bound;
     }
