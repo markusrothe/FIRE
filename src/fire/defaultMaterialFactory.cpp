@@ -1,7 +1,9 @@
 #include "defaultMaterialFactory.h"
+#include "materialFactory.h"
 #include "material.h"
 #include "glslShader.h"
 #include "glslShaderCompiler.h"
+#include "glslShaderLinker.h"
 #include <utility>
 
 namespace Fire
@@ -11,13 +13,12 @@ namespace Fire
 
 	std::unique_ptr<Material> CreateDefaultMaterial()
 	{
-		GLSLShaderCompiler const vertexShaderCompiler(vertexShaderCode, ShaderCompiler::ShaderType::VERTEX_SHADER);
-		GLSLShaderCompiler const fragmentShaderCompiler(fragmentShaderCode, ShaderCompiler::ShaderType::FRAGMENT_SHADER);
+		GLSLShaderCompiler vertexShaderCompiler(vertexShaderCode, ShaderCompiler::ShaderType::VERTEX_SHADER);
+		GLSLShaderCompiler fragmentShaderCompiler(fragmentShaderCode, ShaderCompiler::ShaderType::FRAGMENT_SHADER);
 
 		//GLSLShaderLinker const shaderLinker(vertexShaderCompiler.GetCompileOutput(), fragmentShaderCompiler.GetCompileOutput());
+		GLSLShaderLinker shaderLinker;
 
-		//auto shader = std::make_unique<GLSLShader>(shaderLinker.GetLinkOutput());
-		auto shader = std::make_unique<GLSLShader>("shader");
-		return std::make_unique<Material>("simple", std::move(shader));
+		return CreateMaterial(&vertexShaderCompiler, &fragmentShaderCompiler, &shaderLinker);
 	}
 } // namespace Fire

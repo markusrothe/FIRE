@@ -13,6 +13,7 @@ set(test_sources
   ./materialTest.cpp
   ./textureBinderTest.cpp
   ./shaderParserTest.cpp
+  ./materialFactoryTest.cpp
 )
 
 add_executable(engine_tests ${test_sources})

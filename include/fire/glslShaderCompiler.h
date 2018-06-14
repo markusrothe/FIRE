@@ -11,7 +11,6 @@ namespace Fire
         GLSLShaderCompiler(std::string const& code, ShaderType shaderType);
         
         int Compile() override;
-        int Link() override;
         
     private:
         std::string m_code;

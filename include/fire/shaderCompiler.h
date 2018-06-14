@@ -16,7 +16,6 @@ namespace Fire
         
         virtual ~ShaderCompiler() = default;
         virtual int Compile() = 0;
-        virtual int Link() = 0;
     };
 } // namespace Fire
 

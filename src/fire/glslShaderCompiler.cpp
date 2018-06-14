@@ -66,9 +66,4 @@ namespace Fire
         return shaderID;
     }
 
-    int GLSLShaderCompiler::Link()
-    {
-        return 0;
-    }
-
 } // namespace Fire
