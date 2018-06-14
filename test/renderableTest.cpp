@@ -4,15 +4,21 @@
 #include "fire/material.h"
 #include <gtest/gtest.h>
 #include <string>
+#include <memory>
 
 namespace
 {
     std::string const NAME("name");
+	std::unique_ptr<Fire::Shader> shader;
 
     class RenderableTest : public ::testing::Test
     {
     public:
-        RenderableTest() : m_renderable(NAME) {}
+        RenderableTest()
+			: m_material{std::make_unique<Fire::Material>("materialName", std::move(shader))}
+			, m_renderable(NAME, std::move(m_material))			
+		{
+		}
 
         void SetVertexDeclarationWithSection(Fire::VertexDeclarationSection const& section)
         {
@@ -22,6 +28,7 @@ namespace
         }
 
     protected:
+		std::unique_ptr<Fire::Material> m_material;
         Fire::Renderable m_renderable;
     };    
 } // namespace
@@ -75,12 +82,6 @@ TEST_F(RenderableTest, RenderablesHaveVertexData)
 TEST_F(RenderableTest, RenderablesHaveAMaterial)
 {
     EXPECT_NE(m_renderable.GetMaterial(), nullptr);
-}
-
-TEST_F(RenderableTest, RenderablesHaveTheDefaultMaterialIfNoneProvided)
-{
-    auto material = m_renderable.GetMaterial();
-    EXPECT_EQ(material->GetName(), std::string("simple"));
 }
 
 TEST_F(RenderableTest, RenderablesHaveAUniformFunction)

@@ -2,10 +2,11 @@
 #include "fire/textureBinder.h"
 #include "fire/texture.h"
 #include "fire/renderable.h"
+#include "fire/material.h"
 
 namespace
 {
-    Fire::Renderable renderable("dummy");
+    Fire::Renderable renderable("dummy", nullptr);
 
     class TextureStub : public Fire::Texture
     {

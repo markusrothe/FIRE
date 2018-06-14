@@ -1,16 +1,21 @@
 #ifndef fire_material_f
 #define fire_material_f
 
+#include "shader.h"
 #include <string>
+#include <vector>
+#include <memory>
 
 namespace Fire
 {
     class Material
     {
     public:
-        explicit Material(std::string const& name);
+        Material(std::string const& name, std::unique_ptr<Shader>&& shader);
+		
+		~Material();
         
-        std::string GetName() const;
+		std::string GetName() const;
 
         void Bind();
         void Unbind();
@@ -18,8 +23,9 @@ namespace Fire
         bool IsBound() const;
     private:
         std::string const m_name;
+		std::unique_ptr<Shader> m_shader;
         bool m_bound;
     };
 } // namespace Fire
 
-#endif // fire_material_f
+#endif // fire_material_h

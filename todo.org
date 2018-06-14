@@ -1,9 +1,12 @@
-* TODO Shader class
-* TODO Material Simple (Default) Material
+* TODO ShaderParser regex parsing einbauen
+* TODO Shader Class + tests
+* TODO Shader Linker einbauen + tests
+* TODO Default Material UniformFunction einbauen 
+* TODO Material Simple (Default) Material Factory
+* TODO MaterialBinder class
 * TODO Camera class
 * TODO Input handling
 * TODO Image Texture class (erbt von Texture base class)
-* TODO MaterialBinder class
 * TODO RenderingDelegate Derived class
 * TODO Simple example ausbauen zum Triangle rendern
  

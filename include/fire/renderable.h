@@ -6,6 +6,7 @@
 #include "uniformFunction.h"
 
 #include <string>
+#include <memory>
 
 namespace Fire
 {
@@ -14,13 +15,17 @@ namespace Fire
     class Renderable
     {
     public:
-        explicit Renderable(std::string const& name);
+        Renderable(std::string const& name, std::unique_ptr<Material>&& material);
+		
+		~Renderable();
+
         std::string GetName() const;
 
         void SetVertexDeclaration(VertexDeclaration const& vDecl);
         VertexDeclaration const& GetVertexDeclaration() const;
         
         VertexData& GetVertexData();
+
         Material* GetMaterial() const;
 
         void SetUniformFunction(UniformFunction func);
@@ -35,6 +40,7 @@ namespace Fire
         VertexData m_vData;
         UniformFunction m_uniformFunction;
         Texture* m_texture;
+		std::unique_ptr<Material> m_material;
     };
 } // namespace Fire
 

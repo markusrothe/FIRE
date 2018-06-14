@@ -15,7 +15,7 @@ namespace Fire
 
         virtual void Update() = 0;
 
-        virtual std::vector<Renderable*> GetRenderables() const = 0;
+        virtual std::vector<Renderable*> GetRenderables() = 0;
     };
 } // namespace Fire
 

@@ -45,8 +45,7 @@ namespace Fire
         }
     } // namespace
 
-    GLSLShaderCompiler::GLSLShaderCompiler(std::string const& code,
-                                           ShaderType shaderType)
+    GLSLShaderCompiler::GLSLShaderCompiler(std::string const& code, ShaderType shaderType)
         : m_code(code)
         , m_shaderType(shaderType)
     {

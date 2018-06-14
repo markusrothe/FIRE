@@ -15,7 +15,7 @@ namespace
         explicit SceneComponentStub(std::string const& name): m_name(name) {}
         virtual std::string GetName() const override { return m_name; }
         virtual void Update() override {}
-        virtual std::vector<Fire::Renderable*> GetRenderables() const override { return std::vector<Fire::Renderable*>(); }
+        virtual std::vector<Fire::Renderable*> GetRenderables() override { return std::vector<Fire::Renderable*>(); }
         
     private:
         std::string const m_name;
@@ -26,7 +26,7 @@ namespace
     public:
         MOCK_CONST_METHOD0(GetName, std::string());
         MOCK_METHOD0(Update, void());
-        MOCK_CONST_METHOD0(GetRenderables, std::vector<Fire::Renderable*>());
+        MOCK_METHOD0(GetRenderables, std::vector<Fire::Renderable*>());
     };
 
     class SceneTest : public ::testing::Test

@@ -12,7 +12,7 @@ set(test_sources
   ./vertexDataTest.cpp
   ./materialTest.cpp
   ./textureBinderTest.cpp
-  ./shaderTest.cpp
+  ./shaderParserTest.cpp
 )
 
 add_executable(engine_tests ${test_sources})

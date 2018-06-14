@@ -4,6 +4,7 @@
 #include "fire/renderable.h"
 #include "fire/renderingDelegate.h"
 #include "fire/binder.h"
+#include "fire/material.h"
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include <vector>
@@ -16,7 +17,7 @@ namespace
     
     Fire::VertexData vertexData;
     Fire::VertexDeclaration vertexDecl;
-    Fire::Renderable testRenderable("name");
+    Fire::Renderable testRenderable("name", nullptr);
     
     class RenderingDelegateMock : public Fire::RenderingDelegate
     {

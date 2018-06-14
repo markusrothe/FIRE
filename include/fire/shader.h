@@ -11,17 +11,13 @@ namespace Fire
     class Shader
     {
     public:
-        Shader(std::string const& name,
-               std::unique_ptr<ShaderCompiler> const& compiler);
+		virtual ~Shader() = default;
 
-        std::string const& GetName() const;
+        virtual std::string const& GetName() const = 0;
 
-        void Bind();
-
-        bool Bound() const;
-    private:
-        std::string const m_name;
-        bool m_bound;
+        virtual void Bind() = 0;
+		virtual void Unbind() = 0;
+        virtual bool Bound() const = 0;
     };
     
 } // namespace Fire

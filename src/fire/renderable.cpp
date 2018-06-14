@@ -4,18 +4,20 @@
 
 namespace Fire
 {
-    namespace
-    {
-        Material dummy("");
-    } // namespace
-    
-    Renderable::Renderable(std::string const& name)
-        : m_name(name)
-        , m_vDecl{}
-        , m_vData{}
-        , m_uniformFunction([](){})
+	Renderable::Renderable(std::string const& name, std::unique_ptr<Material>&& material)
+		: m_name{name}
+		, m_vDecl{}
+		, m_vData{}
+		, m_uniformFunction([](){})
+		, m_texture{}
+		, m_material{std::move(material)}
     {
     }
+
+	Renderable::~Renderable()
+	{
+
+	}
 
     std::string Renderable::GetName() const
     {
@@ -39,7 +41,7 @@ namespace Fire
 
     Material* Renderable::GetMaterial() const
     {
-        return &dummy;
+        return m_material.get();
     }
 
     void Renderable::SetUniformFunction(UniformFunction func)

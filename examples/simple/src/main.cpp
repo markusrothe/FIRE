@@ -4,34 +4,36 @@
 #include "fire/sceneComponent.h"
 #include "fire/renderer.h"
 #include "fire/rendererFactory.h"
+#include "fire/renderable.h"
+#include "fire/material.h"
 #include <memory>
 #include <vector>
 
 namespace Fire
 {
-    class TriSceneComponent : public SceneComponent
-    {
-    public:
-        TriSceneComponent()
-        {
+	class TriSceneComponent : public SceneComponent
+	{
+	public:
+		TriSceneComponent()
+			: m_renderable("Triangle", nullptr)
+		{
 
-        }
-        
-        
+		}
+
         std::string GetName() const override { return "tricomp"; }
 
         void Update() override {}
 
-        std::vector<Renderable*> GetRenderables() const override
-        {
-            return std::vector<Renderable*>();
-        }
-
-        
-        
+		std::vector<Renderable*> GetRenderables() override
+		{
+			std::vector<Renderable*> renderables;
+			renderables.push_back(&m_renderable);
+			return renderables;
+		}
+	private:
+		Renderable m_renderable;
     };
 
-    
 } // namespace Fire
 
 int main(int, char**)

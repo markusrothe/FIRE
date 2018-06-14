@@ -37,13 +37,16 @@ set(header_files
   ./include/fire/findByName.h
   ./include/fire/binder.h
   ./include/fire/material.h
+  ./include/fire/defaultMaterialFactory.h
   ./include/fire/uniformFunction.h
   ./include/fire/textureBinder.h
   ./include/fire/texture.h
   ./include/fire/glTexture.h
   ./include/fire/shader.h
+  ./include/fire/shaderParser.h
   ./include/fire/shaderCompiler.h
   ./include/fire/glslShaderCompiler.h
+  ./include/fire/glslShader.h
   )
 
 set(src_files
@@ -54,14 +57,16 @@ set(src_files
   ./src/fire/scene.cpp
   ./src/fire/sceneManager.cpp
   ./src/fire/sceneComponent.cpp
+  ./src/fire/shaderParser.cpp
   ./src/fire/glRenderContext.cpp
   ./src/fire/renderable.cpp
   ./src/fire/vertexData.cpp
   ./src/fire/vertexDeclaration.cpp
   ./src/fire/material.cpp
+  ./src/fire/defaultMaterialFactory.cpp
   ./src/fire/textureBinder.cpp
   ./src/fire/glTexture.cpp
-  ./src/fire/shader.cpp
+  ./src/fire/glslShader.cpp
   ./src/fire/glslShaderCompiler.cpp
   )
 
