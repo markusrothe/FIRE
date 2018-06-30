@@ -9,16 +9,16 @@
 namespace
 {
     std::string const NAME("name");
-	std::unique_ptr<Fire::Shader> shader;
+    std::unique_ptr<Fire::Shader> shader;
 
     class RenderableTest : public ::testing::Test
     {
     public:
         RenderableTest()
-			: m_material{std::make_unique<Fire::Material>("materialName", std::move(shader))}
-			, m_renderable(NAME, std::move(m_material))			
-		{
-		}
+	    : m_material{std::make_unique<Fire::Material>("materialName", std::move(shader))}
+	    , m_renderable(NAME, std::move(m_material))			
+	{
+	}
 
         void SetVertexDeclarationWithSection(Fire::VertexDeclarationSection const& section)
         {
@@ -28,7 +28,7 @@ namespace
         }
 
     protected:
-		std::unique_ptr<Fire::Material> m_material;
+	std::unique_ptr<Fire::Material> m_material;
         Fire::Renderable m_renderable;
     };    
 } // namespace
@@ -79,6 +79,11 @@ TEST_F(RenderableTest, RenderablesHaveVertexData)
     EXPECT_NE(&(m_renderable.GetVertexData()), nullptr);
 }
 
+TEST_F(RenderableTest, RenderablesHaveIndexData)
+{
+    EXPECT_NE(&(m_renderable.GetIndexData()), nullptr);
+}
+
 TEST_F(RenderableTest, RenderablesHaveAMaterial)
 {
     EXPECT_NE(m_renderable.GetMaterial(), nullptr);
@@ -97,15 +102,3 @@ TEST_F(RenderableTest, RenderablesCanAcceptNewUniformFunctions)
     m_renderable.GetUniformFunction()();
     EXPECT_TRUE(called);
 }
-
-
-/**
-   MaterialCanBeSet
-   CanBeMarkedForReupload
-   ContainReferencesToTextures
-   ContainReferencesToMaterials
-   ContainRenderingMetaInfo
-   CreateVertexBuffer
-   CreateIndexBuffer
-   CreateVertexArrayObjects
-*/

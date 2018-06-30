@@ -10,6 +10,7 @@ set(test_sources
   ./renderableTest.cpp
   ./rendererTest.cpp
   ./vertexDataTest.cpp
+  ./indexDataTest.cpp
   ./materialTest.cpp
   ./textureBinderTest.cpp
   ./shaderParserTest.cpp

@@ -34,6 +34,7 @@ set(header_files
   ./include/fire/glRenderContext.h
   ./include/fire/vertexData.h
   ./include/fire/vertexDeclaration.h
+  ./include/fire/indexData.h
   ./include/fire/findByName.h
   ./include/fire/binder.h
   ./include/fire/material.h
@@ -65,6 +66,7 @@ set(src_files
   ./src/fire/renderable.cpp
   ./src/fire/vertexData.cpp
   ./src/fire/vertexDeclaration.cpp
+  ./src/fire/indexData.cpp
   ./src/fire/material.cpp
   ./src/fire/materialFactory.cpp
   ./src/fire/defaultMaterialFactory.cpp

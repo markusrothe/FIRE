@@ -11,27 +11,38 @@
 
 namespace Fire
 {
-	class TriSceneComponent : public SceneComponent
+    class TriSceneComponent : public SceneComponent
+    {
+    public:
+	TriSceneComponent()
+	    : m_renderable("Triangle", nullptr)
 	{
-	public:
-		TriSceneComponent()
-			: m_renderable("Triangle", nullptr)
-		{
+	    auto vertexData = m_renderable.GetVertexData();
+	    vertexData.AddPosition(glm::vec3(0, 0, 0));
+	    vertexData.AddPosition(glm::vec3(0, 1, 0));
+	    vertexData.AddPosition(glm::vec3(1, 0, 0));
+	    
+	    VertexDeclaration vDecl;
+	    vDecl.AddSection("vertex", 3, 0, 0);
+	    m_renderable.SetVertexDeclaration(vDecl);
+	   
+	    
+	}
 
-		}
+	std::string GetName() const override { return "tricomp"; }
 
-        std::string GetName() const override { return "tricomp"; }
-
-        void Update() override {}
-
-		std::vector<Renderable*> GetRenderables() override
-		{
-			std::vector<Renderable*> renderables;
-			renderables.push_back(&m_renderable);
-			return renderables;
-		}
-	private:
-		Renderable m_renderable;
+	void Update() override {}
+            
+	std::vector<Renderable*> GetRenderables() override
+	{
+	    std::vector<Renderable*> renderables;
+	    renderables.push_back(&m_renderable);
+	    return renderables;
+	}
+            
+    private:
+            
+	Renderable m_renderable;
     };
 
 } // namespace Fire

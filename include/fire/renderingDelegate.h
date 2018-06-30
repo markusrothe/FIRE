@@ -9,6 +9,7 @@ namespace Fire
     {
     public:
         virtual ~RenderingDelegate() {}
+	
         virtual void Render(Fire::Renderable* renderable) = 0;
     };
 } // namespace Fire

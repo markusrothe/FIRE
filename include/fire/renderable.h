@@ -3,6 +3,7 @@
 
 #include "vertexDeclaration.h"
 #include "vertexData.h"
+#include "indexData.h"
 #include "uniformFunction.h"
 
 #include <string>
@@ -17,7 +18,7 @@ namespace Fire
     public:
         Renderable(std::string const& name, std::unique_ptr<Material>&& material);
 		
-		~Renderable();
+	~Renderable();
 
         std::string GetName() const;
 
@@ -25,6 +26,7 @@ namespace Fire
         VertexDeclaration const& GetVertexDeclaration() const;
         
         VertexData& GetVertexData();
+	IndexData& GetIndexData();
 
         Material* GetMaterial() const;
 
@@ -38,9 +40,10 @@ namespace Fire
         std::string const m_name;
         VertexDeclaration m_vDecl;
         VertexData m_vData;
+	IndexData m_iData;
         UniformFunction m_uniformFunction;
         Texture* m_texture;
-		std::unique_ptr<Material> m_material;
+	std::unique_ptr<Material> m_material;
     };
 } // namespace Fire
 
