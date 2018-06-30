@@ -37,4 +37,9 @@ namespace Fire
                 return section.m_attributeName;
             });
     }
+
+    std::vector<VertexDeclarationSection> const& VertexDeclaration::GetSections() const
+    {
+	return m_sections;
+    }
 }

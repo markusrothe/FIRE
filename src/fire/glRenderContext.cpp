@@ -16,6 +16,10 @@ namespace Fire
         
         m_window = glfwCreateWindow(width, height, name.c_str(), NULL, NULL);
         glfwMakeContextCurrent(m_window);
+
+	glewInit();
+	
+	
     }
     
     void GLRenderContext::PollEvents() 

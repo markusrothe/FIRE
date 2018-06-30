@@ -28,7 +28,9 @@ namespace Fire
                         , unsigned int offset);               
 
         VertexDeclarationSection GetSection(std::string const& name) const;        
-        
+
+	std::vector<VertexDeclarationSection> const& GetSections() const;
+	
     private:
         std::vector<VertexDeclarationSection> m_sections;
     };

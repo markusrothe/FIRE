@@ -22,7 +22,9 @@ namespace
     class RenderingDelegateMock : public Fire::RenderingDelegate
     {
     public:
+	MOCK_METHOD1(Bind, void(Fire::Renderable*));
         MOCK_METHOD1(Render, void(Fire::Renderable*));
+	MOCK_METHOD1(Unbind, void(Fire::Renderable*));
     };
 
     class BinderMock : public Fire::Binder

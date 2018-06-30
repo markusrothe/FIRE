@@ -21,12 +21,13 @@ namespace Fire
 	    vertexData.AddPosition(glm::vec3(0, 0, 0));
 	    vertexData.AddPosition(glm::vec3(0, 1, 0));
 	    vertexData.AddPosition(glm::vec3(1, 0, 0));
+
+	    auto indexData = m_renderable.GetIndexData();
+	    indexData.AddIndices({0, 2, 1});
 	    
 	    VertexDeclaration vDecl;
 	    vDecl.AddSection("vertex", 3, 0, 0);
-	    m_renderable.SetVertexDeclaration(vDecl);
-	   
-	    
+	    m_renderable.SetVertexDeclaration(vDecl);	    
 	}
 
 	std::string GetName() const override { return "tricomp"; }

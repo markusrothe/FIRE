@@ -32,6 +32,7 @@ set(header_files
   ./include/fire/renderable.h
   ./include/fire/renderingDelegate.h
   ./include/fire/glRenderContext.h
+  ./include/fire/glRenderingDelegate.h
   ./include/fire/vertexData.h
   ./include/fire/vertexDeclaration.h
   ./include/fire/indexData.h
@@ -63,6 +64,7 @@ set(src_files
   ./src/fire/sceneComponent.cpp
   ./src/fire/shaderParser.cpp
   ./src/fire/glRenderContext.cpp
+  ./src/fire/glRenderingDelegate.cpp
   ./src/fire/renderable.cpp
   ./src/fire/vertexData.cpp
   ./src/fire/vertexDeclaration.cpp
@@ -88,7 +90,7 @@ add_library(engine
 if (MSVC)
   target_compile_options(engine PUBLIC /W4)
 else()
-  target_compile_options(engine PUBLIC -Wall -Wextra -Wpedantic -std=c++17)
+  target_compile_options(engine PUBLIC -Wall -Wextra -Wpedantic -std=c++17 -g0 -O0)
 endif()
 
 find_package(OpenGL REQUIRED)
