@@ -5,7 +5,7 @@
 #include <gtest/gtest.h>
 #include <string>
 #include <memory>
-/*
+
 namespace
 {
     std::string const NAME("name");
@@ -102,4 +102,4 @@ TEST_F(RenderableTest, RenderablesCanAcceptNewUniformFunctions)
     m_renderable.GetUniformFunction()();
     EXPECT_TRUE(called);
 }
-*/
+
