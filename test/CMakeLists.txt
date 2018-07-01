@@ -22,6 +22,11 @@ add_executable(engine_tests ${test_sources})
 if (MSVC)
   target_compile_options(engine_tests PUBLIC /W4)
 else()
+  if (COVERAGE)
+    target_compile_options(engine_tests PRIVATE --coverage)
+    target_link_libraries(engine_tests PRIVATE --coverage)
+  endif()
+  
   target_compile_options(engine_tests PUBLIC -Wall -Wextra -Wpedantic -std=c++17)
 endif()
 
