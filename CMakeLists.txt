@@ -91,11 +91,6 @@ if (MSVC)
   target_compile_options(engine PUBLIC /W4)
 else()
   target_compile_options(engine PUBLIC -Wall -Wextra -Wpedantic -std=c++17 -g -O0)
-
-  if (COVERAGE)
-    target_compile_options(engine PUBLIC --coverage)
-    target_link_libraries(engine --coverage)
-  endif()
 endif()
 
 find_package(OpenGL REQUIRED)
