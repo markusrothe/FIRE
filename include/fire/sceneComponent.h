@@ -6,17 +6,17 @@
 
 namespace Fire
 {
-    class Renderable;
-    
-    class SceneComponent
-    {
-    public:
-        virtual std::string GetName() const = 0;
+class Renderable;
 
-        virtual void Update() = 0;
+class SceneComponent
+{
+public:
+    virtual std::string GetName() const = 0;
 
-        virtual std::vector<Renderable*> GetRenderables() = 0;
-    };
+    virtual void Update() = 0;
+
+    virtual std::vector<Renderable*> GetRenderables() = 0;
+};
 } // namespace Fire
 
 #endif // fire_scenecomponent_h

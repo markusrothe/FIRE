@@ -3,19 +3,17 @@
 
 namespace
 {
-    class IndexDataTest : public ::testing::Test
+class IndexDataTest : public ::testing::Test
+{
+public:
+    IndexDataTest()
+        : m_indexData()
     {
-    public:
-	IndexDataTest()
-	    : m_indexData()
-	{
-	    
-	}
+    }
 
-    protected:
-	
-	Fire::IndexData m_indexData;
-    };
+protected:
+    Fire::IndexData m_indexData;
+};
 } // namespace
 
 TEST_F(IndexDataTest, DefaultConstructedHasNoIndices)
@@ -34,7 +32,7 @@ TEST_F(IndexDataTest, IndicesCanBeAddedOneAtATime)
 TEST_F(IndexDataTest, MultipleIndicesCanBeAddedAtOnce)
 {
     m_indexData.AddIndices({0, 1, 2});
-    
+
     ASSERT_EQ(m_indexData.GetIndices().size(), 3);
     EXPECT_EQ(m_indexData.GetIndices()[0], 0);
     EXPECT_EQ(m_indexData.GetIndices()[1], 1);

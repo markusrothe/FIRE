@@ -1,31 +1,33 @@
 #include "fire/vertexData.h"
+#include <functional>
 #include <glm/glm.hpp>
 #include <gtest/gtest.h>
-#include <functional>
 
 namespace
 {
-    glm::vec3 const DUMMY(1, 2, 3);
+glm::vec3 const DUMMY(1, 2, 3);
 
-    template<typename Container>
-    void ExpectContainerContainsOneOf(Container const& container, typename Container::value_type const& value)
+template <typename Container>
+void ExpectContainerContainsOneOf(
+    Container const& container, typename Container::value_type const& value)
+{
+    ASSERT_EQ(container.size(), 1);
+    EXPECT_EQ(container.back(), value);
+}
+
+class VertexDataTest : public ::testing::Test
+{
+public:
+    void ExpectDirtyAfterChange(std::function<void(void)> func)
     {
-        ASSERT_EQ(container.size(), 1);
-        EXPECT_EQ(container.back(), value);
+        EXPECT_FALSE(m_vertexData.IsDirty());
+        func();
+        EXPECT_TRUE(m_vertexData.IsDirty());
     }
 
-    class VertexDataTest : public ::testing::Test
-    {
-    public:
-        void ExpectDirtyAfterChange(std::function<void(void)> func)
-        {
-            EXPECT_FALSE(m_vertexData.IsDirty());
-            func();
-            EXPECT_TRUE(m_vertexData.IsDirty());
-        }
-    protected:
-        Fire::VertexData m_vertexData;
-    };
+protected:
+    Fire::VertexData m_vertexData;
+};
 
 } // namespace
 
@@ -56,22 +58,22 @@ TEST_F(VertexDataTest, DefaultConstructedHasNoColors)
 
 TEST_F(VertexDataTest, IsMarkedDirtyAfterAChangeToItsPositions)
 {
-    ExpectDirtyAfterChange([&](){ m_vertexData.AddPosition(DUMMY); });
+    ExpectDirtyAfterChange([&]() { m_vertexData.AddPosition(DUMMY); });
 }
 
 TEST_F(VertexDataTest, IsMarkedDirtyAfterAChangeToItsNormals)
 {
-    ExpectDirtyAfterChange([&](){ m_vertexData.AddNormal(DUMMY); });
+    ExpectDirtyAfterChange([&]() { m_vertexData.AddNormal(DUMMY); });
 }
 
 TEST_F(VertexDataTest, IsMarkedDirtyAfterAChangeToItsTexCoords)
 {
-    ExpectDirtyAfterChange([&](){ m_vertexData.AddTexCoord(DUMMY); });
+    ExpectDirtyAfterChange([&]() { m_vertexData.AddTexCoord(DUMMY); });
 }
 
 TEST_F(VertexDataTest, IsMarkedDirtyAfterAChangeToItsColors)
 {
-    ExpectDirtyAfterChange([&](){ m_vertexData.AddColor(DUMMY); });
+    ExpectDirtyAfterChange([&]() { m_vertexData.AddColor(DUMMY); });
 }
 
 TEST_F(VertexDataTest, AddedPositionsAreStored)

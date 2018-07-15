@@ -8,8 +8,8 @@ namespace Fire
 {
 namespace RendererFactory
 {
-    std::unique_ptr<Renderer> CreateRenderer();
-    
+std::unique_ptr<Renderer> CreateRenderer();
+
 } // namespace RendererFactory
 } // namespace Fire
 

@@ -1,54 +1,56 @@
 #include "fire/scene.h"
 #include "fire/sceneComponent.h"
-#include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include <gtest/gtest.h>
 #include <string>
 #include <vector>
 
 namespace
 {
-    std::string const sceneName = "test";
+std::string const sceneName = "test";
 
-    class SceneComponentStub : public Fire::SceneComponent
+class SceneComponentStub : public Fire::SceneComponent
+{
+public:
+    explicit SceneComponentStub(std::string const& name)
+        : m_name(name)
     {
-    public:
-        explicit SceneComponentStub(std::string const& name): m_name(name) {}
-        virtual std::string GetName() const override { return m_name; }
-        virtual void Update() override {}
-        virtual std::vector<Fire::Renderable*> GetRenderables() override { return std::vector<Fire::Renderable*>(); }
-        
-    private:
-        std::string const m_name;
-    };
-
-    class SceneComponentMock : public Fire::SceneComponent
+    }
+    virtual std::string GetName() const override { return m_name; }
+    virtual void Update() override {}
+    virtual std::vector<Fire::Renderable*> GetRenderables() override
     {
-    public:
-        MOCK_CONST_METHOD0(GetName, std::string());
-        MOCK_METHOD0(Update, void());
-        MOCK_METHOD0(GetRenderables, std::vector<Fire::Renderable*>());
-    };
+        return std::vector<Fire::Renderable*>();
+    }
 
-    class SceneTest : public ::testing::Test
+private:
+    std::string const m_name;
+};
+
+class SceneComponentMock : public Fire::SceneComponent
+{
+public:
+    MOCK_CONST_METHOD0(GetName, std::string());
+    MOCK_METHOD0(Update, void());
+    MOCK_METHOD0(GetRenderables, std::vector<Fire::Renderable*>());
+};
+
+class SceneTest : public ::testing::Test
+{
+public:
+    SceneTest()
+        : m_scene(sceneName)
+        , m_sceneComponentMock()
     {
-    public:
-        SceneTest()
-            : m_scene(sceneName)
-            , m_sceneComponentMock()
-        {
+    }
 
-        }
-
-        Fire::Scene m_scene;
-        SceneComponentMock m_sceneComponentMock;
-    };
+    Fire::Scene m_scene;
+    SceneComponentMock m_sceneComponentMock;
+};
 
 } // namespace
 
-TEST_F(SceneTest, ScenesHaveAName)
-{
-    EXPECT_EQ(m_scene.GetName(), sceneName);
-}
+TEST_F(SceneTest, ScenesHaveAName) { EXPECT_EQ(m_scene.GetName(), sceneName); }
 
 TEST(SceneTestStandalone, SceneHaveGenericNamesIfAnEmptyNameIsProvided)
 {

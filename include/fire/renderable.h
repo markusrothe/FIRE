@@ -1,50 +1,50 @@
 #ifndef fire_renderable_h
 #define fire_renderable_h
 
-#include "vertexDeclaration.h"
-#include "vertexData.h"
 #include "indexData.h"
 #include "uniformFunction.h"
+#include "vertexData.h"
+#include "vertexDeclaration.h"
 
-#include <string>
 #include <memory>
+#include <string>
 
 namespace Fire
 {
-    class Material;
-    class Texture;
-    class Renderable
-    {
-    public:
-        Renderable(std::string const& name, std::unique_ptr<Material>&& material);
-		
-	~Renderable();
+class Material;
+class Texture;
+class Renderable
+{
+public:
+    Renderable(std::string const& name, std::unique_ptr<Material>&& material);
 
-        std::string GetName() const;
+    ~Renderable();
 
-        void SetVertexDeclaration(VertexDeclaration const& vDecl);
-        VertexDeclaration const& GetVertexDeclaration() const;
-        
-        VertexData& GetVertexData();
-	IndexData& GetIndexData();
+    std::string GetName() const;
 
-        Material* GetMaterial() const;
+    void SetVertexDeclaration(VertexDeclaration const& vDecl);
+    VertexDeclaration const& GetVertexDeclaration() const;
 
-        void SetUniformFunction(UniformFunction func);
-        UniformFunction GetUniformFunction() const;
+    VertexData& GetVertexData();
+    IndexData& GetIndexData();
 
-        void AddTexture(Texture* tex);
-        Texture* GetTexture() const;
-        
-    private:
-        std::string const m_name;
-        VertexDeclaration m_vDecl;
-        VertexData m_vData;
-	IndexData m_iData;
-        UniformFunction m_uniformFunction;
-        Texture* m_texture;
-	std::unique_ptr<Material> m_material;
-    };
+    Material* GetMaterial() const;
+
+    void SetUniformFunction(UniformFunction func);
+    UniformFunction GetUniformFunction() const;
+
+    void AddTexture(Texture* tex);
+    Texture* GetTexture() const;
+
+private:
+    std::string const m_name;
+    VertexDeclaration m_vDecl;
+    VertexData m_vData;
+    IndexData m_iData;
+    UniformFunction m_uniformFunction;
+    Texture* m_texture;
+    std::unique_ptr<Material> m_material;
+};
 } // namespace Fire
 
 #endif // fire_renderable_h

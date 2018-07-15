@@ -8,22 +8,23 @@
 
 namespace Fire
 {
-    class GLRenderContext : public RenderContext
-    {
-    public:
-        GLRenderContext(std::string const& name, unsigned int width, unsigned int height);
+class GLRenderContext : public RenderContext
+{
+public:
+    GLRenderContext(
+        std::string const& name, unsigned int width, unsigned int height);
 
-        virtual ~GLRenderContext(){}
+    virtual ~GLRenderContext() {}
 
-        virtual void PollEvents() override;
-        
-        virtual void SwapBuffers() override;
+    virtual void PollEvents() override;
 
-        virtual bool ShouldClose() override;
-        
-    private:
-        GLFWwindow* m_window;
-    };
-}
+    virtual void SwapBuffers() override;
+
+    virtual bool ShouldClose() override;
+
+private:
+    GLFWwindow* m_window;
+};
+} // namespace Fire
 
 #endif // fire_glrendercontext_h

@@ -2,13 +2,7 @@
 
 namespace Fire
 {
-	GLSLShaderLinker::GLSLShaderLinker()
-	{
+GLSLShaderLinker::GLSLShaderLinker() {}
 
-	}
-
-	int GLSLShaderLinker::Link()
-	{
-		return 0;
-	}
+int GLSLShaderLinker::Link() { return 0; }
 } // namespace Fire

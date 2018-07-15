@@ -6,8 +6,8 @@
 namespace Fire
 {
 
-    typedef std::function<void(void)> UniformFunction;
-    
+typedef std::function<void(void)> UniformFunction;
+
 } // namespace Fire
 
 #endif // fire_uniformfunction_h

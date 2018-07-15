@@ -1,20 +1,16 @@
 #include "fire/findByName.h"
 #include <gtest/gtest.h>
-#include <vector>
 #include <string>
+#include <vector>
 
 namespace
 {
-    std::vector<int> const vec = {1, 2, 3};
-    std::string const ONE = "one";
+std::vector<int> const vec = {1, 2, 3};
+std::string const ONE = "one";
 
-    std::string GetName(int i)
-    {
-        return i == 1 ? ONE : "";
-    }
-    
+std::string GetName(int i) { return i == 1 ? ONE : ""; }
+
 } // namespace
-
 
 TEST(FindByNameTest, ReturnsCollectionEntryIfFound)
 {

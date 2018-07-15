@@ -7,22 +7,21 @@
 
 namespace Fire
 {
-	class ShaderParser
-	{	
-	public:
+class ShaderParser
+{
+public:
+    typedef std::unordered_map<int, std::string> InputLayoutMap;
+    typedef std::vector<std::string> Uniforms;
 
-		typedef std::unordered_map<int, std::string> InputLayoutMap;
-		typedef std::vector<std::string> Uniforms;
+    explicit ShaderParser(std::string const& code);
 
-		explicit ShaderParser(std::string const& code);
+    std::string GetCode() const;
+    InputLayoutMap GetInputs() const;
+    Uniforms GetUniforms() const;
 
-		std::string GetCode() const;
-		InputLayoutMap GetInputs() const;
-		Uniforms GetUniforms() const;
-
-	private:
-		std::string m_code;
-	};
-}
+private:
+    std::string m_code;
+};
+} // namespace Fire
 
 #endif // fire_shaderparser_h

@@ -5,12 +5,12 @@
 
 namespace Fire
 {
-	class GLSLShaderLinker : public ShaderLinker
-	{
-	public:
-		GLSLShaderLinker();
-		int Link() override;
-	};
+class GLSLShaderLinker : public ShaderLinker
+{
+public:
+    GLSLShaderLinker();
+    int Link() override;
+};
 } // namespace Fire
 
 #endif // fire_glslshaderlinker_h

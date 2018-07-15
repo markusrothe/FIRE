@@ -3,27 +3,26 @@
 
 #include "renderingDelegate.h"
 #include <GL/glew.h>
-#include <unordered_map>
 #include <tuple>
+#include <unordered_map>
 
 namespace Fire
 {
-    class Renderable;
-    
-    class GLRenderingDelegate : public RenderingDelegate
-    {
-    public:
+class Renderable;
 
-	void Bind(Renderable* renderable) override;	
-	void Render(Renderable* renderable) override;
-	void Unbind(Renderable* renderable) override;
-    private:
+class GLRenderingDelegate : public RenderingDelegate
+{
+public:
+    void Bind(Renderable* renderable) override;
+    void Render(Renderable* renderable) override;
+    void Unbind(Renderable* renderable) override;
 
-	void UploadRenderable(Renderable* renderable);
+private:
+    void UploadRenderable(Renderable* renderable);
 
-	typedef std::tuple<GLuint, GLuint, GLuint> BufferObjects;
-	std::unordered_map<Renderable*, BufferObjects> m_uploadedRenderables;
-    };
+    typedef std::tuple<GLuint, GLuint, GLuint> BufferObjects;
+    std::unordered_map<Renderable*, BufferObjects> m_uploadedRenderables;
+};
 } // namespace Fire
 
 #endif // fire_glrenderingdelegate_h

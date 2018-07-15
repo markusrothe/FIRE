@@ -5,8 +5,8 @@
 
 namespace Fire
 {
-	class Material;
-	std::unique_ptr<Material> CreateDefaultMaterial();
+class Material;
+std::unique_ptr<Material> CreateDefaultMaterial();
 } // namespace Fire
 
 #endif // fire_defaultmaterialfactory_h

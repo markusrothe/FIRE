@@ -3,16 +3,15 @@
 
 namespace Fire
 {
-    class Renderable;
-    class Binder
-    {
-    public:
-        virtual ~Binder() = default;
+class Renderable;
+class Binder
+{
+public:
+    virtual ~Binder() = default;
 
-        virtual void Bind(Renderable* renderable) const = 0;
-        virtual void Unbind(Renderable* renderable) const = 0;
-
-    };
+    virtual void Bind(Renderable* renderable) const = 0;
+    virtual void Unbind(Renderable* renderable) const = 0;
+};
 
 } // namespace Fire
 

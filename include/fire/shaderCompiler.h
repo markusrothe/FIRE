@@ -5,18 +5,18 @@
 
 namespace Fire
 {
-    class ShaderCompiler
+class ShaderCompiler
+{
+public:
+    enum class ShaderType
     {
-    public:
-        enum class ShaderType
-        {
-            VERTEX_SHADER,
-            FRAGMENT_SHADER
-        };
-        
-        virtual ~ShaderCompiler() = default;
-        virtual int Compile() = 0;
+        VERTEX_SHADER,
+        FRAGMENT_SHADER
     };
+
+    virtual ~ShaderCompiler() = default;
+    virtual int Compile() = 0;
+};
 } // namespace Fire
 
 #endif // fire_shadercompiler_h

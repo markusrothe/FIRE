@@ -4,31 +4,31 @@
 
 namespace Fire
 {
-    void TextureBinder::Bind(Renderable* renderable) const
+void TextureBinder::Bind(Renderable* renderable) const
+{
+    if(!renderable)
     {
-        if (!renderable)
-        {
-            return;
-        }
-
-        auto tex = renderable->GetTexture();
-        if (tex)
-        {
-            tex->Bind();
-        }
+        return;
     }
 
-    void TextureBinder::Unbind(Renderable* renderable) const
+    auto tex = renderable->GetTexture();
+    if(tex)
     {
-        if (!renderable)
-        {
-            return;
-        }
-
-        auto tex = renderable->GetTexture();
-        if (tex && tex->Bound())
-        {
-            tex->Unbind();
-        }
+        tex->Bind();
     }
+}
+
+void TextureBinder::Unbind(Renderable* renderable) const
+{
+    if(!renderable)
+    {
+        return;
+    }
+
+    auto tex = renderable->GetTexture();
+    if(tex && tex->Bound())
+    {
+        tex->Unbind();
+    }
+}
 } // namespace Fire
