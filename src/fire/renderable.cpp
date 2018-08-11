@@ -1,17 +1,15 @@
 #include "renderable.h"
 #include "material.h"
-#include "texture.h"
 
 namespace Fire
 {
 Renderable::Renderable(
-    std::string const& name, std::unique_ptr<Material>&& material)
+    std::string const& name, std::unique_ptr<Material> material)
     : m_name{name}
     , m_vDecl{}
     , m_vData{}
     , m_iData{}
-    , m_uniformFunction([]() {})
-    , m_texture{}
+    , m_uniformFunction([] {})
     , m_material{std::move(material)}
 {
 }
@@ -45,8 +43,4 @@ UniformFunction Renderable::GetUniformFunction() const
 {
     return m_uniformFunction;
 }
-
-void Renderable::AddTexture(Texture* tex) { m_texture = tex; }
-
-Texture* Renderable::GetTexture() const { return m_texture; }
 } // namespace Fire

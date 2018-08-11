@@ -40,18 +40,8 @@ set(header_files
   ./include/fire/binder.h
   ./include/fire/material.h
   ./include/fire/materialFactory.h
-  ./include/fire/defaultMaterialFactory.h
   ./include/fire/uniformFunction.h
-  ./include/fire/textureBinder.h
-  ./include/fire/texture.h
-  ./include/fire/glTexture.h
-  ./include/fire/shader.h
   ./include/fire/shaderParser.h
-  ./include/fire/shaderCompiler.h
-  ./include/fire/shaderLinker.h
-  ./include/fire/glslShaderCompiler.h
-  ./include/fire/glslShaderLinker.h
-  ./include/fire/glslShader.h
   )
 
 set(src_files
@@ -71,12 +61,6 @@ set(src_files
   ./src/fire/indexData.cpp
   ./src/fire/material.cpp
   ./src/fire/materialFactory.cpp
-  ./src/fire/defaultMaterialFactory.cpp
-  ./src/fire/textureBinder.cpp
-  ./src/fire/glTexture.cpp
-  ./src/fire/glslShader.cpp
-  ./src/fire/glslShaderLinker.cpp
-  ./src/fire/glslShaderCompiler.cpp
   )
 
 include_directories(

@@ -27,6 +27,12 @@ void GLRenderingDelegate::Bind(Renderable* renderable)
 
 void GLRenderingDelegate::Render(Renderable* renderable)
 {
+    auto uniformFunction = renderable->GetUniformFunction();
+    if(uniformFunction)
+    {
+        uniformFunction();
+    }
+
     glDrawElements(
         GL_TRIANGLES, renderable->GetIndexData().GetIndices().size(),
         GL_UNSIGNED_INT, 0);

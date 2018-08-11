@@ -1,7 +1,7 @@
 #ifndef fire_material_f
 #define fire_material_f
 
-#include "shader.h"
+#include <GL/glew.h>
 #include <memory>
 #include <string>
 #include <vector>
@@ -11,7 +11,7 @@ namespace Fire
 class Material
 {
 public:
-    Material(std::string const& name, std::unique_ptr<Shader>&& shader);
+    explicit Material(std::string const& name, GLuint shaderProgram);
 
     ~Material();
 
@@ -19,12 +19,11 @@ public:
 
     void Bind();
     void Unbind();
-
     bool IsBound() const;
 
 private:
     std::string const m_name;
-    std::unique_ptr<Shader> m_shader;
+    GLuint const m_shaderProgram;
     bool m_bound;
 };
 } // namespace Fire

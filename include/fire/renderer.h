@@ -8,15 +8,11 @@ namespace Fire
 {
 class Renderable;
 class RenderingDelegate;
-class Binder;
 
 class Renderer
 {
 public:
-    Renderer(
-        std::unique_ptr<RenderingDelegate>&& renderingDelegate,
-        std::unique_ptr<Binder>&& textureBinder,
-        std::unique_ptr<Binder>&& materialBinder);
+    explicit Renderer(std::unique_ptr<RenderingDelegate> renderingDelegate);
 
     ~Renderer();
 
@@ -24,8 +20,6 @@ public:
 
 private:
     std::unique_ptr<RenderingDelegate> const m_renderingDelegate;
-    std::unique_ptr<Binder> const m_textureBinder;
-    std::unique_ptr<Binder> const m_materialBinder;
 };
 
 } // namespace Fire

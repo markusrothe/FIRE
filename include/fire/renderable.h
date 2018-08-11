@@ -12,11 +12,10 @@
 namespace Fire
 {
 class Material;
-class Texture;
 class Renderable
 {
 public:
-    Renderable(std::string const& name, std::unique_ptr<Material>&& material);
+    Renderable(std::string const& name, std::unique_ptr<Material> material);
 
     ~Renderable();
 
@@ -33,16 +32,12 @@ public:
     void SetUniformFunction(UniformFunction func);
     UniformFunction GetUniformFunction() const;
 
-    void AddTexture(Texture* tex);
-    Texture* GetTexture() const;
-
 private:
     std::string const m_name;
     VertexDeclaration m_vDecl;
     VertexData m_vData;
     IndexData m_iData;
     UniformFunction m_uniformFunction;
-    Texture* m_texture;
     std::unique_ptr<Material> m_material;
 };
 } // namespace Fire

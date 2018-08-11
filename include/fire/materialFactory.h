@@ -2,16 +2,16 @@
 #define fire_materialfactory_h
 
 #include <memory>
+#include <string>
 
 namespace Fire
 {
 class Material;
-class ShaderCompiler;
-class ShaderLinker;
 
 std::unique_ptr<Material> CreateMaterial(
-    ShaderCompiler* vertexShaderCompiler,
-    ShaderCompiler* fragmentShaderCompiler, ShaderLinker* shaderLinker);
+    std::string const& materialName, std::string const& vertexShaderCode,
+    std::string const& fragmentShaderCode);
+
 } // namespace Fire
 
 #endif

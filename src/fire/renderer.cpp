@@ -1,22 +1,17 @@
 #include "renderer.h"
 #include "binder.h"
+#include "material.h"
 #include "renderable.h"
 #include "renderingDelegate.h"
-
 namespace Fire
 {
 
-Renderer::Renderer(
-    std::unique_ptr<RenderingDelegate>&& renderingDelegate,
-    std::unique_ptr<Binder>&& textureBinder,
-    std::unique_ptr<Binder>&& materialBinder)
+Renderer::Renderer(std::unique_ptr<RenderingDelegate> renderingDelegate)
     : m_renderingDelegate(std::move(renderingDelegate))
-    , m_textureBinder(std::move(textureBinder))
-    , m_materialBinder(std::move(materialBinder))
 {
 }
 
-Renderer::~Renderer() {}
+Renderer::~Renderer() = default;
 
 void Renderer::Render(std::vector<Renderable*> const& renderables)
 {
@@ -25,19 +20,20 @@ void Renderer::Render(std::vector<Renderable*> const& renderables)
         if(renderable)
         {
             m_renderingDelegate->Bind(renderable);
-            m_textureBinder->Bind(renderable);
-            m_materialBinder->Bind(renderable);
 
-            auto uniformFunction = renderable->GetUniformFunction();
-            if(uniformFunction)
+            auto material = renderable->GetMaterial();
+
+            if(material)
             {
-                uniformFunction();
+                material->Bind();
             }
 
             m_renderingDelegate->Render(renderable);
 
-            m_materialBinder->Unbind(renderable);
-            m_textureBinder->Unbind(renderable);
+            if(material)
+            {
+                material->Unbind();
+            }
 
             m_renderingDelegate->Unbind(renderable);
         }

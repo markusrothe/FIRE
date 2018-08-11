@@ -1,12 +1,11 @@
-* TODO ShaderParser regex parsing einbauen
-* TODO Shader Class + tests
-* TODO Shader Linker einbauen + tests
-* TODO Default Material UniformFunction einbauen 
 * TODO Material Simple (Default) Material Factory
-* TODO MaterialBinder class
-* TODO Camera class
+1) Renderables nutzen default material
+2) Default Material wird bei instanziierung compiled + linked (in factory)
+   Shader compiler + -linker
+3) Default Material nutzt den simple (white) shader einbauen, evtl. hardcoded.
+4) Default Uniform function?
+* TODO Shader Class + tests
+* TODO 3D Rendering (Camera class + Matrizen ...)
 * TODO Input handling
 * TODO Image Texture class (erbt von Texture base class)
-* TODO RenderingDelegate Derived class
-* TODO Simple example ausbauen zum Triangle rendern
  

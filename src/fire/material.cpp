@@ -2,21 +2,29 @@
 
 namespace Fire
 {
-Material::Material(std::string const& name, std::unique_ptr<Shader>&& shader)
-    : m_name(name.empty() ? "simple" : name)
-    , m_shader(std::move(shader))
+Material::Material(std::string const& name, GLuint shaderProgram)
+    : m_name(name)
+    , m_shaderProgram(shaderProgram)
     , m_bound(false)
 {
 }
 
-Material::~Material() {}
+Material::~Material() = default;
 
 std::string Material::GetName() const { return m_name; }
 
-void Material::Bind() { m_shader->Bind(); }
+void Material::Bind()
+{
+    glUseProgram(m_shaderProgram);
+    m_bound = true;
+}
 
-void Material::Unbind() { m_shader->Unbind(); }
+void Material::Unbind()
+{
+    glUseProgram(0);
+    m_bound = false;
+}
 
-bool Material::IsBound() const { return m_shader->Bound(); }
+bool Material::IsBound() const { return m_bound; }
 
 } // namespace Fire

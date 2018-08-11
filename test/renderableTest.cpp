@@ -2,6 +2,7 @@
 #include "fire/material.h"
 #include "fire/vertexData.h"
 #include "fire/vertexDeclaration.h"
+#include <GL/glew.h>
 #include <gtest/gtest.h>
 #include <memory>
 #include <string>
@@ -9,14 +10,12 @@
 namespace
 {
 std::string const NAME("name");
-std::unique_ptr<Fire::Shader> shader;
 
 class RenderableTest : public ::testing::Test
 {
 public:
     RenderableTest()
-        : m_material{std::make_unique<Fire::Material>(
-              "materialName", std::move(shader))}
+        : m_material{std::make_unique<Fire::Material>("materialName", 0u)}
         , m_renderable(NAME, std::move(m_material))
     {
     }
