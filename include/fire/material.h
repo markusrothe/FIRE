@@ -21,6 +21,8 @@ public:
     void Unbind();
     bool IsBound() const;
 
+    GLuint GetShader() { return m_shaderProgram; }
+
 private:
     std::string const m_name;
     GLuint const m_shaderProgram;

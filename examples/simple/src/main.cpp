@@ -1,4 +1,5 @@
 #include "fire/material.h"
+#include "fire/materialFactory.h"
 #include "fire/renderable.h"
 #include "fire/renderer.h"
 #include "fire/rendererFactory.h"
@@ -15,14 +16,14 @@ class TriSceneComponent : public SceneComponent
 {
 public:
     TriSceneComponent()
-        : m_renderable("Triangle", nullptr)
+        : m_renderable("Triangle", CreateDefaultMaterial())
     {
-        auto vertexData = m_renderable.GetVertexData();
-        vertexData.AddPosition(glm::vec3(0, 0, 0));
-        vertexData.AddPosition(glm::vec3(0, 1, 0));
+        auto& vertexData = m_renderable.GetVertexData();
+        vertexData.AddPosition(glm::vec3(-1, 0, 0));
         vertexData.AddPosition(glm::vec3(1, 0, 0));
+        vertexData.AddPosition(glm::vec3(0, 1, 0));
 
-        auto indexData = m_renderable.GetIndexData();
+        auto& indexData = m_renderable.GetIndexData();
         indexData.AddIndices({0, 2, 1});
 
         VertexDeclaration vDecl;

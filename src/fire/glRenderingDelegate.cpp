@@ -1,4 +1,5 @@
 #include "glRenderingDelegate.h"
+#include "material.h"
 #include "renderable.h"
 #include <algorithm>
 #include <iostream>
@@ -38,16 +39,15 @@ void GLRenderingDelegate::Render(Renderable* renderable)
         GL_UNSIGNED_INT, 0);
 }
 
-void GLRenderingDelegate::Unbind(Renderable* renderable)
+void GLRenderingDelegate::Unbind(Renderable*)
 {
-    glBindBuffer(
-        GL_ELEMENT_ARRAY_BUFFER,
-        std::get<2>(m_uploadedRenderables[renderable]));
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 }
 
 void GLRenderingDelegate::UploadRenderable(Renderable* renderable)
 {
+    std::cout << "UploadRenderable\n";
     GLuint vao, vbo, ibo;
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
@@ -57,6 +57,9 @@ void GLRenderingDelegate::UploadRenderable(Renderable* renderable)
     auto vertexDataSize = static_cast<GLfloat>(
         renderable->GetVertexData().GetPositions().size() * sizeof(GLfloat) *
         3.0f);
+
+    std::cout << "vertexDataSize" << vertexDataSize << std::endl;
+
     glBufferData(
         GL_ARRAY_BUFFER, vertexDataSize,
         &(renderable->GetVertexData().GetPositions())[0], GL_STATIC_DRAW);
@@ -64,8 +67,13 @@ void GLRenderingDelegate::UploadRenderable(Renderable* renderable)
     auto vertexDecl = renderable->GetVertexDeclaration();
     for(auto const& vertexDeclSection : vertexDecl.GetSections())
     {
-        auto attribLocation =
-            glGetAttribLocation(0, vertexDeclSection.m_attributeName.c_str());
+        auto attribLocation = glGetAttribLocation(
+            renderable->GetMaterial()->GetShader(),
+            vertexDeclSection.m_attributeName.c_str());
+
+        std::cout << "attrib: " << vertexDeclSection.m_attributeName.c_str()
+                  << attribLocation << std::endl;
+
         glEnableVertexAttribArray(attribLocation);
         glVertexAttribPointer(
             attribLocation, vertexDeclSection.m_numElements, GL_FLOAT, GL_FALSE,
@@ -73,11 +81,14 @@ void GLRenderingDelegate::UploadRenderable(Renderable* renderable)
             (const GLvoid*)vertexDeclSection.m_offset);
     }
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-
     glGenBuffers(1, &ibo);
+
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
     auto indexDataSize =
         renderable->GetIndexData().GetIndices().size() * sizeof(GLuint);
+
+    std::cout << "indexDataSize" << indexDataSize << std::endl;
+
     glBufferData(
         GL_ELEMENT_ARRAY_BUFFER, indexDataSize,
         &(renderable->GetIndexData().GetIndices()[0]), GL_STATIC_DRAW);
@@ -85,6 +96,8 @@ void GLRenderingDelegate::UploadRenderable(Renderable* renderable)
 
     m_uploadedRenderables.insert(
         std::make_pair(renderable, std::make_tuple(vao, vbo, ibo)));
+
+    std::cout << "vbo" << vbo << " ibo" << ibo << " vao" << vao << std::endl;
 }
 
 } // namespace Fire

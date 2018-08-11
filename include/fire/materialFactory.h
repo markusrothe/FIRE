@@ -12,6 +12,8 @@ std::unique_ptr<Material> CreateMaterial(
     std::string const& materialName, std::string const& vertexShaderCode,
     std::string const& fragmentShaderCode);
 
+std::unique_ptr<Material> CreateDefaultMaterial();
+
 } // namespace Fire
 
 #endif
