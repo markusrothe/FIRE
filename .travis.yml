@@ -16,5 +16,5 @@ script:
     - cmake --build .
 
 after_success:
-    - coveralls --root .. -E ".*externals*" -E ".*CMakeFiles.*" -E ".*examples.*" -E ".*/old/.*"
+    - coveralls --root .. -E ".*contrib*" -E ".*CMakeFiles.*" -E ".*examples.*"
     
