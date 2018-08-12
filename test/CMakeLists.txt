@@ -1,6 +1,7 @@
 include_directories(
-  ${gtest_SOURCE_DIR}/include
-  ../include
+  ${PROJECT_SOURCE_DIR}/contrib/gtest/googletest/include
+  ${PROJECT_SOURCE_DIR}/contrib/gtest/googlemock/include
+  ${PROJECT_SOURCE_DIR}/include
 )
 
 set(test_sources
@@ -30,7 +31,12 @@ endif()
 
 target_compile_features(engine_tests PRIVATE cxx_lambda_init_captures)
 
-target_link_libraries(engine_tests gtest_main engine gmock)
+target_link_libraries(engine_tests
+    engine
+    ${GLEW}
+    debug ${GTEST_d} optimized ${GTEST}
+    debug ${GTEST_MAIN_d} optimized ${GTEST_MAIN}
+    debug ${GMOCK_d} optimized ${GMOCK})
 
 add_custom_command (
   TARGET engine_tests POST_BUILD
