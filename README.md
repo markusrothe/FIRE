@@ -16,6 +16,6 @@ CMake Version 3.0 or higher
 ```   
    mkdir build
    cd build
-   cmake ../build
+   cmake ..
    make
 ```
