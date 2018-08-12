@@ -4,8 +4,9 @@ language: cpp
 
 before_install:
     - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+	- sudo add-apt-repository universe
     - sudo apt-get update -q
-    - sudo apt-get install xorg-dev libglu1-mesa-dev g++-7 libglfw3-dev
+    - sudo apt install xorg-dev libglu1-mesa-dev g++-7 libglfw3-dev
     - pip install --user cpp-coveralls
 
 script:
