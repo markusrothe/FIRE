@@ -31,12 +31,22 @@ endif()
 
 target_compile_features(engine_tests PRIVATE cxx_lambda_init_captures)
 
-target_link_libraries(engine_tests
-    engine
-    ${GLEW}
-    debug ${GTEST_d} optimized ${GTEST}
-    debug ${GTEST_MAIN_d} optimized ${GTEST_MAIN}
-    debug ${GMOCK_d} optimized ${GMOCK})
+if (MSVC)
+   target_link_libraries(engine_tests
+		engine
+		${GLEW}
+		debug ${GTEST_d} optimized ${GTEST}
+		debug ${GTEST_MAIN_d} optimized ${GTEST_MAIN}
+		debug ${GMOCK_d} optimized ${GMOCK})
+else()
+	target_link_libraries(engine_tests
+		engine
+		${GLEW}
+		${GTEST}
+		${GTEST_MAIN}
+		${GMOCK}
+		pthread)
+endif()
 
 add_custom_command (
   TARGET engine_tests POST_BUILD

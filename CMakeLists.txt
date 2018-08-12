@@ -86,13 +86,26 @@ if(MSVC)
     find_library(GLFW NAMES glfw3 HINTS ${PROJECT_SOURCE_DIR}/contrib/glfw-3.2.1/msvc_19_0/release)
     find_library(GTEST NAMES gtest HINTS ${PROJECT_SOURCE_DIR}/contrib/gtest/googletest/msvc_19_0/release)
     find_library(GTEST_MAIN NAMES gtest_main HINTS ${PROJECT_SOURCE_DIR}/contrib/gtest/googletest/msvc_19_0/release)
-    find_library(GMOCK NAMES gmock HINTS ${PROJECT_SOURCE_DIR}/contrib/gtest/googlemock/msvc_19_0/release)    
-endif()
+    find_library(GMOCK NAMES gmock HINTS ${PROJECT_SOURCE_DIR}/contrib/gtest/googlemock/msvc_19_0/release)
 
-target_link_libraries(engine
-    ${GLEW}
-    ${OPENGL_gl_LIBRARY}
-    debug ${GLFW_d} optimized ${GLFW})
+	target_link_libraries(engine
+		${GLEW}
+    	${OPENGL_gl_LIBRARY}
+    	debug ${GLFW_d} optimized ${GLFW})
+else()
+    find_library(GLEW NAMES libGLEW.a HINTS ${PROJECT_SOURCE_DIR}/contrib/glew-2.1.0/lib/Release/gcc-7.3)    
+
+	find_package(glfw3 3.2 REQUIRED)
+
+    find_library(GTEST NAMES libgtest.a HINTS ${PROJECT_SOURCE_DIR}/contrib/gtest/googletest/gcc-7.3)
+    find_library(GTEST_MAIN NAMES libgtest_main.a HINTS ${PROJECT_SOURCE_DIR}/contrib/gtest/googletest/gcc-7.3)
+    find_library(GMOCK NAMES libgmock.a HINTS ${PROJECT_SOURCE_DIR}/contrib/gtest/googlemock/gcc-7.3)
+
+	target_link_libraries(engine
+		${GLEW}
+    	${OPENGL_gl_LIBRARY}
+		glfw)
+endif()
 
 target_compile_features(engine PRIVATE cxx_lambda_init_captures)
 
