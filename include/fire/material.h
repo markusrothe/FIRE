@@ -1,7 +1,6 @@
-#ifndef fire_material_f
-#define fire_material_f
+#ifndef fire_material_h
+#define fire_material_h
 
-#define GLEW_STATIC
 #include <GL/glew.h>
 #include <memory>
 #include <string>

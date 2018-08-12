@@ -1,6 +1,6 @@
 include_directories(
-  ${PROJECT_SOURCE_DIR}/contrib/gtest/googletest/include
-  ${PROJECT_SOURCE_DIR}/contrib/gtest/googlemock/include
+  ${PROJECT_SOURCE_DIR}/externals/googletest/googletest/include
+  ${PROJECT_SOURCE_DIR}/externals/googletest/googlemock/include
   ${PROJECT_SOURCE_DIR}/include
 )
 
@@ -16,7 +16,7 @@ set(test_sources
   ./shaderParserTest.cpp
 )
 
-add_executable(engine_tests ${test_sources})
+add_executable(engine_tests ${test_sources} ${glew_header} ${glew_source})
 
 if (MSVC)
   target_compile_options(engine_tests PUBLIC /W4)
@@ -31,22 +31,12 @@ endif()
 
 target_compile_features(engine_tests PRIVATE cxx_lambda_init_captures)
 
-if (MSVC)
-   target_link_libraries(engine_tests
+target_link_libraries(engine_tests
 		engine
-		${GLEW}
-		debug ${GTEST_d} optimized ${GTEST}
-		debug ${GTEST_MAIN_d} optimized ${GTEST_MAIN}
-		debug ${GMOCK_d} optimized ${GMOCK})
-else()
-	target_link_libraries(engine_tests
-		engine
-		${GLEW}
-		${GTEST}
-		${GTEST_MAIN}
-		${GMOCK}
-		pthread)
-endif()
+		glfw
+        gtest_main
+        gtest
+        gmock)
 
 add_custom_command (
   TARGET engine_tests POST_BUILD

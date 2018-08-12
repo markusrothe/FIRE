@@ -2,7 +2,34 @@ cmake_minimum_required(VERSION 3.0)
 
 project(engine)
 
+find_package(OpenGL REQUIRED)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+
+
+if (MSVC AND (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 19.11))	
+  # VS 2017 : Disable warnings from from gtest code, using deprecated code related to TR1 	
+  add_definitions(-D_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING)	
+  message("Add flag to disable warnings from gtest -  _SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING")	
+endif()
+
+option(gtest_force_shared_crt "" ON)	
+option(BUILD_GTEST "" ON)
+add_subdirectory(externals/googletest)	
+
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+add_subdirectory(externals/glfw-3.2.1)
+	
+add_subdirectory(externals/glm-0.9.9-a2)
+
+add_definitions(-DGLEW_STATIC=1)
+set(glew_header
+   ${PROJECT_SOURCE_DIR}/externals/glew-2.1.0/include/GL/glew.h)
+   
+set(glew_source
+    ${PROJECT_SOURCE_DIR}/externals/glew-2.1.0/src/glew.c)
 
 set(header_files
   ./include/fire/renderer.h
@@ -52,7 +79,7 @@ include_directories(
 )
 
 add_library(engine
-  ${src_files} ${header_files}
+  ${src_files} ${header_files} ${glew_header} ${glew_source}
 )
 
 if (MSVC)
@@ -66,46 +93,18 @@ else()
   endif()
 endif()
 
-find_package(OpenGL REQUIRED)
-
 target_include_directories (engine SYSTEM PUBLIC
   ${OPENGL_INCLUDE_DIR} 
-  ${PROJECT_SOURCE_DIR}/contrib/stb_image
-  ${PROJECT_SOURCE_DIR}/contrib/glm-0.9.9-a2
-  ${PROJECT_SOURCE_DIR}/contrib/glfw-3.2.1/include
-  ${PROJECT_SOURCE_DIR}/contrib/glew-2.1.0/include  
+  ${PROJECT_SOURCE_DIR}/externals/stb_image
+  ${PROJECT_SOURCE_DIR}/externals/glm-0.9.9-a2
+  ${PROJECT_SOURCE_DIR}/externals/glfw-3.2.1/include
+  ${PROJECT_SOURCE_DIR}/externals/glew-2.1.0/include
 )
 
-if(MSVC)
-    find_library(GLEW NAMES glew32s HINTS ${PROJECT_SOURCE_DIR}/contrib/glew-2.1.0/lib/Release/Win32)    
-    find_library(GLFW_d NAMES glfw3 HINTS ${PROJECT_SOURCE_DIR}/contrib/glfw-3.2.1/msvc_19_0/debug)    
-    find_library(GTEST_d NAMES gtestd HINTS ${PROJECT_SOURCE_DIR}/contrib/gtest/googletest/msvc_19_0/debug)
-    find_library(GTEST_MAIN_d NAMES gtest_maind HINTS ${PROJECT_SOURCE_DIR}/contrib/gtest/googletest/msvc_19_0/debug)
-    find_library(GMOCK_d NAMES gmockd HINTS ${PROJECT_SOURCE_DIR}/contrib/gtest/googlemock/msvc_19_0/debug)
-    
-    find_library(GLFW NAMES glfw3 HINTS ${PROJECT_SOURCE_DIR}/contrib/glfw-3.2.1/msvc_19_0/release)
-    find_library(GTEST NAMES gtest HINTS ${PROJECT_SOURCE_DIR}/contrib/gtest/googletest/msvc_19_0/release)
-    find_library(GTEST_MAIN NAMES gtest_main HINTS ${PROJECT_SOURCE_DIR}/contrib/gtest/googletest/msvc_19_0/release)
-    find_library(GMOCK NAMES gmock HINTS ${PROJECT_SOURCE_DIR}/contrib/gtest/googlemock/msvc_19_0/release)
+target_link_libraries(engine
+		glfw
+    	${OPENGL_gl_LIBRARY})
 
-	target_link_libraries(engine
-		${GLEW}
-    	${OPENGL_gl_LIBRARY}
-    	debug ${GLFW_d} optimized ${GLFW})
-else()
-    find_library(GLEW NAMES libGLEW.a HINTS ${PROJECT_SOURCE_DIR}/contrib/glew-2.1.0/lib/Release/gcc-7.3)    
-
-	find_package(glfw3 3.2 REQUIRED)
-
-    find_library(GTEST NAMES libgtest.a HINTS ${PROJECT_SOURCE_DIR}/contrib/gtest/googletest/gcc-7.3)
-    find_library(GTEST_MAIN NAMES libgtest_main.a HINTS ${PROJECT_SOURCE_DIR}/contrib/gtest/googletest/gcc-7.3)
-    find_library(GMOCK NAMES libgmock.a HINTS ${PROJECT_SOURCE_DIR}/contrib/gtest/googlemock/gcc-7.3)
-
-	target_link_libraries(engine
-		${GLEW}
-    	${OPENGL_gl_LIBRARY}
-		glfw)
-endif()
 
 target_compile_features(engine PRIVATE cxx_lambda_init_captures)
 
