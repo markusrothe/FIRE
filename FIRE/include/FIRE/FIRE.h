@@ -1,0 +1,4 @@
+namespace FIRE
+{
+    void HelloWorld();
+}
