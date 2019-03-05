@@ -1,17 +1,17 @@
 if(NOT BUILD_TESTING)
-	return()
+    return()
 endif()
 
 add_executable(FIRE_tests
-	./FIRETest.cpp
+    ./FIRETest.cpp
 )
 
 target_link_libraries(FIRE_tests
 PRIVATE
-	FIRE
-	gtest
-	gtest_main
-	gmock
+    FIRE
+    gtest
+    gtest_main
+    gmock
 )
 
 include(GoogleTest)

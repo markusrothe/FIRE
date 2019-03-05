@@ -3,8 +3,5 @@
 
 namespace FIRE
 {
-    void HelloWorld()
-    {
-        std::cout << "Hello FIRE!\n";
-    }
-}
+void HelloWorld() { std::cout << "Hello FIRE!\n"; }
+} // namespace FIRE
