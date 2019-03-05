@@ -1,4 +1,6 @@
-/externals/glew-2.1.0/glew.pc
 /build/
 /.vscode
 /.vs
+doc/
+.ccls-cache/
+compile_commands.json
