@@ -14,7 +14,9 @@ PRIVATE
 	gmock
 )
 
-add_test(
-	NAME FIRETests
-	COMMAND FIRE_tests
+include(GoogleTest)
+gtest_discover_tests(FIRE_tests)
+
+add_custom_command(TARGET FIRE_tests POST_BUILD
+                   COMMAND ctest -C $<CONFIGURATION> --output-on-failure
 )

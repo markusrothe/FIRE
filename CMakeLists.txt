@@ -4,6 +4,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}")
 project(FIRE)
 include(gtest_build)
 
+include(CTest)
 enable_testing()
 
 add_subdirectory(FIRE)
