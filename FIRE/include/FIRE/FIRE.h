@@ -1,4 +1,4 @@
 namespace FIRE
 {
-    void HelloWorld();
+void HelloWorld();
 }
