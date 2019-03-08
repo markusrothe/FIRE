@@ -14,7 +14,7 @@ PRIVATE
     gmock
 )
 
-if("${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" AND COVERAGE)
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" AND COVERAGE)
     target_compile_options(FIRE_tests PUBLIC --coverage)
     target_link_libraries(FIRE_tests PUBLIC --coverage)
 endif()
