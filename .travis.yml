@@ -2,24 +2,25 @@ dist: xenial
 sudo: false
 language: cpp
 
-os:
-    - linux
-    - windows
-
-compiler:
-    - gcc
-    - clang    
+matrix:
+    include:
+        - os: linux
+          compiler: cpp
+        - os: linux
+          compiler: clang
+        - os: windows
     
 before_install:
-    - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-    - sudo apt-get update -q
-    - sudo apt-get install -qq
 
+    - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y; fi
+    - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get update -q; fi
+    - if [ "$TRAVIS_OS_NAME" = "linux" ]; sudo apt-get install -qq
+    
 install:
-    - if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-7; fi
-    - if [ "$CXX" = "g++" ]; then export CXX="g++-7" CC="gcc-7";fi
-    - if [ "$CXX" = "g++" ]; then sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 90; fi
-    - if [ "$CXX" = "g++" ]; then sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 90; fi
+    - if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-7; fi
+    - if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$CXX" = "g++" ]; then export CXX="g++-7" CC="gcc-7";fi
+    - if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$CXX" = "g++" ]; then sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 90; fi
+    - if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$CXX" = "g++" ]; then sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 90; fi
     
 script:
     - mkdir build
