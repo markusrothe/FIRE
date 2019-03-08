@@ -1,7 +1,7 @@
 # FIRE - FIRE is (yet another) Rendering Engine
 
 [![Build Status](https://travis-ci.org/markusrothe/FIRE.svg?branch=master)](https://travis-ci.org/markusrothe/FIRE)
-[![Coverage Status](https://coveralls.io/repos/github/markusrothe/FIRE/badge.svg?branch=master)](https://coveralls.io/github/markusrothe/FIRE?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/markusrothe/FIRE/badge.svg?branch=master)](https://coveralls.io/github/markusrothe/FIRE?branch=master) 
 
 ## Introduction ##
 FIRE is (yet another) rendering engine to create 2D/3D games.
