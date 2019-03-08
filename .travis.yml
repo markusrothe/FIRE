@@ -1,0 +1,33 @@
+dist: xenial
+sudo: false
+language: cpp
+
+matrix:
+    include:
+        - os: linux
+          compiler: cpp
+        - os: linux
+          compiler: clang
+        - os: windows
+    
+before_install:
+
+    - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y; fi
+    - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get update -q; fi
+    - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get install -qq; fi
+    - if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$CXX" = "g++" ]; then pip install --user cpp-coveralls; fi
+    
+install:
+    - if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-7; fi
+    - if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$CXX" = "g++" ]; then export CXX="g++-7" CC="gcc-7";fi
+    - if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$CXX" = "g++" ]; then sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 90; fi
+    - if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$CXX" = "g++" ]; then sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 90; fi
+    
+script:
+    - mkdir build
+    - cd build
+    - cmake -DCOVERAGE=1 .. 
+    - cmake --build .
+    
+after_success:
+    - if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$CXX" = "g++" ]; then coveralls --root .. -E ".*CMakeFiles.*"; fi
