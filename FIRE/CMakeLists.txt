@@ -11,7 +11,7 @@ PUBLIC
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND COVERAGE)
     target_compile_options(FIRE PUBLIC --coverage)
-    target_link_libraries(FIRE --coverage)
+    target_link_libraries(FIRE PUBLIC --coverage)
 endif()
 
 add_subdirectory(test)
