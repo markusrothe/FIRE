@@ -15,6 +15,7 @@ before_install:
     - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y; fi
     - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get update -q; fi
     - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get install -qq; fi
+    - if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$CXX" = "g++" ]; then pip install --user cpp-coveralls; fi
     
 install:
     - if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-7; fi
@@ -25,5 +26,8 @@ install:
 script:
     - mkdir build
     - cd build
-    - cmake ..
+    - cmake -DCOVERAGE=1 .. 
     - cmake --build .
+    
+after_success:
+    - if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$CXX" = "g++" ]; then coveralls --root .. -E ".*CMakeFiles.*"; fi
