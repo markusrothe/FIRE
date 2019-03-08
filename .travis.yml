@@ -30,4 +30,4 @@ script:
     - cmake --build .
     
 after_success:
-    - coveralls --root .. -E ".*CMakeFiles.*" -E ".*build.*"
+    - coveralls --root .. -E ".*CMakeFiles.*" -E ".*googletest.*" -E ".*googlemock.*" 
