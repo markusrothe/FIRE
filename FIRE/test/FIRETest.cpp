@@ -1,5 +1,5 @@
 #include <FIRE/FIRE.h>
-#include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
 TEST(FIRETest, Hello_FIRE_Test)
 {
