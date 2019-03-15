@@ -1,5 +1,4 @@
 dist: xenial
-sudo: false
 language: cpp
 
 matrix:
@@ -30,4 +29,4 @@ script:
     - cmake --build .
     
 after_success:
-    - if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$CXX" = "g++" ]; then coveralls --root .. -E ".*CMakeFiles.*"; fi
+    - coveralls --root .. -E ".*CMakeFiles.*" -E ".*googletest.*" -E ".*googlemock.*" 
