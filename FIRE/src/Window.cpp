@@ -19,10 +19,18 @@ void Window::Resize(unsigned int newWidth, unsigned int newHeight)
 {
     m_width = newWidth;
     m_height = newHeight;
+
+    assert(nullptr != m_context);
+    m_context->Resize(m_width, m_height);
 }
 
-bool Window::ShouldClose() const { return m_shouldClose; }
-void Window::Close() { m_shouldClose = true; }
+bool Window::ShouldClose() const
+{
+    assert(nullptr != m_context);
+    return m_context->ShouldClose();
+}
+
+void Window::Close() { m_context->Close(); }
 
 void Window::SetRenderContext(std::unique_ptr<RenderContext> context)
 {

@@ -1,6 +1,7 @@
 add_library(FIRE STATIC
     include/FIRE/FIRE.h
     include/FIRE/Window.h
+    include/FIRE/RenderContext.h
     include/FIRE/GLRenderContext.h
     src/FIRE.cpp
     src/Window.cpp

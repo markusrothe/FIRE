@@ -5,8 +5,14 @@ add_executable(example1
 target_link_libraries(example1
     PRIVATE
         FIRE
+)
+
+if(NOT MSVC)
+target_link_libraries(example1
+    PRIVATE
         pthread
 )
+endif()
 
 install(
     TARGETS

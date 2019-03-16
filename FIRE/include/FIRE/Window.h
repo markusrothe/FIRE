@@ -31,7 +31,6 @@ private:
     std::string const m_title;
     unsigned int m_width;
     unsigned int m_height;
-    bool m_shouldClose{false};
     std::unique_ptr<RenderContext> m_context;
 };
 } // namespace FIRE
