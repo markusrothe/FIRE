@@ -6,6 +6,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 project(FIRE)
 include(gtest_build)
+include(glfw_build)
+find_package(OpenGL REQUIRED)
 
 include(CTest)
 enable_testing()

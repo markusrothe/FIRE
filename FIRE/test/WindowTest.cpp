@@ -1,42 +1,60 @@
+#include <FIRE/RenderContext.h>
+#include <FIRE/Window.h>
+#include <gmock/gmock.h>
 #include <gtest/gtest.h>
-
+#include <memory>
 #include <string>
 
 namespace FIRE
 {
-class Window
+
+class RenderContextMock : public RenderContext
 {
 public:
-    explicit Window(std::string const title, unsigned int width);
-
-    std::string GetTitle() const;
-
-    unsigned int GetWidth() const;
-
-private:
-    std::string const m_title;
-    unsigned int m_width;
+    ~RenderContextMock() override = default;
+    MOCK_METHOD0(SwapBuffers, void(void));
 };
-
-Window::Window(std::string const title, unsigned int width)
-    : m_title(title)
-    , m_width(width)
-{
-}
-
-std::string Window::GetTitle() const { return m_title; }
-unsigned int Window::GetWidth() const { return m_width; }
-
 } // namespace FIRE
 
-TEST(AWindow, HasATitle)
+namespace
 {
-    FIRE::Window window("WindowTitle", 200u);
-    EXPECT_EQ("WindowTitle", window.GetTitle());
+constexpr auto title{"WindowTitle"};
+constexpr auto width{200u};
+constexpr auto height{400u};
+
+class WindowTest : public ::testing::Test
+{
+public:
+    FIRE::Window window{title, width, height};
+};
+
+} // namespace
+
+TEST_F(WindowTest, HasATitle) { EXPECT_EQ(title, window.GetTitle()); }
+
+TEST_F(WindowTest, HasAWidth) { EXPECT_EQ(width, window.GetWidth()); }
+
+TEST_F(WindowTest, HasAHeight) { EXPECT_EQ(height, window.GetHeight()); }
+
+TEST_F(WindowTest, IsResizable)
+{
+    window.Resize(150, 300);
+    EXPECT_EQ(150, window.GetWidth());
+    EXPECT_EQ(300, window.GetHeight());
 }
 
-TEST(AWindow, HasAWidth)
+TEST_F(WindowTest, CanBeClosed)
 {
-    FIRE::Window window("WindowTitle", 200u);
-    EXPECT_EQ(200u, window.GetWidth());
+    EXPECT_FALSE(window.ShouldClose());
+    window.Close();
+    EXPECT_TRUE(window.ShouldClose());
+}
+
+TEST_F(WindowTest, SupportsDoubleBuffering)
+{
+    auto context = std::make_unique<FIRE::RenderContextMock>();
+    EXPECT_CALL(*context, SwapBuffers());
+    window.SetRenderContext(std::move(context));
+
+    window.SwapBuffers();
 }
