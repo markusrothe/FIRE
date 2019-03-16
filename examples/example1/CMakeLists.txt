@@ -3,6 +3,20 @@ add_executable(example1
 )
 
 target_link_libraries(example1
-PRIVATE
-    FIRE
+    PRIVATE
+        FIRE
+)
+
+install(
+    TARGETS
+        example1
+    DESTINATION 
+        "bin"
+)
+
+install(
+    FILES
+        $<TARGET_FILE:FIRE>
+    DESTINATION
+        bin
 )
