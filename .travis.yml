@@ -13,10 +13,11 @@ before_install:
 
     - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y; fi
     - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get update -q; fi
-    - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get install -qq; fi
+    - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get install -qq; fi    
     - if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$CXX" = "g++" ]; then pip install --user cpp-coveralls; fi
     
 install:
+    - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get install xorg-dev libglu1-mesa-dev; fi
     - if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-7; fi
     - if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$CXX" = "g++" ]; then export CXX="g++-7" CC="gcc-7";fi
     - if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$CXX" = "g++" ]; then sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 90; fi
