@@ -13,6 +13,7 @@ public:
     ~Impl();
 
     void SwapBuffers();
+    void PollEvents();
     bool ShouldClose();
     void Close();
     void Resize(unsigned int width, unsigned int height);
@@ -48,12 +49,18 @@ GLRenderContext::Impl::Impl(Window& window)
     glfwMakeContextCurrent(m_window);
 }
 
-GLRenderContext::Impl::~Impl() { glfwDestroyWindow(m_window); }
+GLRenderContext::Impl::~Impl()
+{
+    glfwDestroyWindow(m_window);
+}
 
 void GLRenderContext::Impl::SwapBuffers()
 {
-    glfwPollEvents();
     glfwSwapBuffers(m_window);
+}
+void GLRenderContext::Impl::PollEvents()
+{
+    glfwPollEvents();
 }
 
 bool GLRenderContext::Impl::ShouldClose()
@@ -78,9 +85,26 @@ GLRenderContext::GLRenderContext(Window& window)
 
 GLRenderContext::~GLRenderContext() = default;
 
-void GLRenderContext::SwapBuffers() { m_impl->SwapBuffers(); }
-bool GLRenderContext::ShouldClose() { return m_impl->ShouldClose(); }
-void GLRenderContext::Close() { m_impl->Close(); }
+void GLRenderContext::SwapBuffers()
+{
+    m_impl->SwapBuffers();
+}
+
+void GLRenderContext::PollEvents()
+{
+    m_impl->PollEvents();
+}
+
+bool GLRenderContext::ShouldClose()
+{
+    return m_impl->ShouldClose();
+}
+
+void GLRenderContext::Close()
+{
+    m_impl->Close();
+}
+
 void GLRenderContext::Resize(unsigned int width, unsigned int height)
 {
     m_impl->Resize(width, height);

@@ -13,6 +13,7 @@ class RenderContextMock : public RenderContext
 public:
     ~RenderContextMock() override = default;
     MOCK_METHOD0(SwapBuffers, void(void));
+    MOCK_METHOD0(PollEvents, void(void));
     MOCK_METHOD0(ShouldClose, bool());
     MOCK_METHOD0(Close, void(void));
     MOCK_METHOD2(Resize, void(unsigned int width, unsigned int height));
@@ -39,11 +40,20 @@ public:
 
 } // namespace
 
-TEST_F(WindowTest, HasATitle) { EXPECT_EQ(title, window.GetTitle()); }
+TEST_F(WindowTest, HasATitle)
+{
+    EXPECT_EQ(title, window.GetTitle());
+}
 
-TEST_F(WindowTest, HasAWidth) { EXPECT_EQ(width, window.GetWidth()); }
+TEST_F(WindowTest, HasAWidth)
+{
+    EXPECT_EQ(width, window.GetWidth());
+}
 
-TEST_F(WindowTest, HasAHeight) { EXPECT_EQ(height, window.GetHeight()); }
+TEST_F(WindowTest, HasAHeight)
+{
+    EXPECT_EQ(height, window.GetHeight());
+}
 
 TEST_F(WindowTest, IsResizable)
 {
@@ -87,4 +97,11 @@ TEST_F(WindowTest, SupportsDoubleBuffering)
     EXPECT_CALL(*context, SwapBuffers());
     window.SetRenderContext(std::move(context));
     window.SwapBuffers();
+}
+
+TEST_F(WindowTest, CanBePolledForEvents)
+{
+    EXPECT_CALL(*context, PollEvents());
+    window.SetRenderContext(std::move(context));
+    window.PollEvents();
 }

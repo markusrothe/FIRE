@@ -12,5 +12,6 @@ int main(int, char**)
     while(!window.ShouldClose())
     {
         window.SwapBuffers();
+        window.PollEvents();
     }
 }

@@ -24,7 +24,7 @@ public:
     void Close();
 
     void SetRenderContext(std::unique_ptr<RenderContext> context);
-
+    void PollEvents();
     void SwapBuffers();
 
 private:

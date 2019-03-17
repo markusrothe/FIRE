@@ -8,6 +8,7 @@ class RenderContext
 public:
     virtual ~RenderContext() = default;
     virtual void SwapBuffers() = 0;
+    virtual void PollEvents() = 0;
     virtual bool ShouldClose() = 0;
     virtual void Close() = 0;
     virtual void Resize(unsigned int width, unsigned int height) = 0;

@@ -21,6 +21,7 @@ public:
     GLRenderContext& operator=(GLRenderContext&&) = delete;
 
     void SwapBuffers() override;
+    void PollEvents() override;
     bool ShouldClose() override;
     void Close() override;
     void Resize(unsigned int width, unsigned int height) override;

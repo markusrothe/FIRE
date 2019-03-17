@@ -12,9 +12,21 @@ Window::Window(std::string const title, unsigned int width, unsigned int height)
 
 Window::~Window() = default;
 
-std::string Window::GetTitle() const { return m_title; }
-unsigned int Window::GetWidth() const { return m_width; }
-unsigned int Window::GetHeight() const { return m_height; }
+std::string Window::GetTitle() const
+{
+    return m_title;
+}
+
+unsigned int Window::GetWidth() const
+{
+    return m_width;
+}
+
+unsigned int Window::GetHeight() const
+{
+    return m_height;
+}
+
 void Window::Resize(unsigned int newWidth, unsigned int newHeight)
 {
     m_width = newWidth;
@@ -30,15 +42,26 @@ bool Window::ShouldClose() const
     return m_context->ShouldClose();
 }
 
-void Window::Close() { m_context->Close(); }
+void Window::Close()
+{
+    m_context->Close();
+}
 
 void Window::SetRenderContext(std::unique_ptr<RenderContext> context)
 {
     m_context = std::move(context);
 }
+
 void Window::SwapBuffers()
 {
     assert(nullptr != m_context);
     m_context->SwapBuffers();
 }
+
+void Window::PollEvents()
+{
+    assert(nullptr != m_context);
+    m_context->PollEvents();
+}
+
 } // namespace FIRE

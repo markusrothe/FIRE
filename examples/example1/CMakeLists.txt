@@ -7,13 +7,6 @@ target_link_libraries(example1
         FIRE
 )
 
-if(NOT MSVC)
-target_link_libraries(example1
-    PRIVATE
-        pthread
-)
-endif()
-
 install(
     TARGETS
         example1
