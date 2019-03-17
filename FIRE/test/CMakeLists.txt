@@ -3,15 +3,15 @@ if(NOT BUILD_TESTING)
 endif()
 
 add_executable(FIRE_tests
-    ./FIRETest.cpp
+    ./WindowTest.cpp
 )
 
 target_link_libraries(FIRE_tests
-PRIVATE
-    FIRE
-    gtest
-    gtest_main
-    gmock
+    PRIVATE
+        FIRE
+        gtest
+        gtest_main
+        gmock
 )
 
 if(MSVC)
@@ -29,6 +29,20 @@ include(GoogleTest)
 gtest_discover_tests(FIRE_tests)
 
 add_custom_command(
-    TARGET FIRE_tests POST_BUILD
+    TARGET FIRE_tests POST_BUILD                   
     COMMAND ctest -C $<CONFIGURATION> --output-on-failure
+)
+
+install(
+    TARGETS
+        FIRE_tests
+    DESTINATION 
+        bin
+)
+
+install(
+    FILES
+        $<TARGET_FILE:FIRE>
+    DESTINATION
+        bin
 )

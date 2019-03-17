@@ -1,12 +1,22 @@
 add_library(FIRE STATIC
     include/FIRE/FIRE.h
+    include/FIRE/Window.h
+    include/FIRE/RenderContext.h
+    include/FIRE/GLRenderContext.h
     src/FIRE.cpp
+    src/Window.cpp
+    src/GLRenderContext.cpp
 )
 
 target_include_directories(FIRE
 PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
+)
+
+target_link_libraries(FIRE
+PRIVATE
+    glfw
 )
 
 if(MSVC)

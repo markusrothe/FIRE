@@ -5,7 +5,7 @@ AlignAfterOpenBracket: AlwaysBreak
 AlignConsecutiveAssignments: 'false'
 AlignConsecutiveDeclarations: 'false'
 AllowShortBlocksOnASingleLine: 'true'
-AllowShortFunctionsOnASingleLine: All
+AllowShortFunctionsOnASingleLine: None
 AllowShortIfStatementsOnASingleLine: 'false'
 AllowShortLoopsOnASingleLine: 'false'
 AlwaysBreakTemplateDeclarations: 'true'
@@ -28,5 +28,4 @@ SpacesInSquareBrackets: 'false'
 Standard: Cpp11
 TabWidth: '4'
 UseTab: Never
-
 ...

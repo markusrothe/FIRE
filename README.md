@@ -11,7 +11,7 @@ It is still a work in progress and by no means ready for meaningful usage, yet.
 CMake Version 3.10 or higher
 
 ## How to build ##
-   After cloning inside the cloned directoy do:
+   After cloning inside the cloned directory do:
    
 ```   
    mkdir build
