@@ -1,5 +1,8 @@
-#include <FIRE/GLRenderContext.h>
+#include "GLRenderContext.h"
 #include <FIRE/Window.h>
+
+#include <glad/glad.h>
+
 #include <GLFW/glfw3.h>
 #include <iostream>
 namespace FIRE
@@ -47,6 +50,7 @@ GLRenderContext::Impl::Impl(Window& window)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     glfwMakeContextCurrent(m_window);
+    gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 }
 
 GLRenderContext::Impl::~Impl()

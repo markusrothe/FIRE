@@ -4,6 +4,15 @@ endif()
 
 add_executable(FIRE_tests
     ./WindowTest.cpp
+    ./RenderableTest.cpp
+    ./RendererTest.cpp
+    ./MeshTest.cpp
+)
+
+target_include_directories(FIRE_tests
+    PUBLIC
+        $<TARGET_PROPERTY:FIRE,INCLUDE_DIRECTORIES>
+        $<TARGET_PROPERTY:FIRE,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 target_link_libraries(FIRE_tests
