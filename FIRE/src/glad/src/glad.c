@@ -19,8 +19,10 @@
         https://glad.dav1d.de/#profile=core&language=c&specification=gl&loader=on&api=gl%3D4.3
 */
 #if !defined(_WIN32)
-#pragma GCC diagnostic ignored "pedantic"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
 #endif
+
 #include <glad/glad.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -2002,3 +2004,7 @@ int gladLoadGLLoader(GLADloadproc load)
         return 0;
     return GLVersion.major != 0 || GLVersion.minor != 0;
 }
+
+#if !defined(_WIN32)
+#pragma GCC diagnostic pop
+#endif

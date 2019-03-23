@@ -1,6 +1,7 @@
 #include "MaterialManager.h"
 #include <iostream>
 #include <tuple>
+#include <vector>
 namespace FIRE
 {
 namespace
