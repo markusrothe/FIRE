@@ -1,5 +1,5 @@
 #ifndef FIRE_Renderable_h
-#define FIRE_Renderable_H
+#define FIRE_Renderable_h
 
 #include <FIRE/Mesh.h>
 #include <string>
@@ -27,4 +27,4 @@ bool operator!=(Renderable const& lhs, Renderable const& rhs);
 
 } // namespace FIRE
 
-#endif
+#endif FIRE_Renderable_h
