@@ -27,4 +27,4 @@ bool operator!=(Renderable const& lhs, Renderable const& rhs);
 
 } // namespace FIRE
 
-#endif FIRE_Renderable_h
+#endif // FIRE_Renderable_h
