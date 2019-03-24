@@ -67,4 +67,13 @@ std::vector<unsigned int> Mesh::Indices() const
     return m_indices;
 }
 
+VertexDeclaration& Mesh::GetVertexDeclaration()
+{
+    return m_vertexDeclaration;
+}
+
+VertexDeclaration const& Mesh::GetVertexDeclaration() const
+{
+    return m_vertexDeclaration;
+}
 } // namespace FIRE

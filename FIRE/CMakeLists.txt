@@ -5,6 +5,7 @@ add_library(FIRE STATIC
     include/FIRE/Renderable.h  
     include/FIRE/Renderer.h 
     include/FIRE/Vertex.h
+    include/FIRE/VertexDeclaration.h
     include/FIRE/GLFactory.h
     
     src/glad/include/glad/glad.h
@@ -27,6 +28,7 @@ add_library(FIRE STATIC
     src/GLRenderContext.cpp    
     src/RendererImpl.cpp
     src/MaterialManager.cpp
+    src/VertexDeclaration.cpp
 )
 
 target_include_directories(FIRE

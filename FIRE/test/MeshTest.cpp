@@ -65,6 +65,23 @@ TEST_F(MeshTest, AccessVerticesAsArray)
     EXPECT_FLOAT_EQ(verticesVec[1].z, vertices[5]);
 }
 
+TEST_F(MeshTest, HasAVertexDeclaration)
+{
+    auto& vDecl = mesh.GetVertexDeclaration();
+
+    std::string const attributeName{"vPos"};
+    auto const size = 3u * sizeof(float);
+    auto const offset = 0u;
+    auto const stride = 3u * sizeof(float);
+    vDecl.AddSection(attributeName, size, offset, stride);
+
+    auto sections = vDecl.GetSections();
+    ASSERT_EQ(1u, sections.size());
+    EXPECT_EQ(size, sections.at(attributeName).size);
+    EXPECT_EQ(offset, sections.at(attributeName).offset);
+    EXPECT_EQ(stride, sections.at(attributeName).stride);
+}
+
 using MeshDeathTest = MeshTest;
 TEST_F(MeshDeathTest, IndicesCannotBeHigherThanVertexCount)
 {

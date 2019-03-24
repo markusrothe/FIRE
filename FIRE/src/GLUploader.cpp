@@ -1,6 +1,8 @@
 #include "GLUploader.h"
 #include "MaterialManager.h"
+#include <FIRE/Mesh.h>
 #include <FIRE/Renderable.h>
+#include <FIRE/VertexDeclaration.h>
 
 namespace FIRE
 {
@@ -31,12 +33,21 @@ GLUploader::Upload(Renderable const& renderable)
         GL_ARRAY_BUFFER, verticesSize,
         &(renderable.GetMesh().VerticesAsArray())[0], GL_STATIC_DRAW);
 
-    auto attribLocation = glGetAttribLocation(
-        m_materialManager->GetShader(renderable.GetMaterial()), "vPos");
-    glEnableVertexAttribArray(attribLocation);
-    // GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei
-    // stride, const void *pointer
-    glVertexAttribPointer(attribLocation, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+    for(auto const& vertexDeclSection :
+        renderable.GetMesh().GetVertexDeclaration().GetSections())
+    {
+        auto attribLocation = glGetAttribLocation(
+            m_materialManager->GetShader(renderable.GetMaterial()),
+            vertexDeclSection.first.c_str());
+
+        glEnableVertexAttribArray(attribLocation);
+        // GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei
+        // stride, const void *pointer
+        glVertexAttribPointer(
+            attribLocation, vertexDeclSection.second.size, GL_FLOAT, GL_FALSE,
+            vertexDeclSection.second.stride,
+            (void*)(vertexDeclSection.second.offset));
+    }
 
     GLuint ibo;
     glBindBuffer(GL_ARRAY_BUFFER, 0);
