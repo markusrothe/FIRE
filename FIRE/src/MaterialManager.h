@@ -1,6 +1,7 @@
 #ifndef FIRE_MaterialManager_h
 #define FIRE_MaterialManager_h
 
+#include <memory>
 #include <string>
 #include <unordered_map>
 namespace FIRE
