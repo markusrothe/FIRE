@@ -7,6 +7,7 @@ add_executable(FIRE_tests
     ./RenderableTest.cpp
     ./RendererTest.cpp
     ./MeshTest.cpp
+    ./MaterialManagerTest.cpp
 )
 
 target_include_directories(FIRE_tests

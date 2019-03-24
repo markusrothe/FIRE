@@ -12,11 +12,14 @@ add_library(FIRE STATIC
     src/glad/include/KHR/khrplatform.h
     src/Uploader.h
     src/DrawAgent.h
+    src/ShaderFactory.h
     src/GLUploader.h    
     src/GLDrawAgent.h
+    src/GLShaderFactory.h
     src/GLRenderContext.h
     src/RendererImpl.h
     src/MaterialManager.h
+    
     
     src/glad/src/glad.c
     src/Window.cpp    
@@ -25,6 +28,7 @@ add_library(FIRE STATIC
     src/GLFactory.cpp
     src/GLUploader.cpp
     src/GLDrawAgent.cpp
+    src/GLShaderFactory.cpp
     src/GLRenderContext.cpp    
     src/RendererImpl.cpp
     src/MaterialManager.cpp
