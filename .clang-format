@@ -15,6 +15,7 @@ BreakBeforeBraces: Allman
 BreakConstructorInitializersBeforeComma: 'true'
 Cpp11BracedListStyle: 'true'
 IndentWidth: '4'
+ColumnLimit: 0
 Language: Cpp
 NamespaceIndentation: None
 PointerAlignment: Left

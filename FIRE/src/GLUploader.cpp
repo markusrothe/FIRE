@@ -3,11 +3,68 @@
 #include <FIRE/Mesh.h>
 #include <FIRE/Renderable.h>
 #include <FIRE/VertexDeclaration.h>
-
+#include <iostream>
 #define BUFFER_OFFSET(i) ((void*)(std::uintptr_t)(i))
 
 namespace FIRE
 {
+namespace
+{
+void SpecifyVertexAttributes(VertexDeclaration const& vDecl, GLuint shader)
+{
+    for(auto const& vertexDeclSection : vDecl.GetSections())
+    {
+        auto attribLocation = glGetAttribLocation(
+            shader,
+            vertexDeclSection.first.c_str());
+
+        glEnableVertexAttribArray(attribLocation);
+        glVertexAttribPointer(
+            attribLocation,
+            vertexDeclSection.second.size,
+            GL_FLOAT,
+            GL_FALSE,
+            vertexDeclSection.second.stride,
+            BUFFER_OFFSET(vertexDeclSection.second.offset));
+    }
+}
+
+GLuint UploadVertices(std::vector<float> const& vertices, VertexDeclaration const& vDecl, GLuint shader)
+{
+    GLuint vbo;
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    auto const verticesSize = vertices.size() * sizeof(float);
+
+    glBufferData(
+        GL_ARRAY_BUFFER,
+        verticesSize,
+        &(vertices[0]),
+        GL_STATIC_DRAW);
+    SpecifyVertexAttributes(vDecl, shader);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    return vbo;
+}
+
+GLuint UploadIndices(std::vector<unsigned int> const& indices)
+{
+    GLuint ibo;
+    glGenBuffers(1, &ibo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+
+    auto const indicesSize = indices.size() * sizeof(unsigned int);
+    glBufferData(
+        GL_ELEMENT_ARRAY_BUFFER,
+        indicesSize,
+        &(indices[0]),
+        GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    return ibo;
+}
+
+} // namespace
+
 GLUploader::GLUploader(std::shared_ptr<MaterialManager> materialManager)
     : m_materialManager(std::move(materialManager))
 {
@@ -16,52 +73,23 @@ GLUploader::GLUploader(std::shared_ptr<MaterialManager> materialManager)
 std::tuple<GLuint, GLuint, GLuint>
 GLUploader::Upload(Renderable const& renderable)
 {
-    auto it = m_uploadedRenderables.find(renderable.GetName());
+    auto const it = m_uploadedRenderables.find(renderable.GetName());
     if(it != m_uploadedRenderables.end())
     {
         return it->second;
     }
 
-    GLuint vao, vbo;
+    GLuint vao;
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    auto const verticesSize =
-        renderable.GetMesh().Vertices().size() * sizeof(float) * 3;
+    Mesh const& mesh = renderable.GetMesh();
 
-    glBufferData(
-        GL_ARRAY_BUFFER, verticesSize,
-        &(renderable.GetMesh().VerticesAsArray())[0], GL_STATIC_DRAW);
+    GLuint const vbo = UploadVertices(
+        mesh.VerticesAsArray(), mesh.GetVertexDeclaration(),
+        m_materialManager->GetShader(renderable.GetMaterial()));
 
-    for(auto const& vertexDeclSection :
-        renderable.GetMesh().GetVertexDeclaration().GetSections())
-    {
-        auto attribLocation = glGetAttribLocation(
-            m_materialManager->GetShader(renderable.GetMaterial()),
-            vertexDeclSection.first.c_str());
-
-        glEnableVertexAttribArray(attribLocation);
-        // GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei
-        // stride, const void *pointer
-        glVertexAttribPointer(
-            attribLocation, vertexDeclSection.second.size, GL_FLOAT, GL_FALSE,
-            vertexDeclSection.second.stride,
-            BUFFER_OFFSET(vertexDeclSection.second.offset));
-    }
-
-    GLuint ibo;
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glGenBuffers(1, &ibo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-
-    auto const indicesSize =
-        renderable.GetMesh().Indices().size() * sizeof(unsigned int);
-    glBufferData(
-        GL_ELEMENT_ARRAY_BUFFER, indicesSize,
-        &(renderable.GetMesh().Indices())[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    GLuint const ibo = UploadIndices(mesh.Indices());
 
     auto buffers = std::make_tuple(vao, vbo, ibo);
     m_uploadedRenderables.insert(std::make_pair(renderable.GetName(), buffers));
