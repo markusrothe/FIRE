@@ -1,17 +1,47 @@
 add_library(FIRE STATIC
-    include/FIRE/FIRE.h
     include/FIRE/Window.h
-    include/FIRE/RenderContext.h
-    include/FIRE/GLRenderContext.h
-    src/FIRE.cpp
-    src/Window.cpp
-    src/GLRenderContext.cpp
+    include/FIRE/RenderContext.h        
+    include/FIRE/Mesh.h
+    include/FIRE/Renderable.h  
+    include/FIRE/Renderer.h 
+    include/FIRE/Vertex.h
+    include/FIRE/VertexDeclaration.h
+    include/FIRE/GLFactory.h
+    
+    src/glad/include/glad/glad.h
+    src/glad/include/KHR/khrplatform.h
+    src/Uploader.h
+    src/DrawAgent.h
+    src/ShaderFactory.h
+    src/GLUploader.h    
+    src/GLDrawAgent.h
+    src/GLShaderFactory.h
+    src/GLRenderContext.h
+    src/RendererImpl.h
+    src/MaterialManager.h
+    
+    
+    src/glad/src/glad.c
+    src/Window.cpp    
+    src/Renderable.cpp
+    src/Mesh.cpp
+    src/GLFactory.cpp
+    src/GLUploader.cpp
+    src/GLDrawAgent.cpp
+    src/GLShaderFactory.cpp
+    src/GLRenderContext.cpp    
+    src/RendererImpl.cpp
+    src/MaterialManager.cpp
+    src/VertexDeclaration.cpp
 )
 
 target_include_directories(FIRE
 PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
+PRIVATE
+    src
+    src/glad/include
 )
 
 target_link_libraries(FIRE

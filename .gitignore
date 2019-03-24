@@ -5,3 +5,4 @@ doc/
 .ccls-cache/
 compile_commands.json
 .dir-locals.el
+TODO.txt
