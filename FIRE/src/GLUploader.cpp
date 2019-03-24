@@ -4,6 +4,8 @@
 #include <FIRE/Renderable.h>
 #include <FIRE/VertexDeclaration.h>
 
+#define BUFFER_OFFSET(i) ((void*)(std::uintptr_t)(i))
+
 namespace FIRE
 {
 GLUploader::GLUploader(std::shared_ptr<MaterialManager> materialManager)
@@ -46,7 +48,7 @@ GLUploader::Upload(Renderable const& renderable)
         glVertexAttribPointer(
             attribLocation, vertexDeclSection.second.size, GL_FLOAT, GL_FALSE,
             vertexDeclSection.second.stride,
-            (void*)(vertexDeclSection.second.offset));
+            BUFFER_OFFSET(vertexDeclSection.second.offset));
     }
 
     GLuint ibo;
