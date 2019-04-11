@@ -62,6 +62,7 @@ void GLRenderContext::Impl::SwapBuffers()
 {
     glfwSwapBuffers(m_window);
 }
+
 void GLRenderContext::Impl::PollEvents()
 {
     glfwPollEvents();
