@@ -11,9 +11,9 @@ TEST(AMatrix, DefaultsToTheIdentityMatrix)
     FIRE::Matrix4x4 const mat;
     auto const values = mat.Raw();
 
-    for(int i = 0; i < values.size(); ++i)
+    for(auto i = 0u; i < values.size(); ++i)
     {
-        EXPECT_EQ(i % 5 == 0 ? 1.0f : 0.0f, values[i]);
+        EXPECT_EQ(i % 5 == 0u ? 1.0f : 0.0f, values[i]);
     }
 
     EXPECT_EQ(FIRE::Matrix4x4::identity, mat);
