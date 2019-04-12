@@ -16,7 +16,7 @@ void GLDrawAgent::Draw(
     Renderable const& renderable, std::tuple<GLuint, GLuint, GLuint> buffers)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glBindVertexArray(std::get<0>(buffers));
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, std::get<2>(buffers));
     
@@ -32,7 +32,5 @@ void GLDrawAgent::Draw(
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     glBindVertexArray(0);
-
-    //
 }
 } // namespace FIRE
