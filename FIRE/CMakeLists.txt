@@ -1,10 +1,14 @@
+
+add_subdirectory(src/glm)
 add_library(FIRE STATIC
+    include/FIRE/Camera.h
     include/FIRE/Window.h
     include/FIRE/RenderContext.h        
     include/FIRE/Mesh.h
     include/FIRE/Renderable.h  
     include/FIRE/Renderer.h 
     include/FIRE/Vertex.h
+    include/FIRE/Matrix.h
     include/FIRE/VertexDeclaration.h
     include/FIRE/GLFactory.h
     
@@ -19,9 +23,9 @@ add_library(FIRE STATIC
     src/GLRenderContext.h
     src/RendererImpl.h
     src/MaterialManager.h
-    
-    
+        
     src/glad/src/glad.c
+    src/Camera.cpp
     src/Window.cpp    
     src/Renderable.cpp
     src/Mesh.cpp
@@ -33,6 +37,7 @@ add_library(FIRE STATIC
     src/RendererImpl.cpp
     src/MaterialManager.cpp
     src/VertexDeclaration.cpp
+    src/Matrix.cpp
 )
 
 target_include_directories(FIRE
@@ -47,9 +52,12 @@ PRIVATE
 target_link_libraries(FIRE
 PRIVATE
     glfw
+    glm
 )
 
 if(MSVC)
+    string(REGEX REPLACE " /W[0-4]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+    string(REGEX REPLACE " /W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
     target_compile_options(FIRE PRIVATE /W4 /WX)
 else()
     target_compile_options(FIRE PRIVATE -Wall -Wextra -pedantic -Werror)

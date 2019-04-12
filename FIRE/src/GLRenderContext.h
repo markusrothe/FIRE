@@ -32,4 +32,4 @@ private:
 };
 } // namespace FIRE
 
-#endif // FIRE_GLRenderContext_h
+#endif // !FIRE_GLRenderContext_h

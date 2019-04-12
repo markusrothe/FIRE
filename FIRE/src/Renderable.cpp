@@ -43,4 +43,14 @@ bool operator!=(Renderable const& lhs, Renderable const& rhs)
     return !(lhs == rhs);
 }
 
+std::pair<std::string, Matrix4x4> Renderable::GetShaderUniformMat4x4() const
+{
+    return m_uniformVals;
+}
+
+void Renderable::SetShaderUniformMat4x4(std::string const& uniformName, Matrix4x4 const& mat)
+{
+    m_uniformVals = std::make_pair(uniformName, mat);
+}
+
 } // namespace FIRE

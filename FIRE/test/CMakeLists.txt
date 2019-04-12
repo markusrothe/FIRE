@@ -8,6 +8,8 @@ add_executable(FIRE_tests
     ./RendererTest.cpp
     ./MeshTest.cpp
     ./MaterialManagerTest.cpp
+    ./CameraTest.cpp
+    ./MatrixTest.cpp
 )
 
 target_include_directories(FIRE_tests
@@ -25,6 +27,8 @@ target_link_libraries(FIRE_tests
 )
 
 if(MSVC)
+    string(REGEX REPLACE " /W[0-4]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+    string(REGEX REPLACE " /W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
     target_compile_options(FIRE_tests PRIVATE /W4 /WX)
 else()
     target_compile_options(FIRE_tests PRIVATE -Wall -Wextra -pedantic -Werror)

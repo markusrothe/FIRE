@@ -14,6 +14,16 @@ struct Vertex
     {
     }
 
+    bool operator==(Vertex const& rhs) const
+    {
+        return x == rhs.x && y == rhs.y && z == rhs.z;
+    }
+
+    bool operator!=(Vertex const& rhs) const
+    {
+        return !(*this == rhs);
+    }
+
     float x, y, z;
 };
 } // namespace FIRE
