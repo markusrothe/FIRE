@@ -53,9 +53,9 @@ namespace glm
 #		endif
 
 #		if GLM_LANG & GLM_LANG_CXXMS_FLAG
-			union
+			union dummy
 			{
-				struct { T x, y, z, w;};
+				struct { T x, y, z, w;} dummy;
 
 				typename detail::storage<4, T, detail::is_aligned<Q>::value>::type data;
 			};

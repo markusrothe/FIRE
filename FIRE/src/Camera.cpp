@@ -1,24 +1,6 @@
-#ifdef WIN32
-
-#pragma warning( push )
-#pragma warning( disable : 4201)
-#pragma warning( disable : 4127)
-#include "glm/glm/glm.hpp"
-#include "glm/glm/gtc/type_ptr.hpp"
-#pragma warning( pop ) 
-
-#elif defined linux
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Werror"
-#pragma GCC diagnostic ignored "-Wall"
-#pragma GCC diagnostic ignored "-Wextra"
-#include "glm/glm/glm.hpp"
-#include "glm/glm/gtc/type_ptr.hpp"
-#pragma GCC diagnostic pop
-
-#endif
-
+#define GLM_FORCE_CXX17
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include <FIRE/Camera.h>
 

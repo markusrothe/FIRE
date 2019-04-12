@@ -22,7 +22,7 @@ public:
     bool operator!=(Matrix4x4 const& other) const;
 
     Matrix4x4 operator*(Matrix4x4 const& other) const;
-    Matrix4x4 operator*=(Matrix4x4 const& other) const;
+    Matrix4x4& operator*=(Matrix4x4 const& other);
 
     float At(int column, int row) const;
     std::array<float, 16> Raw() const;
