@@ -72,12 +72,18 @@ unsigned int GLShaderFactory::CreateDefaultShader()
     std::string const vsCode =
         "#version 440\n"
         "layout(location = 0) in vec3 vPos;\n"
-        "void main() { gl_Position = vec4(vPos.xyz, 1.0); }\n";
+        "uniform mat4 MVP;\n"
+        "out vec3 posVS;\n"
+        "void main() { \n"
+        "    gl_Position = MVP * vec4(vPos.xyz, 1.0);\n"
+        "    posVS = vPos;\n"
+        "}\n";
 
     std::string const fsCode =
         "#version 440\n"
+        "in vec3 posVS;\n"
         "out vec4 color;\n"
-        "void main() { color = vec4(1.0, 1.0, 1.0, 1.0); }\n";
+        "void main() { color = vec4(posVS.xyz, 1.0); }\n";
 
     auto vertexShader = CompileShader(GL_VERTEX_SHADER, vsCode);
     auto fragmentShader = CompileShader(GL_FRAGMENT_SHADER, fsCode);

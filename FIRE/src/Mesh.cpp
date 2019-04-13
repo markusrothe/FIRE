@@ -15,17 +15,17 @@ std::string Mesh::Name() const
     return m_name;
 }
 
-void Mesh::AddVertex(Vertex vertex)
+void Mesh::AddVertex(Vector3 vertex)
 {
     m_vertices.push_back(std::move(vertex));
 }
 
-void Mesh::AddVertices(std::initializer_list<Vertex> vertices)
+void Mesh::AddVertices(std::initializer_list<Vector3> vertices)
 {
     m_vertices.insert(m_vertices.end(), vertices);
 }
 
-std::vector<Vertex> Mesh::Vertices() const
+std::vector<Vector3> Mesh::Vertices() const
 {
     return m_vertices;
 }

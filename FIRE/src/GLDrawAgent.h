@@ -4,14 +4,21 @@
 #include <glad/glad.h>
 
 #include <GLFW/glfw3.h>
+#include <memory>
 namespace FIRE
 {
+class MaterialManager;
 class GLDrawAgent : public DrawAgent
 {
 public:
+    explicit GLDrawAgent(std::shared_ptr<MaterialManager> materialManager);
+
     void Draw(
         Renderable const& renderable,
         std::tuple<GLuint, GLuint, GLuint> buffers) override;
+
+private:
+    std::shared_ptr<MaterialManager> m_materialManager;
 };
 } // namespace FIRE
 

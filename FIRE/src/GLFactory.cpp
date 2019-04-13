@@ -25,7 +25,7 @@ std::unique_ptr<Renderer> CreateRenderer()
 
     return std::make_unique<RendererImpl>(
         std::make_unique<GLUploader>(materialManager),
-        std::make_unique<GLDrawAgent>());
+        std::make_unique<GLDrawAgent>(materialManager));
 }
 } // namespace GLFactory
 } // namespace FIRE
