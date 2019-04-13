@@ -37,8 +37,8 @@ int main(int, char**)
     FIRE::Renderable cube{"cube"};
     cube.SetMesh(std::move(cubeMesh));
 
-    FIRE::Vertex camPos{1.5f, 2, 2};
-    FIRE::Vertex camLookAt{0, 0, 0};
+    FIRE::Vector3 camPos{1.5f, 2, 2};
+    FIRE::Vector3 camLookAt{0, 0, 0};
     FIRE::Camera cam{"cam", std::move(camPos), std::move(camLookAt)};
 
     cube.SetShaderUniformMat4x4("MVP", FIRE::CreatePerspectiveMatrix(90.0f, 800.0f / 600.0f, 0.01f, 20.0f) * cam.ViewMatrix());

@@ -68,3 +68,16 @@ TEST(AMatrix, CanBeCopyAssigned)
     result = testMatrix;
     EXPECT_EQ(testMatrix, result);
 }
+
+TEST(AMatrix, CanBeCompared)
+{
+    FIRE::Matrix4x4 mat;
+    EXPECT_NE(mat, testMatrix);
+    mat = testMatrix;
+    EXPECT_EQ(mat, testMatrix);
+}
+
+TEST(AMatrix, CanBeAPerspectiveMatrix)
+{
+    FIRE::Matrix4x4 view = FIRE::CreatePerspectiveMatrix(10.0f, 10.0f, 10.0f, 10.0f);
+}

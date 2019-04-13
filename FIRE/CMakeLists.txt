@@ -7,7 +7,7 @@ add_library(FIRE STATIC
     include/FIRE/Mesh.h
     include/FIRE/Renderable.h  
     include/FIRE/Renderer.h 
-    include/FIRE/Vertex.h
+    include/FIRE/Vector.h
     include/FIRE/Matrix.h
     include/FIRE/VertexDeclaration.h
     include/FIRE/GLFactory.h

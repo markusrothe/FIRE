@@ -1,7 +1,7 @@
 #ifndef FIRE_Camera_H
 #define FIRE_Camera_H
 
-#include <FIRE/Vertex.h>
+#include <FIRE/Vector.h>
 #include <FIRE/Matrix.h>
 #include <string>
 
@@ -13,23 +13,23 @@ class Camera
 public:
     explicit Camera(
         std::string name, 
-        Vertex pos = Vertex(0.0f, 0.0f, 0.0f), 
-        Vertex lookAt = Vertex(0.0f, 0.0f, 0.0f));
+        Vector3 pos = Vector3(0.0f, 0.0f, 0.0f),
+        Vector3 lookAt = Vector3(0.0f, 0.0f, 0.0f));
 
     std::string Name() const;
 
-    void SetPosition(Vertex pos);
-    Vertex Position() const;
+    void SetPosition(Vector3 pos);
+    Vector3 Position() const;
 
-    void SetOrientation(Vertex lookAt);
-    Vertex Orientation() const;
+    void SetOrientation(Vector3 lookAt);
+    Vector3 Orientation() const;
 
     Matrix4x4 ViewMatrix() const;
 
 private:
     std::string const m_name;
-    Vertex m_pos;
-    Vertex m_lookAt;
+    Vector3 m_pos;
+    Vector3 m_lookAt;
 };
 } // namespace FIRE
 

@@ -1,25 +1,25 @@
-#ifndef FIRE_Vertex_h
-#define FIRE_Vertex_h
+#ifndef FIRE_Vector_h
+#define FIRE_Vector_h
 
 namespace FIRE
 {
-struct Vertex
+struct Vector3
 {
-    Vertex() = default;
+    Vector3() = default;
 
-    Vertex(float x, float y, float z)
+    Vector3(float x, float y, float z)
         : x(x)
         , y(y)
         , z(z)
     {
     }
 
-    bool operator==(Vertex const& rhs) const
+    bool operator==(Vector3 const& rhs) const
     {
         return x == rhs.x && y == rhs.y && z == rhs.z;
     }
 
-    bool operator!=(Vertex const& rhs) const
+    bool operator!=(Vector3 const& rhs) const
     {
         return !(*this == rhs);
     }

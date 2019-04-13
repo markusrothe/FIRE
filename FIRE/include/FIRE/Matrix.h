@@ -5,7 +5,7 @@
 #include <memory>
 namespace FIRE
 {
-struct Vertex;
+struct Vector3;
 class Matrix4x4
 {
 public:
@@ -36,7 +36,7 @@ private:
     std::unique_ptr<Impl> m_impl;
 };
 
-Matrix4x4 CreateViewMatrix(Vertex const& pos, Vertex const& lookAt, Vertex const& up);
+Matrix4x4 CreateViewMatrix(Vector3 const& pos, Vector3 const& lookAt, Vector3 const& up);
 Matrix4x4 CreatePerspectiveMatrix(float fovy, float aspect, float near, float far);
 
 } // namespace FIRE

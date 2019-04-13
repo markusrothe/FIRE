@@ -3,7 +3,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <FIRE/Matrix.h>
-#include <FIRE/Vertex.h>
+#include <FIRE/Vector.h>
 
 namespace FIRE
 {
@@ -145,7 +145,7 @@ array4x4 Matrix4x4::Raw() const
     return m_impl->Raw();
 }
 
-Matrix4x4 CreateViewMatrix(Vertex const& pos, Vertex const& lookAt, Vertex const& up)
+Matrix4x4 CreateViewMatrix(Vector3 const& pos, Vector3 const& lookAt, Vector3 const& up)
 {
     glm::vec3 const posVec(pos.x, pos.y, pos.z);
     glm::vec3 const lookAtVec(lookAt.x, lookAt.y, lookAt.z);

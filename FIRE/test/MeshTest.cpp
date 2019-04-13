@@ -1,5 +1,5 @@
 #include <FIRE/Mesh.h>
-#include <FIRE/Vertex.h>
+#include <FIRE/Vector.h>
 #include <gtest/gtest.h>
 #include <string>
 namespace
@@ -22,7 +22,7 @@ TEST_F(MeshTest, HasAName)
 
 TEST_F(MeshTest, AddVerticesIndividually)
 {
-    mesh.AddVertex(FIRE::Vertex{});
+    mesh.AddVertex(FIRE::Vector3{});
     EXPECT_EQ(1u, mesh.Vertices().size());
 }
 
@@ -34,7 +34,7 @@ TEST_F(MeshTest, AddVerticesGrouped)
 
 TEST_F(MeshTest, AddIndicesIndividually)
 {
-    mesh.AddVertex(FIRE::Vertex{});
+    mesh.AddVertex(FIRE::Vector3{});
     mesh.AddIndex(0);
     EXPECT_EQ(1u, mesh.Indices().size());
 }
