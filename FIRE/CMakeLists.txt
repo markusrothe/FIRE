@@ -14,6 +14,7 @@ add_library(FIRE STATIC
     
     src/glad/include/glad/glad.h
     src/glad/include/KHR/khrplatform.h
+    src/glm_wrapper.h
     src/Uploader.h
     src/DrawAgent.h
     src/ShaderFactory.h

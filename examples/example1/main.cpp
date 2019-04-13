@@ -37,13 +37,11 @@ int main(int, char**)
     FIRE::Renderable cube{"cube"};
     cube.SetMesh(std::move(cubeMesh));
 
-    FIRE::Vertex camPos{2, 3, 4};
+    FIRE::Vertex camPos{1.5f, 2, 2};
     FIRE::Vertex camLookAt{0, 0, 0};
     FIRE::Camera cam{"cam", std::move(camPos), std::move(camLookAt)};
 
-    auto view = cam.ViewMatrix();
-    auto persp = cam.PerspectiveMatrix();
-    cube.SetShaderUniformMat4x4("MVP", persp * view);
+    cube.SetShaderUniformMat4x4("MVP", FIRE::CreatePerspectiveMatrix(90.0f, 800.0f / 600.0f, 0.01f, 20.0f) * cam.ViewMatrix());
 
     auto renderer{FIRE::GLFactory::CreateRenderer()};
 

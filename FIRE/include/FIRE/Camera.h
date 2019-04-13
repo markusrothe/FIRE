@@ -25,7 +25,6 @@ public:
     Vertex Orientation() const;
 
     Matrix4x4 ViewMatrix() const;
-    Matrix4x4 PerspectiveMatrix() const;
 
 private:
     std::string const m_name;
