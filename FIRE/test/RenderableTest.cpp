@@ -17,7 +17,7 @@ public:
 
 TEST_F(ARenderable, HasAName)
 {
-    EXPECT_EQ(name, renderable.GetName());
+    EXPECT_EQ(name, renderable.Name());
 }
 
 TEST_F(ARenderable, HasAMesh)

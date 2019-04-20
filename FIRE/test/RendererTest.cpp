@@ -2,6 +2,7 @@
 #include "RendererImpl.h"
 #include "Uploader.h"
 #include <FIRE/Renderable.h>
+#include <FIRE/Scene.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <memory>
@@ -12,9 +13,7 @@ namespace
 class UploaderMock : public FIRE::Uploader
 {
 public:
-    MOCK_METHOD1(
-        Upload, std::tuple<unsigned int, unsigned int, unsigned int>(
-                    FIRE::Renderable const&));
+    MOCK_METHOD1(Upload, std::tuple<unsigned int, unsigned int, unsigned int>(FIRE::Renderable const&));
 };
 
 class UploaderStub : public FIRE::Uploader
@@ -30,42 +29,51 @@ public:
 class DrawAgentMock : public FIRE::DrawAgent
 {
 public:
-    MOCK_METHOD2(
-        Draw, void(
-                  FIRE::Renderable const&,
-                  std::tuple<unsigned int, unsigned int, unsigned int>));
+    MOCK_METHOD2(Draw, void(FIRE::Renderable const&, std::tuple<unsigned int, unsigned int, unsigned int>));
 };
 
 class DrawAgentStub : public FIRE::DrawAgent
 {
 public:
-    void Draw(
-        FIRE::Renderable const&,
-        std::tuple<unsigned int, unsigned int, unsigned int>) override
+    void Draw(FIRE::Renderable const&, std::tuple<unsigned int, unsigned int, unsigned int>) override
     {
     }
 };
+
+class ARenderer : public ::testing::Test
+{
+public:
+    ARenderer()
+        : renderable(std::make_shared<FIRE::Renderable>(""))
+    {
+        auto sceneComponent = scene.NewSceneComponent("");
+        sceneComponent->AddRenderable(renderable);
+    }
+
+    std::shared_ptr<FIRE::Renderable> renderable;
+    FIRE::Scene scene;
+};
+
 } // namespace
 
-TEST(ARenderer, UploadsRenderableToGPU)
+TEST_F(ARenderer, UploadsRenderableToGPU)
 {
-    FIRE::Renderable renderable{""};
     auto uploader = std::make_unique<UploaderMock>();
 
-    EXPECT_CALL(*uploader, Upload(renderable));
+    EXPECT_CALL(*uploader, Upload(*renderable));
     FIRE::RendererImpl renderer(
         std::move(uploader), std::make_unique<DrawAgentStub>());
 
-    renderer.Render(renderable);
+    renderer.Render(scene);
 }
 
-TEST(ARenderer, DrawsARenderable)
+TEST_F(ARenderer, RendersAScene)
 {
-    FIRE::Renderable renderable{""};
     auto drawAgent = std::make_unique<DrawAgentMock>();
-    EXPECT_CALL(*drawAgent, Draw(renderable, ::testing::_));
+    EXPECT_CALL(*drawAgent, Draw(*renderable, ::testing::_));
 
     FIRE::RendererImpl renderer{std::make_unique<UploaderStub>(),
                                 std::move(drawAgent)};
-    renderer.Render(renderable);
+
+    renderer.Render(scene);
 }

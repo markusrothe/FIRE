@@ -1,8 +1,8 @@
 #ifndef FIRE_Renderable_h
 #define FIRE_Renderable_h
 
-#include <FIRE/Mesh.h>
 #include <FIRE/Matrix.h>
+#include <FIRE/Mesh.h>
 #include <string>
 #include <utility>
 
@@ -16,7 +16,7 @@ public:
     void SetMesh(Mesh mesh);
     Mesh& GetMesh();
     Mesh const& GetMesh() const;
-    std::string GetName() const;
+    std::string Name() const;
     std::string GetMaterial() const;
 
     std::pair<std::string, Matrix4x4> GetShaderUniformMat4x4() const;
@@ -27,7 +27,8 @@ private:
     std::string m_material{"Default"};
     Mesh m_mesh{""};
 
-    std::pair<std::string, Matrix4x4> m_uniformVals;
+    std::pair<std::string, Matrix4x4>
+        m_uniformVals;
 };
 
 bool operator==(Renderable const& lhs, Renderable const& rhs);

@@ -1,10 +1,9 @@
 #ifndef FIRE_Camera_H
 #define FIRE_Camera_H
 
-#include <FIRE/Vector.h>
 #include <FIRE/Matrix.h>
+#include <FIRE/Vector.h>
 #include <string>
-
 
 namespace FIRE
 {
@@ -12,7 +11,7 @@ class Camera
 {
 public:
     explicit Camera(
-        std::string name, 
+        std::string name,
         Vector3 pos = Vector3(0.0f, 0.0f, 0.0f),
         Vector3 lookAt = Vector3(0.0f, 0.0f, 0.0f));
 

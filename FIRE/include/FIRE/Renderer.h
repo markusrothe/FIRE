@@ -3,12 +3,12 @@
 
 namespace FIRE
 {
-class Renderable;
+class Scene;
 class Renderer
 {
 public:
     virtual ~Renderer() = default;
-    virtual void Render(Renderable const&) = 0;
+    virtual void Render(Scene const&) = 0;
 };
 } // namespace FIRE
 

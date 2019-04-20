@@ -7,7 +7,7 @@ namespace FIRE
 {
 class Uploader;
 class DrawAgent;
-
+class Scene;
 class RendererImpl : public Renderer
 {
 public:
@@ -17,7 +17,7 @@ public:
 
     ~RendererImpl() override;
 
-    void Render(Renderable const& renderable) override;
+    void Render(Scene const& scene) override;
 
 private:
     std::unique_ptr<Uploader> m_uploader;

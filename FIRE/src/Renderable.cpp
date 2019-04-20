@@ -23,7 +23,7 @@ Mesh const& Renderable::GetMesh() const
     return m_mesh;
 }
 
-std::string Renderable::GetName() const
+std::string Renderable::Name() const
 {
     return m_name;
 }
@@ -35,7 +35,7 @@ std::string Renderable::GetMaterial() const
 
 bool operator==(Renderable const& lhs, Renderable const& rhs)
 {
-    return lhs.GetName() == rhs.GetName();
+    return lhs.Name() == rhs.Name();
 }
 
 bool operator!=(Renderable const& lhs, Renderable const& rhs)

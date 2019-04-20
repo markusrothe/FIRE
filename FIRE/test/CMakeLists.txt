@@ -10,6 +10,7 @@ add_executable(FIRE_tests
     ./MaterialManagerTest.cpp
     ./CameraTest.cpp
     ./MatrixTest.cpp
+    ./SceneTest.cpp
 )
 
 target_include_directories(FIRE_tests
