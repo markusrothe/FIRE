@@ -16,6 +16,7 @@ public:
     void SetMesh(Mesh mesh);
     Mesh& GetMesh();
     Mesh const& GetMesh() const;
+    void SetName(std::string name);
     std::string Name() const;
     std::string GetMaterial() const;
 

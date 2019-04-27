@@ -20,6 +20,13 @@ TEST_F(ARenderable, HasAName)
     EXPECT_EQ(name, renderable.Name());
 }
 
+TEST_F(ARenderable, CanBeAssignedANewName)
+{
+    std::string const newName{"newName"};
+    renderable.SetName(newName);
+    EXPECT_EQ(newName, renderable.Name());
+}
+
 TEST_F(ARenderable, HasAMesh)
 {
     std::string const meshName{"triangleMesh"};

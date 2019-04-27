@@ -81,3 +81,11 @@ TEST(AMatrix, CanBeAPerspectiveMatrix)
 {
     FIRE::Matrix4x4 view = FIRE::CreatePerspectiveMatrix(10.0f, 10.0f, 10.0f, 10.0f);
 }
+
+TEST(AMatrix, CanBeAssignedNewValues)
+{
+    FIRE::Matrix4x4 mat;
+    mat.At(3, 2) = 10.0f;
+
+    EXPECT_EQ(10.0f, mat.At(3, 2));
+}

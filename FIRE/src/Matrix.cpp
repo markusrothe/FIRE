@@ -4,19 +4,20 @@
 
 #include <FIRE/Matrix.h>
 #include <FIRE/Vector.h>
+#include <iostream>
 
 namespace FIRE
 {
 namespace
 {
-    using array4x4 = std::array<float, 16>;
-    array4x4 matToArray(glm::mat4x4 const& mat)
-    {
-        array4x4 arr;
-        auto rawData = glm::value_ptr<float>(mat);
-        std::copy(rawData, rawData + arr.max_size(), arr.begin());
-        return arr;
-    }
+using array4x4 = std::array<float, 16>;
+array4x4 matToArray(glm::mat4x4 const& mat)
+{
+    array4x4 arr;
+    auto rawData = glm::value_ptr<float>(mat);
+    std::copy(rawData, rawData + arr.max_size(), arr.begin());
+    return arr;
+}
 } // namespace
 
 class Matrix4x4::Impl
@@ -68,7 +69,7 @@ public:
         return *this;
     }
 
-    float At(int column, int row) const
+    float& At(int column, int row)
     {
         return m_mat[column][row];
     }
@@ -135,6 +136,11 @@ Matrix4x4& Matrix4x4::operator*=(Matrix4x4 const& other)
     return *this;
 }
 
+float& Matrix4x4::At(int column, int row)
+{
+    return m_impl->At(column, row);
+}
+
 float Matrix4x4::At(int column, int row) const
 {
     return m_impl->At(column, row);
@@ -156,6 +162,19 @@ Matrix4x4 CreateViewMatrix(Vector3 const& pos, Vector3 const& lookAt, Vector3 co
 Matrix4x4 CreatePerspectiveMatrix(float fovy, float aspect, float near, float far)
 {
     return Matrix4x4(matToArray(glm::perspective(fovy, aspect, near, far)));
+}
+
+std::ostream& operator<<(std::ostream& os, Matrix4x4 const& mat)
+{
+    for(auto i = 0u; i < 4; ++i)
+    {
+        for(auto j = 0u; j < 4; ++j)
+        {
+            os << mat.At(j, i) << ' '; 
+        }
+        os << '\n';
+    }   
+    return os;
 }
 
 } // namespace FIRE

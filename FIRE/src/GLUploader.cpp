@@ -78,7 +78,7 @@ GLUploader::Upload(Renderable const& renderable)
     {
         return it->second;
     }
-
+    std::cout << "Uploading " << renderable.Name() << '\n';
     GLuint vao;
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);

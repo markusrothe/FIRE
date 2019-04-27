@@ -23,6 +23,11 @@ Mesh const& Renderable::GetMesh() const
     return m_mesh;
 }
 
+void Renderable::SetName(std::string name)
+{
+    m_name = std::move(name);
+}
+
 std::string Renderable::Name() const
 {
     return m_name;

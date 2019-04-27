@@ -9,7 +9,7 @@
 
 namespace
 {
-std::shared_ptr<FIRE::Renderable> CreateCube()
+std::shared_ptr<FIRE::Renderable> CreateCube(std::string name)
 {
     FIRE::Mesh cubeMesh{"cubeMesh"};
 
@@ -31,15 +31,15 @@ std::shared_ptr<FIRE::Renderable> CreateCube()
 
     cubeMesh.GetVertexDeclaration().AddSection("vPos", 3u, 0, 0);
 
-    auto cube = std::make_shared<FIRE::Renderable>("cube");
+    auto cube = std::make_shared<FIRE::Renderable>(std::move(name));
     cube->SetMesh(std::move(cubeMesh));
     return cube;
 }
 
 std::shared_ptr<FIRE::Camera> CreateCamera()
 {
-    FIRE::Vector3 camPos{1.5f, 2, 2};
-    FIRE::Vector3 camLookAt{0, 0, 0};
+    FIRE::Vector3 camPos{10, 10, 10};
+    FIRE::Vector3 camLookAt{0, 1, 0};
     return std::make_shared<FIRE::Camera>("cam", std::move(camPos), std::move(camLookAt));
 }
 } // namespace
@@ -52,22 +52,34 @@ int main(int, char**)
     window.SetRenderContext(std::move(context));
 
     auto cam = CreateCamera();
-    auto cube = CreateCube();
 
-    cube->SetShaderUniformMat4x4("MVP", FIRE::CreatePerspectiveMatrix(90.0f, 800.0f / 600.0f, 0.01f, 20.0f) * cam->ViewMatrix());
+    auto cube = CreateCube("cube1");
+    auto cube2 = CreateCube("cube2");
+
+    FIRE::Matrix4x4 viewMatrix = cam->ViewMatrix();
+    FIRE::Matrix4x4 projMatrix = FIRE::CreatePerspectiveMatrix(90.0f, 800.0f / 600.0f, 1.f, 20.0f);
+    FIRE::Matrix4x4 modelMatrix;
+    modelMatrix.At(3, 0) = 4;
+    modelMatrix.At(3, 1) = 7;
+    modelMatrix.At(3, 2) = 10;
+
+    auto mat0 = projMatrix * viewMatrix;
+    cube->SetShaderUniformMat4x4("MVP", mat0);
 
     FIRE::Scene scene;
     auto sceneComponent = scene.NewSceneComponent("sceneComponent");
     sceneComponent->AddRenderable(cube);
 
+    cube2->SetShaderUniformMat4x4("MVP", projMatrix * viewMatrix * modelMatrix);
+    sceneComponent->AddRenderable(cube2);
+
     auto renderer{FIRE::GLFactory::CreateRenderer()};
 
     while(!window.ShouldClose())
     {
+        cube2->SetShaderUniformMat4x4("MVP", projMatrix * viewMatrix * modelMatrix);
         window.PollEvents();
-
         renderer->Render(scene);
-
         window.SwapBuffers();
     }
 }

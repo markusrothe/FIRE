@@ -12,6 +12,8 @@ public:
     virtual void Draw(
         Renderable const&,
         std::tuple<unsigned int, unsigned int, unsigned int> buffers) = 0;
+
+    virtual void Clear() {}
 };
 
 } // namespace FIRE
