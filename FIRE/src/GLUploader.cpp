@@ -3,7 +3,7 @@
 #include <FIRE/Mesh.h>
 #include <FIRE/Renderable.h>
 #include <FIRE/VertexDeclaration.h>
-#include <iostream>
+
 #define BUFFER_OFFSET(i) ((void*)(std::uintptr_t)(i))
 
 namespace FIRE
@@ -78,7 +78,7 @@ GLUploader::Upload(Renderable const& renderable)
     {
         return it->second;
     }
-    std::cout << "Uploading " << renderable.Name() << '\n';
+
     GLuint vao;
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);

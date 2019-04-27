@@ -30,12 +30,17 @@ class DrawAgentMock : public FIRE::DrawAgent
 {
 public:
     MOCK_METHOD2(Draw, void(FIRE::Renderable const&, std::tuple<unsigned int, unsigned int, unsigned int>));
+    MOCK_METHOD0(Clear, void(void));
 };
 
 class DrawAgentStub : public FIRE::DrawAgent
 {
 public:
     void Draw(FIRE::Renderable const&, std::tuple<unsigned int, unsigned int, unsigned int>) override
+    {
+    }
+
+    void Clear() override
     {
     }
 };

@@ -13,7 +13,7 @@ public:
         Renderable const&,
         std::tuple<unsigned int, unsigned int, unsigned int> buffers) = 0;
 
-    virtual void Clear() {}
+    virtual void Clear() = 0;
 };
 
 } // namespace FIRE
