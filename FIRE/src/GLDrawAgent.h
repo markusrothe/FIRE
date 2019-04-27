@@ -12,6 +12,7 @@ class GLDrawAgent : public DrawAgent
 {
 public:
     explicit GLDrawAgent(std::shared_ptr<MaterialManager> materialManager);
+
     void Clear() override;
 
     void Draw(
