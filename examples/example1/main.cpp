@@ -3,27 +3,24 @@
 #include <FIRE/RenderContext.h>
 #include <FIRE/Renderable.h>
 #include <FIRE/Renderer.h>
+#include <FIRE/Scene.h>
 #include <FIRE/Window.h>
-
-int main(int, char**)
+#include <memory>
+#include <sstream>
+namespace
 {
-    FIRE::Window window{"example1", 800, 600};
-
-    auto context{FIRE::GLFactory::CreateRenderContext(window)};
-    window.SetRenderContext(std::move(context));
-
+std::shared_ptr<FIRE::Renderable> CreateCube(std::string name)
+{
     FIRE::Mesh cubeMesh{"cubeMesh"};
 
-    cubeMesh.AddVertices({
-        {-1.0f, -1.0f, 1.0f},
-        {1.0f, -1.0f, 1.0f},
-        {1.0f, -1.0f, -1.0f},
-        {-1.0f, -1.0f, -1.0f},
-        {-1.0f, 1.0f, 1.0f},
-        {1.0f, 1.0f, 1.0f},
-        {1.0f, 1.0f, -1.0f},
-        {-1.0f, 1.0f, -1.0f}
-    });
+    cubeMesh.AddVertices({{-1.0f, -1.0f, 1.0f},
+                          {1.0f, -1.0f, 1.0f},
+                          {1.0f, -1.0f, -1.0f},
+                          {-1.0f, -1.0f, -1.0f},
+                          {-1.0f, 1.0f, 1.0f},
+                          {1.0f, 1.0f, 1.0f},
+                          {1.0f, 1.0f, -1.0f},
+                          {-1.0f, 1.0f, -1.0f}});
 
     cubeMesh.AddIndices({0, 1, 5, 0, 5, 4,
                          1, 2, 6, 1, 6, 5,
@@ -34,23 +31,60 @@ int main(int, char**)
 
     cubeMesh.GetVertexDeclaration().AddSection("vPos", 3u, 0, 0);
 
-    FIRE::Renderable cube{"cube"};
-    cube.SetMesh(std::move(cubeMesh));
+    auto cube = std::make_shared<FIRE::Renderable>(std::move(name));
+    cube->SetMesh(std::move(cubeMesh));
+    return cube;
+}
 
-    FIRE::Vector3 camPos{1.5f, 2, 2};
+std::shared_ptr<FIRE::Camera> CreateCamera()
+{
+    FIRE::Vector3 camPos{26, 30, 22};
     FIRE::Vector3 camLookAt{0, 0, 0};
-    FIRE::Camera cam{"cam", std::move(camPos), std::move(camLookAt)};
+    return std::make_shared<FIRE::Camera>("cam", std::move(camPos), std::move(camLookAt));
+}
 
-    cube.SetShaderUniformMat4x4("MVP", FIRE::CreatePerspectiveMatrix(90.0f, 800.0f / 600.0f, 0.01f, 20.0f) * cam.ViewMatrix());
+void SetShaderUniform(FIRE::Camera& cam, FIRE::Renderable& renderable)
+{
+    auto const projMatrix = FIRE::CreatePerspectiveMatrix(90.0f, 800.0f / 600.0f, 0.01f, 500.0f);
+    renderable.SetShaderUniformMat4x4("MVP", projMatrix * cam.ViewMatrix() * renderable.GetTransform().ModelMatrix());
+}
+
+} // namespace
+
+int main(int, char**)
+{
+    FIRE::Window window{"example1", 800, 600};
+
+    auto context{FIRE::GLFactory::CreateRenderContext(window)};
+    window.SetRenderContext(std::move(context));
+
+    auto cam = CreateCamera();
+
+    FIRE::Scene scene;
+    auto sceneComponent = scene.NewSceneComponent("sceneComponent");
+    for(auto i = 0u; i < 5; ++i)
+    {
+        for(auto j = 0u; j < 5; ++j)
+        {
+            for(auto k = 0u; k < 5; ++k)
+            {
+                std::stringstream ss;
+                ss << "cube" << i << '_' << j << '_' << k;
+
+                auto cube = CreateCube(ss.str());
+                auto const factor = 5.0f;
+                cube->GetTransform().Translate(i * factor, j * factor, k * factor);
+                SetShaderUniform(*cam, *cube);
+                sceneComponent->AddRenderable(cube);
+            }
+        }
+    }
 
     auto renderer{FIRE::GLFactory::CreateRenderer()};
-
     while(!window.ShouldClose())
     {
         window.PollEvents();
-
-        renderer->Render(cube);
-
+        renderer->Render(scene);
         window.SwapBuffers();
     }
 }

@@ -25,7 +25,9 @@ public:
     Matrix4x4 operator*(Matrix4x4 const& other) const;
     Matrix4x4& operator*=(Matrix4x4 const& other);
 
+    float& At(int column, int row);
     float At(int column, int row) const;
+
     std::array<float, 16> Raw() const;
 
 private:
@@ -35,6 +37,8 @@ private:
 
     std::unique_ptr<Impl> m_impl;
 };
+
+std::ostream& operator<<(std::ostream& os, Matrix4x4 const& mat);
 
 Matrix4x4 CreateViewMatrix(Vector3 const& pos, Vector3 const& lookAt, Vector3 const& up);
 Matrix4x4 CreatePerspectiveMatrix(float fovy, float aspect, float near, float far);

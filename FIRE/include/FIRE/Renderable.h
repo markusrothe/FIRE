@@ -1,8 +1,11 @@
 #ifndef FIRE_Renderable_h
 #define FIRE_Renderable_h
 
-#include <FIRE/Mesh.h>
 #include <FIRE/Matrix.h>
+#include <FIRE/Mesh.h>
+#include <FIRE/Transform.h>
+#include <FIRE/Vector.h>
+#include <memory>
 #include <string>
 #include <utility>
 
@@ -13,21 +16,22 @@ class Renderable
 {
 public:
     explicit Renderable(std::string name);
+    ~Renderable();
     void SetMesh(Mesh mesh);
     Mesh& GetMesh();
     Mesh const& GetMesh() const;
-    std::string GetName() const;
+    void SetName(std::string name);
+    std::string Name() const;
     std::string GetMaterial() const;
+
+    Transform& GetTransform();
 
     std::pair<std::string, Matrix4x4> GetShaderUniformMat4x4() const;
     void SetShaderUniformMat4x4(std::string const& uniformName, Matrix4x4 const& mat);
 
 private:
-    std::string m_name;
-    std::string m_material{"Default"};
-    Mesh m_mesh{""};
-
-    std::pair<std::string, Matrix4x4> m_uniformVals;
+    class Impl;
+    std::unique_ptr<Impl> m_impl;
 };
 
 bool operator==(Renderable const& lhs, Renderable const& rhs);

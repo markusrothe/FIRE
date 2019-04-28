@@ -14,6 +14,21 @@ struct Vector3
     {
     }
 
+    Vector3& operator+=(Vector3 const& rhs)
+    {
+        x += rhs.x;
+        y += rhs.y;
+        z += rhs.z;
+        return *this;
+    }
+
+    Vector3 operator+(Vector3 const& other)
+    {
+        Vector3 result = *this;
+        result += other;
+        return result;
+    }
+
     bool operator==(Vector3 const& rhs) const
     {
         return x == rhs.x && y == rhs.y && z == rhs.z;
@@ -24,8 +39,11 @@ struct Vector3
         return !(*this == rhs);
     }
 
-    float x, y, z;
+    float x{0.0f};
+    float y{0.0f};
+    float z{0.0f};
 };
+
 } // namespace FIRE
 
 #endif

@@ -17,7 +17,14 @@ public:
 
 TEST_F(ARenderable, HasAName)
 {
-    EXPECT_EQ(name, renderable.GetName());
+    EXPECT_EQ(name, renderable.Name());
+}
+
+TEST_F(ARenderable, CanBeAssignedANewName)
+{
+    std::string const newName{"newName"};
+    renderable.SetName(newName);
+    EXPECT_EQ(newName, renderable.Name());
 }
 
 TEST_F(ARenderable, HasAMesh)
@@ -48,4 +55,10 @@ TEST_F(ARenderable, HasUniformsToSendToAShader)
     auto const shaderUniform = renderable.GetShaderUniformMat4x4();
     EXPECT_EQ("MVP", shaderUniform.first);
     EXPECT_EQ(FIRE::Matrix4x4(), shaderUniform.second);
+}
+
+TEST_F(ARenderable, HasATransform)
+{
+    FIRE::Vector3 const zero;
+    EXPECT_EQ(zero, renderable.GetTransform().Position());
 }

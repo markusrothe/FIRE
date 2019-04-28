@@ -3,7 +3,7 @@
 #include <FIRE/Mesh.h>
 #include <FIRE/Renderable.h>
 #include <FIRE/VertexDeclaration.h>
-#include <iostream>
+
 #define BUFFER_OFFSET(i) ((void*)(std::uintptr_t)(i))
 
 namespace FIRE
@@ -73,7 +73,7 @@ GLUploader::GLUploader(std::shared_ptr<MaterialManager> materialManager)
 std::tuple<GLuint, GLuint, GLuint>
 GLUploader::Upload(Renderable const& renderable)
 {
-    auto const it = m_uploadedRenderables.find(renderable.GetName());
+    auto const it = m_uploadedRenderables.find(renderable.Name());
     if(it != m_uploadedRenderables.end())
     {
         return it->second;
@@ -92,7 +92,7 @@ GLUploader::Upload(Renderable const& renderable)
     GLuint const ibo = UploadIndices(mesh.Indices());
 
     auto buffers = std::make_tuple(vao, vbo, ibo);
-    m_uploadedRenderables.insert(std::make_pair(renderable.GetName(), buffers));
+    m_uploadedRenderables.insert(std::make_pair(renderable.Name(), buffers));
     return buffers;
 }
 
