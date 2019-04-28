@@ -10,21 +10,12 @@
 
 namespace
 {
+using ::testing::_;
 using ::testing::Ref;
 class UploaderMock : public FIRE::Uploader
 {
 public:
     MOCK_METHOD1(Upload, std::tuple<unsigned int, unsigned int, unsigned int>(FIRE::Renderable const&));
-};
-
-class UploaderStub : public FIRE::Uploader
-{
-public:
-    std::tuple<unsigned int, unsigned int, unsigned int>
-    Upload(FIRE::Renderable const&) override
-    {
-        return std::make_tuple(0, 0, 0);
-    }
 };
 
 class DrawAgentMock : public FIRE::DrawAgent
@@ -34,52 +25,64 @@ public:
     MOCK_METHOD0(Clear, void(void));
 };
 
-class DrawAgentStub : public FIRE::DrawAgent
-{
-public:
-    void Draw(FIRE::Renderable const&, std::tuple<unsigned int, unsigned int, unsigned int>) override
-    {
-    }
-
-    void Clear() override
-    {
-    }
-};
-
 class ARenderer : public ::testing::Test
 {
 public:
     ARenderer()
-        : renderable(std::make_shared<FIRE::Renderable>(""))
+        : uploaderPtr(std::make_unique<UploaderMock>())
+        , drawAgentPtr(std::make_unique<DrawAgentMock>())
+        , uploader(*uploaderPtr)
+        , drawAgent(*drawAgentPtr)
+        , renderer(std::move(uploaderPtr), std::move(drawAgentPtr))
+        , renderable(std::make_shared<FIRE::Renderable>(""))
     {
         auto sceneComponent = scene.NewSceneComponent("");
         sceneComponent->AddRenderable(renderable);
     }
 
-    std::shared_ptr<FIRE::Renderable> renderable;
+private:
+    std::unique_ptr<UploaderMock> uploaderPtr;
+    std::unique_ptr<DrawAgentMock> drawAgentPtr;
+
+protected:
+    UploaderMock& uploader;
+    DrawAgentMock& drawAgent;
+    FIRE::RendererImpl renderer;
+
     FIRE::Scene scene;
+    std::shared_ptr<FIRE::Renderable> renderable;
 };
 
 } // namespace
 
 TEST_F(ARenderer, UploadsRenderableToGPU)
 {
-    auto uploader = std::make_unique<UploaderMock>();
-
-    EXPECT_CALL(*uploader, Upload(Ref(*renderable)));
-    FIRE::RendererImpl renderer(
-        std::move(uploader), std::make_unique<DrawAgentStub>());
-
+    EXPECT_CALL(uploader, Upload(Ref(*renderable)));
     renderer.Render(scene);
 }
 
 TEST_F(ARenderer, RendersAScene)
 {
-    auto drawAgent = std::make_unique<DrawAgentMock>();
-    EXPECT_CALL(*drawAgent, Draw(Ref(*renderable), ::testing::_));
-
-    FIRE::RendererImpl renderer{std::make_unique<UploaderStub>(),
-                                std::move(drawAgent)};
-
+    EXPECT_CALL(drawAgent, Draw(Ref(*renderable), _));
     renderer.Render(scene);
+}
+
+TEST_F(ARenderer, DoesNotDoAnythingWithAnEmptyScene)
+{
+    EXPECT_CALL(uploader, Upload(_)).Times(0);
+    EXPECT_CALL(drawAgent, Draw(_, _)).Times(0);
+
+    FIRE::Scene emptyScene;
+    renderer.Render(emptyScene);
+}
+
+TEST_F(ARenderer, DoesNotDoAnythingWithASceneWithoutRenderables)
+{
+    EXPECT_CALL(uploader, Upload(_)).Times(0);
+    EXPECT_CALL(drawAgent, Draw(_, _)).Times(0);
+
+    FIRE::Scene sceneWithoutRenderables;
+    auto sceneComponent = sceneWithoutRenderables.NewSceneComponent("");
+    sceneComponent->AddRenderable(nullptr);
+    renderer.Render(sceneWithoutRenderables);
 }
