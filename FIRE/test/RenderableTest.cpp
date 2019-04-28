@@ -56,3 +56,9 @@ TEST_F(ARenderable, HasUniformsToSendToAShader)
     EXPECT_EQ("MVP", shaderUniform.first);
     EXPECT_EQ(FIRE::Matrix4x4(), shaderUniform.second);
 }
+
+TEST_F(ARenderable, HasATransform)
+{
+    FIRE::Vector3 const zero;
+    EXPECT_EQ(zero, renderable.GetTransform().Position());
+}

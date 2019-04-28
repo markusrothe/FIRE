@@ -6,7 +6,7 @@
 #include <FIRE/Scene.h>
 #include <FIRE/Window.h>
 #include <memory>
-
+#include <sstream>
 namespace
 {
 std::shared_ptr<FIRE::Renderable> CreateCube(std::string name)
@@ -38,10 +38,17 @@ std::shared_ptr<FIRE::Renderable> CreateCube(std::string name)
 
 std::shared_ptr<FIRE::Camera> CreateCamera()
 {
-    FIRE::Vector3 camPos{10, 10, 10};
-    FIRE::Vector3 camLookAt{0, 1, 0};
+    FIRE::Vector3 camPos{26, 30, 22};
+    FIRE::Vector3 camLookAt{0, 0, 0};
     return std::make_shared<FIRE::Camera>("cam", std::move(camPos), std::move(camLookAt));
 }
+
+void SetShaderUniform(FIRE::Camera& cam, FIRE::Renderable& renderable)
+{
+    auto const projMatrix = FIRE::CreatePerspectiveMatrix(90.0f, 800.0f / 600.0f, 0.01f, 500.0f);
+    renderable.SetShaderUniformMat4x4("MVP", projMatrix * cam.ViewMatrix() * renderable.GetTransform().ModelMatrix());
+}
+
 } // namespace
 
 int main(int, char**)
@@ -53,31 +60,29 @@ int main(int, char**)
 
     auto cam = CreateCamera();
 
-    auto cube = CreateCube("cube1");
-    auto cube2 = CreateCube("cube2");
-
-    FIRE::Matrix4x4 viewMatrix = cam->ViewMatrix();
-    FIRE::Matrix4x4 projMatrix = FIRE::CreatePerspectiveMatrix(90.0f, 800.0f / 600.0f, 1.f, 20.0f);
-    FIRE::Matrix4x4 modelMatrix;
-    modelMatrix.At(3, 0) = 4;
-    modelMatrix.At(3, 1) = 7;
-    modelMatrix.At(3, 2) = 10;
-
-    auto mat0 = projMatrix * viewMatrix;
-    cube->SetShaderUniformMat4x4("MVP", mat0);
-
     FIRE::Scene scene;
     auto sceneComponent = scene.NewSceneComponent("sceneComponent");
-    sceneComponent->AddRenderable(cube);
+    for(auto i = 0u; i < 5; ++i)
+    {
+        for(auto j = 0u; j < 5; ++j)
+        {
+            for(auto k = 0u; k < 5; ++k)
+            {
+                std::stringstream ss;
+                ss << "cube" << i << '_' << j << '_' << k;
 
-    cube2->SetShaderUniformMat4x4("MVP", projMatrix * viewMatrix * modelMatrix);
-    sceneComponent->AddRenderable(cube2);
+                auto cube = CreateCube(ss.str());
+                auto const factor = 5.0f;
+                cube->GetTransform().Translate(i * factor, j * factor, k * factor);
+                SetShaderUniform(*cam, *cube);
+                sceneComponent->AddRenderable(cube);
+            }
+        }
+    }
 
     auto renderer{FIRE::GLFactory::CreateRenderer()};
-
     while(!window.ShouldClose())
     {
-        cube2->SetShaderUniformMat4x4("MVP", projMatrix * viewMatrix * modelMatrix);
         window.PollEvents();
         renderer->Render(scene);
         window.SwapBuffers();

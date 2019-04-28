@@ -10,6 +10,7 @@
 
 namespace
 {
+using ::testing::Ref;
 class UploaderMock : public FIRE::Uploader
 {
 public:
@@ -65,7 +66,7 @@ TEST_F(ARenderer, UploadsRenderableToGPU)
 {
     auto uploader = std::make_unique<UploaderMock>();
 
-    EXPECT_CALL(*uploader, Upload(*renderable));
+    EXPECT_CALL(*uploader, Upload(Ref(*renderable)));
     FIRE::RendererImpl renderer(
         std::move(uploader), std::make_unique<DrawAgentStub>());
 
@@ -75,7 +76,7 @@ TEST_F(ARenderer, UploadsRenderableToGPU)
 TEST_F(ARenderer, RendersAScene)
 {
     auto drawAgent = std::make_unique<DrawAgentMock>();
-    EXPECT_CALL(*drawAgent, Draw(*renderable, ::testing::_));
+    EXPECT_CALL(*drawAgent, Draw(Ref(*renderable), ::testing::_));
 
     FIRE::RendererImpl renderer{std::make_unique<UploaderStub>(),
                                 std::move(drawAgent)};

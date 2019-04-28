@@ -12,6 +12,7 @@ add_library(FIRE STATIC
     include/FIRE/VertexDeclaration.h
     include/FIRE/GLFactory.h
     include/FIRE/Scene.h
+    include/FIRE/Transform.h
     
     src/glad/include/glad/glad.h
     src/glad/include/KHR/khrplatform.h
@@ -25,7 +26,6 @@ add_library(FIRE STATIC
     src/GLRenderContext.h
     src/RendererImpl.h
     src/MaterialManager.h
-
         
     src/glad/src/glad.c
     src/Camera.cpp
@@ -42,6 +42,7 @@ add_library(FIRE STATIC
     src/VertexDeclaration.cpp
     src/Matrix.cpp
     src/Scene.cpp
+    src/Transform.cpp
 )
 
 target_include_directories(FIRE
