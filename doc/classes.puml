@@ -1,0 +1,14 @@
+skinparam classBackgroundColor DarkSlateGray
+skinparam classBorderColor Black
+skinparam DefaultFontColor Snow
+skinparam ArrowColor Snow
+hide empty members
+
+Scene "1" o-- "n"  SceneComponent
+SceneComponent "1" o-- "n" Renderable
+
+Renderable o-- Mesh
+Renderable "1" o-l- "1" Transform
+Renderable o- Material
+
+Renderer -> Scene : render()
