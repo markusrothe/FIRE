@@ -1,5 +1,5 @@
 
-add_subdirectory(src/glm)
+add_subdirectory(src/glm EXCLUDE_FROM_ALL)
 add_library(FIRE STATIC
     include/FIRE/Camera.h
     include/FIRE/Window.h

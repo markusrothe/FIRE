@@ -62,17 +62,20 @@ int main(int, char**)
 
     FIRE::Scene scene;
     auto sceneComponent = scene.NewSceneComponent("sceneComponent");
-    for(auto i = 0u; i < 5; ++i)
+    auto numCubes = 5;
+    for(auto i = 0u; i < numCubes; ++i)
     {
-        for(auto j = 0u; j < 5; ++j)
+        for(auto j = 0u; j < numCubes; ++j)
         {
-            for(auto k = 0u; k < 5; ++k)
+            for(auto k = 0u; k < numCubes; ++k)
             {
                 std::stringstream ss;
                 ss << "cube" << i << '_' << j << '_' << k;
 
                 auto cube = CreateCube(ss.str());
+
                 auto const factor = 5.0f;
+                cube->GetTransform().Rotate(FIRE::Vector3(0, 1, 0), 45);
                 cube->GetTransform().Translate(i * factor, j * factor, k * factor);
                 SetShaderUniform(*cam, *cube);
                 sceneComponent->AddRenderable(cube);
