@@ -62,7 +62,7 @@ int main(int, char**)
 
     FIRE::Scene scene;
     auto sceneComponent = scene.NewSceneComponent("sceneComponent");
-    auto numCubes = 5;
+    auto numCubes = 5u;
     for(auto i = 0u; i < numCubes; ++i)
     {
         for(auto j = 0u; j < numCubes; ++j)

@@ -5,3 +5,5 @@
 compile_commands.json
 .dir-locals.el
 TODO.txt
+/FIRE/src/glm/doc
+.projectile
