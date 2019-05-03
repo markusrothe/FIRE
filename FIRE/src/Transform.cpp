@@ -45,12 +45,15 @@ public:
 
     Matrix4x4 ModelMatrix() const
     {
-        auto quat = glm::rotation(
-            glm::vec3(0.0f, 0.0f, -1.0f),
-            glm::vec3(m_lookAt.x, m_lookAt.y, m_lookAt.z));
-
         glm::mat4x4 mat(1.0f);
-        mat = glm::translate(mat, glm::vec3(m_position.x, m_position.y, m_position.z)) * glm::toMat4(quat);
+        mat = glm::translate(
+            mat,
+            glm::vec3(m_position.x, m_position.y, m_position.z));
+
+        mat *= glm::toMat4(
+            glm::rotation(
+                glm::vec3(0.0f, 0.0f, -1.0f),
+                glm::vec3(m_lookAt.x, m_lookAt.y, m_lookAt.z)));
 
         return Matrix4x4(glm_helper::matToArray(mat));
     }
