@@ -7,9 +7,9 @@ namespace FIRE
 class Transform::Impl
 {
 public:
-    Impl(Vector3 pos)
+    Impl(Vector3 pos, Vector3 lookAt)
         : m_position(std::move(pos))
-        , m_lookAt(0.0f, 0.0f, -1.0f)
+        , m_lookAt(std::move(lookAt))
     {
     }
 
@@ -21,6 +21,11 @@ public:
     Vector3 Orientation() const
     {
         return m_lookAt;
+    }
+
+    void SetOrientation(Vector3 lookAt)
+    {
+        m_lookAt = std::move(lookAt);
     }
 
     void Translate(float x, float y, float z)
@@ -55,8 +60,10 @@ private:
     Vector3 m_lookAt;
 };
 
-Transform::Transform(Vector3 pos /* = Vector3(0.0f, 0.0f, 0.0f) */)
-    : m_impl(std::make_unique<Transform::Impl>(std::move(pos)))
+Transform::Transform(
+    Vector3 pos /* = Vector3(0.0f, 0.0f, 0.0f) */,
+    Vector3 lookAt /* = Vector3(0.0f, 0.0f, -1.0f) */)
+    : m_impl(std::make_unique<Transform::Impl>(std::move(pos), std::move(lookAt)))
 {
 }
 
@@ -70,6 +77,11 @@ Vector3 Transform::Position() const
 Vector3 Transform::Orientation() const
 {
     return m_impl->Orientation();
+}
+
+void Transform::SetOrientation(Vector3 lookAt)
+{
+    return m_impl->SetOrientation(std::move(lookAt));
 }
 
 void Transform::Translate(float x, float y, float z)
