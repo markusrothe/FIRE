@@ -38,7 +38,7 @@ std::shared_ptr<FIRE::Renderable> CreateCube(std::string name)
 
 std::shared_ptr<FIRE::Camera> CreateCamera()
 {
-    FIRE::Vector3 camPos{26, 30, 22};
+    FIRE::Vector3 camPos{3, 0, 3};
     FIRE::Vector3 camLookAt{0, 0, 0};
     return std::make_shared<FIRE::Camera>("cam", std::move(camPos), std::move(camLookAt));
 }
@@ -62,28 +62,17 @@ int main(int, char**)
 
     FIRE::Scene scene;
     auto sceneComponent = scene.NewSceneComponent("sceneComponent");
-    for(auto i = 0u; i < 5; ++i)
-    {
-        for(auto j = 0u; j < 5; ++j)
-        {
-            for(auto k = 0u; k < 5; ++k)
-            {
-                std::stringstream ss;
-                ss << "cube" << i << '_' << j << '_' << k;
 
-                auto cube = CreateCube(ss.str());
-                auto const factor = 5.0f;
-                cube->GetTransform().Translate(i * factor, j * factor, k * factor);
-                SetShaderUniform(*cam, *cube);
-                sceneComponent->AddRenderable(cube);
-            }
-        }
-    }
+    auto cube = CreateCube("cube");
+
+    sceneComponent->AddRenderable(cube);
 
     auto renderer{FIRE::GLFactory::CreateRenderer()};
     while(!window.ShouldClose())
     {
         window.PollEvents();
+        cube->GetTransform().Rotate(FIRE::Vector3(0, 1, 0), 1);
+        SetShaderUniform(*cam, *cube);
         renderer->Render(scene);
         window.SwapBuffers();
     }

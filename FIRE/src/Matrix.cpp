@@ -1,25 +1,10 @@
-#define GLM_FORCE_CXX17
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include "glm_wrapper.h"
 
 #include <FIRE/Matrix.h>
 #include <FIRE/Vector.h>
 #include <iostream>
-
 namespace FIRE
 {
-namespace
-{
-using array4x4 = std::array<float, 16>;
-array4x4 matToArray(glm::mat4x4 const& mat)
-{
-    array4x4 arr;
-    auto rawData = glm::value_ptr<float>(mat);
-    std::copy(rawData, rawData + arr.max_size(), arr.begin());
-    return arr;
-}
-} // namespace
-
 class Matrix4x4::Impl
 {
 public:
@@ -28,7 +13,7 @@ public:
     {
     }
 
-    explicit Impl(array4x4 vals)
+    explicit Impl(glm_helper::array4x4 vals)
         : m_mat(glm::make_mat4x4(vals.data()))
     {
     }
@@ -74,9 +59,9 @@ public:
         return m_mat[column][row];
     }
 
-    array4x4 Raw() const
+    glm_helper::array4x4 Raw() const
     {
-        return matToArray(m_mat);
+        return glm_helper::matToArray(m_mat);
     }
 
 private:
@@ -90,7 +75,7 @@ Matrix4x4::Matrix4x4()
 {
 }
 
-Matrix4x4::Matrix4x4(array4x4 vals)
+Matrix4x4::Matrix4x4(glm_helper::array4x4 vals)
     : m_impl(std::make_unique<Matrix4x4::Impl>(std::move(vals)))
 {
 }
@@ -146,7 +131,7 @@ float Matrix4x4::At(int column, int row) const
     return m_impl->At(column, row);
 }
 
-array4x4 Matrix4x4::Raw() const
+glm_helper::array4x4 Matrix4x4::Raw() const
 {
     return m_impl->Raw();
 }
@@ -156,12 +141,12 @@ Matrix4x4 CreateViewMatrix(Vector3 const& pos, Vector3 const& lookAt, Vector3 co
     glm::vec3 const posVec(pos.x, pos.y, pos.z);
     glm::vec3 const lookAtVec(lookAt.x, lookAt.y, lookAt.z);
     glm::vec3 const upVec(up.x, up.y, up.z);
-    return Matrix4x4(matToArray(glm::lookAt(posVec, lookAtVec, upVec)));
+    return Matrix4x4(glm_helper::matToArray(glm::lookAt(posVec, lookAtVec, upVec)));
 }
 
 Matrix4x4 CreatePerspectiveMatrix(float fovy, float aspect, float near, float far)
 {
-    return Matrix4x4(matToArray(glm::perspective(fovy, aspect, near, far)));
+    return Matrix4x4(glm_helper::matToArray(glm::perspective(fovy, aspect, near, far)));
 }
 
 std::ostream& operator<<(std::ostream& os, Matrix4x4 const& mat)
@@ -170,10 +155,10 @@ std::ostream& operator<<(std::ostream& os, Matrix4x4 const& mat)
     {
         for(auto j = 0u; j < 4; ++j)
         {
-            os << mat.At(j, i) << ' '; 
+            os << mat.At(j, i) << ' ';
         }
         os << '\n';
-    }   
+    }
     return os;
 }
 
