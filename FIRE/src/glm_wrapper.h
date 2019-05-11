@@ -32,6 +32,11 @@ inline array4x4 matToArray(glm::mat4x4 const& mat)
     return arr;
 }
 
+inline glm::mat4x4 arrayToMat(array4x4 const& arr)
+{
+    return glm::make_mat4(arr.data());
+}
+
 } // namespace glm_helper
 
 #endif // !FIRE_glm_wrapper_h

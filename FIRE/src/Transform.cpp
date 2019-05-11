@@ -3,70 +3,68 @@
 #include <iostream>
 namespace FIRE
 {
+namespace
+{
+glm::vec3 constexpr up{0.0f, 1.0f, 0.0f};
+}
 
 class Transform::Impl
 {
 public:
-    Impl(Vector3 pos, Vector3 lookAt)
-        : m_position(std::move(pos))
-        , m_lookAt(std::move(lookAt))
+    Impl(Vector3 const& pos, Vector3 const& lookAt)
+        : m_position(pos.x, pos.y, pos.z)
+        , m_lookAt(lookAt.x, lookAt.y, lookAt.z)
     {
     }
 
     Vector3 Position() const
     {
-        return m_position;
+        return Vector3(m_position.x, m_position.y, m_position.z);
     }
 
     Vector3 Orientation() const
     {
-        return m_lookAt;
+        return Vector3(m_lookAt.x, m_lookAt.y, m_lookAt.z);
     }
 
-    void SetOrientation(Vector3 lookAt)
+    void SetOrientation(Vector3 const& lookAt)
     {
-        m_lookAt = std::move(lookAt);
+        m_lookAt.x = lookAt.x;
+        m_lookAt.y = lookAt.y;
+        m_lookAt.z = lookAt.z;
     }
 
     void Translate(float x, float y, float z)
     {
-        m_position += Vector3(x, y, z);
+        m_position += glm::vec3(x, y, z);
     }
 
     void Rotate(Vector3 const& axis, float angle)
     {
-        auto const result = glm::rotate(
-            glm::vec3(m_lookAt.x, m_lookAt.y, m_lookAt.z),
+        m_lookAt = glm::rotate(
+            m_lookAt,
             glm::radians(angle),
             glm::vec3(axis.x, axis.y, axis.z));
-
-        m_lookAt = Vector3(result.x, result.y, result.z);
     }
 
     Matrix4x4 ModelMatrix() const
     {
-        glm::mat4x4 mat(1.0f);
-        mat = glm::translate(
-            mat,
-            glm::vec3(m_position.x, m_position.y, m_position.z));
+        auto modelMatrix = glm::translate(m_position);
+        auto const lookAtMat = glm::lookAt(m_position, m_lookAt, up);
+        modelMatrix *= glm::mat4_cast(glm::conjugate(glm::toQuat(lookAtMat)));
 
-        mat *= glm::toMat4(
-            glm::rotation(
-                glm::vec3(0.0f, 0.0f, -1.0f),
-                glm::vec3(m_lookAt.x, m_lookAt.y, m_lookAt.z)));
-
-        return Matrix4x4(glm_helper::matToArray(mat));
+        return Matrix4x4(glm_helper::matToArray(modelMatrix));
     }
 
 private:
-    Vector3 m_position;
-    Vector3 m_lookAt;
+    glm::vec3 m_position;
+    glm::vec3 m_lookAt;
 };
 
 Transform::Transform(
     Vector3 pos /* = Vector3(0.0f, 0.0f, 0.0f) */,
     Vector3 lookAt /* = Vector3(0.0f, 0.0f, -1.0f) */)
-    : m_impl(std::make_unique<Transform::Impl>(std::move(pos), std::move(lookAt)))
+    : m_impl(std::make_unique<Transform::Impl>(pos, lookAt))
 {
 }
 

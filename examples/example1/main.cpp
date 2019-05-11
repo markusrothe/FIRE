@@ -38,15 +38,9 @@ std::shared_ptr<FIRE::Renderable> CreateCube(std::string name)
 
 std::shared_ptr<FIRE::Camera> CreateCamera()
 {
-    FIRE::Vector3 camPos{3, 0, 3};
+    FIRE::Vector3 camPos{0.1, 5, 0};
     FIRE::Vector3 camLookAt{0, 0, 0};
     return std::make_shared<FIRE::Camera>("cam", std::move(camPos), std::move(camLookAt));
-}
-
-void SetShaderUniform(FIRE::Camera& cam, FIRE::Renderable& renderable)
-{
-    auto const projMatrix = FIRE::CreatePerspectiveMatrix(90.0f, 800.0f / 600.0f, 0.01f, 500.0f);
-    renderable.SetShaderUniformMat4x4("MVP", projMatrix * cam.ViewMatrix() * renderable.GetTransform().ModelMatrix());
 }
 
 } // namespace
@@ -64,15 +58,25 @@ int main(int, char**)
     auto sceneComponent = scene.NewSceneComponent("sceneComponent");
 
     auto cube = CreateCube("cube");
+    auto cube2 = CreateCube("2ndCube");
 
     sceneComponent->AddRenderable(cube);
-
+    sceneComponent->AddRenderable(cube2);
+    cube2->GetTransform().Translate(5, 0, 0);
     auto renderer{FIRE::GLFactory::CreateRenderer()};
+
+    FIRE::Transform transform;
+    auto const proj = FIRE::CreatePerspectiveMatrix(90.0f, 800.0f / 600.0f, 0.01f, 500.0f);
+    auto const view = cam->ViewMatrix();
+
     while(!window.ShouldClose())
     {
         window.PollEvents();
-        cube->GetTransform().Rotate(FIRE::Vector3(0, 1, 0), 1);
-        SetShaderUniform(*cam, *cube);
+
+        transform.Rotate(FIRE::Vector3(0, 1, 0), 1.0f);
+        cube->SetShaderUniformMat4x4("MVP", proj * view * cube->GetTransform().ModelMatrix());
+        cube2->SetShaderUniformMat4x4("MVP", proj * view * transform.ModelMatrix() * cube2->GetTransform().ModelMatrix());
+
         renderer->Render(scene);
         window.SwapBuffers();
     }
