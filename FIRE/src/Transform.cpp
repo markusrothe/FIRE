@@ -25,7 +25,6 @@ public:
         glm::vec3 scale, translation, skew;
         glm::vec4 perspective;
         glm::quat orientation;
-
         glm::decompose(m_modelMatrix, scale, orientation, translation, skew, perspective);
 
         return Vector3(translation.x, translation.y, translation.z);
@@ -36,7 +35,6 @@ public:
         glm::vec3 scale, translation, skew;
         glm::vec4 perspective;
         glm::quat orientation;
-
         glm::decompose(m_modelMatrix, scale, orientation, translation, skew, perspective);
 
         glm::vec3 result = glm::rotate(orientation, ToGlmVec3(m_viewDir));

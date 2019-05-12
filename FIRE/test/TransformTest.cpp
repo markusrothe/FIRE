@@ -4,15 +4,6 @@
 #include <gtest/gtest.h>
 #include <ostream>
 
-namespace FIRE
-{
-std::ostream& operator<<(std::ostream& os, const Vector3& vec)
-{
-    os << '(' << vec.x << ',' << vec.y << ',' << vec.z << ')';
-    return os;
-}
-} // namespace FIRE
-
 namespace
 {
 class ATransform : public ::testing::Test
@@ -122,4 +113,11 @@ TEST_F(ATransform, RotatesProperlyAroundZAxis)
 
     transform.Rotate(zAxis, 90.0f);
     EXPECT_VEC_EQ(transform.Orientation(), FIRE::Vector3(0.0f, 0.0f, -1.0f));
+}
+
+TEST_F(ATransform, RotationAfterOrientationChange)
+{
+    transform.SetOrientation(FIRE::Vector3(1.0f, 0.0f, 1.0f));
+    transform.Rotate(FIRE::Vector3(0.0f, 1.0f, 0.0f), 90.0f);
+    EXPECT_VEC_EQ(FIRE::Vector3(1.0f, 0.0f, -1.0f), transform.Orientation());
 }
