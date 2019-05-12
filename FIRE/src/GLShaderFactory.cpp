@@ -83,7 +83,7 @@ unsigned int GLShaderFactory::CreateDefaultShader()
         "#version 440\n"
         "in vec3 posVS;\n"
         "out vec4 color;\n"
-        "void main() { color = vec4(posVS.xyz, 1.0); }\n";
+        "void main() { color = vec4(0.4,0.4,0.4,1.0) + vec4(posVS.xyz, 1.0); }\n";
 
     auto vertexShader = CompileShader(GL_VERTEX_SHADER, vsCode);
     auto fragmentShader = CompileShader(GL_FRAGMENT_SHADER, fsCode);

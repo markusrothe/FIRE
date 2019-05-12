@@ -5,60 +5,69 @@ namespace FIRE
 {
 namespace
 {
-glm::vec3 constexpr up{0.0f, 1.0f, 0.0f};
+glm::vec3 ToGlmVec3(Vector3 const& v)
+{
+    return glm::vec3(v.x, v.y, v.z);
 }
+} // namespace
 
 class Transform::Impl
 {
 public:
-    Impl(Vector3 const& pos, Vector3 const& lookAt)
-        : m_position(pos.x, pos.y, pos.z)
-        , m_lookAt(lookAt.x, lookAt.y, lookAt.z)
+    Impl(Vector3 const& pos, Vector3 const& viewDir)
+        : m_modelMatrix(glm::translate(ToGlmVec3(pos)))
     {
+        SetOrientation(viewDir);
     }
 
     Vector3 Position() const
     {
-        return Vector3(m_position.x, m_position.y, m_position.z);
+        glm::vec3 scale, translation, skew;
+        glm::vec4 perspective;
+        glm::quat orientation;
+
+        glm::decompose(m_modelMatrix, scale, orientation, translation, skew, perspective);
+
+        return Vector3(translation.x, translation.y, translation.z);
     }
 
     Vector3 Orientation() const
     {
-        return Vector3(m_lookAt.x, m_lookAt.y, m_lookAt.z);
+        glm::vec3 scale, translation, skew;
+        glm::vec4 perspective;
+        glm::quat orientation;
+
+        glm::decompose(m_modelMatrix, scale, orientation, translation, skew, perspective);
+
+        glm::vec3 result = glm::rotate(orientation, ToGlmVec3(m_viewDir));
+
+        return Vector3(result.x, result.y, result.z);
     }
 
-    void SetOrientation(Vector3 const& lookAt)
+    void SetOrientation(Vector3 dir)
     {
-        m_lookAt.x = lookAt.x;
-        m_lookAt.y = lookAt.y;
-        m_lookAt.z = lookAt.z;
+        m_viewDir = std::move(dir);
     }
 
     void Translate(float x, float y, float z)
     {
-        m_position += glm::vec3(x, y, z);
+        m_modelMatrix = glm::translate(m_modelMatrix, glm::vec3(x, y, z));
     }
 
     void Rotate(Vector3 const& axis, float angle)
     {
-        m_lookAt = glm::rotate(
-            m_lookAt,
-            glm::radians(angle),
-            glm::vec3(axis.x, axis.y, axis.z));
+        m_modelMatrix = glm::rotate(
+            m_modelMatrix, glm::radians(angle), ToGlmVec3(axis));
     }
 
     Matrix4x4 ModelMatrix() const
     {
-        auto modelMatrix = glm::translate(m_position);
-        auto const lookAtMat = glm::lookAt(m_position, m_lookAt, up);
-        modelMatrix *= glm::mat4_cast(glm::conjugate(glm::toQuat(lookAtMat)));
-
-        return Matrix4x4(glm_helper::matToArray(modelMatrix));
+        return Matrix4x4(glm_helper::matToArray(m_modelMatrix));
     }
 
 private:
-    glm::vec3 m_position;
-    glm::vec3 m_lookAt;
+    glm::mat4 m_modelMatrix;
+    Vector3 m_viewDir;
 };
 
 Transform::Transform(
@@ -80,9 +89,9 @@ Vector3 Transform::Orientation() const
     return m_impl->Orientation();
 }
 
-void Transform::SetOrientation(Vector3 lookAt)
+void Transform::SetOrientation(Vector3 viewDir)
 {
-    return m_impl->SetOrientation(std::move(lookAt));
+    return m_impl->SetOrientation(std::move(viewDir));
 }
 
 void Transform::Translate(float x, float y, float z)

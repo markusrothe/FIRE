@@ -27,7 +27,7 @@ std::shared_ptr<FIRE::Renderable> CreateCube(std::string name)
                          2, 3, 7, 2, 7, 6,
                          3, 0, 4, 3, 4, 7,
                          4, 5, 6, 4, 6, 7,
-                         2, 3, 1, 2, 1, 0});
+                         2, 1, 3, 3, 1, 0});
 
     cubeMesh.GetVertexDeclaration().AddSection("vPos", 3u, 0, 0);
 
@@ -38,7 +38,7 @@ std::shared_ptr<FIRE::Renderable> CreateCube(std::string name)
 
 std::shared_ptr<FIRE::Camera> CreateCamera()
 {
-    FIRE::Vector3 camPos{0.1, 5, 0};
+    FIRE::Vector3 camPos{5, 5, 5};
     FIRE::Vector3 camLookAt{0, 0, 0};
     return std::make_shared<FIRE::Camera>("cam", std::move(camPos), std::move(camLookAt));
 }
@@ -59,13 +59,17 @@ int main(int, char**)
 
     auto cube = CreateCube("cube");
     auto cube2 = CreateCube("2ndCube");
+    auto cube3 = CreateCube("3rdCube");
 
     sceneComponent->AddRenderable(cube);
     sceneComponent->AddRenderable(cube2);
+    sceneComponent->AddRenderable(cube3);
     cube2->GetTransform().Translate(5, 0, 0);
+    cube3->GetTransform().Translate(0, 5, 0);
     auto renderer{FIRE::GLFactory::CreateRenderer()};
 
-    FIRE::Transform transform;
+    FIRE::Transform transformY, transformX;
+
     auto const proj = FIRE::CreatePerspectiveMatrix(90.0f, 800.0f / 600.0f, 0.01f, 500.0f);
     auto const view = cam->ViewMatrix();
 
@@ -73,9 +77,13 @@ int main(int, char**)
     {
         window.PollEvents();
 
-        transform.Rotate(FIRE::Vector3(0, 1, 0), 1.0f);
+        transformY.Rotate(FIRE::Vector3(0, 1, 0), 1.0f);
+        transformX.Rotate(FIRE::Vector3(1, 0, 0), 1.0f);
+        cube->GetTransform().Rotate(FIRE::Vector3(1, 0, 0), 1.0f);
+
         cube->SetShaderUniformMat4x4("MVP", proj * view * cube->GetTransform().ModelMatrix());
-        cube2->SetShaderUniformMat4x4("MVP", proj * view * transform.ModelMatrix() * cube2->GetTransform().ModelMatrix());
+        cube2->SetShaderUniformMat4x4("MVP", proj * view * transformY.ModelMatrix() * cube2->GetTransform().ModelMatrix());
+        cube3->SetShaderUniformMat4x4("MVP", proj * view * transformX.ModelMatrix() * cube3->GetTransform().ModelMatrix());
 
         renderer->Render(scene);
         window.SwapBuffers();

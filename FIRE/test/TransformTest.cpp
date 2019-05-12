@@ -18,6 +18,15 @@ namespace
 class ATransform : public ::testing::Test
 {
 public:
+    void EXPECT_VEC_EQ(
+        FIRE::Vector3 const& expected, FIRE::Vector3 const& actual)
+    {
+        auto const eps = 0.000001f;
+        EXPECT_THAT(actual.x, ::testing::FloatNear(expected.x, eps));
+        EXPECT_THAT(actual.y, ::testing::FloatNear(expected.y, eps));
+        EXPECT_THAT(actual.z, ::testing::FloatNear(expected.z, eps));
+    }
+
     FIRE::Transform transform;
 };
 } // namespace
@@ -59,19 +68,58 @@ TEST_F(ATransform, DescribesAnOrientation)
     EXPECT_EQ(defaultOrientation, transform.Orientation());
 }
 
-TEST_F(ATransform, SupportsRotationAroundAxisInDegrees)
+TEST_F(ATransform, CanChangeItsOrientation)
 {
-    transform.Rotate(FIRE::Vector3(0.0f, 1.0f, 0.0f), 90.0f);
-    auto orientation = transform.Orientation();
+    FIRE::Vector3 const lookAt(3.0f, 2.0f, 1.0f);
+    transform.SetOrientation(lookAt);
 
-    auto eps = 0.000001f;
-    EXPECT_THAT(orientation.x, ::testing::FloatNear(-1.0f, eps));
-    EXPECT_THAT(orientation.y, ::testing::FloatNear(0.0f, eps));
-    EXPECT_THAT(orientation.z, ::testing::FloatNear(0.0f, eps));
+    EXPECT_VEC_EQ(lookAt, transform.Orientation());
+}
 
-    transform.Rotate(FIRE::Vector3(0.0f, 0.0f, 1.0f), 90.0f);
-    orientation = transform.Orientation();
-    EXPECT_THAT(orientation.x, ::testing::FloatNear(0.0f, eps));
-    EXPECT_THAT(orientation.y, ::testing::FloatNear(-1.0f, eps));
-    EXPECT_THAT(orientation.z, ::testing::FloatNear(0.0f, eps));
+TEST_F(ATransform, RotatesProperlyAroundXAxis)
+{
+    FIRE::Vector3 const xAxis(1.0f, 0.0f, 0.0f);
+    transform.Rotate(xAxis, 90.0f);
+    EXPECT_VEC_EQ(transform.Orientation(), FIRE::Vector3(0.0f, 1.0f, 0.0f));
+
+    transform.Rotate(xAxis, 90.0f);
+    EXPECT_VEC_EQ(transform.Orientation(), FIRE::Vector3(0.0f, 0.0f, 1.0f));
+
+    transform.Rotate(xAxis, 90.0f);
+    EXPECT_VEC_EQ(transform.Orientation(), FIRE::Vector3(0.0f, -1.0f, 0.0f));
+
+    transform.Rotate(xAxis, 90.0f);
+    EXPECT_VEC_EQ(transform.Orientation(), FIRE::Vector3(0.0f, 0.0f, -1.0f));
+}
+
+TEST_F(ATransform, RotatesProperlyAroundYAxis)
+{
+    FIRE::Vector3 const yAxis(0.0f, 1.0f, 0.0f);
+    transform.Rotate(yAxis, 90.0f);
+    EXPECT_VEC_EQ(transform.Orientation(), FIRE::Vector3(-1.0f, 0.0f, 0.0f));
+
+    transform.Rotate(yAxis, 90.0f);
+    EXPECT_VEC_EQ(transform.Orientation(), FIRE::Vector3(0.0f, 0.0f, 1.0f));
+
+    transform.Rotate(yAxis, 90.0f);
+    EXPECT_VEC_EQ(transform.Orientation(), FIRE::Vector3(1.0f, 0.0f, 0.0f));
+
+    transform.Rotate(yAxis, 90.0f);
+    EXPECT_VEC_EQ(transform.Orientation(), FIRE::Vector3(0.0f, 0.0f, -1.0f));
+}
+
+TEST_F(ATransform, RotatesProperlyAroundZAxis)
+{
+    FIRE::Vector3 const zAxis(0.0f, 0.0f, 1.0f);
+    transform.Rotate(zAxis, 90.0f);
+    EXPECT_VEC_EQ(transform.Orientation(), FIRE::Vector3(0.0f, 0.0f, -1.0f));
+
+    transform.Rotate(zAxis, 90.0f);
+    EXPECT_VEC_EQ(transform.Orientation(), FIRE::Vector3(0.0f, 0.0f, -1.0f));
+
+    transform.Rotate(zAxis, 90.0f);
+    EXPECT_VEC_EQ(transform.Orientation(), FIRE::Vector3(0.0f, 0.0f, -1.0f));
+
+    transform.Rotate(zAxis, 90.0f);
+    EXPECT_VEC_EQ(transform.Orientation(), FIRE::Vector3(0.0f, 0.0f, -1.0f));
 }
