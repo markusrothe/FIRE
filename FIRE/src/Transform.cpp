@@ -37,8 +37,21 @@ public:
         glm::quat orientation;
         glm::decompose(m_modelMatrix, scale, orientation, translation, skew, perspective);
 
-        glm::vec3 result = glm::rotate(orientation, ToGlmVec3(m_viewDir));
+        glm::vec3 const result = glm::normalize(glm::rotate(orientation, ToGlmVec3(m_viewDir)));
         return Vector3(result.x, result.y, result.z);
+    }
+
+    Vector3 Right() const
+    {
+        glm::vec3 const forward{ToGlmVec3(Orientation())};
+        glm::vec3 const up{ToGlmVec3(Up())};
+        auto right = glm::normalize(glm::cross(glm::normalize(forward), glm::normalize(up)));
+        return Vector3(right.x, right.y, right.z);
+    }
+
+    Vector3 Up() const
+    {
+        return Vector3(0.0f, 1.0f, 0.0f);
     }
 
     void SetOrientation(Vector3 dir)
@@ -86,6 +99,16 @@ Vector3 Transform::Orientation() const
     return m_impl->Orientation();
 }
 
+Vector3 Transform::Right() const
+{
+    return m_impl->Right();
+}
+
+Vector3 Transform::Up() const
+{
+    return m_impl->Up();
+}
+
 void Transform::SetOrientation(Vector3 viewDir)
 {
     return m_impl->SetOrientation(std::move(viewDir));
@@ -94,6 +117,11 @@ void Transform::SetOrientation(Vector3 viewDir)
 void Transform::Translate(float x, float y, float z)
 {
     m_impl->Translate(x, y, z);
+}
+
+void Transform::Translate(Vector3 const& vec)
+{
+    m_impl->Translate(vec.x, vec.y, vec.z);
 }
 
 void Transform::Rotate(Vector3 const& axis, float angle)

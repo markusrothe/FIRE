@@ -28,13 +28,20 @@ TEST_F(ATransform, DescribesAPosition)
     EXPECT_EQ(defaultPosition, transform.Position());
 }
 
-TEST_F(ATransform, SupportsTranslation)
+TEST_F(ATransform, SupportsTranslationByIndividualCoordinates)
 {
     auto const x = 2.0f;
     auto const y = 3.0f;
     auto const z = -4.0f;
     transform.Translate(x, y, z);
     FIRE::Vector3 const pos{x, y, z};
+    EXPECT_EQ(pos, transform.Position());
+}
+
+TEST_F(ATransform, SupportsTranslationByAVector)
+{
+    FIRE::Vector3 const pos{2.0f, 3.0f, -4.0f};
+    transform.Translate(pos);
     EXPECT_EQ(pos, transform.Position());
 }
 
@@ -61,10 +68,10 @@ TEST_F(ATransform, DescribesAnOrientation)
 
 TEST_F(ATransform, CanChangeItsOrientation)
 {
-    FIRE::Vector3 const lookAt(3.0f, 2.0f, 1.0f);
-    transform.SetOrientation(lookAt);
+    FIRE::Vector3 const viewDir(0.0f, 1.0f, 0.0f);
+    transform.SetOrientation(viewDir);
 
-    EXPECT_VEC_EQ(lookAt, transform.Orientation());
+    EXPECT_VEC_EQ(viewDir, transform.Orientation());
 }
 
 TEST_F(ATransform, RotatesProperlyAroundXAxis)
@@ -117,7 +124,18 @@ TEST_F(ATransform, RotatesProperlyAroundZAxis)
 
 TEST_F(ATransform, RotationAfterOrientationChange)
 {
-    transform.SetOrientation(FIRE::Vector3(1.0f, 0.0f, 1.0f));
+    transform.SetOrientation(FIRE::Vector3(0.0f, 0.0f, 1.0f));
     transform.Rotate(FIRE::Vector3(0.0f, 1.0f, 0.0f), 90.0f);
-    EXPECT_VEC_EQ(FIRE::Vector3(1.0f, 0.0f, -1.0f), transform.Orientation());
+    EXPECT_VEC_EQ(FIRE::Vector3(1.0f, 0.0f, 0.0f), transform.Orientation());
+}
+
+TEST_F(ATransform, HasARightHandDirection)
+{
+    EXPECT_VEC_EQ(FIRE::Vector3(1.0f, 0.0f, 0.0f), transform.Right());
+}
+
+TEST_F(ATransform, ChangesItsRightHandDirectionBasedOnItsOrientation)
+{
+    transform.SetOrientation(FIRE::Vector3(1.0f, 0.0f, 0.0f));
+    EXPECT_VEC_EQ(FIRE::Vector3(0.0f, 0.0f, 1.0f), transform.Right());
 }

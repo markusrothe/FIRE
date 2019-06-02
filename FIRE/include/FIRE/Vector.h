@@ -39,6 +39,11 @@ struct Vector3
         return !(*this == rhs);
     }
 
+    Vector3 operator-() const
+    {
+        return Vector3(-x, -y, -z);
+    }
+
     float x{0.0f};
     float y{0.0f};
     float z{0.0f};

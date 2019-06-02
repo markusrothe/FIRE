@@ -18,6 +18,10 @@ FIRE::KeyAction ToFIREKeyAction(int action)
     {
     case GLFW_PRESS:
         return FIRE::KeyAction::PRESS;
+    case GLFW_REPEAT:
+        return FIRE::KeyAction::REPEAT;
+    case GLFW_RELEASE:
+        return FIRE::KeyAction::RELEASE;
     default:
         return FIRE::KeyAction::INVALID;
     };
@@ -29,6 +33,76 @@ FIRE::Key ToFIREKey(int key)
     {
     case GLFW_KEY_A:
         return FIRE::Key::KEY_A;
+    case GLFW_KEY_B:
+        return FIRE::Key::KEY_B;
+    case GLFW_KEY_C:
+        return FIRE::Key::KEY_C;
+    case GLFW_KEY_D:
+        return FIRE::Key::KEY_D;
+    case GLFW_KEY_E:
+        return FIRE::Key::KEY_E;
+    case GLFW_KEY_F:
+        return FIRE::Key::KEY_F;
+    case GLFW_KEY_G:
+        return FIRE::Key::KEY_G;
+    case GLFW_KEY_H:
+        return FIRE::Key::KEY_H;
+    case GLFW_KEY_I:
+        return FIRE::Key::KEY_I;
+    case GLFW_KEY_J:
+        return FIRE::Key::KEY_J;
+    case GLFW_KEY_K:
+        return FIRE::Key::KEY_K;
+    case GLFW_KEY_L:
+        return FIRE::Key::KEY_L;
+    case GLFW_KEY_M:
+        return FIRE::Key::KEY_M;
+    case GLFW_KEY_N:
+        return FIRE::Key::KEY_N;
+    case GLFW_KEY_O:
+        return FIRE::Key::KEY_O;
+    case GLFW_KEY_P:
+        return FIRE::Key::KEY_P;
+    case GLFW_KEY_Q:
+        return FIRE::Key::KEY_Q;
+    case GLFW_KEY_R:
+        return FIRE::Key::KEY_R;
+    case GLFW_KEY_S:
+        return FIRE::Key::KEY_S;
+    case GLFW_KEY_T:
+        return FIRE::Key::KEY_T;
+    case GLFW_KEY_U:
+        return FIRE::Key::KEY_U;
+    case GLFW_KEY_V:
+        return FIRE::Key::KEY_V;
+    case GLFW_KEY_W:
+        return FIRE::Key::KEY_W;
+    case GLFW_KEY_X:
+        return FIRE::Key::KEY_X;
+    case GLFW_KEY_Y:
+        return FIRE::Key::KEY_Y;
+    case GLFW_KEY_Z:
+        return FIRE::Key::KEY_Z;
+    case GLFW_KEY_0:
+        return FIRE::Key::KEY_0;
+    case GLFW_KEY_1:
+        return FIRE::Key::KEY_1;
+    case GLFW_KEY_2:
+        return FIRE::Key::KEY_2;
+    case GLFW_KEY_3:
+        return FIRE::Key::KEY_3;
+    case GLFW_KEY_4:
+        return FIRE::Key::KEY_4;
+    case GLFW_KEY_5:
+        return FIRE::Key::KEY_5;
+    case GLFW_KEY_6:
+        return FIRE::Key::KEY_6;
+    case GLFW_KEY_7:
+        return FIRE::Key::KEY_7;
+    case GLFW_KEY_8:
+        return FIRE::Key::KEY_8;
+    case GLFW_KEY_9:
+        return FIRE::Key::KEY_9;
     default:
         return FIRE::Key::INVALID;
     }

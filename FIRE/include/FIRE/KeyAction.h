@@ -6,7 +6,9 @@ namespace FIRE
 enum class KeyAction
 {
     INVALID = 0,
-    PRESS = 1
+    PRESS = 1,
+    RELEASE = 2,
+    REPEAT = 3
 };
 } // namespace FIRE
 

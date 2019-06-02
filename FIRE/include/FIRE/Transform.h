@@ -19,9 +19,12 @@ public:
 
     Vector3 Position() const;
     Vector3 Orientation() const;
+    Vector3 Right() const;
+    Vector3 Up() const;
     void SetOrientation(Vector3 dir);
 
     void Translate(float x, float y, float z);
+    void Translate(Vector3 const& vec);
     void Rotate(Vector3 const& axis, float angle);
 
     Matrix4x4 ModelMatrix() const;

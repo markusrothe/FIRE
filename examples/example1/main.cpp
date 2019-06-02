@@ -41,9 +41,9 @@ std::shared_ptr<FIRE::Renderable> CreateCube(std::string name)
 
 std::shared_ptr<FIRE::Camera> CreateCamera()
 {
-    FIRE::Vector3 camPos{5, 5, 5};
-    FIRE::Vector3 camLookAt{0, 0, 0};
-    return std::make_shared<FIRE::Camera>("cam", std::move(camPos), std::move(camLookAt));
+    FIRE::Vector3 camPos{0, 0, 5};
+    FIRE::Vector3 camViewDir{0.0f, 0.0f, -1.0f};
+    return std::make_shared<FIRE::Camera>("cam", std::move(camPos), std::move(camViewDir));
 }
 
 } // namespace
@@ -64,32 +64,40 @@ int main(int, char**)
     auto sceneComponent = scene.NewSceneComponent("sceneComponent");
 
     auto cube = CreateCube("cube");
-    auto cube2 = CreateCube("2ndCube");
-    auto cube3 = CreateCube("3rdCube");
 
     sceneComponent->AddRenderable(cube);
-    sceneComponent->AddRenderable(cube2);
-    sceneComponent->AddRenderable(cube3);
-    cube2->GetTransform().Translate(5, 0, 0);
-    cube3->GetTransform().Translate(0, 5, 0);
     auto renderer{FIRE::GLFactory::CreateRenderer()};
-
-    FIRE::Transform transformY, transformX;
-
     auto const proj = FIRE::CreatePerspectiveMatrix(90.0f, 800.0f / 600.0f, 0.01f, 500.0f);
-    input->Register(FIRE::Key::KEY_A, FIRE::KeyAction::PRESS, [cam] { cam->GetTransform().Translate(1.0f, 0.0f, 0.0f); });
+
+    auto moveRight = [cam] {
+        auto& camTransform = cam->GetTransform();
+        camTransform.Translate(camTransform.Right());
+    };
+    auto moveLeft = [cam] { auto& camTransform = cam->GetTransform(); camTransform.Translate(-camTransform.Right()); };
+    auto moveUp = [cam] { auto& camTransform = cam->GetTransform(); camTransform.Translate(camTransform.Up()); };
+    auto moveDown = [cam] { auto& camTransform = cam->GetTransform(); camTransform.Translate(-camTransform.Up()); };
+    auto moveForward = [cam] { auto& camTransform = cam->GetTransform(); camTransform.Translate(camTransform.Orientation()); };
+    auto moveBackward = [cam] { auto& camTransform = cam->GetTransform(); camTransform.Translate(-camTransform.Orientation()); };
+
+    input->Register(FIRE::Key::KEY_D, FIRE::KeyAction::PRESS, moveRight);
+    input->Register(FIRE::Key::KEY_D, FIRE::KeyAction::REPEAT, moveRight);
+    input->Register(FIRE::Key::KEY_A, FIRE::KeyAction::PRESS, moveLeft);
+    input->Register(FIRE::Key::KEY_A, FIRE::KeyAction::REPEAT, moveLeft);
+    input->Register(FIRE::Key::KEY_Q, FIRE::KeyAction::PRESS, moveUp);
+    input->Register(FIRE::Key::KEY_Q, FIRE::KeyAction::REPEAT, moveUp);
+    input->Register(FIRE::Key::KEY_E, FIRE::KeyAction::PRESS, moveDown);
+    input->Register(FIRE::Key::KEY_E, FIRE::KeyAction::REPEAT, moveDown);
+    input->Register(FIRE::Key::KEY_W, FIRE::KeyAction::PRESS, moveForward);
+    input->Register(FIRE::Key::KEY_W, FIRE::KeyAction::REPEAT, moveForward);
+    input->Register(FIRE::Key::KEY_S, FIRE::KeyAction::PRESS, moveBackward);
+    input->Register(FIRE::Key::KEY_S, FIRE::KeyAction::REPEAT, moveBackward);
 
     while(!window.ShouldClose())
     {
         window.PollEvents();
 
-        transformY.Rotate(FIRE::Vector3(0, 1, 0), 1.0f);
-        transformX.Rotate(FIRE::Vector3(1, 0, 0), 1.0f);
-        cube->GetTransform().Rotate(FIRE::Vector3(1, 0, 0), 1.0f);
-
+        cube->GetTransform().Rotate(FIRE::Vector3(1, 1, 1), 1.0f);
         cube->SetShaderUniformMat4x4("MVP", proj * cam->ViewMatrix() * cube->GetTransform().ModelMatrix());
-        cube2->SetShaderUniformMat4x4("MVP", proj * cam->ViewMatrix() * transformY.ModelMatrix() * cube2->GetTransform().ModelMatrix());
-        cube3->SetShaderUniformMat4x4("MVP", proj * cam->ViewMatrix() * transformX.ModelMatrix() * cube3->GetTransform().ModelMatrix());
 
         renderer->Render(scene);
         window.SwapBuffers();
