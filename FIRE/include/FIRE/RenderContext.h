@@ -3,6 +3,7 @@
 
 namespace FIRE
 {
+class InputListener;
 class RenderContext
 {
 public:
@@ -12,6 +13,7 @@ public:
     virtual bool ShouldClose() = 0;
     virtual void Close() = 0;
     virtual void Resize(unsigned int width, unsigned int height) = 0;
+    virtual void RegisterInputListener(InputListener* inputListener) = 0;
 };
 } // namespace FIRE
 #endif // FIRE_RenderContext_h

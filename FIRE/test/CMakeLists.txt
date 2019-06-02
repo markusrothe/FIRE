@@ -12,6 +12,7 @@ add_executable(FIRE_tests
     ./MatrixTest.cpp
     ./SceneTest.cpp
     ./TransformTest.cpp
+    ./InputListenerTest.cpp
 )
 
 target_include_directories(FIRE_tests

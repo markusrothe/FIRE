@@ -1,12 +1,15 @@
 #include <FIRE/Camera.h>
 #include <FIRE/GLFactory.h>
+#include <FIRE/InputListener.h>
 #include <FIRE/RenderContext.h>
 #include <FIRE/Renderable.h>
 #include <FIRE/Renderer.h>
 #include <FIRE/Scene.h>
 #include <FIRE/Window.h>
+#include <iostream>
 #include <memory>
 #include <sstream>
+
 namespace
 {
 std::shared_ptr<FIRE::Renderable> CreateCube(std::string name)
@@ -52,6 +55,9 @@ int main(int, char**)
     auto context{FIRE::GLFactory::CreateRenderContext(window)};
     window.SetRenderContext(std::move(context));
 
+    auto input{std::make_shared<FIRE::InputListener>()};
+    window.SetInputListener(input);
+
     auto cam = CreateCamera();
 
     FIRE::Scene scene;
@@ -71,7 +77,7 @@ int main(int, char**)
     FIRE::Transform transformY, transformX;
 
     auto const proj = FIRE::CreatePerspectiveMatrix(90.0f, 800.0f / 600.0f, 0.01f, 500.0f);
-    auto const view = cam->ViewMatrix();
+    input->Register(FIRE::Key::KEY_A, FIRE::KeyAction::PRESS, [cam] { cam->GetTransform().Translate(1.0f, 0.0f, 0.0f); });
 
     while(!window.ShouldClose())
     {
@@ -81,9 +87,9 @@ int main(int, char**)
         transformX.Rotate(FIRE::Vector3(1, 0, 0), 1.0f);
         cube->GetTransform().Rotate(FIRE::Vector3(1, 0, 0), 1.0f);
 
-        cube->SetShaderUniformMat4x4("MVP", proj * view * cube->GetTransform().ModelMatrix());
-        cube2->SetShaderUniformMat4x4("MVP", proj * view * transformY.ModelMatrix() * cube2->GetTransform().ModelMatrix());
-        cube3->SetShaderUniformMat4x4("MVP", proj * view * transformX.ModelMatrix() * cube3->GetTransform().ModelMatrix());
+        cube->SetShaderUniformMat4x4("MVP", proj * cam->ViewMatrix() * cube->GetTransform().ModelMatrix());
+        cube2->SetShaderUniformMat4x4("MVP", proj * cam->ViewMatrix() * transformY.ModelMatrix() * cube2->GetTransform().ModelMatrix());
+        cube3->SetShaderUniformMat4x4("MVP", proj * cam->ViewMatrix() * transformX.ModelMatrix() * cube3->GetTransform().ModelMatrix());
 
         renderer->Render(scene);
         window.SwapBuffers();

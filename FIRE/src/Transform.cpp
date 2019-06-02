@@ -38,7 +38,6 @@ public:
         glm::decompose(m_modelMatrix, scale, orientation, translation, skew, perspective);
 
         glm::vec3 result = glm::rotate(orientation, ToGlmVec3(m_viewDir));
-
         return Vector3(result.x, result.y, result.z);
     }
 

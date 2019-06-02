@@ -13,6 +13,9 @@ add_library(FIRE STATIC
     include/FIRE/GLFactory.h
     include/FIRE/Scene.h
     include/FIRE/Transform.h
+    include/FIRE/InputListener.h
+    include/FIRE/Key.h
+    include/FIRE/KeyAction.h
     
     src/glad/include/glad/glad.h
     src/glad/include/KHR/khrplatform.h
@@ -43,6 +46,7 @@ add_library(FIRE STATIC
     src/Matrix.cpp
     src/Scene.cpp
     src/Transform.cpp
+    src/InputListener.cpp
 )
 
 target_include_directories(FIRE
