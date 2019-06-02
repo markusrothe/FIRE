@@ -10,7 +10,7 @@
 namespace std
 {
 template <>
-class hash<std::pair<FIRE::Key, FIRE::KeyAction>>
+struct hash<std::pair<FIRE::Key, FIRE::KeyAction>>
 {
 public:
     size_t operator()(pair<FIRE::Key, FIRE::KeyAction> const& val) const
@@ -28,7 +28,6 @@ public:
 
 namespace FIRE
 {
-class Window;
 class InputListener
 {
 public:
