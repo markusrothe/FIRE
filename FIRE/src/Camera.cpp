@@ -25,7 +25,7 @@ Transform& Camera::GetTransform()
 
 Matrix4x4 Camera::ViewMatrix() const
 {
-    return CreateViewMatrix(m_transform.Position(), m_transform.Position() + m_transform.Orientation(), m_transform.Up());
+    return CreateViewMatrix(m_transform.Position(), m_transform.LookAt(), m_transform.Up());
 }
 
 } // namespace FIRE

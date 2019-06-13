@@ -8,13 +8,25 @@ void InputListener::Register(Key key, KeyAction action, std::function<void(void)
     m_callbacks.insert(std::make_pair(std::make_pair(key, action), callback));
 }
 
-void InputListener::Call(Key key, KeyAction action)
+void InputListener::Register(std::function<void(double x, double y)> mouseCallback)
+{
+    m_mouseCallback = std::move(mouseCallback);
+}
+
+void InputListener::KeyboardInput(Key key, KeyAction action)
 {
     auto callback = m_callbacks.find(std::make_pair(key, action));
-    if(callback != m_callbacks.end())
+    if(callback != m_callbacks.end() && callback->second)
     {
         (callback->second)();
     }
 }
 
+void InputListener::MouseInput(double x, double y)
+{
+    if(m_mouseCallback)
+    {
+        m_mouseCallback(x, y);
+    }
+}
 } // namespace FIRE

@@ -18,10 +18,10 @@ public:
     ~Transform();
 
     Vector3 Position() const;
-    Vector3 Orientation() const;
+    Vector3 LookAt() const;
     Vector3 Right() const;
     Vector3 Up() const;
-    void SetOrientation(Vector3 dir);
+    void SetLookAt(Vector3 dir);
 
     void Translate(float x, float y, float z);
     void Translate(Vector3 const& vec);

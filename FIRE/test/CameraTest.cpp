@@ -34,7 +34,7 @@ TEST(Standalone_ACamera, CanBeInitializedWithAPosition)
 TEST(Standalone_ACamera, CanBeInitializedWithAnOrientation)
 {
     FIRE::Vector3 const dummyPos(1.0f, 2.0f, 3.0f);
-    FIRE::Vector3 const viewDir(0.0f, 0.0f, 1.0f);
-    FIRE::Camera cam{camName, dummyPos, viewDir};
-    EXPECT_EQ(viewDir, cam.GetTransform().Orientation());
+    FIRE::Vector3 const lookAt(0.0f, 0.0f, 1.0f);
+    FIRE::Camera cam{camName, dummyPos, lookAt};
+    EXPECT_EQ(lookAt, cam.GetTransform().LookAt());
 }

@@ -14,6 +14,14 @@ struct Vector3
     {
     }
 
+    Vector3& operator-=(Vector3 const& rhs)
+    {
+        x -= rhs.x;
+        y -= rhs.y;
+        z -= rhs.z;
+        return *this;
+    }
+
     Vector3& operator+=(Vector3 const& rhs)
     {
         x += rhs.x;
@@ -22,10 +30,17 @@ struct Vector3
         return *this;
     }
 
-    Vector3 operator+(Vector3 const& other)
+    Vector3 operator+(Vector3 const& other) const
     {
         Vector3 result = *this;
         result += other;
+        return result;
+    }
+
+    Vector3 operator-(Vector3 const& other) const
+    {
+        Vector3 result = *this;
+        result -= other;
         return result;
     }
 

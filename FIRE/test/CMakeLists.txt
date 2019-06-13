@@ -52,15 +52,11 @@ add_custom_command(
 )
 
 install(
-    TARGETS
-        FIRE_tests
-    DESTINATION 
-        bin
+    TARGETS FIRE_tests
+    DESTINATION bin
 )
 
 install(
-    FILES
-        $<TARGET_FILE:FIRE>
-    DESTINATION
-        bin
+    FILES $<TARGET_FILE:FIRE>
+    DESTINATION bin
 )

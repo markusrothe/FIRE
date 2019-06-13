@@ -114,7 +114,16 @@ static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int acti
     assert(windowUserPointer);
 
     InputListener* inputListener = reinterpret_cast<InputListener*>(windowUserPointer);
-    inputListener->Call(ToFIREKey(key), ToFIREKeyAction(action));
+    inputListener->KeyboardInput(ToFIREKey(key), ToFIREKeyAction(action));
+}
+
+static void mouse_callback(GLFWwindow* window, double x, double y)
+{
+    void* windowUserPointer = glfwGetWindowUserPointer(window);
+    assert(windowUserPointer);
+
+    InputListener* inputListener = reinterpret_cast<InputListener*>(windowUserPointer);
+    inputListener->MouseInput(x, y);
 }
 
 class GLRenderContext::Impl
@@ -165,6 +174,7 @@ GLRenderContext::Impl::Impl(Window& window)
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
     glfwSetKeyCallback(m_window, key_callback);
+    glfwSetCursorPosCallback(m_window, mouse_callback);
 }
 
 GLRenderContext::Impl::~Impl()

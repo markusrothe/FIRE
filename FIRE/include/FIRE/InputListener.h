@@ -32,10 +32,14 @@ class InputListener
 {
 public:
     void Register(Key key, KeyAction action, std::function<void(void)> callback);
-    void Call(Key key, KeyAction action);
+    void Register(std::function<void(double x, double y)> mouseCallback);
+
+    void KeyboardInput(Key key, KeyAction action);
+    void MouseInput(double x, double y);
 
 private:
     std::unordered_map<std::pair<Key, KeyAction>, std::function<void(void)>> m_callbacks;
+    std::function<void(double x, double y)> m_mouseCallback;
 };
 } // namespace FIRE
 
