@@ -113,14 +113,26 @@ int main(int, char**)
     input->Register(FIRE::Key::KEY_S, FIRE::KeyAction::PRESS, moveBackward);
     input->Register(FIRE::Key::KEY_S, FIRE::KeyAction::REPEAT, moveBackward);
 
+    double oldX = 0, oldY = 0;
     auto lookAt = cam->GetTransform().LookAt();
-    auto rotate = [cam, &lookAt](double x, double y) {
-        auto& camTransform = cam->GetTransform();
-        camTransform.SetLookAt(lookAt);
-        auto degreeX = (x * 120.0) / 800.0 - 60.0;
-        auto degreeY = (y * 120.0) / 600.0 - 60.0;
-        camTransform.Rotate(camTransform.Up(), -degreeX);    // around up-axis
-        camTransform.Rotate(camTransform.Right(), -degreeY); // around right-axis
+    auto firstCallback = true;
+    auto rotate = [cam, &oldX, &oldY, &firstCallback](double x, double y) {
+        if(!firstCallback)
+        {
+            auto deltaX = x - oldX;
+            auto deltaY = y - oldY;
+            auto& camTransform = cam->GetTransform();
+            std::cout << "x,y= " << x << "," << y << "\n";
+            camTransform.Rotate(camTransform.Up(), static_cast<float>(-deltaX) / 10.0f);    // around up-axis
+            camTransform.Rotate(camTransform.Right(), static_cast<float>(-deltaY) / 10.0f); // around right-axis            
+        }
+        else
+        {
+            // Initialize the x and y the first time, this callback is called
+            firstCallback = false;
+        }
+        oldX = x;
+        oldY = y;
     };
     input->Register(rotate);
 

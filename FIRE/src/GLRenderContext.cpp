@@ -174,6 +174,8 @@ GLRenderContext::Impl::Impl(Window& window)
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
     glfwSetKeyCallback(m_window, key_callback);
+    glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
     glfwSetCursorPosCallback(m_window, mouse_callback);
 }
 
