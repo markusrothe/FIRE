@@ -17,6 +17,7 @@ public:
     MOCK_METHOD0(ShouldClose, bool());
     MOCK_METHOD0(Close, void(void));
     MOCK_METHOD2(Resize, void(unsigned int width, unsigned int height));
+    MOCK_METHOD1(RegisterInputListener, void(InputListener*));
 };
 } // namespace FIRE
 

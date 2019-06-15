@@ -7,9 +7,9 @@ namespace FIRE
 Camera::Camera(
     std::string name,
     Vector3 pos /* = Vertex(0.0f, 0.0f, 0.0f) */,
-    Vector3 lookAt /*= Vertex(0.0f, 0.0f, 0.0f) */)
+    Vector3 viewDir /*= Vertex(0.0f, 0.0f, -1.0f) */)
     : m_name(std::move(name))
-    , m_transform(pos, lookAt)
+    , m_transform(pos, viewDir)
 {
 }
 
@@ -25,7 +25,7 @@ Transform& Camera::GetTransform()
 
 Matrix4x4 Camera::ViewMatrix() const
 {
-    return CreateViewMatrix(m_transform.Position(), m_transform.Orientation(), Vector3(0.0f, 1.0f, 0.0f));
+    return CreateViewMatrix(m_transform.Position(), m_transform.LookAt(), m_transform.Up());
 }
 
 } // namespace FIRE

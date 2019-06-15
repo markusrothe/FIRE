@@ -1,8 +1,4 @@
-skinparam classBackgroundColor DarkSlateGray
-skinparam classBorderColor Black
-skinparam DefaultFontColor Snow
-skinparam ArrowColor Snow
-hide empty members
+!include skin.iuml
 
 Scene "1" o-- "n"  SceneComponent
 SceneComponent "1" o-- "n" Renderable

@@ -14,7 +14,7 @@ public:
     explicit Camera(
         std::string name,
         Vector3 pos = Vector3(0.0f, 0.0f, 0.0f),
-        Vector3 lookAt = Vector3(0.0f, 0.0f, -1.0f));
+        Vector3 viewDir = Vector3(0.0f, 0.0f, -1.0f));
 
     std::string Name() const;
 

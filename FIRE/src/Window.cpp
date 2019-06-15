@@ -32,18 +32,19 @@ void Window::Resize(unsigned int newWidth, unsigned int newHeight)
     m_width = newWidth;
     m_height = newHeight;
 
-    assert(nullptr != m_context);
+    assert(m_context);
     m_context->Resize(m_width, m_height);
 }
 
 bool Window::ShouldClose() const
 {
-    assert(nullptr != m_context);
+    assert(m_context);
     return m_context->ShouldClose();
 }
 
 void Window::Close()
 {
+    assert(m_context);
     m_context->Close();
 }
 
@@ -52,15 +53,22 @@ void Window::SetRenderContext(std::unique_ptr<RenderContext> context)
     m_context = std::move(context);
 }
 
+void Window::SetInputListener(std::shared_ptr<InputListener> inputListener)
+{
+    assert(m_context);
+    m_inputListener = std::move(inputListener);
+    m_context->RegisterInputListener(m_inputListener.get());
+}
+
 void Window::SwapBuffers()
 {
-    assert(nullptr != m_context);
+    assert(m_context);
     m_context->SwapBuffers();
 }
 
 void Window::PollEvents()
 {
-    assert(nullptr != m_context);
+    assert(m_context);
     m_context->PollEvents();
 }
 

@@ -1,0 +1,4 @@
+skinparam classBackgroundColor LightGray
+skinparam classBorderColor Black
+skinparam DefaultFontColor Black
+hide empty members

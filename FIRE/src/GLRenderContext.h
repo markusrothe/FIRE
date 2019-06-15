@@ -26,6 +26,8 @@ public:
     void Close() override;
     void Resize(unsigned int width, unsigned int height) override;
 
+    void RegisterInputListener(InputListener* inputListener) override;
+
 private:
     class Impl;
     std::unique_ptr<Impl> m_impl;

@@ -7,6 +7,7 @@
 namespace FIRE
 {
 class RenderContext;
+class InputListener;
 class Window
 {
 public:
@@ -24,6 +25,7 @@ public:
     void Close();
 
     void SetRenderContext(std::unique_ptr<RenderContext> context);
+    void SetInputListener(std::shared_ptr<InputListener> inputListener);
     void PollEvents();
     void SwapBuffers();
 
@@ -32,6 +34,7 @@ private:
     unsigned int m_width;
     unsigned int m_height;
     std::unique_ptr<RenderContext> m_context;
+    std::shared_ptr<InputListener> m_inputListener;
 };
 } // namespace FIRE
 

@@ -12,6 +12,7 @@ add_executable(FIRE_tests
     ./MatrixTest.cpp
     ./SceneTest.cpp
     ./TransformTest.cpp
+    ./InputListenerTest.cpp
 )
 
 target_include_directories(FIRE_tests
@@ -51,15 +52,11 @@ add_custom_command(
 )
 
 install(
-    TARGETS
-        FIRE_tests
-    DESTINATION 
-        bin
+    TARGETS FIRE_tests
+    DESTINATION bin
 )
 
 install(
-    FILES
-        $<TARGET_FILE:FIRE>
-    DESTINATION
-        bin
+    FILES $<TARGET_FILE:FIRE>
+    DESTINATION bin
 )
