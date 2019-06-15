@@ -56,7 +56,12 @@ void Renderable::SetMaterial(Material material)
     m_impl->m_material = std::move(material);
 }
 
-Material Renderable::GetMaterial() const
+Material const& Renderable::GetMaterial() const
+{
+    return m_impl->m_material;
+}
+
+Material& Renderable::GetMaterial()
 {
     return m_impl->m_material;
 }
@@ -74,16 +79,6 @@ bool operator==(Renderable const& lhs, Renderable const& rhs)
 bool operator!=(Renderable const& lhs, Renderable const& rhs)
 {
     return !(lhs == rhs);
-}
-
-std::pair<std::string, Matrix4x4> Renderable::GetShaderUniformMat4x4() const
-{
-    return m_impl->m_uniformVals;
-}
-
-void Renderable::SetShaderUniformMat4x4(std::string const& uniformName, Matrix4x4 const& mat)
-{
-    m_impl->m_uniformVals = std::make_pair(uniformName, mat);
 }
 
 } // namespace FIRE

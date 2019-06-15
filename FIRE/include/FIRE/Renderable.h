@@ -18,17 +18,19 @@ class Renderable
 public:
     explicit Renderable(std::string name);
     ~Renderable();
+
     void SetMesh(Mesh mesh);
     Mesh& GetMesh();
     Mesh const& GetMesh() const;
+
     void SetName(std::string name);
     std::string Name() const;
-    void SetMaterial(Material material);
-    Material GetMaterial() const;
-    Transform& GetTransform();
 
-    std::pair<std::string, Matrix4x4> GetShaderUniformMat4x4() const;
-    void SetShaderUniformMat4x4(std::string const& uniformName, Matrix4x4 const& mat);
+    void SetMaterial(Material material);
+    Material const& GetMaterial() const;
+    Material& GetMaterial();
+
+    Transform& GetTransform();
 
 private:
     class Impl;

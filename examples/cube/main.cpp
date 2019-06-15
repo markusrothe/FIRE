@@ -160,8 +160,8 @@ int main(int, char**)
         window.PollEvents();
 
         cube->GetTransform().Rotate(FIRE::Vector3(1, 1, 1), 10.0f);
-        cube->SetShaderUniformMat4x4("MVP", proj * cam->ViewMatrix() * cube->GetTransform().ModelMatrix());
-        plane->SetShaderUniformMat4x4("MVP", proj * cam->ViewMatrix() * plane->GetTransform().ModelMatrix());
+        cube->GetMaterial().SetShaderParameter("MVP", FIRE::ShaderParameterType::MAT4x4, proj * cam->ViewMatrix() * cube->GetTransform().ModelMatrix());
+        plane->GetMaterial().SetShaderParameter("MVP", FIRE::ShaderParameterType::MAT4x4, proj * cam->ViewMatrix() * plane->GetTransform().ModelMatrix());
 
         renderer->Render(scene);
         window.SwapBuffers();

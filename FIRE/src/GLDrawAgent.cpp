@@ -1,8 +1,25 @@
 #include "GLDrawAgent.h"
 #include <FIRE/Renderable.h>
-
+#include <any>
 namespace FIRE
 {
+void SetShaderUniforms(GLuint shader, std::map<std::string, std::pair<ShaderParameterType, std::any>> const& params)
+{
+    for(auto const& param : params)
+    {
+        auto const& name = param.first;
+        auto const& paramType = param.second.first;
+        auto const& paramVal = param.second.second;
+
+        if(ShaderParameterType::MAT4x4 == paramType)
+        {
+            auto const uniformVal = std::any_cast<Matrix4x4>(paramVal);
+            auto const uniformLocation = glGetUniformLocation(shader, name.c_str());
+            glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, uniformVal.Raw().data());
+        }
+    }
+}
+
 GLDrawAgent::GLDrawAgent()
 {
     glEnable(GL_CULL_FACE);
@@ -23,9 +40,8 @@ void GLDrawAgent::Draw(
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, std::get<2>(buffers));
     auto const shader = renderable.GetMaterial().ShaderId();
     glUseProgram(shader);
-    auto const uniformVal = renderable.GetShaderUniformMat4x4();
-    auto const uniformLocation = glGetUniformLocation(shader, uniformVal.first.c_str());
-    glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, uniformVal.second.Raw().data());
+
+    SetShaderUniforms(shader, renderable.GetMaterial().GetShaderParameters());
 
     glDrawElements(
         GL_TRIANGLES, static_cast<GLsizei>(renderable.GetMesh().Indices().size()), GL_UNSIGNED_INT, 0);

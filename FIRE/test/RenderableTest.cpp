@@ -44,14 +44,6 @@ TEST_F(ARenderable, CanBeComparedViaItsName)
     EXPECT_NE(renderable, different);
 }
 
-TEST_F(ARenderable, HasUniformsToSendToAShader)
-{
-    renderable.SetShaderUniformMat4x4("MVP", FIRE::Matrix4x4());
-    auto const shaderUniform = renderable.GetShaderUniformMat4x4();
-    EXPECT_EQ("MVP", shaderUniform.first);
-    EXPECT_EQ(FIRE::Matrix4x4(), shaderUniform.second);
-}
-
 TEST_F(ARenderable, HasATransform)
 {
     FIRE::Vector3 const zero;
