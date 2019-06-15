@@ -7,7 +7,7 @@ add_executable(FIRE_tests
     ./RenderableTest.cpp
     ./RendererTest.cpp
     ./MeshTest.cpp
-    ./MaterialManagerTest.cpp
+    ./MaterialFactoryTest.cpp
     ./CameraTest.cpp
     ./MatrixTest.cpp
     ./SceneTest.cpp

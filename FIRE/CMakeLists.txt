@@ -17,19 +17,22 @@ add_library(FIRE STATIC
     include/FIRE/Key.h
     include/FIRE/MouseKey.h
     include/FIRE/KeyAction.h
+    include/FIRE/ShaderFactory.h
+    include/FIRE/ShaderType.h
+    include/FIRE/MaterialFactory.h
+    include/FIRE/Material.h
     
     src/glad/include/glad/glad.h
     src/glad/include/KHR/khrplatform.h
     src/glm_wrapper.h
     src/Uploader.h
     src/DrawAgent.h
-    src/ShaderFactory.h
     src/GLUploader.h    
     src/GLDrawAgent.h
     src/GLShaderFactory.h
     src/GLRenderContext.h
     src/RendererImpl.h
-    src/MaterialManager.h
+
         
     src/glad/src/glad.c
     src/Camera.cpp
@@ -42,12 +45,13 @@ add_library(FIRE STATIC
     src/GLShaderFactory.cpp
     src/GLRenderContext.cpp    
     src/RendererImpl.cpp
-    src/MaterialManager.cpp
+    src/MaterialFactory.cpp
     src/VertexDeclaration.cpp
     src/Matrix.cpp
     src/Scene.cpp
     src/Transform.cpp
     src/InputListener.cpp
+    src/Material.cpp
 )
 
 target_include_directories(FIRE

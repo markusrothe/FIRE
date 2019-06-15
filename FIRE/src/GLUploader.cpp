@@ -1,5 +1,5 @@
 #include "GLUploader.h"
-#include "MaterialManager.h"
+#include <FIRE/Material.h>
 #include <FIRE/Mesh.h>
 #include <FIRE/Renderable.h>
 #include <FIRE/VertexDeclaration.h>
@@ -65,11 +65,6 @@ GLuint UploadIndices(std::vector<unsigned int> const& indices)
 
 } // namespace
 
-GLUploader::GLUploader(std::shared_ptr<MaterialManager> materialManager)
-    : m_materialManager(std::move(materialManager))
-{
-}
-
 std::tuple<GLuint, GLuint, GLuint>
 GLUploader::Upload(Renderable const& renderable)
 {
@@ -87,7 +82,7 @@ GLUploader::Upload(Renderable const& renderable)
 
     GLuint const vbo = UploadVertices(
         mesh.VerticesAsArray(), mesh.GetVertexDeclaration(),
-        m_materialManager->GetShader(renderable.GetMaterial()));
+        renderable.GetMaterial().ShaderId());
 
     GLuint const ibo = UploadIndices(mesh.Indices());
 

@@ -1,10 +1,12 @@
 #include <FIRE/Camera.h>
 #include <FIRE/GLFactory.h>
 #include <FIRE/InputListener.h>
+#include <FIRE/MaterialFactory.h>
 #include <FIRE/RenderContext.h>
 #include <FIRE/Renderable.h>
 #include <FIRE/Renderer.h>
 #include <FIRE/Scene.h>
+#include <FIRE/ShaderFactory.h>
 #include <FIRE/Window.h>
 #include <iostream>
 #include <memory>
@@ -12,7 +14,7 @@
 
 namespace
 {
-std::shared_ptr<FIRE::Renderable> CreatePlane(std::string name)
+std::shared_ptr<FIRE::Renderable> CreatePlane(std::string name, FIRE::ShaderFactory& shaderFactory)
 {
     FIRE::Mesh planeMesh{"planeMesh"};
 
@@ -29,10 +31,13 @@ std::shared_ptr<FIRE::Renderable> CreatePlane(std::string name)
 
     auto plane = std::make_shared<FIRE::Renderable>(std::move(name));
     plane->SetMesh(std::move(planeMesh));
+
+    auto material = FIRE::MaterialFactory::CreateDefault(shaderFactory);
+    plane->SetMaterial(material);
     return plane;
 }
 
-std::shared_ptr<FIRE::Renderable> CreateCube(std::string name)
+std::shared_ptr<FIRE::Renderable> CreateCube(std::string name, FIRE::ShaderFactory& shaderFactory)
 {
     FIRE::Mesh cubeMesh{"cubeMesh"};
 
@@ -56,6 +61,9 @@ std::shared_ptr<FIRE::Renderable> CreateCube(std::string name)
 
     auto cube = std::make_shared<FIRE::Renderable>(std::move(name));
     cube->SetMesh(std::move(cubeMesh));
+
+    auto material = FIRE::MaterialFactory::CreateDefault(shaderFactory);
+    cube->SetMaterial(material);
     return cube;
 }
 
@@ -135,9 +143,11 @@ int main(int, char**)
     FIRE::Scene scene;
     auto sceneComponent = scene.NewSceneComponent("sceneComponent");
 
-    auto cube = CreateCube("cube");
+    auto shaderFactory{FIRE::GLFactory::CreateShaderFactory()};
+
+    auto cube = CreateCube("cube", *shaderFactory);
     cube->GetTransform().Translate(0.0f, 2.0f, 0.0f);
-    auto plane = CreatePlane("plane");
+    auto plane = CreatePlane("plane", *shaderFactory);
 
     sceneComponent->AddRenderable(cube);
     sceneComponent->AddRenderable(plane);

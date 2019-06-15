@@ -1,11 +1,9 @@
 #include "GLDrawAgent.h"
-#include "MaterialManager.h"
 #include <FIRE/Renderable.h>
 
 namespace FIRE
 {
-GLDrawAgent::GLDrawAgent(std::shared_ptr<MaterialManager> materialManager)
-    : m_materialManager(std::move(materialManager))
+GLDrawAgent::GLDrawAgent()
 {
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
@@ -23,7 +21,7 @@ void GLDrawAgent::Draw(
 {
     glBindVertexArray(std::get<0>(buffers));
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, std::get<2>(buffers));
-    auto const shader = m_materialManager->GetShader(renderable.GetMaterial());
+    auto const shader = renderable.GetMaterial().ShaderId();
     glUseProgram(shader);
     auto const uniformVal = renderable.GetShaderUniformMat4x4();
     auto const uniformLocation = glGetUniformLocation(shader, uniformVal.first.c_str());

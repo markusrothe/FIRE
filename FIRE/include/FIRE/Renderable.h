@@ -1,6 +1,7 @@
 #ifndef FIRE_Renderable_h
 #define FIRE_Renderable_h
 
+#include <FIRE/Material.h>
 #include <FIRE/Matrix.h>
 #include <FIRE/Mesh.h>
 #include <FIRE/Transform.h>
@@ -22,8 +23,8 @@ public:
     Mesh const& GetMesh() const;
     void SetName(std::string name);
     std::string Name() const;
-    std::string GetMaterial() const;
-
+    void SetMaterial(Material material);
+    Material GetMaterial() const;
     Transform& GetTransform();
 
     std::pair<std::string, Matrix4x4> GetShaderUniformMat4x4() const;

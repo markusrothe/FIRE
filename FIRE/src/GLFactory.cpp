@@ -3,7 +3,6 @@
 #include "GLRenderContext.h"
 #include "GLShaderFactory.h"
 #include "GLUploader.h"
-#include "MaterialManager.h"
 #include "RendererImpl.h"
 #include <FIRE/GLFactory.h>
 #include <FIRE/Window.h>
@@ -20,12 +19,14 @@ std::unique_ptr<RenderContext> CreateRenderContext(Window& window)
 
 std::unique_ptr<Renderer> CreateRenderer()
 {
-    auto shaderFactory = std::make_unique<GLShaderFactory>();
-    auto materialManager = std::make_shared<MaterialManager>(std::move(shaderFactory));
-
     return std::make_unique<RendererImpl>(
-        std::make_unique<GLUploader>(materialManager),
-        std::make_unique<GLDrawAgent>(materialManager));
+        std::make_unique<GLUploader>(),
+        std::make_unique<GLDrawAgent>());
+}
+
+std::unique_ptr<ShaderFactory> CreateShaderFactory()
+{
+    return std::make_unique<GLShaderFactory>();
 }
 } // namespace GLFactory
 } // namespace FIRE

@@ -35,11 +35,6 @@ TEST_F(ARenderable, HasAMesh)
     EXPECT_EQ(meshName, mesh.Name());
 }
 
-TEST_F(ARenderable, HasADefaultMaterial)
-{
-    EXPECT_EQ(std::string("Default"), renderable.GetMaterial());
-}
-
 TEST_F(ARenderable, CanBeComparedViaItsName)
 {
     FIRE::Renderable other{name};
@@ -61,4 +56,13 @@ TEST_F(ARenderable, HasATransform)
 {
     FIRE::Vector3 const zero;
     EXPECT_EQ(zero, renderable.GetTransform().Position());
+}
+
+TEST_F(ARenderable, MayBeAssignedAMaterial)
+{
+    std::string const materialName{"name"};
+    auto const shaderId{0u};
+    renderable.SetMaterial(FIRE::Material(materialName, shaderId));
+    EXPECT_EQ(materialName, renderable.GetMaterial().Name());
+    EXPECT_EQ(shaderId, renderable.GetMaterial().ShaderId());
 }

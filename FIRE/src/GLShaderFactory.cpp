@@ -102,4 +102,9 @@ unsigned int GLShaderFactory::CreateDefaultShader()
     return shader;
 }
 
+unsigned int GLShaderFactory::Create(std::vector<std::pair<ShaderType, std::string>> const& /*shaderCode*/)
+{
+    return CreateDefaultShader();
+}
+
 } // namespace FIRE
