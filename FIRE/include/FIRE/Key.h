@@ -52,7 +52,9 @@ enum class Key
     KEY_UP = 41,
     KEY_DOWN = 42,
     KEY_LEFT = 43,
-    KEY_RIGHT = 44
+    KEY_RIGHT = 44,
+
+    KEY_ESC = 45
 };
 }
 

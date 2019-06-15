@@ -66,6 +66,59 @@ std::shared_ptr<FIRE::Camera> CreateCamera()
     return std::make_shared<FIRE::Camera>("cam", std::move(camPos), std::move(lookAt));
 }
 
+void MapInput(std::shared_ptr<FIRE::Camera> const& cam, FIRE::Window& window)
+{
+    auto input{std::make_shared<FIRE::InputListener>()};
+    window.SetInputListener(input);
+
+    auto closeWindow = [&window] { window.Close(); };
+
+    auto moveRight = [cam] { auto& camTransform = cam->GetTransform(); camTransform.Translate(camTransform.Right()); };
+    auto moveLeft = [cam] { auto& camTransform = cam->GetTransform(); camTransform.Translate(-camTransform.Right()); };
+    auto moveUp = [cam] { auto& camTransform = cam->GetTransform(); camTransform.Translate(camTransform.Up()); };
+    auto moveDown = [cam] { auto& camTransform = cam->GetTransform(); camTransform.Translate(-camTransform.Up()); };
+    auto moveForward = [cam] { auto& camTransform = cam->GetTransform(); camTransform.Translate(camTransform.LookAt() - camTransform.Position()); };
+    auto moveBackward = [cam] { auto& camTransform = cam->GetTransform(); camTransform.Translate(-(camTransform.LookAt() - camTransform.Position())); };
+
+    input->RegisterKeyEvent(FIRE::Key::KEY_D, FIRE::KeyAction::PRESS, moveRight);
+    input->RegisterKeyEvent(FIRE::Key::KEY_D, FIRE::KeyAction::REPEAT, moveRight);
+    input->RegisterKeyEvent(FIRE::Key::KEY_A, FIRE::KeyAction::PRESS, moveLeft);
+    input->RegisterKeyEvent(FIRE::Key::KEY_A, FIRE::KeyAction::REPEAT, moveLeft);
+    input->RegisterKeyEvent(FIRE::Key::KEY_Q, FIRE::KeyAction::PRESS, moveUp);
+    input->RegisterKeyEvent(FIRE::Key::KEY_Q, FIRE::KeyAction::REPEAT, moveUp);
+    input->RegisterKeyEvent(FIRE::Key::KEY_E, FIRE::KeyAction::PRESS, moveDown);
+    input->RegisterKeyEvent(FIRE::Key::KEY_E, FIRE::KeyAction::REPEAT, moveDown);
+    input->RegisterKeyEvent(FIRE::Key::KEY_W, FIRE::KeyAction::PRESS, moveForward);
+    input->RegisterKeyEvent(FIRE::Key::KEY_W, FIRE::KeyAction::REPEAT, moveForward);
+    input->RegisterKeyEvent(FIRE::Key::KEY_S, FIRE::KeyAction::PRESS, moveBackward);
+    input->RegisterKeyEvent(FIRE::Key::KEY_S, FIRE::KeyAction::REPEAT, moveBackward);
+    input->RegisterKeyEvent(FIRE::Key::KEY_ESC, FIRE::KeyAction::PRESS, closeWindow);
+
+    double oldX = 0, oldY = 0;
+    auto firstCallback = true;
+    auto rotate = [cam, oldX = std::move(oldX), oldY = std::move(oldY), firstCallback = std::move(firstCallback)](double x, double y) mutable {
+        if(!firstCallback)
+        {
+            auto const deltaX = x - oldX;
+            auto const deltaY = y - oldY;
+            auto& camTransform = cam->GetTransform();
+            //std::cout << "x,y= " << x << "," << y << "\n";
+            camTransform.Rotate(camTransform.Up(), static_cast<float>(-deltaX) / 10.0f);    // around up-axis
+            camTransform.Rotate(camTransform.Right(), static_cast<float>(-deltaY) / 10.0f); // around right-axis
+        }
+        else
+        {
+            // Only initialize x and y the first time that this callback is called and do no camera rotation to prevent camera jumps
+            firstCallback = false;
+        }
+        oldX = x;
+        oldY = y;
+    };
+    input->RegisterMouseEvent(rotate);
+
+    input->RegisterMouseButtonEvent(FIRE::MouseKey::LEFT_BUTTON, FIRE::KeyAction::PRESS, closeWindow);
+}
+
 } // namespace
 
 int main(int, char**)
@@ -75,10 +128,9 @@ int main(int, char**)
     auto context{FIRE::GLFactory::CreateRenderContext(window)};
     window.SetRenderContext(std::move(context));
 
-    auto input{std::make_shared<FIRE::InputListener>()};
-    window.SetInputListener(input);
-
     auto cam = CreateCamera();
+
+    MapInput(cam, window);
 
     FIRE::Scene scene;
     auto sceneComponent = scene.NewSceneComponent("sceneComponent");
@@ -92,49 +144,6 @@ int main(int, char**)
 
     auto renderer{FIRE::GLFactory::CreateRenderer()};
     auto const proj = FIRE::CreatePerspectiveMatrix(90.0f, 800.0f / 600.0f, 0.01f, 500.0f);
-
-    auto moveRight = [cam] { auto& camTransform = cam->GetTransform(); camTransform.Translate(camTransform.Right()); };
-    auto moveLeft = [cam] { auto& camTransform = cam->GetTransform(); camTransform.Translate(-camTransform.Right()); };
-    auto moveUp = [cam] { auto& camTransform = cam->GetTransform(); camTransform.Translate(camTransform.Up()); };
-    auto moveDown = [cam] { auto& camTransform = cam->GetTransform(); camTransform.Translate(-camTransform.Up()); };
-    auto moveForward = [cam] { auto& camTransform = cam->GetTransform(); camTransform.Translate(camTransform.LookAt() - camTransform.Position()); };
-    auto moveBackward = [cam] { auto& camTransform = cam->GetTransform(); camTransform.Translate(-(camTransform.LookAt() - camTransform.Position())); };
-
-    input->Register(FIRE::Key::KEY_D, FIRE::KeyAction::PRESS, moveRight);
-    input->Register(FIRE::Key::KEY_D, FIRE::KeyAction::REPEAT, moveRight);
-    input->Register(FIRE::Key::KEY_A, FIRE::KeyAction::PRESS, moveLeft);
-    input->Register(FIRE::Key::KEY_A, FIRE::KeyAction::REPEAT, moveLeft);
-    input->Register(FIRE::Key::KEY_Q, FIRE::KeyAction::PRESS, moveUp);
-    input->Register(FIRE::Key::KEY_Q, FIRE::KeyAction::REPEAT, moveUp);
-    input->Register(FIRE::Key::KEY_E, FIRE::KeyAction::PRESS, moveDown);
-    input->Register(FIRE::Key::KEY_E, FIRE::KeyAction::REPEAT, moveDown);
-    input->Register(FIRE::Key::KEY_W, FIRE::KeyAction::PRESS, moveForward);
-    input->Register(FIRE::Key::KEY_W, FIRE::KeyAction::REPEAT, moveForward);
-    input->Register(FIRE::Key::KEY_S, FIRE::KeyAction::PRESS, moveBackward);
-    input->Register(FIRE::Key::KEY_S, FIRE::KeyAction::REPEAT, moveBackward);
-
-    double oldX = 0, oldY = 0;
-    auto lookAt = cam->GetTransform().LookAt();
-    auto firstCallback = true;
-    auto rotate = [cam, &oldX, &oldY, &firstCallback](double x, double y) {
-        if(!firstCallback)
-        {
-            auto deltaX = x - oldX;
-            auto deltaY = y - oldY;
-            auto& camTransform = cam->GetTransform();
-            std::cout << "x,y= " << x << "," << y << "\n";
-            camTransform.Rotate(camTransform.Up(), static_cast<float>(-deltaX) / 10.0f);    // around up-axis
-            camTransform.Rotate(camTransform.Right(), static_cast<float>(-deltaY) / 10.0f); // around right-axis            
-        }
-        else
-        {
-            // Initialize the x and y the first time, this callback is called
-            firstCallback = false;
-        }
-        oldX = x;
-        oldY = y;
-    };
-    input->Register(rotate);
 
     while(!window.ShouldClose())
     {

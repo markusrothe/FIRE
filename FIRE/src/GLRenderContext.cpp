@@ -23,8 +23,25 @@ FIRE::KeyAction ToFIREKeyAction(int action)
     case GLFW_RELEASE:
         return FIRE::KeyAction::RELEASE;
     default:
+        assert(false);
         return FIRE::KeyAction::INVALID;
     };
+}
+
+FIRE::MouseKey ToFIREMouseKey(int key)
+{
+    switch(key)
+    {
+    case GLFW_MOUSE_BUTTON_LEFT:
+        return FIRE::MouseKey::LEFT_BUTTON;
+    case GLFW_MOUSE_BUTTON_MIDDLE:
+        return FIRE::MouseKey::MIDDLE_BUTTON;
+    case GLFW_MOUSE_BUTTON_RIGHT:
+        return FIRE::MouseKey::RIGHT_BUTTON;
+    default:
+        assert(false);
+        return FIRE::MouseKey::INVALID;
+    }
 }
 
 FIRE::Key ToFIREKey(int key)
@@ -103,7 +120,10 @@ FIRE::Key ToFIREKey(int key)
         return FIRE::Key::KEY_8;
     case GLFW_KEY_9:
         return FIRE::Key::KEY_9;
+    case GLFW_KEY_ESCAPE:
+        return FIRE::Key::KEY_ESC;
     default:
+        assert(false);
         return FIRE::Key::INVALID;
     }
 }
@@ -124,6 +144,15 @@ static void mouse_callback(GLFWwindow* window, double x, double y)
 
     InputListener* inputListener = reinterpret_cast<InputListener*>(windowUserPointer);
     inputListener->MouseInput(x, y);
+}
+
+static void mouse_button_callback(GLFWwindow* window, int button, int action, int /*mods*/)
+{
+    void* windowUserPointer = glfwGetWindowUserPointer(window);
+    assert(windowUserPointer);
+
+    InputListener* inputListener = reinterpret_cast<InputListener*>(windowUserPointer);
+    inputListener->MouseKeyInput(ToFIREMouseKey(button), ToFIREKeyAction(action));
 }
 
 class GLRenderContext::Impl
@@ -177,6 +206,8 @@ GLRenderContext::Impl::Impl(Window& window)
     glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     glfwSetCursorPosCallback(m_window, mouse_callback);
+
+    glfwSetMouseButtonCallback(m_window, mouse_button_callback);
 }
 
 GLRenderContext::Impl::~Impl()

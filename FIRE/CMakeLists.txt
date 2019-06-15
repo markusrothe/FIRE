@@ -15,6 +15,7 @@ add_library(FIRE STATIC
     include/FIRE/Transform.h
     include/FIRE/InputListener.h
     include/FIRE/Key.h
+    include/FIRE/MouseKey.h
     include/FIRE/KeyAction.h
     
     src/glad/include/glad/glad.h
