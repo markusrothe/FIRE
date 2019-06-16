@@ -21,5 +21,5 @@ TEST(AScene, ContainsSceneComponents)
     scene.NewSceneComponent("component_0");
     scene.NewSceneComponent("component_1");
 
-    EXPECT_EQ(2, scene.GetSceneComponents().size());
+    EXPECT_EQ(2u, scene.GetSceneComponents().size());
 }

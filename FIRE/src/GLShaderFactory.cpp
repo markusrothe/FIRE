@@ -113,7 +113,8 @@ unsigned int GLShaderFactory::Create(std::vector<std::pair<ShaderType, std::stri
 
     for(auto const& shaderSource : shaderCode)
     {
-        auto shaderType = shaderSource.first == ShaderType::VERTEX_SHADER ? GL_VERTEX_SHADER : GL_FRAGMENT_SHADER;
+        auto const shaderType = ToGLShaderType(shaderSource.first);
+
         glAttachShader(shaderProgram, CompileShader(shaderType, shaderSource.second));
     }
 
