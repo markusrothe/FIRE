@@ -58,7 +58,7 @@ std::unique_ptr<FIRE::Renderable> CreateRenderable(std::string&& name, FIRE::Mes
 
     auto material = FIRE::MaterialFactory::CreateDefault(shaderFactory);
     renderable->SetMaterial(material);
-    return std::move(renderable);
+    return renderable;
 }
 
 std::shared_ptr<FIRE::Renderable> CreatePlane(std::string&& name, FIRE::ShaderFactory& shaderFactory)
