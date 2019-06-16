@@ -23,7 +23,6 @@ include(gtest_build)
 include(glfw_build)
 find_package(OpenGL REQUIRED)
 
-include(CTest)
 enable_testing()
 
 add_subdirectory(FIRE)

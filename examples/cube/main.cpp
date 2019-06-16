@@ -14,7 +14,8 @@
 
 namespace
 {
-std::shared_ptr<FIRE::Renderable> CreatePlane(std::string name, FIRE::ShaderFactory& shaderFactory)
+
+FIRE::Mesh CreatePlane()
 {
     FIRE::Mesh planeMesh{"planeMesh"};
 
@@ -26,21 +27,12 @@ std::shared_ptr<FIRE::Renderable> CreatePlane(std::string name, FIRE::ShaderFact
     });
 
     planeMesh.AddIndices({0, 1, 2, 0, 2, 3});
-
-    planeMesh.GetVertexDeclaration().AddSection("vPos", 3u, 0, 0);
-
-    auto plane = std::make_shared<FIRE::Renderable>(std::move(name));
-    plane->SetMesh(std::move(planeMesh));
-
-    auto material = FIRE::MaterialFactory::CreateDefault(shaderFactory);
-    plane->SetMaterial(material);
-    return plane;
+    return planeMesh;
 }
 
-std::shared_ptr<FIRE::Renderable> CreateCube(std::string name, FIRE::ShaderFactory& shaderFactory)
+FIRE::Mesh CreateCube()
 {
     FIRE::Mesh cubeMesh{"cubeMesh"};
-
     cubeMesh.AddVertices({{-1.0f, -1.0f, 1.0f},
                           {1.0f, -1.0f, 1.0f},
                           {1.0f, -1.0f, -1.0f},
@@ -56,15 +48,30 @@ std::shared_ptr<FIRE::Renderable> CreateCube(std::string name, FIRE::ShaderFacto
                          3, 0, 4, 3, 4, 7,
                          4, 5, 6, 4, 6, 7,
                          2, 1, 3, 3, 1, 0});
+    return cubeMesh;
+}
 
-    cubeMesh.GetVertexDeclaration().AddSection("vPos", 3u, 0, 0);
-
-    auto cube = std::make_shared<FIRE::Renderable>(std::move(name));
-    cube->SetMesh(std::move(cubeMesh));
+std::unique_ptr<FIRE::Renderable> CreateRenderable(std::string&& name, FIRE::Mesh&& mesh, FIRE::ShaderFactory& shaderFactory)
+{
+    auto renderable = std::make_shared<FIRE::Renderable>(std::move(name));
+    renderable->SetMesh(std::move(mesh));
 
     auto material = FIRE::MaterialFactory::CreateDefault(shaderFactory);
-    cube->SetMaterial(material);
-    return cube;
+    renderable->SetMaterial(material);
+}
+
+std::shared_ptr<FIRE::Renderable> CreatePlane(std::string&& name, FIRE::ShaderFactory& shaderFactory)
+{
+    FIRE::Mesh planeMesh = CreatePlane();
+    planeMesh.GetVertexDeclaration().AddSection("vPos", 3u, 0, 0);
+    return CreateRenderable(std::move(name), std::move(planeMesh), shaderFactory);
+}
+
+std::shared_ptr<FIRE::Renderable> CreateCube(std::string&& name, FIRE::ShaderFactory& shaderFactory)
+{
+    auto cubeMesh = CreateCube();
+    cubeMesh.GetVertexDeclaration().AddSection("vPos", 3u, 0, 0);
+    return CreateRenderable(std::move(name), std::move(cubeMesh), shaderFactory);
 }
 
 std::shared_ptr<FIRE::Camera> CreateCamera()
@@ -123,7 +130,6 @@ void MapInput(std::shared_ptr<FIRE::Camera> const& cam, FIRE::Window& window)
         oldY = y;
     };
     input->RegisterMouseEvent(rotate);
-
     input->RegisterMouseButtonEvent(FIRE::MouseKey::LEFT_BUTTON, FIRE::KeyAction::PRESS, closeWindow);
 }
 
@@ -153,7 +159,7 @@ int main(int, char**)
     sceneComponent->AddRenderable(plane);
 
     auto renderer{FIRE::GLFactory::CreateRenderer()};
-    auto const proj = FIRE::CreatePerspectiveMatrix(90.0f, 800.0f / 600.0f, 0.01f, 500.0f);
+    auto const proj = FIRE::CreatePerspectiveMatrix(70.0f, 800.0f / 600.0f, 0.01f, 500.0f);
 
     while(!window.ShouldClose())
     {
