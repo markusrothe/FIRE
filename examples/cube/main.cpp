@@ -53,11 +53,12 @@ FIRE::Mesh CreateCube()
 
 std::unique_ptr<FIRE::Renderable> CreateRenderable(std::string&& name, FIRE::Mesh&& mesh, FIRE::ShaderFactory& shaderFactory)
 {
-    auto renderable = std::make_shared<FIRE::Renderable>(std::move(name));
+    auto renderable = std::make_unique<FIRE::Renderable>(std::move(name));
     renderable->SetMesh(std::move(mesh));
 
     auto material = FIRE::MaterialFactory::CreateDefault(shaderFactory);
     renderable->SetMaterial(material);
+    return std::move(renderable);
 }
 
 std::shared_ptr<FIRE::Renderable> CreatePlane(std::string&& name, FIRE::ShaderFactory& shaderFactory)
@@ -76,7 +77,7 @@ std::shared_ptr<FIRE::Renderable> CreateCube(std::string&& name, FIRE::ShaderFac
 
 std::shared_ptr<FIRE::Camera> CreateCamera()
 {
-    FIRE::Vector3 camPos{0, 2, 5};
+    FIRE::Vector3 camPos{0, 2, 10};
     FIRE::Vector3 lookAt{0.0f, 2.0f, 0.0f};
     return std::make_shared<FIRE::Camera>("cam", std::move(camPos), std::move(lookAt));
 }
