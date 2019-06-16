@@ -5,6 +5,7 @@ add_executable(cube
 target_link_libraries(cube
     PRIVATE
         FIRE
+        CompileOptions
 )
 
 install(
@@ -16,10 +17,3 @@ install(
     FILES $<TARGET_FILE:FIRE>
     DESTINATION bin
 )
-
-if(MSVC)
-    target_compile_options(cube PRIVATE /W4 /WX)
-else()
-    target_compile_options(cube PRIVATE -Wall -Wextra -pedantic -Werror)
-endif()
-set_property(TARGET cube PROPERTY CXX_STANDARD 17)

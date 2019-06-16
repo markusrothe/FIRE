@@ -28,19 +28,8 @@ target_link_libraries(FIRE_tests
         gtest
         gtest_main
         gmock
+        CompileOptions
 )
-
-set_property(TARGET FIRE_tests PROPERTY CXX_STANDARD 17)
-if(MSVC)    
-    target_compile_options(FIRE_tests PRIVATE /W4 /WX)
-else()
-    target_compile_options(FIRE_tests PRIVATE -Wall -Wextra -pedantic -Werror)    
-endif()
-
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" AND COVERAGE)
-    target_compile_options(FIRE_tests PUBLIC --coverage)
-    target_link_libraries(FIRE_tests PUBLIC --coverage)
-endif()
 
 include(GoogleTest)
 gtest_discover_tests(FIRE_tests)
