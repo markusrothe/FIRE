@@ -30,13 +30,11 @@ target_link_libraries(FIRE_tests
         gmock
 )
 
-if(MSVC)
-    string(REGEX REPLACE " /W[0-4]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
-    string(REGEX REPLACE " /W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    target_compile_options(FIRE_tests PRIVATE /W4 /WX /std:c++17)
+set_property(TARGET FIRE_tests PROPERTY CXX_STANDARD 17)
+if(MSVC)    
+    target_compile_options(FIRE_tests PRIVATE /W4 /WX)
 else()
-    target_compile_options(FIRE_tests PRIVATE -Wall -Wextra -pedantic -Werror)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1z")
+    target_compile_options(FIRE_tests PRIVATE -Wall -Wextra -pedantic -Werror)    
 endif()
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" AND COVERAGE)
