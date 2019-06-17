@@ -11,7 +11,9 @@ enum class ShaderType
 
 enum class ShaderParameterType
 {
-    MAT4x4
+    MAT4x4,
+    VEC3
+
 };
 } // namespace FIRE
 

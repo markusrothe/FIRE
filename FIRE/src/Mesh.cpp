@@ -3,6 +3,22 @@
 #include <cassert>
 namespace FIRE
 {
+
+namespace
+{
+std::vector<float> FlattenVectors(std::vector<Vector3> const& vecs)
+{
+    std::vector<float> result;
+    for(auto const& vec : vecs)
+    {
+        result.push_back(vec.x);
+        result.push_back(vec.y);
+        result.push_back(vec.z);
+    }
+    return result;
+}
+} // namespace
+
 Mesh::Mesh(std::string name)
     : m_name{name}
     , m_vertices{}
@@ -32,16 +48,7 @@ std::vector<Vector3> Mesh::Vertices() const
 
 std::vector<float> Mesh::VerticesAsArray() const
 {
-    std::vector<float> res;
-
-    for(auto const& vertex : m_vertices)
-    {
-        res.push_back(vertex.x);
-        res.push_back(vertex.y);
-        res.push_back(vertex.z);
-    }
-
-    return res;
+    return FlattenVectors(m_vertices);
 }
 
 void Mesh::AddIndex(unsigned int idx)
@@ -65,6 +72,26 @@ void Mesh::AddIndices(std::initializer_list<unsigned int> indices)
 std::vector<unsigned int> Mesh::Indices() const
 {
     return m_indices;
+}
+
+void Mesh::AddNormal(Vector3 normal)
+{
+    m_normals.push_back(std::move(normal));
+}
+
+void Mesh::AddNormals(std::initializer_list<Vector3> normals)
+{
+    m_normals.insert(m_normals.end(), normals);
+}
+
+std::vector<Vector3> Mesh::Normals() const
+{
+    return m_normals;
+}
+
+std::vector<float> Mesh::NormalsAsArray() const
+{
+    return FlattenVectors(m_normals);
 }
 
 VertexDeclaration& Mesh::GetVertexDeclaration()

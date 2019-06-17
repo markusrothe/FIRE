@@ -1,6 +1,7 @@
 #ifndef FIRE_Vector_h
 #define FIRE_Vector_h
 
+#include <vector>
 namespace FIRE
 {
 struct Vector3
@@ -57,6 +58,11 @@ struct Vector3
     Vector3 operator-() const
     {
         return Vector3(-x, -y, -z);
+    }
+
+    std::vector<float> Raw() const
+    {
+        return {x, y, z};
     }
 
     float x{0.0f};

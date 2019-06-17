@@ -8,7 +8,7 @@
 
 namespace FIRE
 {
-class Matrix4x4;
+
 class Material
 {
 public:
@@ -17,7 +17,7 @@ public:
 
     std::string Name() const;
     unsigned int ShaderId() const;
-    void SetShaderParameter(std::string const& paramName, ShaderParameterType paramType, Matrix4x4&& paramValue);
+    void SetShaderParameter(std::string const& paramName, ShaderParameterType paramType, std::any paramValue);
     std::optional<std::pair<ShaderParameterType, std::any>> GetShaderParameter(std::string const& paramName) const;
     std::map<std::string, std::pair<ShaderParameterType, std::any>> GetShaderParameters() const;
 

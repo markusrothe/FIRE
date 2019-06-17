@@ -19,12 +19,15 @@ FIRE::Mesh CreatePlane()
 {
     FIRE::Mesh planeMesh{"planeMesh"};
 
-    planeMesh.AddVertices({
-        {-100.0f, 0.0f, -100.0f},
-        {-100.0f, 0.0f, 100.0f},
-        {100.0f, 0.0f, 100.0f},
-        {100.0f, 0.0f, -100.0f},
-    });
+    planeMesh.AddVertices({{-100.0f, 0.0f, -100.0f},
+                           {-100.0f, 0.0f, 100.0f},
+                           {100.0f, 0.0f, 100.0f},
+                           {100.0f, 0.0f, -100.0f}});
+
+    planeMesh.AddNormals({{0.0f, 1.0f, 0.0f},
+                          {0.0f, 1.0f, 0.0f},
+                          {0.0f, 1.0f, 0.0f},
+                          {0.0f, 1.0f, 0.0f}});
 
     planeMesh.AddIndices({0, 1, 2, 0, 2, 3});
     return planeMesh;
@@ -65,6 +68,7 @@ std::shared_ptr<FIRE::Renderable> CreatePlane(std::string&& name, FIRE::ShaderFa
 {
     FIRE::Mesh planeMesh = CreatePlane();
     planeMesh.GetVertexDeclaration().AddSection("vPos", 3u, 0, 0);
+    planeMesh.GetVertexDeclaration().AddSection("vNormal", 3u, static_cast<unsigned int>(planeMesh.Vertices().size() * 3 * sizeof(float)), 0);
     return CreateRenderable(std::move(name), std::move(planeMesh), shaderFactory);
 }
 
@@ -162,6 +166,8 @@ int main(int, char**)
     auto renderer{FIRE::GLFactory::CreateRenderer()};
     auto const proj = FIRE::CreatePerspectiveMatrix(70.0f, 800.0f / 600.0f, 0.01f, 500.0f);
 
+    FIRE::Vector3 lightPos(0.0f, 10.0f, 0.0f);
+
     while(!window.ShouldClose())
     {
         window.PollEvents();
@@ -169,6 +175,7 @@ int main(int, char**)
         cube->GetTransform().Rotate(FIRE::Vector3(1, 1, 1), 10.0f);
         cube->GetMaterial().SetShaderParameter("MVP", FIRE::ShaderParameterType::MAT4x4, proj * cam->ViewMatrix() * cube->GetTransform().ModelMatrix());
         plane->GetMaterial().SetShaderParameter("MVP", FIRE::ShaderParameterType::MAT4x4, proj * cam->ViewMatrix() * plane->GetTransform().ModelMatrix());
+        plane->GetMaterial().SetShaderParameter("LightPos", FIRE::ShaderParameterType::VEC3, lightPos);
 
         renderer->Render(scene);
         window.SwapBuffers();

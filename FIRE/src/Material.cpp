@@ -19,7 +19,7 @@ unsigned int Material::ShaderId() const
     return m_shaderId;
 }
 
-void Material::SetShaderParameter(std::string const& paramName, FIRE::ShaderParameterType paramType, FIRE::Matrix4x4&& paramValue)
+void Material::SetShaderParameter(std::string const& paramName, FIRE::ShaderParameterType paramType, std::any paramValue)
 {
     m_shaderParams[paramName] = std::make_pair(paramType, std::move(paramValue));
 }

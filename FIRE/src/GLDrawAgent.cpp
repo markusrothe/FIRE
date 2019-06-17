@@ -10,12 +10,22 @@ void SetShaderUniforms(GLuint shader, std::map<std::string, std::pair<ShaderPara
         auto const& name = param.first;
         auto const& paramType = param.second.first;
         auto const& paramVal = param.second.second;
+        auto const uniformLocation = glGetUniformLocation(shader, name.c_str());
 
-        if(ShaderParameterType::MAT4x4 == paramType)
+        switch(paramType)
         {
-            auto const uniformVal = std::any_cast<Matrix4x4>(paramVal);
-            auto const uniformLocation = glGetUniformLocation(shader, name.c_str());
+        case ShaderParameterType::MAT4x4:
+        {
+            auto const& uniformVal = std::any_cast<Matrix4x4>(paramVal);
             glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, uniformVal.Raw().data());
+            break;
+        }
+        case ShaderParameterType::VEC3:
+        {
+            auto const& uniformVal = std::any_cast<Vector3>(paramVal);
+            glUniform3fv(uniformLocation, 1, uniformVal.Raw().data());
+            break;
+        }
         }
     }
 }
