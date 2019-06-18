@@ -8,9 +8,11 @@
 #include <FIRE/Scene.h>
 #include <FIRE/ShaderFactory.h>
 #include <FIRE/Window.h>
+#include <fstream>
 #include <iostream>
 #include <memory>
 #include <sstream>
+#include <streambuf>
 
 namespace
 {
@@ -54,13 +56,11 @@ FIRE::Mesh CreateCube()
     return cubeMesh;
 }
 
-std::unique_ptr<FIRE::Renderable> CreateRenderable(std::string&& name, FIRE::Mesh&& mesh, FIRE::ShaderFactory& shaderFactory)
+std::unique_ptr<FIRE::Renderable> CreateRenderable(std::string&& name, FIRE::Mesh&& mesh)
 {
     auto renderable = std::make_unique<FIRE::Renderable>(std::move(name));
     renderable->SetMesh(std::move(mesh));
 
-    auto material = FIRE::MaterialFactory::CreateDefault(shaderFactory);
-    renderable->SetMaterial(material);
     return renderable;
 }
 
@@ -69,14 +69,31 @@ std::shared_ptr<FIRE::Renderable> CreatePlane(std::string&& name, FIRE::ShaderFa
     FIRE::Mesh planeMesh = CreatePlane();
     planeMesh.GetVertexDeclaration().AddSection("vPos", 3u, 0, 0);
     planeMesh.GetVertexDeclaration().AddSection("vNormal", 3u, static_cast<unsigned int>(planeMesh.Vertices().size() * 3 * sizeof(float)), 0);
-    return CreateRenderable(std::move(name), std::move(planeMesh), shaderFactory);
+
+    auto renderable = CreateRenderable(std::move(name), std::move(planeMesh));
+
+    std::ifstream vs("PhongVS.glsl");
+    std::string vertexShader((std::istreambuf_iterator<char>(vs)), std::istreambuf_iterator<char>());
+
+    std::ifstream fs("PhongFS.glsl");
+    std::string fragmentShader((std::istreambuf_iterator<char>(fs)), std::istreambuf_iterator<char>());
+
+    std::vector<std::pair<FIRE::ShaderType, std::string>> shaders = {
+        {FIRE::ShaderType::VERTEX_SHADER, vertexShader},
+        {FIRE::ShaderType::FRAGMENT_SHADER, fragmentShader}};
+
+    renderable->SetMaterial(FIRE::MaterialFactory::Create("phong", shaders, shaderFactory));
+
+    return renderable;
 }
 
 std::shared_ptr<FIRE::Renderable> CreateCube(std::string&& name, FIRE::ShaderFactory& shaderFactory)
 {
     auto cubeMesh = CreateCube();
     cubeMesh.GetVertexDeclaration().AddSection("vPos", 3u, 0, 0);
-    return CreateRenderable(std::move(name), std::move(cubeMesh), shaderFactory);
+    auto renderable = CreateRenderable(std::move(name), std::move(cubeMesh));
+    renderable->SetMaterial(FIRE::MaterialFactory::CreateDefault(shaderFactory));
+    return renderable;
 }
 
 std::shared_ptr<FIRE::Camera> CreateCamera()
