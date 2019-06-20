@@ -29,6 +29,7 @@ target_link_libraries(FIRE_tests
         gtest_main
         gmock
         CompileOptions
+        MeasureCoverage
 )
 
 include(GoogleTest)

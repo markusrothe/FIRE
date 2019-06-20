@@ -7,6 +7,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 project(FIRE)
 
 add_library(CompileOptions INTERFACE)
+add_library(MeasureCoverage INTERFACE)
 if(MSVC)
     target_compile_options(CompileOptions INTERFACE /W4 /WX)
 else()
@@ -14,16 +15,16 @@ else()
 endif()
 target_compile_features(CompileOptions INTERFACE cxx_std_17)
 
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" AND COVERAGE)
-    message(STATUS "Set coverage flag")    
-    target_compile_options(CompileOptions INTERFACE --coverage)
-    target_link_libraries(CompileOptions INTERFACE --coverage)    
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" AND COVERAGE)  
+    target_compile_options(MeasureCoverage INTERFACE --coverage)
+    target_link_libraries(MeasureCoverage INTERFACE --coverage)    
 endif()
 
 include(gtest_build)
 include(glfw_build)
 find_package(OpenGL REQUIRED)
 
+include(CTest)
 enable_testing()
 
 add_subdirectory(FIRE)
