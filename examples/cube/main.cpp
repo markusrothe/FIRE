@@ -179,7 +179,7 @@ int main(int, char**)
     auto const fovy = 70.0f;
     auto const near = 0.01f;
     auto const far = 500.0f;
-    auto const proj = FIRE::CreatePerspectiveMatrix(70.0f, static_cast<float>(WINDOW_WIDTH) / static_cast<float>(WINDOW_HEIGHT), 0.01f, 500.0f);
+    auto const proj = FIRE::CreatePerspectiveMatrix(fovy, static_cast<float>(WINDOW_WIDTH) / static_cast<float>(WINDOW_HEIGHT), near, far);
 
     auto renderer{FIRE::GLFactory::CreateRenderer()};
     FIRE::Vector3 const lightPos(0.0f, 10.0f, 0.0f);
