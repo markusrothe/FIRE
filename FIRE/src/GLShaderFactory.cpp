@@ -2,6 +2,7 @@
 #include <glad/glad.h>
 
 #include <GLFW/glfw3.h>
+#include <cassert>
 #include <iostream>
 #include <vector>
 namespace FIRE
@@ -66,40 +67,65 @@ GLuint CompileShader(GLenum shaderType, std::string const& code)
 
     return shaderID;
 }
+
+GLenum ToGLShaderType(ShaderType shaderType)
+{
+    switch(shaderType)
+    {
+    case ShaderType::VERTEX_SHADER:
+        return GL_VERTEX_SHADER;
+    case ShaderType::FRAGMENT_SHADER:
+        return GL_FRAGMENT_SHADER;
+    default:
+        assert(false);
+        return GL_VERTEX_SHADER;
+    }
+}
 } // namespace
 unsigned int GLShaderFactory::CreateDefaultShader()
 {
     std::string const vsCode =
         "#version 440\n"
-        "layout(location = 0) in vec3 vPos;\n"
-        "uniform mat4 MVP;\n"
-        "out vec3 posVS;\n"
-        "void main() { \n"
-        "    gl_Position = MVP * vec4(vPos.xyz, 1.0);\n"
-        "    posVS = vPos;\n"
-        "}\n";
+        "layout(location = 0) in vec3 vPos;"
+        "uniform mat4 MVP;"
+        "out vec3 posVS;"
+        "void main() {"
+        "    gl_Position = MVP * vec4(vPos.xyz, 1.0);"
+        "    posVS = vPos;"
+        "}";
 
     std::string const fsCode =
         "#version 440\n"
-        "in vec3 posVS;\n"
-        "out vec4 color;\n"
-        "void main() { color = vec4(0.4,0.4,0.4,1.0) + vec4(posVS.xyz, 1.0); }\n";
+        "in vec3 posVS;"
+        "out vec4 color;"
+        "void main() { color = vec4(0.4,0.4,0.4,1.0) + vec4(posVS.xyz, 1.0); }";
 
-    auto vertexShader = CompileShader(GL_VERTEX_SHADER, vsCode);
-    auto fragmentShader = CompileShader(GL_FRAGMENT_SHADER, fsCode);
+    std::vector<std::pair<ShaderType, std::string>> shaders = {
+        {ShaderType::VERTEX_SHADER, vsCode},
+        {ShaderType::FRAGMENT_SHADER, fsCode}};
 
-    auto shader = glCreateProgram();
-    glAttachShader(shader, vertexShader);
-    glAttachShader(shader, fragmentShader);
+    return Create(shaders);
+}
 
-    glBindAttribLocation(shader, 0, "vPos");
-    glLinkProgram(shader);
-    if(LinkError(shader))
+unsigned int GLShaderFactory::Create(std::vector<std::pair<ShaderType, std::string>> const& shaderCode)
+{
+    auto shaderProgram = glCreateProgram();
+
+    for(auto const& shaderSource : shaderCode)
+    {
+        auto const shaderType = ToGLShaderType(shaderSource.first);
+
+        glAttachShader(shaderProgram, CompileShader(shaderType, shaderSource.second));
+    }
+
+    glBindAttribLocation(shaderProgram, 0, "vPos");
+    glLinkProgram(shaderProgram);
+    if(LinkError(shaderProgram))
     {
         exit(EXIT_FAILURE);
     }
 
-    return shader;
+    return shaderProgram;
 }
 
 } // namespace FIRE

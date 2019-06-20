@@ -10,22 +10,16 @@
 namespace FIRE
 {
 class Renderable;
-class MaterialManager;
 
 class GLUploader : public Uploader
 {
 public:
-    explicit GLUploader(std::shared_ptr<MaterialManager> materialManager);
     ~GLUploader() override = default;
 
-    std::tuple<GLuint, GLuint, GLuint>
-    Upload(Renderable const& renderable) override;
+    std::tuple<GLuint, GLuint, GLuint> Upload(Renderable const& renderable) override;
 
 private:
-    std::shared_ptr<MaterialManager> m_materialManager;
-
-    std::unordered_map<std::string, std::tuple<GLuint, GLuint, GLuint>>
-        m_uploadedRenderables;
+    std::unordered_map<std::string, std::tuple<GLuint, GLuint, GLuint>> m_uploadedRenderables;
 };
 } // namespace FIRE
 

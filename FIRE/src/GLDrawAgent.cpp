@@ -1,11 +1,36 @@
 #include "GLDrawAgent.h"
-#include "MaterialManager.h"
 #include <FIRE/Renderable.h>
-
+#include <any>
 namespace FIRE
 {
-GLDrawAgent::GLDrawAgent(std::shared_ptr<MaterialManager> materialManager)
-    : m_materialManager(std::move(materialManager))
+void SetShaderUniforms(GLuint shader, std::map<std::string, std::pair<ShaderParameterType, std::any>> const& params)
+{
+    for(auto const& param : params)
+    {
+        auto const& name = param.first;
+        auto const& paramType = param.second.first;
+        auto const& paramVal = param.second.second;
+        auto const uniformLocation = glGetUniformLocation(shader, name.c_str());
+
+        switch(paramType)
+        {
+        case ShaderParameterType::MAT4x4:
+        {
+            auto const& uniformVal = std::any_cast<Matrix4x4>(paramVal);
+            glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, uniformVal.Raw().data());
+            break;
+        }
+        case ShaderParameterType::VEC3:
+        {
+            auto const& uniformVal = std::any_cast<Vector3>(paramVal);
+            glUniform3fv(uniformLocation, 1, uniformVal.Raw().data());
+            break;
+        }
+        }
+    }
+}
+
+GLDrawAgent::GLDrawAgent()
 {
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
@@ -23,11 +48,10 @@ void GLDrawAgent::Draw(
 {
     glBindVertexArray(std::get<0>(buffers));
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, std::get<2>(buffers));
-    auto const shader = m_materialManager->GetShader(renderable.GetMaterial());
+    auto const shader = renderable.GetMaterial().ShaderId();
     glUseProgram(shader);
-    auto const uniformVal = renderable.GetShaderUniformMat4x4();
-    auto const uniformLocation = glGetUniformLocation(shader, uniformVal.first.c_str());
-    glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, uniformVal.second.Raw().data());
+
+    SetShaderUniforms(shader, renderable.GetMaterial().GetShaderParameters());
 
     glDrawElements(
         GL_TRIANGLES, static_cast<GLsizei>(renderable.GetMesh().Indices().size()), GL_UNSIGNED_INT, 0);

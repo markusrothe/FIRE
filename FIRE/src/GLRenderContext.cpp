@@ -185,7 +185,7 @@ GLRenderContext::Impl::Impl(Window& window)
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 
     m_window = glfwCreateWindow(
         window.GetWidth(), window.GetHeight(), window.GetTitle().c_str(), NULL,

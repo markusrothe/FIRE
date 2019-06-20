@@ -17,19 +17,22 @@ add_library(FIRE STATIC
     include/FIRE/Key.h
     include/FIRE/MouseKey.h
     include/FIRE/KeyAction.h
+    include/FIRE/ShaderFactory.h
+    include/FIRE/ShaderType.h
+    include/FIRE/MaterialFactory.h
+    include/FIRE/Material.h
     
     src/glad/include/glad/glad.h
     src/glad/include/KHR/khrplatform.h
     src/glm_wrapper.h
     src/Uploader.h
     src/DrawAgent.h
-    src/ShaderFactory.h
     src/GLUploader.h    
     src/GLDrawAgent.h
     src/GLShaderFactory.h
     src/GLRenderContext.h
     src/RendererImpl.h
-    src/MaterialManager.h
+
         
     src/glad/src/glad.c
     src/Camera.cpp
@@ -42,12 +45,13 @@ add_library(FIRE STATIC
     src/GLShaderFactory.cpp
     src/GLRenderContext.cpp    
     src/RendererImpl.cpp
-    src/MaterialManager.cpp
+    src/MaterialFactory.cpp
     src/VertexDeclaration.cpp
     src/Matrix.cpp
     src/Scene.cpp
     src/Transform.cpp
     src/InputListener.cpp
+    src/Material.cpp
 )
 
 target_include_directories(FIRE
@@ -63,20 +67,8 @@ target_link_libraries(FIRE
 PRIVATE
     glfw
     glm
+    CompileOptions
+    MeasureCoverage
 )
-
-if(MSVC)
-    string(REGEX REPLACE " /W[0-4]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
-    string(REGEX REPLACE " /W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    target_compile_options(FIRE PRIVATE /W4 /WX /std:c++17)
-else()
-    target_compile_options(FIRE PRIVATE -Wall -Wextra -pedantic -Werror)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1z")
-endif()
-
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" AND COVERAGE)
-    target_compile_options(FIRE PUBLIC --coverage)
-    target_link_libraries(FIRE PUBLIC --coverage)
-endif()
 
 add_subdirectory(test)

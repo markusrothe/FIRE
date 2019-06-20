@@ -5,8 +5,11 @@
 namespace
 {
 std::string const name{"name"};
+std::initializer_list<FIRE::Vector3> const vecs = {
+    {0.0f, 1.0f, 2.0f},
+    {4.0f, 3.0f, 0.0f}};
 
-class MeshTest : public ::testing::Test
+class AMesh : public ::testing::Test
 {
 public:
 protected:
@@ -15,48 +18,30 @@ protected:
 
 } // namespace
 
-TEST_F(MeshTest, HasAName)
+TEST_F(AMesh, HasAName)
 {
     EXPECT_EQ(name, mesh.Name());
 }
 
-TEST_F(MeshTest, AddVerticesIndividually)
+TEST_F(AMesh, AllowsToAddVerticesIndividually)
 {
     mesh.AddVertex(FIRE::Vector3{});
     EXPECT_EQ(1u, mesh.Vertices().size());
 }
 
-TEST_F(MeshTest, AddVerticesGrouped)
+TEST_F(AMesh, AllowsToAddMultipleVerticesAtOnce)
 {
-    mesh.AddVertices({{0.0f, 1.0f, 2.0f}, {4.0f, 3.0f, 0.0f}});
-    EXPECT_EQ(2u, mesh.Vertices().size());
+    mesh.AddVertices(vecs);
+    EXPECT_EQ(vecs.size(), mesh.Vertices().size());
 }
 
-TEST_F(MeshTest, AddIndicesIndividually)
+TEST_F(AMesh, AllowsToAccessVerticesAsAVectorOfFloats)
 {
-    mesh.AddVertex(FIRE::Vector3{});
-    mesh.AddIndex(0);
-    EXPECT_EQ(1u, mesh.Indices().size());
-}
-
-TEST_F(MeshTest, AddIndicesGrouped)
-{
-    mesh.AddVertices({{0.0f, 1.0f, 2.0f},
-                      {4.0f, 3.0f, 0.0f},
-                      {4.0f, 3.0f, 0.0f},
-                      {4.0f, 3.0f, 0.0f},
-                      {4.0f, 3.0f, 0.0f}});
-    mesh.AddIndices({0, 1, 2, 3, 4});
-    EXPECT_EQ(5u, mesh.Indices().size());
-}
-
-TEST_F(MeshTest, AccessVerticesAsArray)
-{
-    mesh.AddVertices({{0.0f, 1.0f, 2.0f}, {3.0f, 4.0f, 5.0f}});
+    mesh.AddVertices(vecs);
     auto const verticesVec = mesh.Vertices();
 
     auto vertices = mesh.VerticesAsArray();
-    ASSERT_EQ(6u, vertices.size());
+    ASSERT_EQ(vecs.size() * 3, vertices.size());
     EXPECT_FLOAT_EQ(verticesVec[0].x, vertices[0]);
     EXPECT_FLOAT_EQ(verticesVec[0].y, vertices[1]);
     EXPECT_FLOAT_EQ(verticesVec[0].z, vertices[2]);
@@ -65,7 +50,48 @@ TEST_F(MeshTest, AccessVerticesAsArray)
     EXPECT_FLOAT_EQ(verticesVec[1].z, vertices[5]);
 }
 
-TEST_F(MeshTest, HasAVertexDeclaration)
+TEST_F(AMesh, AllowsToAddIndicesIndividually)
+{
+    mesh.AddVertex(FIRE::Vector3{});
+    mesh.AddIndex(0);
+    EXPECT_EQ(1u, mesh.Indices().size());
+}
+
+TEST_F(AMesh, AllowsToAddMultipleIndicesAtOnce)
+{
+    mesh.AddVertices(vecs);
+    mesh.AddIndices({0, 1});
+    EXPECT_EQ(2u, mesh.Indices().size());
+}
+
+TEST_F(AMesh, AllowsToAddNormalsIndividually)
+{
+    mesh.AddNormal(FIRE::Vector3{});
+    EXPECT_EQ(1u, mesh.Normals().size());
+}
+
+TEST_F(AMesh, AllowsToAddMultipleNormalsAtOnce)
+{
+    mesh.AddNormals(vecs);
+    EXPECT_EQ(vecs.size(), mesh.Normals().size());
+}
+
+TEST_F(AMesh, AllowsToAccessNormalsAsAVectorOfFloats)
+{
+    mesh.AddNormals(vecs);
+    auto const normalsVec = mesh.Normals();
+
+    auto normals = mesh.NormalsAsArray();
+    ASSERT_EQ(vecs.size() * 3, normals.size());
+    EXPECT_FLOAT_EQ(normalsVec[0].x, normals[0]);
+    EXPECT_FLOAT_EQ(normalsVec[0].y, normals[1]);
+    EXPECT_FLOAT_EQ(normalsVec[0].z, normals[2]);
+    EXPECT_FLOAT_EQ(normalsVec[1].x, normals[3]);
+    EXPECT_FLOAT_EQ(normalsVec[1].y, normals[4]);
+    EXPECT_FLOAT_EQ(normalsVec[1].z, normals[5]);
+}
+
+TEST_F(AMesh, HasAVertexDeclaration)
 {
     auto& vDecl = mesh.GetVertexDeclaration();
 
@@ -82,7 +108,7 @@ TEST_F(MeshTest, HasAVertexDeclaration)
     EXPECT_EQ(stride, sections.at(attributeName).stride);
 }
 
-using MeshDeathTest = MeshTest;
+using MeshDeathTest = AMesh;
 TEST_F(MeshDeathTest, IndicesCannotBeHigherThanVertexCount)
 {
     mesh.AddVertex({0.0f, 0.0f, 0.0f});

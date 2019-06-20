@@ -7,7 +7,8 @@ add_executable(FIRE_tests
     ./RenderableTest.cpp
     ./RendererTest.cpp
     ./MeshTest.cpp
-    ./MaterialManagerTest.cpp
+    ./MaterialFactoryTest.cpp
+    ./MaterialTest.cpp
     ./CameraTest.cpp
     ./MatrixTest.cpp
     ./SceneTest.cpp
@@ -27,21 +28,9 @@ target_link_libraries(FIRE_tests
         gtest
         gtest_main
         gmock
+        CompileOptions
+        MeasureCoverage
 )
-
-if(MSVC)
-    string(REGEX REPLACE " /W[0-4]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
-    string(REGEX REPLACE " /W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    target_compile_options(FIRE PRIVATE /W4 /WX /std:c++17)
-else()
-    target_compile_options(FIRE PRIVATE -Wall -Wextra -pedantic -Werror)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1z")
-endif()
-
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" AND COVERAGE)
-    target_compile_options(FIRE_tests PUBLIC --coverage)
-    target_link_libraries(FIRE_tests PUBLIC --coverage)
-endif()
 
 include(GoogleTest)
 gtest_discover_tests(FIRE_tests)

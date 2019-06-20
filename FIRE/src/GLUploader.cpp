@@ -1,5 +1,5 @@
 #include "GLUploader.h"
-#include "MaterialManager.h"
+#include <FIRE/Material.h>
 #include <FIRE/Mesh.h>
 #include <FIRE/Renderable.h>
 #include <FIRE/VertexDeclaration.h>
@@ -29,18 +29,17 @@ void SpecifyVertexAttributes(VertexDeclaration const& vDecl, GLuint shader)
     }
 }
 
-GLuint UploadVertices(std::vector<float> const& vertices, VertexDeclaration const& vDecl, GLuint shader)
+GLuint UploadVertices(std::vector<float> const& vertices, std::vector<float> const& normals, VertexDeclaration const& vDecl, GLuint shader)
 {
     GLuint vbo;
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    auto const verticesSize = vertices.size() * sizeof(float);
 
-    glBufferData(
-        GL_ARRAY_BUFFER,
-        verticesSize,
-        &(vertices[0]),
-        GL_STATIC_DRAW);
+    std::vector<float> data = vertices;
+    data.insert(data.end(), normals.begin(), normals.end());
+
+    glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), &(data[0]), GL_STATIC_DRAW);
+
     SpecifyVertexAttributes(vDecl, shader);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     return vbo;
@@ -65,11 +64,6 @@ GLuint UploadIndices(std::vector<unsigned int> const& indices)
 
 } // namespace
 
-GLUploader::GLUploader(std::shared_ptr<MaterialManager> materialManager)
-    : m_materialManager(std::move(materialManager))
-{
-}
-
 std::tuple<GLuint, GLuint, GLuint>
 GLUploader::Upload(Renderable const& renderable)
 {
@@ -86,8 +80,8 @@ GLUploader::Upload(Renderable const& renderable)
     Mesh const& mesh = renderable.GetMesh();
 
     GLuint const vbo = UploadVertices(
-        mesh.VerticesAsArray(), mesh.GetVertexDeclaration(),
-        m_materialManager->GetShader(renderable.GetMaterial()));
+        mesh.VerticesAsArray(), mesh.NormalsAsArray(), mesh.GetVertexDeclaration(),
+        renderable.GetMaterial().ShaderId());
 
     GLuint const ibo = UploadIndices(mesh.Indices());
 
