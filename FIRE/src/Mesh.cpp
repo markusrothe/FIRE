@@ -21,7 +21,7 @@ std::vector<float> FlattenVectors(std::vector<Vector3> const& vecs)
 
 Mesh::Mesh(std::string name)
     : m_name{name}
-    , m_vertices{}
+    , m_positions{}
     , m_indices{}
 {
 }
@@ -31,35 +31,35 @@ std::string Mesh::Name() const
     return m_name;
 }
 
-void Mesh::AddVertex(Vector3 vertex)
+void Mesh::AddPosition(Vector3 vertex)
 {
-    m_vertices.push_back(std::move(vertex));
+    m_positions.push_back(std::move(vertex));
 }
 
-void Mesh::AddVertices(std::initializer_list<Vector3> vertices)
+void Mesh::AddPositions(std::initializer_list<Vector3> vertices)
 {
-    m_vertices.insert(m_vertices.end(), vertices);
+    m_positions.insert(m_positions.end(), vertices);
 }
 
-std::vector<Vector3> Mesh::Vertices() const
+std::vector<Vector3> Mesh::Positions() const
 {
-    return m_vertices;
+    return m_positions;
 }
 
-std::vector<float> Mesh::VerticesAsArray() const
+std::vector<float> Mesh::PositionsAsArray() const
 {
-    return FlattenVectors(m_vertices);
+    return FlattenVectors(m_positions);
 }
 
 void Mesh::AddIndex(unsigned int idx)
 {
-    assert(idx < m_vertices.size());
+    assert(idx < m_positions.size());
     m_indices.push_back(idx);
 }
 
 void Mesh::AddIndices(std::initializer_list<unsigned int> indices)
 {
-    auto const vertexCount = m_vertices.size();
+    auto const vertexCount = m_positions.size();
 
     assert(
         std::find_if(indices.begin(), indices.end(), [vertexCount](auto index) {

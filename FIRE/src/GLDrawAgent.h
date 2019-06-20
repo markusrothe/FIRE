@@ -13,9 +13,7 @@ public:
     GLDrawAgent();
     void Clear() override;
 
-    void Draw(
-        Renderable const& renderable,
-        std::tuple<GLuint, GLuint, GLuint> buffers) override;
+    void Draw(Renderable const& renderable, GLVertexArrayObject arrObj) override;
 };
 } // namespace FIRE
 

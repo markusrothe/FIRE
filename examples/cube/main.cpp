@@ -30,10 +30,10 @@ FIRE::Mesh CreatePlaneMesh()
 {
     FIRE::Mesh planeMesh{"planeMesh"};
 
-    planeMesh.AddVertices({{-100.0f, 0.0f, -100.0f},
-                           {-100.0f, 0.0f, 100.0f},
-                           {100.0f, 0.0f, 100.0f},
-                           {100.0f, 0.0f, -100.0f}});
+    planeMesh.AddPositions({{-100.0f, 0.0f, -100.0f},
+                            {-100.0f, 0.0f, 100.0f},
+                            {100.0f, 0.0f, 100.0f},
+                            {100.0f, 0.0f, -100.0f}});
 
     planeMesh.AddNormals({{0.0f, 1.0f, 0.0f},
                           {0.0f, 1.0f, 0.0f},
@@ -47,14 +47,14 @@ FIRE::Mesh CreatePlaneMesh()
 FIRE::Mesh CreateCubeMesh()
 {
     FIRE::Mesh cubeMesh{"cubeMesh"};
-    cubeMesh.AddVertices({{-1.0f, -1.0f, 1.0f},
-                          {1.0f, -1.0f, 1.0f},
-                          {1.0f, -1.0f, -1.0f},
-                          {-1.0f, -1.0f, -1.0f},
-                          {-1.0f, 1.0f, 1.0f},
-                          {1.0f, 1.0f, 1.0f},
-                          {1.0f, 1.0f, -1.0f},
-                          {-1.0f, 1.0f, -1.0f}});
+    cubeMesh.AddPositions({{-1.0f, -1.0f, 1.0f},
+                           {1.0f, -1.0f, 1.0f},
+                           {1.0f, -1.0f, -1.0f},
+                           {-1.0f, -1.0f, -1.0f},
+                           {-1.0f, 1.0f, 1.0f},
+                           {1.0f, 1.0f, 1.0f},
+                           {1.0f, 1.0f, -1.0f},
+                           {-1.0f, 1.0f, -1.0f}});
 
     cubeMesh.AddIndices({0, 1, 5, 0, 5, 4,
                          1, 2, 6, 1, 6, 5,
@@ -77,7 +77,7 @@ std::shared_ptr<FIRE::Renderable> CreatePlane(std::string&& name, FIRE::ShaderFa
 {
     FIRE::Mesh planeMesh = CreatePlaneMesh();
     planeMesh.GetVertexDeclaration().AddSection("vPos", 3u, 0, 0);
-    planeMesh.GetVertexDeclaration().AddSection("vNormal", 3u, static_cast<unsigned int>(planeMesh.Vertices().size() * 3 * sizeof(float)), 0);
+    planeMesh.GetVertexDeclaration().AddSection("vNormal", 3u, static_cast<unsigned int>(planeMesh.Positions().size() * 3 * sizeof(float)), 0);
 
     FIRE::Shaders const shaders = {
         {FIRE::ShaderType::VERTEX_SHADER, GetFileContent("PhongVS.glsl")},

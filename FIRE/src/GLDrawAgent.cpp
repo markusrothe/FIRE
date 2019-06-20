@@ -43,11 +43,10 @@ void GLDrawAgent::Clear()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void GLDrawAgent::Draw(
-    Renderable const& renderable, std::tuple<GLuint, GLuint, GLuint> buffers)
+void GLDrawAgent::Draw(Renderable const& renderable, GLVertexArrayObject arrObj)
 {
-    glBindVertexArray(std::get<0>(buffers));
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, std::get<2>(buffers));
+    glBindVertexArray(arrObj.m_vao);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, arrObj.m_ibo);
     auto const shader = renderable.GetMaterial().ShaderId();
     glUseProgram(shader);
 

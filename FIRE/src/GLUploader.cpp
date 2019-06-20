@@ -29,18 +29,34 @@ void SpecifyVertexAttributes(VertexDeclaration const& vDecl, GLuint shader)
     }
 }
 
-GLuint UploadVertices(std::vector<float> const& vertices, std::vector<float> const& normals, VertexDeclaration const& vDecl, GLuint shader)
+void Write(std::vector<float> const& data, unsigned int offset)
+{
+    glBufferSubData(GL_ARRAY_BUFFER, offset, data.size() * sizeof(float), &data[0]);
+}
+
+GLuint UploadVertices(Mesh const& mesh, GLuint shader)
 {
     GLuint vbo;
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-    std::vector<float> data = vertices;
-    data.insert(data.end(), normals.begin(), normals.end());
+    auto const positions = mesh.PositionsAsArray();
+    auto const normals = mesh.NormalsAsArray();
 
-    glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), &(data[0]), GL_STATIC_DRAW);
+    auto bufferSize = (positions.size() + normals.size()) * sizeof(float);
+    glBufferData(GL_ARRAY_BUFFER, bufferSize, NULL, GL_STATIC_DRAW);
 
-    SpecifyVertexAttributes(vDecl, shader);
+    if(!positions.empty())
+    {
+        Write(positions, 0u);
+    }
+
+    if(!normals.empty())
+    {
+        Write(normals, positions.size() * sizeof(float));
+    }
+
+    SpecifyVertexAttributes(mesh.GetVertexDeclaration(), shader);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     return vbo;
 }
@@ -64,8 +80,7 @@ GLuint UploadIndices(std::vector<unsigned int> const& indices)
 
 } // namespace
 
-std::tuple<GLuint, GLuint, GLuint>
-GLUploader::Upload(Renderable const& renderable)
+GLVertexArrayObject GLUploader::Upload(Renderable const& renderable)
 {
     auto const it = m_uploadedRenderables.find(renderable.Name());
     if(it != m_uploadedRenderables.end())
@@ -79,15 +94,12 @@ GLUploader::Upload(Renderable const& renderable)
 
     Mesh const& mesh = renderable.GetMesh();
 
-    GLuint const vbo = UploadVertices(
-        mesh.VerticesAsArray(), mesh.NormalsAsArray(), mesh.GetVertexDeclaration(),
-        renderable.GetMaterial().ShaderId());
-
+    GLuint const vbo = UploadVertices(mesh, renderable.GetMaterial().ShaderId());
     GLuint const ibo = UploadIndices(mesh.Indices());
 
-    auto buffers = std::make_tuple(vao, vbo, ibo);
-    m_uploadedRenderables.insert(std::make_pair(renderable.Name(), buffers));
-    return buffers;
+    GLVertexArrayObject arrObj(vao, vbo, ibo);
+    m_uploadedRenderables.insert(std::make_pair(renderable.Name(), arrObj));
+    return arrObj;
 }
 
 } // namespace FIRE

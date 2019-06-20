@@ -12,16 +12,17 @@ namespace
 {
 using ::testing::_;
 using ::testing::Ref;
+using ::testing::Return;
 class UploaderMock : public FIRE::Uploader
 {
 public:
-    MOCK_METHOD1(Upload, std::tuple<unsigned int, unsigned int, unsigned int>(FIRE::Renderable const&));
+    MOCK_METHOD1(Upload, FIRE::GLVertexArrayObject(FIRE::Renderable const&));
 };
 
 class DrawAgentMock : public FIRE::DrawAgent
 {
 public:
-    MOCK_METHOD2(Draw, void(FIRE::Renderable const&, std::tuple<unsigned int, unsigned int, unsigned int>));
+    MOCK_METHOD2(Draw, void(FIRE::Renderable const&, FIRE::GLVertexArrayObject));
     MOCK_METHOD0(Clear, void(void));
 };
 
@@ -57,12 +58,14 @@ protected:
 
 TEST_F(ARenderer, UploadsRenderableToGPU)
 {
-    EXPECT_CALL(uploader, Upload(Ref(*renderable)));
+    EXPECT_CALL(uploader, Upload(Ref(*renderable)))
+        .WillOnce(Return(FIRE::GLVertexArrayObject(0, 0, 0)));
     renderer.Render(scene);
 }
 
 TEST_F(ARenderer, RendersAScene)
 {
+    ON_CALL(uploader, Upload(_)).WillByDefault(Return(FIRE::GLVertexArrayObject(0, 0, 0)));
     EXPECT_CALL(drawAgent, Draw(Ref(*renderable), _));
     renderer.Render(scene);
 }

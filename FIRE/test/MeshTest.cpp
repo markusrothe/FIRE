@@ -23,43 +23,43 @@ TEST_F(AMesh, HasAName)
     EXPECT_EQ(name, mesh.Name());
 }
 
-TEST_F(AMesh, AllowsToAddVerticesIndividually)
+TEST_F(AMesh, AllowsToAddPositionsIndividually)
 {
-    mesh.AddVertex(FIRE::Vector3{});
-    EXPECT_EQ(1u, mesh.Vertices().size());
+    mesh.AddPosition(FIRE::Vector3{});
+    EXPECT_EQ(1u, mesh.Positions().size());
 }
 
-TEST_F(AMesh, AllowsToAddMultipleVerticesAtOnce)
+TEST_F(AMesh, AllowsToAddMultiplePositionsAtOnce)
 {
-    mesh.AddVertices(vecs);
-    EXPECT_EQ(vecs.size(), mesh.Vertices().size());
+    mesh.AddPositions(vecs);
+    EXPECT_EQ(vecs.size(), mesh.Positions().size());
 }
 
-TEST_F(AMesh, AllowsToAccessVerticesAsAVectorOfFloats)
+TEST_F(AMesh, AllowsToAccessPositionsAsAVectorOfFloats)
 {
-    mesh.AddVertices(vecs);
-    auto const verticesVec = mesh.Vertices();
+    mesh.AddPositions(vecs);
+    auto const positionsVec = mesh.Positions();
 
-    auto vertices = mesh.VerticesAsArray();
-    ASSERT_EQ(vecs.size() * 3, vertices.size());
-    EXPECT_FLOAT_EQ(verticesVec[0].x, vertices[0]);
-    EXPECT_FLOAT_EQ(verticesVec[0].y, vertices[1]);
-    EXPECT_FLOAT_EQ(verticesVec[0].z, vertices[2]);
-    EXPECT_FLOAT_EQ(verticesVec[1].x, vertices[3]);
-    EXPECT_FLOAT_EQ(verticesVec[1].y, vertices[4]);
-    EXPECT_FLOAT_EQ(verticesVec[1].z, vertices[5]);
+    auto positions = mesh.PositionsAsArray();
+    ASSERT_EQ(vecs.size() * 3, positions.size());
+    EXPECT_FLOAT_EQ(positionsVec[0].x, positions[0]);
+    EXPECT_FLOAT_EQ(positionsVec[0].y, positions[1]);
+    EXPECT_FLOAT_EQ(positionsVec[0].z, positions[2]);
+    EXPECT_FLOAT_EQ(positionsVec[1].x, positions[3]);
+    EXPECT_FLOAT_EQ(positionsVec[1].y, positions[4]);
+    EXPECT_FLOAT_EQ(positionsVec[1].z, positions[5]);
 }
 
 TEST_F(AMesh, AllowsToAddIndicesIndividually)
 {
-    mesh.AddVertex(FIRE::Vector3{});
+    mesh.AddPosition(FIRE::Vector3{});
     mesh.AddIndex(0);
     EXPECT_EQ(1u, mesh.Indices().size());
 }
 
 TEST_F(AMesh, AllowsToAddMultipleIndicesAtOnce)
 {
-    mesh.AddVertices(vecs);
+    mesh.AddPositions(vecs);
     mesh.AddIndices({0, 1});
     EXPECT_EQ(2u, mesh.Indices().size());
 }
@@ -111,7 +111,7 @@ TEST_F(AMesh, HasAVertexDeclaration)
 using MeshDeathTest = AMesh;
 TEST_F(MeshDeathTest, IndicesCannotBeHigherThanVertexCount)
 {
-    mesh.AddVertex({0.0f, 0.0f, 0.0f});
+    mesh.AddPosition({0.0f, 0.0f, 0.0f});
     EXPECT_DEATH(mesh.AddIndices({0, 1}), "");
     EXPECT_DEATH(mesh.AddIndex(2), "");
 }

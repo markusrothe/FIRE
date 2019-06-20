@@ -20,8 +20,11 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" AND COVERAGE)
     target_link_libraries(MeasureCoverage INTERFACE --coverage)    
 endif()
 
-include(gtest_build)
-include(glfw_build)
+add_subdirectory(gtest)
+add_subdirectory(glfw)
+add_subdirectory(glad)
+add_subdirectory(glm EXCLUDE_FROM_ALL)
+
 find_package(OpenGL REQUIRED)
 
 include(CTest)

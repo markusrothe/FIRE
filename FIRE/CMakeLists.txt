@@ -1,5 +1,3 @@
-
-add_subdirectory(src/glm EXCLUDE_FROM_ALL)
 add_library(FIRE STATIC
     include/FIRE/Camera.h
     include/FIRE/Window.h
@@ -22,8 +20,6 @@ add_library(FIRE STATIC
     include/FIRE/MaterialFactory.h
     include/FIRE/Material.h
     
-    src/glad/include/glad/glad.h
-    src/glad/include/KHR/khrplatform.h
     src/glm_wrapper.h
     src/Uploader.h
     src/DrawAgent.h
@@ -32,9 +28,7 @@ add_library(FIRE STATIC
     src/GLShaderFactory.h
     src/GLRenderContext.h
     src/RendererImpl.h
-
-        
-    src/glad/src/glad.c
+      
     src/Camera.cpp
     src/Window.cpp    
     src/Renderable.cpp
@@ -60,12 +54,12 @@ PUBLIC
     $<INSTALL_INTERFACE:include>
 PRIVATE
     src
-    src/glad/include
 )
 
 target_link_libraries(FIRE
-PRIVATE
+    PRIVATE
     glfw
+    glad
     glm
     CompileOptions
     MeasureCoverage
