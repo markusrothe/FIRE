@@ -16,8 +16,17 @@
 
 namespace
 {
+unsigned int constexpr WINDOW_WIDTH = 800;
+unsigned int constexpr WINDOW_HEIGHT = 600;
 
-FIRE::Mesh CreatePlane()
+std::string GetFileContent(std::string const& filePath)
+{
+    std::ifstream file(filePath);
+    std::string const content{(std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>()};
+    return content;
+}
+
+FIRE::Mesh CreatePlaneMesh()
 {
     FIRE::Mesh planeMesh{"planeMesh"};
 
@@ -35,7 +44,7 @@ FIRE::Mesh CreatePlane()
     return planeMesh;
 }
 
-FIRE::Mesh CreateCube()
+FIRE::Mesh CreateCubeMesh()
 {
     FIRE::Mesh cubeMesh{"cubeMesh"};
     cubeMesh.AddVertices({{-1.0f, -1.0f, 1.0f},
@@ -56,44 +65,33 @@ FIRE::Mesh CreateCube()
     return cubeMesh;
 }
 
-std::unique_ptr<FIRE::Renderable> CreateRenderable(std::string&& name, FIRE::Mesh&& mesh)
+std::unique_ptr<FIRE::Renderable> CreateRenderable(std::string&& name, FIRE::Mesh&& mesh, FIRE::Material&& material)
 {
     auto renderable = std::make_unique<FIRE::Renderable>(std::move(name));
     renderable->SetMesh(std::move(mesh));
-
+    renderable->SetMaterial(std::move(material));
     return renderable;
 }
 
 std::shared_ptr<FIRE::Renderable> CreatePlane(std::string&& name, FIRE::ShaderFactory& shaderFactory)
 {
-    FIRE::Mesh planeMesh = CreatePlane();
+    FIRE::Mesh planeMesh = CreatePlaneMesh();
     planeMesh.GetVertexDeclaration().AddSection("vPos", 3u, 0, 0);
     planeMesh.GetVertexDeclaration().AddSection("vNormal", 3u, static_cast<unsigned int>(planeMesh.Vertices().size() * 3 * sizeof(float)), 0);
 
-    auto renderable = CreateRenderable(std::move(name), std::move(planeMesh));
+    FIRE::Shaders const shaders = {
+        {FIRE::ShaderType::VERTEX_SHADER, GetFileContent("PhongVS.glsl")},
+        {FIRE::ShaderType::FRAGMENT_SHADER, GetFileContent("PhongFS.glsl")}};
 
-    std::ifstream vs("PhongVS.glsl");
-    std::string vertexShader((std::istreambuf_iterator<char>(vs)), std::istreambuf_iterator<char>());
-
-    std::ifstream fs("PhongFS.glsl");
-    std::string fragmentShader((std::istreambuf_iterator<char>(fs)), std::istreambuf_iterator<char>());
-
-    std::vector<std::pair<FIRE::ShaderType, std::string>> shaders = {
-        {FIRE::ShaderType::VERTEX_SHADER, vertexShader},
-        {FIRE::ShaderType::FRAGMENT_SHADER, fragmentShader}};
-
-    renderable->SetMaterial(FIRE::MaterialFactory::Create("phong", shaders, shaderFactory));
-
-    return renderable;
+    return CreateRenderable(std::move(name), std::move(planeMesh), FIRE::MaterialFactory::Create("phong", shaders, shaderFactory));
 }
 
 std::shared_ptr<FIRE::Renderable> CreateCube(std::string&& name, FIRE::ShaderFactory& shaderFactory)
 {
-    auto cubeMesh = CreateCube();
+    auto cubeMesh = CreateCubeMesh();
     cubeMesh.GetVertexDeclaration().AddSection("vPos", 3u, 0, 0);
-    auto renderable = CreateRenderable(std::move(name), std::move(cubeMesh));
-    renderable->SetMaterial(FIRE::MaterialFactory::CreateDefault(shaderFactory));
-    return renderable;
+
+    return CreateRenderable(std::move(name), std::move(cubeMesh), FIRE::MaterialFactory::CreateDefault(shaderFactory));
 }
 
 std::shared_ptr<FIRE::Camera> CreateCamera()
@@ -139,7 +137,6 @@ void MapInput(std::shared_ptr<FIRE::Camera> const& cam, FIRE::Window& window)
             auto const deltaX = x - oldX;
             auto const deltaY = y - oldY;
             auto& camTransform = cam->GetTransform();
-            //std::cout << "x,y= " << x << "," << y << "\n";
             camTransform.Rotate(camTransform.Up(), static_cast<float>(-deltaX) / 10.0f);    // around up-axis
             camTransform.Rotate(camTransform.Right(), static_cast<float>(-deltaY) / 10.0f); // around right-axis
         }
@@ -159,7 +156,7 @@ void MapInput(std::shared_ptr<FIRE::Camera> const& cam, FIRE::Window& window)
 
 int main(int, char**)
 {
-    FIRE::Window window{"cube", 800, 600};
+    FIRE::Window window{"FIRE cube example", WINDOW_WIDTH, WINDOW_HEIGHT};
 
     auto context{FIRE::GLFactory::CreateRenderContext(window)};
     window.SetRenderContext(std::move(context));
@@ -172,7 +169,6 @@ int main(int, char**)
     auto sceneComponent = scene.NewSceneComponent("sceneComponent");
 
     auto shaderFactory{FIRE::GLFactory::CreateShaderFactory()};
-
     auto cube = CreateCube("cube", *shaderFactory);
     cube->GetTransform().Translate(0.0f, 2.0f, 0.0f);
     auto plane = CreatePlane("plane", *shaderFactory);
@@ -180,11 +176,13 @@ int main(int, char**)
     sceneComponent->AddRenderable(cube);
     sceneComponent->AddRenderable(plane);
 
+    auto const fovy = 70.0f;
+    auto const near = 0.01f;
+    auto const far = 500.0f;
+    auto const proj = FIRE::CreatePerspectiveMatrix(70.0f, static_cast<float>(WINDOW_WIDTH) / static_cast<float>(WINDOW_HEIGHT), 0.01f, 500.0f);
+
     auto renderer{FIRE::GLFactory::CreateRenderer()};
-    auto const proj = FIRE::CreatePerspectiveMatrix(70.0f, 800.0f / 600.0f, 0.01f, 500.0f);
-
-    FIRE::Vector3 lightPos(0.0f, 10.0f, 0.0f);
-
+    FIRE::Vector3 const lightPos(0.0f, 10.0f, 0.0f);
     while(!window.ShouldClose())
     {
         window.PollEvents();

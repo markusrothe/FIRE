@@ -19,9 +19,7 @@ std::unique_ptr<RenderContext> CreateRenderContext(Window& window)
 
 std::unique_ptr<Renderer> CreateRenderer()
 {
-    return std::make_unique<RendererImpl>(
-        std::make_unique<GLUploader>(),
-        std::make_unique<GLDrawAgent>());
+    return std::make_unique<RendererImpl>(std::make_unique<GLUploader>(), std::make_unique<GLDrawAgent>());
 }
 
 std::unique_ptr<ShaderFactory> CreateShaderFactory()
