@@ -7,3 +7,5 @@ compile_commands.json
 TODO.txt
 /FIRE/src/glm/doc
 .projectile
+run.sh
+flycheck_.dir-locals.elc
