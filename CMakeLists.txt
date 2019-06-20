@@ -15,8 +15,9 @@ endif()
 target_compile_features(CompileOptions INTERFACE cxx_std_17)
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" AND COVERAGE)
+    message(STATUS "Set coverage flag")    
     target_compile_options(CompileOptions INTERFACE --coverage)
-    target_link_libraries(CompileOptions INTERFACE --coverage)
+    target_link_libraries(CompileOptions INTERFACE --coverage)    
 endif()
 
 include(gtest_build)

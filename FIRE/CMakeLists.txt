@@ -70,4 +70,10 @@ PRIVATE
     CompileOptions
 )
 
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" AND COVERAGE)
+    message(STATUS "Set coverage flag")    
+    target_compile_options(FIRE PRIVATE --coverage)
+    target_link_libraries(FIRE PRIVATE --coverage)    
+endif()
+
 add_subdirectory(test)
