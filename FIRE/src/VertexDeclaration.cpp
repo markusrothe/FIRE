@@ -2,20 +2,15 @@
 
 namespace FIRE
 {
-VertexDeclarationSection::VertexDeclarationSection(
-    unsigned int size, unsigned int offset, unsigned int stride)
+VertexDeclarationSection::VertexDeclarationSection(size_t size, size_t offset)
     : size(size)
     , offset(offset)
-    , stride(stride)
 {
 }
 
-void VertexDeclaration::AddSection(
-    std::string name, unsigned int size, unsigned int offset,
-    unsigned int stride)
+void VertexDeclaration::AddSection(std::string name, size_t size, size_t offset)
 {
-    m_sections.insert(
-        std::make_pair(name, VertexDeclarationSection(size, offset, stride)));
+    m_sections.insert(std::make_pair(name, VertexDeclarationSection(size, offset)));
 }
 
 VertexDeclaration::VertexDeclarationMap VertexDeclaration::GetSections() const

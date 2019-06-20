@@ -31,8 +31,11 @@ TEST_F(ARenderable, HasAMesh)
 {
     std::string const meshName{"triangleMesh"};
     renderable.SetMesh(FIRE::Mesh(meshName));
-    auto const mesh = renderable.GetMesh();
-    EXPECT_EQ(meshName, mesh.Name());
+
+    EXPECT_EQ(meshName, renderable.GetMesh().Name());
+
+    auto const& constRenderable = renderable;
+    EXPECT_EQ(meshName, constRenderable.GetMesh().Name());
 }
 
 TEST_F(ARenderable, CanBeComparedViaItsName)
@@ -57,4 +60,8 @@ TEST_F(ARenderable, MayBeAssignedAMaterial)
     renderable.SetMaterial(FIRE::Material(materialName, shaderId));
     EXPECT_EQ(materialName, renderable.GetMaterial().Name());
     EXPECT_EQ(shaderId, renderable.GetMaterial().ShaderId());
+
+    auto const& constRenderable = renderable;
+    EXPECT_EQ(materialName, constRenderable.GetMaterial().Name());
+    EXPECT_EQ(shaderId, constRenderable.GetMaterial().ShaderId());
 }

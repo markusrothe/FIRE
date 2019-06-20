@@ -12,10 +12,10 @@ struct Mesh
     explicit Mesh(std::string name);
 
     std::string Name() const;
-    void AddVertex(Vector3 vertex);
-    void AddVertices(std::initializer_list<Vector3> vertices);
-    std::vector<Vector3> Vertices() const;
-    std::vector<float> VerticesAsArray() const;
+    void AddPosition(Vector3 vertex);
+    void AddPositions(std::initializer_list<Vector3> positions);
+    std::vector<Vector3> Positions() const;
+    std::vector<float> PositionsAsArray() const;
 
     void AddIndex(unsigned int idx);
     void AddIndices(std::initializer_list<unsigned int> indices);
@@ -32,7 +32,7 @@ struct Mesh
 private:
     std::string m_name;
 
-    std::vector<Vector3> m_vertices;
+    std::vector<Vector3> m_positions;
     std::vector<Vector3> m_normals;
     std::vector<unsigned int> m_indices;
 
