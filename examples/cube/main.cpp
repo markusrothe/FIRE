@@ -76,8 +76,8 @@ std::unique_ptr<FIRE::Renderable> CreateRenderable(std::string&& name, FIRE::Mes
 std::shared_ptr<FIRE::Renderable> CreatePlane(std::string&& name, FIRE::ShaderFactory& shaderFactory)
 {
     FIRE::Mesh planeMesh = CreatePlaneMesh();
-    planeMesh.GetVertexDeclaration().AddSection("vPos", 3u, 0, 0);
-    planeMesh.GetVertexDeclaration().AddSection("vNormal", 3u, static_cast<unsigned int>(planeMesh.Positions().size() * 3 * sizeof(float)), 0);
+    planeMesh.GetVertexDeclaration().AddSection("vPos", 3u, 0u);
+    planeMesh.GetVertexDeclaration().AddSection("vNormal", 3u, planeMesh.Positions().size() * sizeof(float) * 3);
 
     FIRE::Shaders const shaders = {
         {FIRE::ShaderType::VERTEX_SHADER, GetFileContent("PhongVS.glsl")},
@@ -89,7 +89,7 @@ std::shared_ptr<FIRE::Renderable> CreatePlane(std::string&& name, FIRE::ShaderFa
 std::shared_ptr<FIRE::Renderable> CreateCube(std::string&& name, FIRE::ShaderFactory& shaderFactory)
 {
     auto cubeMesh = CreateCubeMesh();
-    cubeMesh.GetVertexDeclaration().AddSection("vPos", 3u, 0, 0);
+    cubeMesh.GetVertexDeclaration().AddSection("vPos", 3u, 0u);
 
     return CreateRenderable(std::move(name), std::move(cubeMesh), FIRE::MaterialFactory::CreateDefault(shaderFactory));
 }

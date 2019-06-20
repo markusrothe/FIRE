@@ -1,5 +1,5 @@
-#ifndef FIRE_VAO_h
-#define FIRE_VAO_h
+#ifndef FIRE_GLBuffer_h
+#define FIRE_GLBuffer_h
 
 namespace FIRE
 {
@@ -23,4 +23,4 @@ struct GLVertexArrayObject
 
 } // namespace FIRE
 
-#endif // FIRE_VAO_h
+#endif // FIRE_GLBuffer_h

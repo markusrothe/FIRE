@@ -18,13 +18,14 @@ void SpecifyVertexAttributes(VertexDeclaration const& vDecl, GLuint shader)
             shader,
             vertexDeclSection.first.c_str());
 
+        auto const stride = 0u;
         glEnableVertexAttribArray(attribLocation);
         glVertexAttribPointer(
             attribLocation,
             vertexDeclSection.second.size,
             GL_FLOAT,
             GL_FALSE,
-            vertexDeclSection.second.stride,
+            stride,
             BUFFER_OFFSET(vertexDeclSection.second.offset));
     }
 }

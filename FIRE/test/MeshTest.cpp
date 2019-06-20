@@ -97,15 +97,13 @@ TEST_F(AMesh, HasAVertexDeclaration)
 
     std::string const attributeName{"vPos"};
     auto const size = 3u * sizeof(float);
-    auto const offset = 0u;
-    auto const stride = 3u * sizeof(float);
-    vDecl.AddSection(attributeName, size, offset, stride);
+    auto const offset = 42u;
+    vDecl.AddSection(attributeName, size, offset);
 
     auto sections = vDecl.GetSections();
     ASSERT_EQ(1u, sections.size());
     EXPECT_EQ(size, sections.at(attributeName).size);
     EXPECT_EQ(offset, sections.at(attributeName).offset);
-    EXPECT_EQ(stride, sections.at(attributeName).stride);
 }
 
 using MeshDeathTest = AMesh;
