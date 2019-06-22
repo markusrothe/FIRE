@@ -29,6 +29,9 @@ public:
     void PollEvents();
     void SwapBuffers();
 
+    void CaptureCursor();
+    void ReleaseCursor();
+
 private:
     std::string const m_title;
     unsigned int m_width;

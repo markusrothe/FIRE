@@ -167,8 +167,9 @@ public:
     bool ShouldClose();
     void Close();
     void Resize(unsigned int width, unsigned int height);
-
     void RegisterInputListener(InputListener* inputListener);
+    void CaptureCursor();
+    void ReleaseCursor();
 
 private:
     GLFWwindow* m_window;
@@ -203,7 +204,6 @@ GLRenderContext::Impl::Impl(Window& window)
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
     glfwSetKeyCallback(m_window, key_callback);
-    glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     glfwSetCursorPosCallback(m_window, mouse_callback);
 
@@ -245,6 +245,16 @@ void GLRenderContext::Impl::RegisterInputListener(InputListener* inputListener)
     glfwSetWindowUserPointer(m_window, reinterpret_cast<void*>(inputListener));
 }
 
+void GLRenderContext::Impl::CaptureCursor()
+{
+    glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+}
+
+void GLRenderContext::Impl::ReleaseCursor()
+{
+    glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+}
+
 GLRenderContext::GLRenderContext(Window& window)
     : m_impl(std::make_unique<GLRenderContext::Impl>(window))
 {
@@ -282,4 +292,13 @@ void GLRenderContext::RegisterInputListener(InputListener* inputListener)
     m_impl->RegisterInputListener(inputListener);
 }
 
+void GLRenderContext::CaptureCursor()
+{
+    m_impl->CaptureCursor();
+}
+
+void GLRenderContext::ReleaseCursor()
+{
+    m_impl->ReleaseCursor();
+}
 } // namespace FIRE

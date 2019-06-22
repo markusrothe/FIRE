@@ -38,6 +38,7 @@ void Write(std::vector<float> const& data, unsigned int offset)
 GLuint UploadVertices(Mesh const& mesh, GLuint shader)
 {
     GLuint vbo;
+
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 

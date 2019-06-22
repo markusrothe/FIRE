@@ -27,6 +27,8 @@ public:
     void Resize(unsigned int width, unsigned int height) override;
 
     void RegisterInputListener(InputListener* inputListener) override;
+    void CaptureCursor() override;
+    void ReleaseCursor() override;
 
 private:
     class Impl;
