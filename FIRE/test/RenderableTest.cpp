@@ -2,6 +2,7 @@
 #include <FIRE/Renderable.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
+#include <memory>
 
 namespace
 {
@@ -30,7 +31,7 @@ TEST_F(ARenderable, CanBeAssignedANewName)
 TEST_F(ARenderable, HasAMesh)
 {
     std::string const meshName{"triangleMesh"};
-    renderable.SetMesh(FIRE::Mesh(meshName));
+    renderable.SetMesh(std::make_shared<FIRE::Mesh>(meshName));
 
     EXPECT_EQ(meshName, renderable.GetMesh().Name());
 

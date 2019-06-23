@@ -3,15 +3,16 @@
 layout(location=0)in vec3 vPos;
 layout(location=1)in vec3 vNormal;
 
-uniform mat4 MVP;
+uniform mat4 VP;
+uniform mat4 M;
 
 out vec3 posVS;
 out vec3 normalVS;
 
 void main()
 {
-    gl_Position=MVP*vec4(vPos.xyz,1.);
+    gl_Position = VP * M * vec4(vPos, 1.0);
     
-    posVS=vPos;
-    normalVS=vNormal;
+    posVS = (M * vec4(vPos, 1.0)).xyz;
+    normalVS = (M * vec4(vNormal, 1.0)).xyz;
 }

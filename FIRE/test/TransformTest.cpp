@@ -1,3 +1,4 @@
+#include "Utilities.h"
 #include <FIRE/Transform.h>
 #include <FIRE/Vector.h>
 #include <gmock/gmock.h>
@@ -6,18 +7,10 @@
 
 namespace
 {
+using TestUtil::EXPECT_VEC_EQ;
 class ATransform : public ::testing::Test
 {
 public:
-    void EXPECT_VEC_EQ(
-        FIRE::Vector3 const& expected, FIRE::Vector3 const& actual)
-    {
-        auto const eps = 0.000001f;
-        EXPECT_THAT(actual.x, ::testing::FloatNear(expected.x, eps));
-        EXPECT_THAT(actual.y, ::testing::FloatNear(expected.y, eps));
-        EXPECT_THAT(actual.z, ::testing::FloatNear(expected.z, eps));
-    }
-
     FIRE::Transform transform;
 };
 } // namespace
@@ -44,6 +37,14 @@ TEST_F(ATransform, SupportsTranslationByAVector)
     transform.Translate(pos);
     EXPECT_EQ(pos, transform.Position());
 }
+
+TEST_F(ATransform, SupportsScaling)
+{
+    FIRE::Vector3 const scale{2.0f, 0.0f, 0.0f};
+    transform.Scale(scale);
+    EXPECT_EQ(scale, transform.GetScaling());
+}
+
 TEST_F(ATransform, ProvidesAModelMatrix)
 {
     FIRE::Matrix4x4 const mat;

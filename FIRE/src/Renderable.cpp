@@ -1,5 +1,6 @@
 #include <FIRE/Renderable.h>
 #include <FIRE/Transform.h>
+#include <cassert>
 #include <utility>
 namespace FIRE
 {
@@ -13,7 +14,7 @@ public:
     }
 
     std::string m_name;
-    Mesh m_mesh{""};
+    std::shared_ptr<Mesh> m_mesh;
     std::pair<std::string, Matrix4x4> m_uniformVals;
     Transform m_transform;
     Material m_material;
@@ -26,19 +27,21 @@ Renderable::Renderable(std::string name)
 
 Renderable::~Renderable() = default;
 
-void Renderable::SetMesh(Mesh mesh)
+void Renderable::SetMesh(std::shared_ptr<Mesh> const& mesh)
 {
-    m_impl->m_mesh = std::move(mesh);
+    m_impl->m_mesh = mesh;
 }
 
 Mesh& Renderable::GetMesh()
 {
-    return m_impl->m_mesh;
+    assert(m_impl->m_mesh);
+    return *(m_impl->m_mesh);
 }
 
 Mesh const& Renderable::GetMesh() const
 {
-    return m_impl->m_mesh;
+    assert(m_impl->m_mesh);
+    return *(m_impl->m_mesh);
 }
 
 void Renderable::SetName(std::string name)

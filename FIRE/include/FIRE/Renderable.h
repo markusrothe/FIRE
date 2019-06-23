@@ -19,7 +19,7 @@ public:
     explicit Renderable(std::string name);
     ~Renderable();
 
-    void SetMesh(Mesh mesh);
+    void SetMesh(std::shared_ptr<Mesh> const& mesh);
     Mesh& GetMesh();
     Mesh const& GetMesh() const;
 
