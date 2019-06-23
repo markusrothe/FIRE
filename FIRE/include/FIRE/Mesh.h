@@ -7,7 +7,7 @@
 #include <vector>
 namespace FIRE
 {
-struct Mesh
+class Mesh
 {
     explicit Mesh(std::string name);
 
