@@ -9,6 +9,7 @@ namespace FIRE
 {
 class Mesh
 {
+public:
     explicit Mesh(std::string name);
 
     std::string Name() const;
