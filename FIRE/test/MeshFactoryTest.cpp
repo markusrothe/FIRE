@@ -1,5 +1,3 @@
-#ifndef FIRE_MeshFactoryTest_h
-#define FIRE_MeshFactoryTest_h
 #include "Utilities.h"
 #include <FIRE/Mesh.h>
 #include <FIRE/MeshFactory.h>
@@ -7,12 +5,24 @@
 #include <gtest/gtest.h>
 #include <stdexcept>
 
+namespace
+{
+std::string const CUBE{"cube"};
+std::string const PLANE{"plane"};
+
+class AMeshFactory : public ::testing::Test
+{
+public:
+    FIRE::MeshFactory factory;
+};
+
+} // namespace
+
 using TestUtil::EXPECT_VEC_EQ;
 
-TEST(AMeshFactory, CreatesACube)
+TEST_F(AMeshFactory, CreatesACube)
 {
-    FIRE::MeshFactory factory;
-    std::shared_ptr<FIRE::Mesh> cube = factory.CreateCube("cube");
+    std::shared_ptr<FIRE::Mesh> cube = factory.CreateCube(CUBE);
 
     auto const positions = cube->Positions();
     ASSERT_EQ(24u, positions.size());
@@ -94,10 +104,9 @@ TEST(AMeshFactory, CreatesACube)
     EXPECT_THAT(cube->Indices(), ::testing::ContainerEq(expectedIndices));
 }
 
-TEST(AMeshFactory, CreatesAPlane)
+TEST_F(AMeshFactory, CreatesAPlane)
 {
-    FIRE::MeshFactory factory;
-    auto const planeMesh = factory.CreatePlane("plane");
+    auto const planeMesh = factory.CreatePlane(PLANE);
     ASSERT_TRUE(planeMesh);
 
     auto const positions = planeMesh->Positions();
@@ -118,26 +127,22 @@ TEST(AMeshFactory, CreatesAPlane)
     EXPECT_THAT(planeMesh->Indices(), ::testing::ContainerEq(expectedIndices));
 }
 
-TEST(AMeshFactory, CreatesASphere)
+TEST_F(AMeshFactory, CreatesASphere)
 {
 }
 
-TEST(AMeshFactory, CachesACreatedMesh)
+TEST_F(AMeshFactory, CachesACreatedMesh)
 {
-    FIRE::MeshFactory factory;
-    auto const mesh1 = factory.CreateCube("cube");
-    auto const mesh2 = factory.CreateCube("cube");
+    auto const mesh1 = factory.CreateCube(CUBE);
+    auto const mesh2 = factory.CreateCube(CUBE);
 
     EXPECT_EQ(2, mesh1.use_count());
     EXPECT_EQ(2, mesh2.use_count());
 }
 
-TEST(AMeshFactory, ThrowsIfADifferentMeshIsCreatedWithTheSameName)
+TEST_F(AMeshFactory, ThrowsIfADifferentMeshTypeIsCreatedWithTheSameName)
 {
-    FIRE::MeshFactory factory;
-    auto const mesh1 = factory.CreateCube("cube");
+    auto const mesh = factory.CreateCube(CUBE);
 
-    EXPECT_THROW(factory.CreatePlane("cube"), std::runtime_error);
+    EXPECT_THROW(factory.CreatePlane(CUBE), std::runtime_error);
 }
-
-#endif // FIRE_MeshFactoryTest_h
