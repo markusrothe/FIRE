@@ -39,7 +39,7 @@ std::unique_ptr<FIRE::Renderable> CreateRenderable(std::string&& name, std::shar
 std::shared_ptr<FIRE::Renderable> CreatePlane(std::string&& name, FIRE::Material const& material)
 {
     FIRE::MeshFactory factory;
-    auto planeMesh = factory.CreatePlane();
+    auto planeMesh = factory.CreatePlane("plane");
     planeMesh->GetVertexDeclaration().AddSection("vPos", 3u, 0u);
     planeMesh->GetVertexDeclaration().AddSection("vNormal", 3u, planeMesh->Positions().size() * sizeof(float) * 3);
     return CreateRenderable(std::move(name), planeMesh, material);
@@ -48,7 +48,7 @@ std::shared_ptr<FIRE::Renderable> CreatePlane(std::string&& name, FIRE::Material
 std::shared_ptr<FIRE::Renderable> CreateCube(std::string&& name, FIRE::Material const& material)
 {
     FIRE::MeshFactory factory;
-    auto cubeMesh = factory.CreateCube();
+    auto cubeMesh = factory.CreateCube("cube");
     cubeMesh->GetVertexDeclaration().AddSection("vPos", 3u, 0u);
     cubeMesh->GetVertexDeclaration().AddSection("vNormal", 3u, cubeMesh->Positions().size() * sizeof(float) * 3);
     return CreateRenderable(std::move(name), cubeMesh, material);
@@ -166,9 +166,9 @@ int main(int, char**)
     plane->GetMaterial().SetShaderParameter("LightPos", FIRE::ShaderParameterType::VEC3, lightPos);
 
     auto const defaultMaterial = CreateDefaultMaterial();
-    auto lightCube = CreateCube("lightCube", defaultMaterial);
+    auto lightCube = CreateCube("cube", defaultMaterial);
     lightCube->GetTransform().Translate(lightPos);
-    lightCube->GetTransform().Scale(FIRE::Vector3(0.01f, 0.01f, 0.01f));
+    lightCube->GetTransform().Scale(FIRE::Vector3(0.1f, 0.1f, 0.1f));
     lightCube->GetMaterial().SetShaderParameter("LightPos", FIRE::ShaderParameterType::VEC3, lightPos);
 
     auto const proj = FIRE::CreatePerspectiveMatrix(70.0f, static_cast<float>(WINDOW_WIDTH) / static_cast<float>(WINDOW_HEIGHT), 0.01f, 500.0f);

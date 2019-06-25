@@ -36,9 +36,9 @@ void Mesh::AddPosition(Vector3 vertex)
     m_positions.push_back(std::move(vertex));
 }
 
-void Mesh::AddPositions(std::initializer_list<Vector3> vertices)
+void Mesh::AddPositions(std::vector<Vector3> vertices)
 {
-    m_positions.insert(m_positions.end(), vertices);
+    m_positions.insert(m_positions.end(), vertices.begin(), vertices.end());
 }
 
 std::vector<Vector3> Mesh::Positions() const
@@ -57,7 +57,7 @@ void Mesh::AddIndex(unsigned int idx)
     m_indices.push_back(idx);
 }
 
-void Mesh::AddIndices(std::initializer_list<unsigned int> indices)
+void Mesh::AddIndices(std::vector<unsigned int> indices)
 {
     auto const vertexCount = m_positions.size();
 
@@ -66,7 +66,7 @@ void Mesh::AddIndices(std::initializer_list<unsigned int> indices)
             return index >= vertexCount;
         }) == indices.end());
 
-    m_indices.insert(m_indices.end(), indices);
+    m_indices.insert(m_indices.end(), indices.begin(), indices.end());
 }
 
 std::vector<unsigned int> Mesh::Indices() const
@@ -79,9 +79,9 @@ void Mesh::AddNormal(Vector3 normal)
     m_normals.push_back(std::move(normal));
 }
 
-void Mesh::AddNormals(std::initializer_list<Vector3> normals)
+void Mesh::AddNormals(std::vector<Vector3> normals)
 {
-    m_normals.insert(m_normals.end(), normals);
+    m_normals.insert(m_normals.end(), normals.begin(), normals.end());
 }
 
 std::vector<Vector3> Mesh::Normals() const

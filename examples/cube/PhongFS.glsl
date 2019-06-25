@@ -23,7 +23,7 @@ void main()
     vec3 diffuse=2.*vec3(nDotL);
     
     float distanceToLight=length(LightPos-posVS);
-    float attenuation=1./(1.+.01*pow(distanceToLight,2));
+    float attenuation=1./(1.+.02*pow(distanceToLight,2));
     
     vec3 gamma=vec3(1./2.2);
     

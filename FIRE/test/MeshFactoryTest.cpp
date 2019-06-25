@@ -5,13 +5,14 @@
 #include <FIRE/MeshFactory.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
+#include <stdexcept>
 
 using TestUtil::EXPECT_VEC_EQ;
 
 TEST(AMeshFactory, CreatesACube)
 {
     FIRE::MeshFactory factory;
-    std::shared_ptr<FIRE::Mesh> cube = factory.CreateCube();
+    std::shared_ptr<FIRE::Mesh> cube = factory.CreateCube("cube");
 
     auto const positions = cube->Positions();
     ASSERT_EQ(24u, positions.size());
@@ -96,7 +97,7 @@ TEST(AMeshFactory, CreatesACube)
 TEST(AMeshFactory, CreatesAPlane)
 {
     FIRE::MeshFactory factory;
-    auto const planeMesh = factory.CreatePlane();
+    auto const planeMesh = factory.CreatePlane("plane");
     ASSERT_TRUE(planeMesh);
 
     auto const positions = planeMesh->Positions();
@@ -123,6 +124,20 @@ TEST(AMeshFactory, CreatesASphere)
 
 TEST(AMeshFactory, CachesACreatedMesh)
 {
+    FIRE::MeshFactory factory;
+    auto const mesh1 = factory.CreateCube("cube");
+    auto const mesh2 = factory.CreateCube("cube");
+
+    EXPECT_EQ(2, mesh1.use_count());
+    EXPECT_EQ(2, mesh2.use_count());
+}
+
+TEST(AMeshFactory, ThrowsIfADifferentMeshIsCreatedWithTheSameName)
+{
+    FIRE::MeshFactory factory;
+    auto const mesh1 = factory.CreateCube("cube");
+
+    EXPECT_THROW(factory.CreatePlane("cube"), std::runtime_error);
 }
 
 #endif // FIRE_MeshFactoryTest_h

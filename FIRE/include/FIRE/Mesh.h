@@ -14,16 +14,16 @@ public:
 
     std::string Name() const;
     void AddPosition(Vector3 vertex);
-    void AddPositions(std::initializer_list<Vector3> positions);
+    void AddPositions(std::vector<Vector3> positions);
     std::vector<Vector3> Positions() const;
     std::vector<float> PositionsAsArray() const;
 
     void AddIndex(unsigned int idx);
-    void AddIndices(std::initializer_list<unsigned int> indices);
+    void AddIndices(std::vector<unsigned int> indices);
     std::vector<unsigned int> Indices() const;
 
     void AddNormal(Vector3 normal);
-    void AddNormals(std::initializer_list<Vector3> normals);
+    void AddNormals(std::vector<Vector3> normals);
     std::vector<Vector3> Normals() const;
     std::vector<float> NormalsAsArray() const;
 
