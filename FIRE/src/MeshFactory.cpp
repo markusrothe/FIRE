@@ -81,4 +81,23 @@ std::shared_ptr<Mesh> MeshFactory::CreateCube()
 
     return mesh;
 }
+
+std::shared_ptr<Mesh> MeshFactory::CreatePlane()
+{
+    auto mesh = std::make_shared<Mesh>("");
+
+    mesh->AddPositions({{-1.0f, 0.0f, -1.0f},
+                        {-1.0f, 0.0f, 1.0f},
+                        {1.0f, 0.0f, 1.0f},
+                        {1.0f, 0.0f, -1.0f}});
+
+    for(auto i = 0u; i < 4u; ++i)
+    {
+        mesh->AddNormal({0.0f, 1.0f, 0.0f});
+    }
+
+    mesh->AddIndices({0, 1, 2, 0, 2, 3});
+    return mesh;
+}
+
 } // namespace FIRE

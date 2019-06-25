@@ -81,8 +81,7 @@ TEST(AMeshFactory, CreatesACube)
     EXPECT_VEC_EQ(normals[22], FIRE::Vector3(0.0f, 1.0f, 0.0f));  // top
     EXPECT_VEC_EQ(normals[23], FIRE::Vector3(0.0f, 0.0f, -1.0f)); // back
 
-    ASSERT_EQ(36u, cube->Indices().size());
-    std::vector<unsigned int> expectedIndices = {
+    std::vector<unsigned int> const expectedIndices = {
         11, 3, 17, 11, 17, 13,  // front
         4, 7, 18, 4, 18, 15,    // right
         8, 1, 23, 8, 23, 20,    // back
@@ -91,14 +90,31 @@ TEST(AMeshFactory, CreatesACube)
         0, 6, 5, 0, 5, 9        // down
     };
 
-    for(auto i = 0u; i < 36; ++i)
-    {
-        EXPECT_EQ(expectedIndices[i], cube->Indices()[i]);
-    }
+    EXPECT_THAT(cube->Indices(), ::testing::ContainerEq(expectedIndices));
 }
 
 TEST(AMeshFactory, CreatesAPlane)
 {
+    FIRE::MeshFactory factory;
+    auto const planeMesh = factory.CreatePlane();
+    ASSERT_TRUE(planeMesh);
+
+    auto const positions = planeMesh->Positions();
+    ASSERT_EQ(4u, positions.size());
+    EXPECT_VEC_EQ(positions[0], FIRE::Vector3(-1.0f, 0.0f, -1.0f));
+    EXPECT_VEC_EQ(positions[1], FIRE::Vector3(-1.0f, 0.0f, 1.0f));
+    EXPECT_VEC_EQ(positions[2], FIRE::Vector3(1.0f, 0.0f, 1.0f));
+    EXPECT_VEC_EQ(positions[3], FIRE::Vector3(1.0f, 0.0f, -1.0f));
+
+    auto const normals = planeMesh->Normals();
+    ASSERT_EQ(4u, normals.size());
+    for(auto i = 0u; i < 4u; ++i)
+    {
+        EXPECT_VEC_EQ(normals[i], FIRE::Vector3(0.0f, 1.0f, 0.0f));
+    }
+
+    std::vector<unsigned int> const expectedIndices = {0, 1, 2, 0, 2, 3};
+    EXPECT_THAT(planeMesh->Indices(), ::testing::ContainerEq(expectedIndices));
 }
 
 TEST(AMeshFactory, CreatesASphere)

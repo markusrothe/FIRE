@@ -14,5 +14,5 @@ void main()
     gl_Position = VP * M * vec4(vPos, 1.0);
     
     posVS = (M * vec4(vPos, 1.0)).xyz;
-    normalVS = (M * vec4(vNormal, 1.0)).xyz;
+    normalVS = (M * vec4(normalize(vNormal), 1.0)).xyz;
 }

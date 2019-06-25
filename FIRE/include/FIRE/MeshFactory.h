@@ -10,6 +10,7 @@ class MeshFactory
 {
 public:
     std::shared_ptr<Mesh> CreateCube();
+    std::shared_ptr<Mesh> CreatePlane();
 };
 
 } // namespace FIRE

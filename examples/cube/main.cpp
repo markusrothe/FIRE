@@ -19,6 +19,7 @@ namespace
 {
 unsigned int constexpr WINDOW_WIDTH = 800;
 unsigned int constexpr WINDOW_HEIGHT = 600;
+FIRE::Vector3 const lightPos(5.0f, 10.0f, 7.0f);
 
 std::string GetFileContent(std::string const& filePath)
 {
@@ -27,62 +28,30 @@ std::string GetFileContent(std::string const& filePath)
     return content;
 }
 
-std::shared_ptr<FIRE::Mesh> CreatePlaneMesh()
-{
-    auto planeMesh = std::make_shared<FIRE::Mesh>("planeMesh");
-
-    planeMesh->AddPositions({{-100.0f, 0.0f, -100.0f},
-                             {-100.0f, 0.0f, 100.0f},
-                             {100.0f, 0.0f, 100.0f},
-                             {100.0f, 0.0f, -100.0f}});
-
-    planeMesh->AddNormals({{0.0f, 1.0f, 0.0f},
-                           {0.0f, 1.0f, 0.0f},
-                           {0.0f, 1.0f, 0.0f},
-                           {0.0f, 1.0f, 0.0f}});
-
-    planeMesh->AddIndices({0, 1, 2, 0, 2, 3});
-    return planeMesh;
-}
-
-std::shared_ptr<FIRE::Mesh> CreateCubeMesh()
-{
-    FIRE::MeshFactory factory;
-    return factory.CreateCube();
-}
-
-std::unique_ptr<FIRE::Renderable> CreateRenderable(std::string&& name, std::shared_ptr<FIRE::Mesh> const& mesh, FIRE::Material&& material)
+std::unique_ptr<FIRE::Renderable> CreateRenderable(std::string&& name, std::shared_ptr<FIRE::Mesh> const& mesh, FIRE::Material const& material)
 {
     auto renderable = std::make_unique<FIRE::Renderable>(std::move(name));
     renderable->SetMesh(mesh);
-    renderable->SetMaterial(std::move(material));
+    renderable->SetMaterial(material);
     return renderable;
 }
 
-std::shared_ptr<FIRE::Renderable> CreatePlane(std::string&& name, FIRE::ShaderFactory& shaderFactory)
+std::shared_ptr<FIRE::Renderable> CreatePlane(std::string&& name, FIRE::Material const& material)
 {
-    auto planeMesh = CreatePlaneMesh();
+    FIRE::MeshFactory factory;
+    auto planeMesh = factory.CreatePlane();
     planeMesh->GetVertexDeclaration().AddSection("vPos", 3u, 0u);
     planeMesh->GetVertexDeclaration().AddSection("vNormal", 3u, planeMesh->Positions().size() * sizeof(float) * 3);
-
-    FIRE::Shaders const shaders = {
-        {FIRE::ShaderType::VERTEX_SHADER, GetFileContent("PhongVS.glsl")},
-        {FIRE::ShaderType::FRAGMENT_SHADER, GetFileContent("PhongFS.glsl")}};
-
-    return CreateRenderable(std::move(name), planeMesh, FIRE::MaterialFactory::Create("phong", shaders, shaderFactory));
+    return CreateRenderable(std::move(name), planeMesh, material);
 }
 
-std::shared_ptr<FIRE::Renderable> CreateCube(std::string&& name, FIRE::ShaderFactory& shaderFactory)
+std::shared_ptr<FIRE::Renderable> CreateCube(std::string&& name, FIRE::Material const& material)
 {
-    auto cubeMesh = CreateCubeMesh();
+    FIRE::MeshFactory factory;
+    auto cubeMesh = factory.CreateCube();
     cubeMesh->GetVertexDeclaration().AddSection("vPos", 3u, 0u);
     cubeMesh->GetVertexDeclaration().AddSection("vNormal", 3u, cubeMesh->Positions().size() * sizeof(float) * 3);
-
-    FIRE::Shaders const shaders = {
-        {FIRE::ShaderType::VERTEX_SHADER, GetFileContent("PhongVS.glsl")},
-        {FIRE::ShaderType::FRAGMENT_SHADER, GetFileContent("PhongFS.glsl")}};
-
-    return CreateRenderable(std::move(name), cubeMesh, FIRE::MaterialFactory::Create("cube_phong", shaders, shaderFactory));
+    return CreateRenderable(std::move(name), cubeMesh, material);
 }
 
 std::shared_ptr<FIRE::Camera> CreateCamera()
@@ -90,6 +59,23 @@ std::shared_ptr<FIRE::Camera> CreateCamera()
     FIRE::Vector3 camPos{0, 2, 10};
     FIRE::Vector3 lookAt{0.0f, 2.0f, 0.0f};
     return std::make_shared<FIRE::Camera>("cam", std::move(camPos), std::move(lookAt));
+}
+
+FIRE::Material CreateDefaultMaterial()
+{
+    auto shaderFactory{FIRE::GLFactory::CreateShaderFactory()};
+    return FIRE::MaterialFactory::CreateDefault(*shaderFactory);
+}
+
+FIRE::Material CreatePhongMaterial()
+{
+    auto shaderFactory{FIRE::GLFactory::CreateShaderFactory()};
+
+    FIRE::Shaders const shaders = {
+        {FIRE::ShaderType::VERTEX_SHADER, GetFileContent("PhongVS.glsl")},
+        {FIRE::ShaderType::FRAGMENT_SHADER, GetFileContent("PhongFS.glsl")}};
+
+    return FIRE::MaterialFactory::Create("phong", shaders, *shaderFactory);
 }
 
 void MapInput(std::shared_ptr<FIRE::Camera> const& cam, FIRE::Window& window)
@@ -164,42 +150,36 @@ void MapInput(std::shared_ptr<FIRE::Camera> const& cam, FIRE::Window& window)
 int main(int, char**)
 {
     FIRE::Window window{"FIRE cube example", WINDOW_WIDTH, WINDOW_HEIGHT};
-
     auto context{FIRE::GLFactory::CreateRenderContext(window)};
     window.SetRenderContext(std::move(context));
 
     auto cam = CreateCamera();
-
     MapInput(cam, window);
+
+    auto const material = CreatePhongMaterial();
+    auto cube = CreateCube("cube", material);
+    cube->GetTransform().Translate(0.0f, 4.0f, 0.0f);
+    cube->GetMaterial().SetShaderParameter("LightPos", FIRE::ShaderParameterType::VEC3, lightPos);
+
+    auto plane = CreatePlane("plane", material);
+    plane->GetTransform().Scale(FIRE::Vector3(20.0f, 1.0f, 20.0f));
+    plane->GetMaterial().SetShaderParameter("LightPos", FIRE::ShaderParameterType::VEC3, lightPos);
+
+    auto const defaultMaterial = CreateDefaultMaterial();
+    auto lightCube = CreateCube("lightCube", defaultMaterial);
+    lightCube->GetTransform().Translate(lightPos);
+    lightCube->GetTransform().Scale(FIRE::Vector3(0.01f, 0.01f, 0.01f));
+    lightCube->GetMaterial().SetShaderParameter("LightPos", FIRE::ShaderParameterType::VEC3, lightPos);
+
+    auto const proj = FIRE::CreatePerspectiveMatrix(70.0f, static_cast<float>(WINDOW_WIDTH) / static_cast<float>(WINDOW_HEIGHT), 0.01f, 500.0f);
 
     FIRE::Scene scene;
     auto sceneComponent = scene.NewSceneComponent("sceneComponent");
-
-    auto shaderFactory{FIRE::GLFactory::CreateShaderFactory()};
-    auto cube = CreateCube("cube", *shaderFactory);
-
-    cube->GetTransform().Translate(0.0f, 4.0f, 0.0f);
-    auto plane = CreatePlane("plane", *shaderFactory);
-
     sceneComponent->AddRenderable(cube);
     sceneComponent->AddRenderable(plane);
-
-    auto const fovy = 70.0f;
-    auto const near = 0.01f;
-    auto const far = 500.0f;
-    auto const proj = FIRE::CreatePerspectiveMatrix(fovy, static_cast<float>(WINDOW_WIDTH) / static_cast<float>(WINDOW_HEIGHT), near, far);
+    sceneComponent->AddRenderable(lightCube);
 
     auto renderer{FIRE::GLFactory::CreateRenderer()};
-    FIRE::Vector3 const lightPos(5.0f, 10.0f, 7.0f);
-    auto lightCube = CreateCube("lightCube", *shaderFactory);
-    sceneComponent->AddRenderable(lightCube);
-    lightCube->GetTransform().Translate(lightPos);
-    lightCube->GetTransform().Scale(FIRE::Vector3(0.1f, 0.1f, 0.1f));
-
-    cube->GetMaterial().SetShaderParameter("LightPos", FIRE::ShaderParameterType::VEC3, lightPos);
-    plane->GetMaterial().SetShaderParameter("LightPos", FIRE::ShaderParameterType::VEC3, lightPos);
-    lightCube->GetMaterial().SetShaderParameter("LightPos", FIRE::ShaderParameterType::VEC3, lightPos);
-
     while(!window.ShouldClose())
     {
         window.PollEvents();
@@ -213,8 +193,7 @@ int main(int, char**)
         plane->GetMaterial().SetShaderParameter("M", FIRE::ShaderParameterType::MAT4x4, plane->GetTransform().ModelMatrix());
         plane->GetMaterial().SetShaderParameter("VP", FIRE::ShaderParameterType::MAT4x4, VP);
 
-        lightCube->GetMaterial().SetShaderParameter("M", FIRE::ShaderParameterType::MAT4x4, lightCube->GetTransform().ModelMatrix());
-        lightCube->GetMaterial().SetShaderParameter("VP", FIRE::ShaderParameterType::MAT4x4, VP);
+        lightCube->GetMaterial().SetShaderParameter("MVP", FIRE::ShaderParameterType::MAT4x4, VP * lightCube->GetTransform().ModelMatrix());
 
         renderer->Render(scene);
         window.SwapBuffers();
