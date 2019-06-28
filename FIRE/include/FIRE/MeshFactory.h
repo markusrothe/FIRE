@@ -5,6 +5,7 @@
 #include <string>
 #include <string_view>
 #include <unordered_map>
+
 namespace FIRE
 {
 class Mesh;
@@ -13,12 +14,14 @@ class MeshFactory
 public:
     std::shared_ptr<Mesh> CreateCube(std::string name);
     std::shared_ptr<Mesh> CreatePlane(std::string name);
+    std::shared_ptr<Mesh> CreateSphere(std::string name, size_t segments);
 
 private:
     enum class MeshType
     {
         Plane,
-        Cube
+        Cube,
+        Sphere
     };
 
     std::weak_ptr<Mesh> Lookup(std::string const& name, MeshType meshType);

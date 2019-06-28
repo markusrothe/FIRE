@@ -1,6 +1,7 @@
 #include <FIRE/Mesh.h>
 #include <FIRE/MeshFactory.h>
 #include <algorithm>
+#include <cmath>
 namespace FIRE
 {
 
@@ -131,6 +132,91 @@ std::shared_ptr<Mesh> MeshFactory::CreatePlane(std::string name)
 
     return Create(
         MeshType::Plane,
+        std::move(name),
+        std::move(positions),
+        std::move(normals),
+        std::move(indices));
+}
+
+std::shared_ptr<Mesh> MeshFactory::CreateSphere(std::string name, size_t segments)
+{
+    if(auto ptr = Lookup(name, MeshType::Sphere).lock())
+    {
+        return ptr;
+    }
+
+    std::vector<FIRE::Vector3> positions;
+    std::vector<FIRE::Vector3> normals;
+    std::vector<unsigned int> indices;
+
+    // top
+    positions.emplace_back(0.0f, 1.0f, 0.0f);
+    normals.emplace_back(0.0f, 1.0f, 0.0f);
+
+    // middle
+    for(auto j = 0u; j < segments - 1; ++j)
+    {
+        auto polarAngle = M_PI * double(j + 1) / double(segments); // 0° - 180° divided into segments
+        auto const sinPolar = std::sin(polarAngle);
+        auto const cosPolar = std::cos(polarAngle);
+
+        for(auto i = 0u; i < segments; ++i)
+        {
+            double const azimuth = 2.0 * M_PI * double(i) / double(segments); // 0° - 360° divided into segments
+            double const sinAzimuth = std::sin(azimuth);
+            double const cosAzimuth = std::cos(azimuth);
+            double const x = sinPolar * cosAzimuth;
+            double const y = cosPolar;
+            double const z = sinPolar * sinAzimuth;
+            positions.emplace_back(x, y, z);
+            normals.emplace_back(x, y, z);
+        }
+    }
+
+    //bottom
+    positions.emplace_back(0.0f, -1.0f, 0.0f);
+    normals.emplace_back(0.0f, -1.0f, 0.0f);
+
+    for(uint32_t i = 0; i < segments; ++i)
+    {
+        uint32_t const a = i + 1;
+        uint32_t const b = (i + 1) % segments + 1;
+        indices.push_back(0); // top
+        indices.push_back(b); // azimuth is increased clock-wise, so b comes before a
+        indices.push_back(a);
+    }
+
+    for(uint32_t j = 0; j < segments - 2; ++j)
+    {
+        uint32_t aStart = j * segments + 1;
+        uint32_t bStart = (j + 1) * segments + 1;
+        for(uint32_t i = 0; i < segments; ++i)
+        {
+            const uint32_t a = aStart + i;
+            const uint32_t a1 = aStart + (i + 1) % segments;
+            const uint32_t b = bStart + i;
+            const uint32_t b1 = bStart + (i + 1) % segments;
+            indices.push_back(a);
+            indices.push_back(a1);
+            indices.push_back(b1);
+
+            indices.push_back(a);
+            indices.push_back(b1);
+            indices.push_back(b);
+        }
+    }
+
+    for(uint32_t i = 0; i < segments; ++i)
+    {
+        uint32_t const a = i + segments * (segments - 2) + 1;
+        uint32_t const b = (i + 1) % segments + segments * (segments - 2) + 1;
+        indices.push_back(positions.size() - 1); // bottom
+        indices.push_back(a);
+        indices.push_back(b);
+    }
+
+    return Create(
+        MeshType::Sphere,
         std::move(name),
         std::move(positions),
         std::move(normals),

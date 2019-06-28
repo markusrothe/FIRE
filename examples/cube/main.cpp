@@ -54,6 +54,15 @@ std::shared_ptr<FIRE::Renderable> CreateCube(std::string&& name, FIRE::Material 
     return CreateRenderable(std::move(name), cubeMesh, material);
 }
 
+std::shared_ptr<FIRE::Renderable> CreateSphere(std::string&& name, FIRE::Material const& material)
+{
+    FIRE::MeshFactory factory;
+    auto sphereMesh = factory.CreateSphere("sphere", 20);
+    sphereMesh->GetVertexDeclaration().AddSection("vPos", 3u, 0u);
+    sphereMesh->GetVertexDeclaration().AddSection("vNormal", 3u, sphereMesh->Positions().size() * sizeof(float) * 3);
+    return CreateRenderable(std::move(name), sphereMesh, material);
+}
+
 std::shared_ptr<FIRE::Camera> CreateCamera()
 {
     FIRE::Vector3 camPos{0, 2, 10};
@@ -166,6 +175,9 @@ int main(int, char**)
     plane->GetMaterial().SetShaderParameter("LightPos", FIRE::ShaderParameterType::VEC3, lightPos);
 
     auto const defaultMaterial = CreateDefaultMaterial();
+    auto sphere = CreateSphere("sphere", material);
+    sphere->GetMaterial().SetShaderParameter("LightPos", FIRE::ShaderParameterType::VEC3, lightPos);
+
     auto lightCube = CreateCube("cube", defaultMaterial);
     lightCube->GetTransform().Translate(lightPos);
     lightCube->GetTransform().Scale(FIRE::Vector3(0.1f, 0.1f, 0.1f));
@@ -178,6 +190,7 @@ int main(int, char**)
     sceneComponent->AddRenderable(cube);
     sceneComponent->AddRenderable(plane);
     sceneComponent->AddRenderable(lightCube);
+    sceneComponent->AddRenderable(sphere);
 
     auto renderer{FIRE::GLFactory::CreateRenderer()};
     while(!window.ShouldClose())
@@ -192,6 +205,9 @@ int main(int, char**)
 
         plane->GetMaterial().SetShaderParameter("M", FIRE::ShaderParameterType::MAT4x4, plane->GetTransform().ModelMatrix());
         plane->GetMaterial().SetShaderParameter("VP", FIRE::ShaderParameterType::MAT4x4, VP);
+
+        sphere->GetMaterial().SetShaderParameter("M", FIRE::ShaderParameterType::MAT4x4, sphere->GetTransform().ModelMatrix());
+        sphere->GetMaterial().SetShaderParameter("VP", FIRE::ShaderParameterType::MAT4x4, VP);
 
         lightCube->GetMaterial().SetShaderParameter("MVP", FIRE::ShaderParameterType::MAT4x4, VP * lightCube->GetTransform().ModelMatrix());
 

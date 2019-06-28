@@ -36,6 +36,7 @@ GLDrawAgent::GLDrawAgent()
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
     glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 
 void GLDrawAgent::Clear()

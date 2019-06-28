@@ -9,6 +9,7 @@ namespace
 {
 std::string const CUBE{"cube"};
 std::string const PLANE{"plane"};
+std::string const SPHERE("sphere");
 
 class AMeshFactory : public ::testing::Test
 {
@@ -129,6 +130,8 @@ TEST_F(AMeshFactory, CreatesAPlane)
 
 TEST_F(AMeshFactory, CreatesASphere)
 {
+    auto const numSegments = 4;
+    auto const mesh = factory.CreateSphere(SPHERE, numSegments);
 }
 
 TEST_F(AMeshFactory, CachesACreatedMesh)
