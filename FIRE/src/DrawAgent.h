@@ -5,7 +5,7 @@
 
 namespace FIRE
 {
-class Renderable;
+struct Renderable;
 class DrawAgent
 {
 public:

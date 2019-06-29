@@ -11,7 +11,7 @@
 
 namespace FIRE
 {
-class Renderable;
+struct Renderable;
 class MeshManager;
 class GLUploader : public Uploader
 {

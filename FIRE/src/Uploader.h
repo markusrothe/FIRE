@@ -6,7 +6,7 @@
 
 namespace FIRE
 {
-class Renderable;
+struct Renderable;
 class Uploader
 {
 public:
