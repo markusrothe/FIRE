@@ -9,11 +9,12 @@ class Window;
 class Renderer;
 class RenderContext;
 class ShaderFactory;
+class MeshFactory;
 
 namespace GLFactory
 {
 std::unique_ptr<RenderContext> CreateRenderContext(Window& window);
-std::unique_ptr<Renderer> CreateRenderer();
+std::unique_ptr<Renderer> CreateRenderer(MeshFactory& meshFactory);
 std::unique_ptr<ShaderFactory> CreateShaderFactory();
 } // namespace GLFactory
 

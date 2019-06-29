@@ -7,6 +7,14 @@
 #include <vector>
 namespace FIRE
 {
+
+enum class MeshType
+{
+    Plane,
+    Cube,
+    Sphere
+};
+
 class Mesh
 {
 public:
@@ -39,6 +47,13 @@ private:
 
     VertexDeclaration m_vertexDeclaration;
 };
+
+struct MeshHandle
+{
+    std::string name;
+    MeshType type;
+};
+
 } // namespace FIRE
 
 #endif

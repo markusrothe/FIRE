@@ -12,15 +12,17 @@
 namespace FIRE
 {
 class Renderable;
-
+class MeshFactory;
 class GLUploader : public Uploader
 {
 public:
+    explicit GLUploader(MeshFactory& meshFactory);
     ~GLUploader() override = default;
 
     GLVertexArrayObject Upload(Renderable const& renderable) override;
 
 private:
+    MeshFactory& m_meshFactory;
     std::unordered_map<std::string, GLVertexArrayObject> m_uploadedRenderables;
 };
 } // namespace FIRE

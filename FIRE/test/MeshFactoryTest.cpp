@@ -23,7 +23,9 @@ using TestUtil::EXPECT_VEC_EQ;
 
 TEST_F(AMeshFactory, CreatesACube)
 {
-    std::shared_ptr<FIRE::Mesh> cube = factory.CreateCube(CUBE);
+    FIRE::MeshHandle mesh = factory.CreateCube(CUBE);
+    FIRE::Mesh* cube = factory.Lookup(mesh);
+    ASSERT_TRUE(cube);
 
     auto const positions = cube->Positions();
     ASSERT_EQ(24u, positions.size());
@@ -107,7 +109,8 @@ TEST_F(AMeshFactory, CreatesACube)
 
 TEST_F(AMeshFactory, CreatesAPlane)
 {
-    auto const planeMesh = factory.CreatePlane(PLANE);
+    FIRE::MeshHandle mesh = factory.CreatePlane(PLANE);
+    FIRE::Mesh* planeMesh = factory.Lookup(mesh);
     ASSERT_TRUE(planeMesh);
 
     auto const positions = planeMesh->Positions();
@@ -136,11 +139,13 @@ TEST_F(AMeshFactory, CreatesASphere)
 
 TEST_F(AMeshFactory, CachesACreatedMesh)
 {
-    auto const mesh1 = factory.CreateCube(CUBE);
-    auto const mesh2 = factory.CreateCube(CUBE);
+    auto const meshHandle1 = factory.CreateCube(CUBE);
+    auto const meshHandle2 = factory.CreateCube(CUBE);
 
-    EXPECT_EQ(2, mesh1.use_count());
-    EXPECT_EQ(2, mesh2.use_count());
+    auto mesh1 = factory.Lookup(meshHandle1);
+    auto mesh2 = factory.Lookup(meshHandle2);
+
+    EXPECT_EQ(mesh1, mesh2);
 }
 
 TEST_F(AMeshFactory, ThrowsIfADifferentMeshTypeIsCreatedWithTheSameName)

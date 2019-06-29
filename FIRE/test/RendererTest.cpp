@@ -1,8 +1,11 @@
 #include "DrawAgent.h"
 #include "RendererImpl.h"
+#include "SceneComponentMock.h"
 #include "Uploader.h"
+#include <FIRE/Camera.h>
 #include <FIRE/Renderable.h>
 #include <FIRE/Scene.h>
+#include <FIRE/SceneComponent.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <memory>
@@ -34,11 +37,11 @@ public:
         , drawAgentPtr(std::make_unique<DrawAgentMock>())
         , uploader(*uploaderPtr)
         , drawAgent(*drawAgentPtr)
+        , sceneComponent(std::make_shared<Mocks::SceneComponentMock>())
         , renderer(std::move(uploaderPtr), std::move(drawAgentPtr))
-        , renderable(std::make_shared<FIRE::Renderable>(""))
+        , scene(FIRE::Camera("cam"))
     {
-        auto sceneComponent = scene.NewSceneComponent("");
-        sceneComponent->AddRenderable(renderable);
+        scene.AddSceneComponent(sceneComponent);
     }
 
 private:
@@ -48,25 +51,35 @@ private:
 protected:
     UploaderMock& uploader;
     DrawAgentMock& drawAgent;
+    std::shared_ptr<Mocks::SceneComponentMock> sceneComponent;
     FIRE::RendererImpl renderer;
-
     FIRE::Scene scene;
-    std::shared_ptr<FIRE::Renderable> renderable;
+    FIRE::Renderable renderable;
+    std::vector<FIRE::Renderable> renderables = {renderable};
 };
 
 } // namespace
 
 TEST_F(ARenderer, UploadsRenderableToGPU)
 {
-    EXPECT_CALL(uploader, Upload(Ref(*renderable)))
+    ON_CALL(*sceneComponent, CollectRenderables())
+        .WillByDefault(::testing::Return(renderables));
+
+    EXPECT_CALL(uploader, Upload(renderable))
         .WillOnce(Return(FIRE::GLVertexArrayObject(0, 0, 0)));
+
     renderer.Render(scene);
 }
 
 TEST_F(ARenderer, RendersAScene)
 {
-    ON_CALL(uploader, Upload(_)).WillByDefault(Return(FIRE::GLVertexArrayObject(0, 0, 0)));
-    EXPECT_CALL(drawAgent, Draw(Ref(*renderable), _));
+    ON_CALL(*sceneComponent, CollectRenderables())
+        .WillByDefault(::testing::Return(renderables));
+
+    ON_CALL(uploader, Upload(_))
+        .WillByDefault(Return(FIRE::GLVertexArrayObject(0, 0, 0)));
+
+    EXPECT_CALL(drawAgent, Draw(renderable, _));
     renderer.Render(scene);
 }
 
@@ -75,17 +88,17 @@ TEST_F(ARenderer, DoesNotDoAnythingWithAnEmptyScene)
     EXPECT_CALL(uploader, Upload(_)).Times(0);
     EXPECT_CALL(drawAgent, Draw(_, _)).Times(0);
 
-    FIRE::Scene emptyScene;
+    FIRE::Scene emptyScene(FIRE::Camera(""));
     renderer.Render(emptyScene);
 }
 
 TEST_F(ARenderer, DoesNotDoAnythingWithASceneWithoutRenderables)
 {
+    ON_CALL(*sceneComponent, CollectRenderables())
+        .WillByDefault(::testing::Return(std::vector<FIRE::Renderable>()));
+
     EXPECT_CALL(uploader, Upload(_)).Times(0);
     EXPECT_CALL(drawAgent, Draw(_, _)).Times(0);
 
-    FIRE::Scene sceneWithoutRenderables;
-    auto sceneComponent = sceneWithoutRenderables.NewSceneComponent("");
-    sceneComponent->AddRenderable(nullptr);
-    renderer.Render(sceneWithoutRenderables);
+    renderer.Render(scene);
 }

@@ -1,25 +1,47 @@
+#include "SceneComponentMock.h"
+
+#include <FIRE/Camera.h>
+#include <FIRE/Renderable.h>
 #include <FIRE/Scene.h>
+#include <FIRE/SceneComponent.h>
+#include <gmock/gmock.h>
 #include <gtest/gtest.h>
-#include <memory>
+
+#include <vector>
 
 namespace
 {
-std::string const sceneComponentName{"component"};
+
+class AScene : public ::testing::Test
+{
+public:
+    AScene()
+        : cam{"cam"}
+        , scene{cam}
+        , sceneComponent{std::make_shared<Mocks::SceneComponentMock>()}
+    {
+        scene.AddSceneComponent(sceneComponent);
+    }
+
+    FIRE::Camera cam;
+    FIRE::Scene scene;
+    std::shared_ptr<Mocks::SceneComponentMock> sceneComponent;
+};
+
 } // namespace
 
-TEST(AScene, CreatesSceneComponents)
+TEST_F(AScene, UpdatesSceneComponents)
 {
-    FIRE::Scene scene;
-    auto sceneComponent = scene.NewSceneComponent(sceneComponentName);
-
-    EXPECT_EQ(sceneComponentName, sceneComponent->Name());
+    EXPECT_CALL(*sceneComponent, Update(cam));
+    scene.Update();
 }
 
-TEST(AScene, ContainsSceneComponents)
+TEST_F(AScene, CollectsRenderablesFromSceneComponents)
 {
-    FIRE::Scene scene;
-    scene.NewSceneComponent("component_0");
-    scene.NewSceneComponent("component_1");
+    std::vector<FIRE::Renderable> renderables;
+    renderables.push_back(FIRE::Renderable());
+    EXPECT_CALL(*sceneComponent, CollectRenderables())
+        .WillOnce(::testing::Return(renderables));
 
-    EXPECT_EQ(2u, scene.GetSceneComponents().size());
+    EXPECT_THAT(scene.CollectRenderables(), ::testing::ContainerEq(renderables));
 }

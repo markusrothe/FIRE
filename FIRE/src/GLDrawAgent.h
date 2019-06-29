@@ -7,13 +7,17 @@
 #include <memory>
 namespace FIRE
 {
+class MeshFactory;
 class GLDrawAgent : public DrawAgent
 {
 public:
-    GLDrawAgent();
+    explicit GLDrawAgent(MeshFactory& meshFactory);
     void Clear() override;
 
     void Draw(Renderable const& renderable, GLVertexArrayObject arrObj) override;
+
+private:
+    MeshFactory& m_meshFactory;
 };
 } // namespace FIRE
 

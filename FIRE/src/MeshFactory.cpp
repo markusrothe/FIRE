@@ -2,31 +2,31 @@
 #include <FIRE/MeshFactory.h>
 #include <algorithm>
 #include <cmath>
+#include <iostream>
 namespace FIRE
 {
-
-std::weak_ptr<Mesh> MeshFactory::Lookup(std::string const& key, MeshType meshType)
+Mesh* MeshFactory::Lookup(MeshHandle const& handle)
 {
-    auto mesh = m_cache.find(key);
+    auto mesh = m_cache.find(handle.name);
     if(mesh != std::cend(m_cache))
     {
-        if(meshType != mesh->second.first)
+        if(handle.type != mesh->second.first)
         {
             throw std::runtime_error(
                 "A mesh of a different type with that name already exists.");
         }
 
-        return mesh->second.second;
+        return mesh->second.second.get();
     }
 
-    return std::weak_ptr<Mesh>();
+    return nullptr;
 }
 
-std::shared_ptr<Mesh> MeshFactory::CreateCube(std::string name)
+MeshHandle MeshFactory::CreateCube(std::string name)
 {
-    if(auto ptr = Lookup(name, MeshType::Cube).lock())
+    if(Lookup({name, MeshType::Cube}))
     {
-        return ptr;
+        return {name, MeshType::Cube};
     }
 
     std::vector<FIRE::Vector3> positions = {{-1.0f, -1.0f, -1.0f},
@@ -109,11 +109,12 @@ std::shared_ptr<Mesh> MeshFactory::CreateCube(std::string name)
         std::move(indices));
 }
 
-std::shared_ptr<Mesh> MeshFactory::CreatePlane(std::string name)
+MeshHandle MeshFactory::CreatePlane(std::string name)
 {
-    if(auto ptr = Lookup(name, MeshType::Plane).lock())
+
+    if(Lookup({name, MeshType::Plane}))
     {
-        return ptr;
+        return {name, MeshType::Plane};
     }
 
     std::vector<FIRE::Vector3> positions = {{-1.0f, 0.0f, -1.0f},
@@ -138,11 +139,11 @@ std::shared_ptr<Mesh> MeshFactory::CreatePlane(std::string name)
         std::move(indices));
 }
 
-std::shared_ptr<Mesh> MeshFactory::CreateSphere(std::string name, size_t segments)
+MeshHandle MeshFactory::CreateSphere(std::string name, size_t segments)
 {
-    if(auto ptr = Lookup(name, MeshType::Sphere).lock())
+    if(Lookup({name, MeshType::Sphere}))
     {
-        return ptr;
+        return {name, MeshType::Sphere};
     }
 
     std::vector<FIRE::Vector3> positions;
@@ -223,19 +224,23 @@ std::shared_ptr<Mesh> MeshFactory::CreateSphere(std::string name, size_t segment
         std::move(indices));
 }
 
-std::shared_ptr<Mesh> MeshFactory::Create(
+MeshHandle MeshFactory::Create(
     MeshType meshType,
-    std::string&& name,
+    std::string name,
     std::vector<FIRE::Vector3>&& positions,
     std::vector<FIRE::Vector3>&& normals,
     std::vector<unsigned int>&& indices)
 {
-    auto mesh = std::make_shared<Mesh>(std::move(name));
+    auto mesh = std::make_unique<Mesh>(name);
     mesh->AddPositions(positions);
     mesh->AddNormals(normals);
     mesh->AddIndices(indices);
-    m_cache.insert(std::make_pair(mesh->Name(), std::make_pair(meshType, mesh)));
-    return mesh;
+
+    mesh->GetVertexDeclaration().AddSection("vPos", 3u, 0u);
+    mesh->GetVertexDeclaration().AddSection("vNormal", 3u, positions.size() * sizeof(float) * 3);
+
+    m_cache.insert(std::make_pair(name, std::make_pair(meshType, std::move(mesh))));
+    return {name, meshType};
 }
 
 } // namespace FIRE

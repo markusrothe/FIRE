@@ -20,7 +20,7 @@ std::vector<float> FlattenVectors(std::vector<Vector3> const& vecs)
 } // namespace
 
 Mesh::Mesh(std::string name)
-    : m_name{name}
+    : m_name{std::move(name)}
     , m_positions{}
     , m_indices{}
 {

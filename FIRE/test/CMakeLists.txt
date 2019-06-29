@@ -5,7 +5,6 @@ endif()
 add_executable(FIRE_tests
     ./Utilities.h
     ./WindowTest.cpp
-    ./RenderableTest.cpp
     ./RendererTest.cpp
     ./MeshTest.cpp
     ./MaterialFactoryTest.cpp

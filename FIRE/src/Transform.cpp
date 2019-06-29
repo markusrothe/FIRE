@@ -1,6 +1,5 @@
 #include "glm_wrapper.h"
 #include <FIRE/Transform.h>
-#include <iostream>
 namespace FIRE
 {
 namespace
@@ -98,6 +97,16 @@ Transform::Transform(
     Vector3 lookAt /* = Vector3(0.0f, 0.0f, -1.0f) */)
     : m_impl(std::make_unique<Transform::Impl>(pos, lookAt))
 {
+}
+
+Transform::Transform(Transform const& other)
+    : m_impl(std::make_unique<Transform::Impl>(*other.m_impl))
+{
+}
+Transform& Transform::operator=(Transform other)
+{
+    std::swap(m_impl, other.m_impl);
+    return *this;
 }
 
 Transform::~Transform() = default;

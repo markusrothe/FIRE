@@ -10,6 +10,7 @@ add_library(FIRE STATIC
     include/FIRE/VertexDeclaration.h
     include/FIRE/GLFactory.h
     include/FIRE/Scene.h
+    include/FIRE/SceneComponent.h
     include/FIRE/Transform.h
     include/FIRE/InputListener.h
     include/FIRE/Key.h

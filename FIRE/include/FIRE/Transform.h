@@ -15,6 +15,9 @@ public:
         Vector3 pos = Vector3(0.0f, 0.0f, 0.0f),
         Vector3 lookAt = Vector3(0.0f, 0.0f, -1.0f));
 
+    Transform(Transform const& other);
+    Transform& operator=(Transform other);
+
     ~Transform();
 
     Vector3 Position() const;

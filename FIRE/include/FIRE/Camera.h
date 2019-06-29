@@ -26,6 +26,10 @@ private:
     std::string const m_name;
     Transform m_transform;
 };
+
+bool operator==(FIRE::Camera const& lhs, FIRE::Camera const& rhs);
+bool operator!=(FIRE::Camera const& lhs, FIRE::Camera const& rhs);
+
 } // namespace FIRE
 
 #endif // !FIRE_Camera_H

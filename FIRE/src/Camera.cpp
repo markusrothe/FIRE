@@ -28,4 +28,13 @@ Matrix4x4 Camera::ViewMatrix() const
     return CreateViewMatrix(m_transform.Position(), m_transform.LookAt(), m_transform.Up());
 }
 
+bool operator==(FIRE::Camera const& lhs, FIRE::Camera const& rhs)
+{
+    return lhs.Name() == rhs.Name();
+}
+
+bool operator!=(FIRE::Camera const& lhs, FIRE::Camera const& rhs)
+{
+    return !(lhs == rhs);
+}
 } // namespace FIRE

@@ -131,28 +131,32 @@ FIRE::Key ToFIREKey(int key)
 static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/)
 {
     void* windowUserPointer = glfwGetWindowUserPointer(window);
-    assert(windowUserPointer);
-
-    InputListener* inputListener = reinterpret_cast<InputListener*>(windowUserPointer);
-    inputListener->KeyboardInput(ToFIREKey(key), ToFIREKeyAction(action));
+    if(windowUserPointer)
+    {
+        InputListener* inputListener = reinterpret_cast<InputListener*>(windowUserPointer);
+        inputListener->KeyboardInput(ToFIREKey(key), ToFIREKeyAction(action));
+    }
 }
 
 static void mouse_callback(GLFWwindow* window, double x, double y)
 {
     void* windowUserPointer = glfwGetWindowUserPointer(window);
-    assert(windowUserPointer);
-
-    InputListener* inputListener = reinterpret_cast<InputListener*>(windowUserPointer);
-    inputListener->MouseInput(x, y);
+    if(windowUserPointer)
+    {
+        InputListener* inputListener = reinterpret_cast<InputListener*>(windowUserPointer);
+        inputListener->MouseInput(x, y);
+    }
 }
 
 static void mouse_button_callback(GLFWwindow* window, int button, int action, int /*mods*/)
 {
     void* windowUserPointer = glfwGetWindowUserPointer(window);
-    assert(windowUserPointer);
 
-    InputListener* inputListener = reinterpret_cast<InputListener*>(windowUserPointer);
-    inputListener->MouseKeyInput(ToFIREMouseKey(button), ToFIREKeyAction(action));
+    if(windowUserPointer)
+    {
+        InputListener* inputListener = reinterpret_cast<InputListener*>(windowUserPointer);
+        inputListener->MouseKeyInput(ToFIREMouseKey(button), ToFIREKeyAction(action));
+    }
 }
 
 class GLRenderContext::Impl
