@@ -68,4 +68,9 @@ target_link_libraries(FIRE
     MeasureCoverage
 )
 
+if(MSVC)
+    set_target_properties(FIRE PROPERTIES COMPILE_FLAGS /D_USE_MATH_DEFINES)
+endif()
+
+
 add_subdirectory(test)
