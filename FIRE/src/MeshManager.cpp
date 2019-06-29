@@ -157,18 +157,18 @@ MeshHandle MeshManager::CreateSphere(std::string name, size_t segments)
     // middle
     for(auto j = 0u; j < segments - 1; ++j)
     {
-        auto polarAngle = M_PI * float(j + 1) / float(segments); // 0° - 180° divided into segments
-        auto const sinPolar = std::sin(polarAngle);
-        auto const cosPolar = std::cos(polarAngle);
+        double polarAngle = M_PI * double(j + 1) / double(segments); // 0° - 180° divided into segments
+        double const sinPolar = std::sin(polarAngle);
+        double const cosPolar = std::cos(polarAngle);
 
         for(auto i = 0u; i < segments; ++i)
         {
-            float const azimuth = 2.0 * M_PI * float(i) / float(segments); // 0° - 360° divided into segments
-            float const sinAzimuth = std::sin(azimuth);
-            float const cosAzimuth = std::cos(azimuth);
-            float const x = sinPolar * cosAzimuth;
-            float const y = cosPolar;
-            float const z = sinPolar * sinAzimuth;
+            double const azimuth = 2.0 * M_PI * double(i) / double(segments); // 0° - 360° divided into segments
+            double const sinAzimuth = std::sin(azimuth);
+            double const cosAzimuth = std::cos(azimuth);
+            double const x = sinPolar * cosAzimuth;
+            double const y = cosPolar;
+            double const z = sinPolar * sinAzimuth;
             positions.emplace_back(x, y, z);
             normals.emplace_back(x, y, z);
         }
