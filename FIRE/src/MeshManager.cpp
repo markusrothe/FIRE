@@ -139,7 +139,7 @@ MeshHandle MeshManager::CreatePlane(std::string name)
         std::move(indices));
 }
 
-MeshHandle MeshManager::CreateSphere(std::string name, size_t segments)
+MeshHandle MeshManager::CreateSphere(std::string name, uint32_t segments)
 {
     if(Lookup({name, MeshType::Sphere}))
     {
@@ -169,8 +169,9 @@ MeshHandle MeshManager::CreateSphere(std::string name, size_t segments)
             double const x = sinPolar * cosAzimuth;
             double const y = cosPolar;
             double const z = sinPolar * sinAzimuth;
-            positions.emplace_back(x, y, z);
-            normals.emplace_back(x, y, z);
+            Vector3 pos(static_cast<float>(x), static_cast<float>(y), static_cast<float>(z));
+            positions.push_back(pos);
+            normals.push_back(pos);
         }
     }
 
@@ -211,7 +212,7 @@ MeshHandle MeshManager::CreateSphere(std::string name, size_t segments)
     {
         uint32_t const a = i + segments * (segments - 2) + 1;
         uint32_t const b = (i + 1) % segments + segments * (segments - 2) + 1;
-        indices.push_back(positions.size() - 1); // bottom
+        indices.push_back(static_cast<unsigned int>(positions.size() - 1)); // bottom
         indices.push_back(a);
         indices.push_back(b);
     }

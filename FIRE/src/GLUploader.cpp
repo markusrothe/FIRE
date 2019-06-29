@@ -23,7 +23,7 @@ void SpecifyVertexAttributes(VertexDeclaration const& vDecl, GLuint shader)
         glEnableVertexAttribArray(attribLocation);
         glVertexAttribPointer(
             attribLocation,
-            vertexDeclSection.second.size,
+            static_cast<GLint>(vertexDeclSection.second.size),
             GL_FLOAT,
             GL_FALSE,
             stride,
@@ -31,7 +31,7 @@ void SpecifyVertexAttributes(VertexDeclaration const& vDecl, GLuint shader)
     }
 }
 
-void Write(std::vector<float> const& data, unsigned int offset)
+void Write(std::vector<float> const& data, size_t offset)
 {
     glBufferSubData(GL_ARRAY_BUFFER, offset, data.size() * sizeof(float), &data[0]);
 }

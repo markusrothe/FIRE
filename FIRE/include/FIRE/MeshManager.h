@@ -2,10 +2,12 @@
 #define FIRE_MeshFactory_h
 
 #include <FIRE/Mesh.h>
+#include <cstdint>
 #include <memory>
 #include <string>
 #include <string_view>
 #include <unordered_map>
+
 
 namespace FIRE
 {
@@ -15,7 +17,7 @@ class MeshManager
 public:
     MeshHandle CreateCube(std::string name);
     MeshHandle CreatePlane(std::string name);
-    MeshHandle CreateSphere(std::string name, size_t segments);
+    MeshHandle CreateSphere(std::string name, uint32_t segments);
 
     Mesh* Lookup(MeshHandle const& handle);
 
