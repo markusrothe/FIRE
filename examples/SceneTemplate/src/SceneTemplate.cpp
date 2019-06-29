@@ -5,7 +5,7 @@
 #include <FIRE/GLFactory.h>
 #include <FIRE/MaterialFactory.h>
 #include <FIRE/Mesh.h>
-#include <FIRE/MeshFactory.h>
+#include <FIRE/MeshManager.h>
 #include <FIRE/ShaderFactory.h>
 #include <FIRE/Window.h>
 #include <fstream>
@@ -45,7 +45,7 @@ FIRE::Material CreatePhongMaterial()
 
 } // namespace
 
-FIRE::Renderable CreatePlane(FIRE::MeshFactory& factory, FIRE::Material material)
+FIRE::Renderable CreatePlane(FIRE::MeshManager& factory, FIRE::Material material)
 {
     FIRE::Renderable plane;
     plane.name = PLANE;
@@ -55,7 +55,7 @@ FIRE::Renderable CreatePlane(FIRE::MeshFactory& factory, FIRE::Material material
     return plane;
 }
 
-FIRE::Renderable CreateCube(FIRE::MeshFactory& factory, FIRE::Material material)
+FIRE::Renderable CreateCube(FIRE::MeshManager& factory, FIRE::Material material)
 {
     FIRE::Renderable renderable;
     renderable.name = LIGHT;
@@ -64,7 +64,7 @@ FIRE::Renderable CreateCube(FIRE::MeshFactory& factory, FIRE::Material material)
     return renderable;
 }
 
-SceneTemplate::SceneTemplate(FIRE::Camera& cam, FIRE::Window& window, FIRE::MeshFactory& factory)
+SceneTemplate::SceneTemplate(FIRE::Camera& cam, FIRE::Window& window, FIRE::MeshManager& factory)
     : m_lightPos{5.0f, 10.0f, 7.0f}
     , m_proj(FIRE::CreatePerspectiveMatrix(70.0f, static_cast<float>(window.GetWidth()) / static_cast<float>(window.GetHeight()), 0.01f, 500.0f))
 {

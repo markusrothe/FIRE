@@ -1,11 +1,11 @@
 #include <FIRE/Mesh.h>
-#include <FIRE/MeshFactory.h>
+#include <FIRE/MeshManager.h>
 #include <algorithm>
 #include <cmath>
 #include <iostream>
 namespace FIRE
 {
-Mesh* MeshFactory::Lookup(MeshHandle const& handle)
+Mesh* MeshManager::Lookup(MeshHandle const& handle)
 {
     auto mesh = m_cache.find(handle.name);
     if(mesh != std::cend(m_cache))
@@ -22,7 +22,7 @@ Mesh* MeshFactory::Lookup(MeshHandle const& handle)
     return nullptr;
 }
 
-MeshHandle MeshFactory::CreateCube(std::string name)
+MeshHandle MeshManager::CreateCube(std::string name)
 {
     if(Lookup({name, MeshType::Cube}))
     {
@@ -109,7 +109,7 @@ MeshHandle MeshFactory::CreateCube(std::string name)
         std::move(indices));
 }
 
-MeshHandle MeshFactory::CreatePlane(std::string name)
+MeshHandle MeshManager::CreatePlane(std::string name)
 {
 
     if(Lookup({name, MeshType::Plane}))
@@ -139,7 +139,7 @@ MeshHandle MeshFactory::CreatePlane(std::string name)
         std::move(indices));
 }
 
-MeshHandle MeshFactory::CreateSphere(std::string name, size_t segments)
+MeshHandle MeshManager::CreateSphere(std::string name, size_t segments)
 {
     if(Lookup({name, MeshType::Sphere}))
     {
@@ -224,7 +224,7 @@ MeshHandle MeshFactory::CreateSphere(std::string name, size_t segments)
         std::move(indices));
 }
 
-MeshHandle MeshFactory::Create(
+MeshHandle MeshManager::Create(
     MeshType meshType,
     std::string name,
     std::vector<FIRE::Vector3>&& positions,

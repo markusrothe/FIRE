@@ -1,7 +1,7 @@
 #include "GLUploader.h"
 #include <FIRE/Material.h>
 #include <FIRE/Mesh.h>
-#include <FIRE/MeshFactory.h>
+#include <FIRE/MeshManager.h>
 #include <FIRE/Renderable.h>
 #include <FIRE/VertexDeclaration.h>
 
@@ -83,7 +83,7 @@ GLuint UploadIndices(std::vector<unsigned int> const& indices)
 
 } // namespace
 
-GLUploader::GLUploader(MeshFactory& meshFactory)
+GLUploader::GLUploader(MeshManager& meshFactory)
     : m_meshFactory(meshFactory)
 {
 }

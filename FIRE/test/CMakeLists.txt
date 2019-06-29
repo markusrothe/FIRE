@@ -14,7 +14,7 @@ add_executable(FIRE_tests
     ./SceneTest.cpp
     ./TransformTest.cpp
     ./InputListenerTest.cpp
-    ./MeshFactoryTest.cpp
+    ./MeshManagerTest.cpp
 )
 
 target_include_directories(FIRE_tests

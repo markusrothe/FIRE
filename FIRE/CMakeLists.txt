@@ -1,7 +1,8 @@
 add_library(FIRE STATIC
     include/FIRE/Camera.h
     include/FIRE/Window.h
-    include/FIRE/RenderContext.h        
+    include/FIRE/RenderContext.h
+    include/FIRE/MeshManager.h
     include/FIRE/Mesh.h
     include/FIRE/Renderable.h  
     include/FIRE/Renderer.h 
@@ -20,7 +21,6 @@ add_library(FIRE STATIC
     include/FIRE/ShaderType.h
     include/FIRE/MaterialFactory.h
     include/FIRE/Material.h
-    include/FIRE/MeshFactory.h
     
     src/glm_wrapper.h
     src/Uploader.h
@@ -48,7 +48,7 @@ add_library(FIRE STATIC
     src/Transform.cpp
     src/InputListener.cpp
     src/Material.cpp
-    src/MeshFactory.cpp
+    src/MeshManager.cpp
 )
 
 target_include_directories(FIRE

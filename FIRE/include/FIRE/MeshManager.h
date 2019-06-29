@@ -10,7 +10,7 @@
 namespace FIRE
 {
 
-class MeshFactory
+class MeshManager
 {
 public:
     MeshHandle CreateCube(std::string name);

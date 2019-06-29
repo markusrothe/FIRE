@@ -1,7 +1,7 @@
 
 #include <FIRE/Camera.h>
 #include <FIRE/GLFactory.h>
-#include <FIRE/MeshFactory.h>
+#include <FIRE/MeshManager.h>
 #include <FIRE/RenderContext.h>
 #include <FIRE/Renderer.h>
 #include <FIRE/Scene.h>
@@ -21,12 +21,12 @@ int main(int, char**)
     auto context{FIRE::GLFactory::CreateRenderContext(window)};
     window.SetRenderContext(std::move(context));
 
-    FIRE::MeshFactory factory;
+    FIRE::MeshManager meshManager;
     FIRE::Scene scene(FIRE::Camera("cam", {0.0f, 2.0f, 10.0f}, {0.0f, 2.0f, 0.0f}));
     FIRE::Camera& cam = scene.GetCamera();
-    scene.AddSceneComponent(std::make_shared<SceneTemplate::SceneTemplate>(cam, window, factory));
+    scene.AddSceneComponent(std::make_shared<SceneTemplate::SceneTemplate>(cam, window, meshManager));
 
-    auto renderer{FIRE::GLFactory::CreateRenderer(factory)};
+    auto renderer{FIRE::GLFactory::CreateRenderer(meshManager)};
     while(!window.ShouldClose())
     {
         window.PollEvents();

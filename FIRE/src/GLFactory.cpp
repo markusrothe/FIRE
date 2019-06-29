@@ -17,11 +17,11 @@ std::unique_ptr<RenderContext> CreateRenderContext(Window& window)
     return std::make_unique<GLRenderContext>(window);
 }
 
-std::unique_ptr<Renderer> CreateRenderer(MeshFactory& meshFactory)
+std::unique_ptr<Renderer> CreateRenderer(MeshManager& meshManager)
 {
     return std::make_unique<RendererImpl>(
-        std::make_unique<GLUploader>(meshFactory),
-        std::make_unique<GLDrawAgent>(meshFactory));
+        std::make_unique<GLUploader>(meshManager),
+        std::make_unique<GLDrawAgent>(meshManager));
 }
 
 std::unique_ptr<ShaderFactory> CreateShaderFactory()

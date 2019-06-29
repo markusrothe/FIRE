@@ -1,6 +1,6 @@
 #include "Utilities.h"
 #include <FIRE/Mesh.h>
-#include <FIRE/MeshFactory.h>
+#include <FIRE/MeshManager.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <stdexcept>
@@ -11,20 +11,20 @@ std::string const CUBE{"cube"};
 std::string const PLANE{"plane"};
 std::string const SPHERE("sphere");
 
-class AMeshFactory : public ::testing::Test
+class AMeshManager : public ::testing::Test
 {
 public:
-    FIRE::MeshFactory factory;
+    FIRE::MeshManager meshManager;
 };
 
 } // namespace
 
 using TestUtil::EXPECT_VEC_EQ;
 
-TEST_F(AMeshFactory, CreatesACube)
+TEST_F(AMeshManager, CreatesACube)
 {
-    FIRE::MeshHandle mesh = factory.CreateCube(CUBE);
-    FIRE::Mesh* cube = factory.Lookup(mesh);
+    FIRE::MeshHandle mesh = meshManager.CreateCube(CUBE);
+    FIRE::Mesh* cube = meshManager.Lookup(mesh);
     ASSERT_TRUE(cube);
 
     auto const positions = cube->Positions();
@@ -107,10 +107,10 @@ TEST_F(AMeshFactory, CreatesACube)
     EXPECT_THAT(cube->Indices(), ::testing::ContainerEq(expectedIndices));
 }
 
-TEST_F(AMeshFactory, CreatesAPlane)
+TEST_F(AMeshManager, CreatesAPlane)
 {
-    FIRE::MeshHandle mesh = factory.CreatePlane(PLANE);
-    FIRE::Mesh* planeMesh = factory.Lookup(mesh);
+    FIRE::MeshHandle mesh = meshManager.CreatePlane(PLANE);
+    FIRE::Mesh* planeMesh = meshManager.Lookup(mesh);
     ASSERT_TRUE(planeMesh);
 
     auto const positions = planeMesh->Positions();
@@ -131,26 +131,26 @@ TEST_F(AMeshFactory, CreatesAPlane)
     EXPECT_THAT(planeMesh->Indices(), ::testing::ContainerEq(expectedIndices));
 }
 
-TEST_F(AMeshFactory, CreatesASphere)
+TEST_F(AMeshManager, CreatesASphere)
 {
     auto const numSegments = 4;
-    auto const mesh = factory.CreateSphere(SPHERE, numSegments);
+    auto const mesh = meshManager.CreateSphere(SPHERE, numSegments);
 }
 
-TEST_F(AMeshFactory, CachesACreatedMesh)
+TEST_F(AMeshManager, CachesACreatedMesh)
 {
-    auto const meshHandle1 = factory.CreateCube(CUBE);
-    auto const meshHandle2 = factory.CreateCube(CUBE);
+    auto const meshHandle1 = meshManager.CreateCube(CUBE);
+    auto const meshHandle2 = meshManager.CreateCube(CUBE);
 
-    auto mesh1 = factory.Lookup(meshHandle1);
-    auto mesh2 = factory.Lookup(meshHandle2);
+    auto mesh1 = meshManager.Lookup(meshHandle1);
+    auto mesh2 = meshManager.Lookup(meshHandle2);
 
     EXPECT_EQ(mesh1, mesh2);
 }
 
-TEST_F(AMeshFactory, ThrowsIfADifferentMeshTypeIsCreatedWithTheSameName)
+TEST_F(AMeshManager, ThrowsIfADifferentMeshTypeIsCreatedWithTheSameName)
 {
-    auto const mesh = factory.CreateCube(CUBE);
+    auto const mesh = meshManager.CreateCube(CUBE);
 
-    EXPECT_THROW(factory.CreatePlane(CUBE), std::runtime_error);
+    EXPECT_THROW(meshManager.CreatePlane(CUBE), std::runtime_error);
 }
