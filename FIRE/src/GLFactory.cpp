@@ -11,6 +11,12 @@ namespace FIRE
 {
 namespace GLFactory
 {
+Window InitWindow(std::string title, uint32_t width, uint32_t height)
+{
+    Window window(std::move(title), width, height);
+    window.SetRenderContext(CreateRenderContext(window));
+    return window; //will move as copies are disabled.
+}
 
 std::unique_ptr<RenderContext> CreateRenderContext(Window& window)
 {

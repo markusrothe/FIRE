@@ -17,9 +17,7 @@ unsigned int constexpr WINDOW_HEIGHT = 600;
 
 int main(int, char**)
 {
-    FIRE::Window window{"FIRE cube example", WINDOW_WIDTH, WINDOW_HEIGHT};
-    auto context{FIRE::GLFactory::CreateRenderContext(window)};
-    window.SetRenderContext(std::move(context));
+    FIRE::Window window = FIRE::GLFactory::InitWindow("FIRE - cube", WINDOW_WIDTH, WINDOW_HEIGHT);
 
     FIRE::MeshManager meshManager;
     FIRE::Scene scene(FIRE::Camera("cam", {0.0f, 2.0f, 10.0f}, {0.0f, 2.0f, 0.0f}));

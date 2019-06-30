@@ -16,9 +16,9 @@ public:
     ~GLRenderContext() override;
 
     GLRenderContext(GLRenderContext const&) = delete;
-    GLRenderContext(GLRenderContext&&) = delete;
+    GLRenderContext(GLRenderContext&&) noexcept = default;
     GLRenderContext& operator=(GLRenderContext const&) = delete;
-    GLRenderContext& operator=(GLRenderContext&&) = delete;
+    GLRenderContext& operator=(GLRenderContext&&) noexcept = default;
 
     void SwapBuffers() override;
     void PollEvents() override;
