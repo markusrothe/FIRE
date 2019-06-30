@@ -14,6 +14,9 @@ public:
     explicit Window(
         std::string const title, unsigned int width, unsigned int height);
 
+    Window(Window&& other) = default;
+    Window& operator=(Window&& other) = default;
+
     ~Window();
 
     std::string GetTitle() const;
@@ -28,6 +31,9 @@ public:
     void SetInputListener(std::shared_ptr<InputListener> inputListener);
     void PollEvents();
     void SwapBuffers();
+
+    void CaptureCursor();
+    void ReleaseCursor();
 
 private:
     std::string const m_title;

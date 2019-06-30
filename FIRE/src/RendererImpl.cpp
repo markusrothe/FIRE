@@ -3,7 +3,6 @@
 #include "Uploader.h"
 #include <FIRE/Renderable.h>
 #include <FIRE/Scene.h>
-#include <cassert>
 namespace FIRE
 {
 
@@ -18,27 +17,12 @@ RendererImpl::~RendererImpl() = default;
 
 void RendererImpl::Render(Scene const& scene)
 {
-    assert(m_uploader && m_drawAgent);
+    m_drawAgent->Clear();
 
-    for(auto const& sceneComponent : scene.GetSceneComponents())
+    for(auto const& renderable : scene.CollectRenderables())
     {
-        if(!sceneComponent)
-        {
-            return;
-        }
-
-        m_drawAgent->Clear();
-
-        for(auto const& renderable : sceneComponent->GetRenderables())
-        {
-            if(!renderable)
-            {
-                continue;
-            }
-
-            auto buffers = m_uploader->Upload(*renderable);
-            m_drawAgent->Draw(*renderable, buffers);
-        }
+        auto buffers = m_uploader->Upload(renderable);
+        m_drawAgent->Draw(renderable, buffers);
     }
 }
 

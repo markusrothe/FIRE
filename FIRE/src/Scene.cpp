@@ -1,38 +1,42 @@
 #include <FIRE/Scene.h>
+
+#include <FIRE/Renderable.h>
+#include <FIRE/SceneComponent.h>
 #include <algorithm>
 namespace FIRE
 {
-
-SceneComponent::SceneComponent(std::string name)
-    : m_name(std::move(name))
+Scene::Scene(FIRE::Camera cam)
+    : m_cam(cam)
 {
 }
 
-std::string SceneComponent::Name() const
+FIRE::Camera& Scene::GetCamera()
 {
-    return m_name;
+    return m_cam;
 }
 
-void SceneComponent::AddRenderable(std::shared_ptr<Renderable> const& renderable)
+void Scene::AddSceneComponent(std::shared_ptr<SceneComponent> const& sceneComponent)
 {
-    m_renderables.push_back(renderable);
+    m_sceneComponents.push_back(sceneComponent);
 }
 
-std::vector<std::shared_ptr<Renderable>> SceneComponent::GetRenderables() const
+void Scene::Update()
 {
-    return m_renderables;
+    for(auto& sceneComponent : m_sceneComponents)
+    {
+        sceneComponent->Update(m_cam);
+    }
 }
 
-std::shared_ptr<SceneComponent> Scene::NewSceneComponent(std::string const& name)
+std::vector<Renderable> Scene::CollectRenderables() const
 {
-    auto newSceneComponent = std::make_shared<SceneComponent>(name);
-    m_sceneComponents.push_back(newSceneComponent);
-    return newSceneComponent;
-}
-
-std::vector<std::shared_ptr<SceneComponent>> const& Scene::GetSceneComponents() const
-{
-    return m_sceneComponents;
+    std::vector<Renderable> renderables;
+    for(auto& sceneComponent : m_sceneComponents)
+    {
+        auto const sceneComponentRenderables = sceneComponent->CollectRenderables();
+        renderables.insert(renderables.end(), sceneComponentRenderables.begin(), sceneComponentRenderables.end());
+    }
+    return renderables;
 }
 
 } // namespace FIRE

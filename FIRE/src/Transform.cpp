@@ -1,6 +1,5 @@
 #include "glm_wrapper.h"
 #include <FIRE/Transform.h>
-#include <iostream>
 namespace FIRE
 {
 namespace
@@ -22,6 +21,7 @@ class Transform::Impl
 public:
     Impl(Vector3 const& pos, Vector3 const& lookAt)
         : m_pos(ToGlmVec3(pos))
+        , m_scale(1.0f, 1.0f, 1.0f)
         , m_lookAt(ToGlmVec3(lookAt))
         , m_rotation(1.0, 0.0, 0.0, 0.0)
     {
@@ -35,6 +35,11 @@ public:
     Vector3 LookAt() const
     {
         return FromGlmVec3(m_lookAt);
+    }
+
+    Vector3 GetScaling() const
+    {
+        return FromGlmVec3(m_scale);
     }
 
     Vector3 Right() const
@@ -67,16 +72,22 @@ public:
         m_lookAt = m_pos + glm::rotate(glm::normalize(m_lookAt - m_pos), glm::radians(angle), glm::normalize(ToGlmVec3(axis)));
     }
 
+    void Scale(Vector3 const& scale)
+    {
+        m_scale = ToGlmVec3(scale);
+    }
+
     Matrix4x4 ModelMatrix() const
     {
-        glm::mat4 mat(1.0f);
-        mat = glm::translate(mat, m_pos);
-        mat *= glm::toMat4(m_rotation);
+        auto const mat =
+            glm::translate(m_pos) * glm::toMat4(m_rotation) * glm::scale(m_scale);
+
         return Matrix4x4(glm_helper::matToArray(mat));
     }
 
 private:
     glm::vec3 m_pos;
+    glm::vec3 m_scale;
     glm::vec3 m_lookAt;
     glm::quat m_rotation;
 };
@@ -86,6 +97,16 @@ Transform::Transform(
     Vector3 lookAt /* = Vector3(0.0f, 0.0f, -1.0f) */)
     : m_impl(std::make_unique<Transform::Impl>(pos, lookAt))
 {
+}
+
+Transform::Transform(Transform const& other)
+    : m_impl(std::make_unique<Transform::Impl>(*other.m_impl))
+{
+}
+Transform& Transform::operator=(Transform other)
+{
+    std::swap(m_impl, other.m_impl);
+    return *this;
 }
 
 Transform::~Transform() = default;
@@ -98,6 +119,11 @@ Vector3 Transform::Position() const
 Vector3 Transform::LookAt() const
 {
     return m_impl->LookAt();
+}
+
+Vector3 Transform::GetScaling() const
+{
+    return m_impl->GetScaling();
 }
 
 Vector3 Transform::Right() const
@@ -128,6 +154,10 @@ void Transform::Translate(Vector3 const& vec)
 void Transform::Rotate(Vector3 const& axis, float angle)
 {
     m_impl->Rotate(axis, angle);
+}
+void Transform::Scale(Vector3 const& scale)
+{
+    m_impl->Scale(scale);
 }
 
 Matrix4x4 Transform::ModelMatrix() const

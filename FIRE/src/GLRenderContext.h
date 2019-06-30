@@ -16,9 +16,9 @@ public:
     ~GLRenderContext() override;
 
     GLRenderContext(GLRenderContext const&) = delete;
-    GLRenderContext(GLRenderContext&&) = delete;
+    GLRenderContext(GLRenderContext&&) noexcept = default;
     GLRenderContext& operator=(GLRenderContext const&) = delete;
-    GLRenderContext& operator=(GLRenderContext&&) = delete;
+    GLRenderContext& operator=(GLRenderContext&&) noexcept = default;
 
     void SwapBuffers() override;
     void PollEvents() override;
@@ -27,6 +27,8 @@ public:
     void Resize(unsigned int width, unsigned int height) override;
 
     void RegisterInputListener(InputListener* inputListener) override;
+    void CaptureCursor() override;
+    void ReleaseCursor() override;
 
 private:
     class Impl;

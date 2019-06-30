@@ -131,28 +131,32 @@ FIRE::Key ToFIREKey(int key)
 static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/)
 {
     void* windowUserPointer = glfwGetWindowUserPointer(window);
-    assert(windowUserPointer);
-
-    InputListener* inputListener = reinterpret_cast<InputListener*>(windowUserPointer);
-    inputListener->KeyboardInput(ToFIREKey(key), ToFIREKeyAction(action));
+    if(windowUserPointer)
+    {
+        InputListener* inputListener = reinterpret_cast<InputListener*>(windowUserPointer);
+        inputListener->KeyboardInput(ToFIREKey(key), ToFIREKeyAction(action));
+    }
 }
 
 static void mouse_callback(GLFWwindow* window, double x, double y)
 {
     void* windowUserPointer = glfwGetWindowUserPointer(window);
-    assert(windowUserPointer);
-
-    InputListener* inputListener = reinterpret_cast<InputListener*>(windowUserPointer);
-    inputListener->MouseInput(x, y);
+    if(windowUserPointer)
+    {
+        InputListener* inputListener = reinterpret_cast<InputListener*>(windowUserPointer);
+        inputListener->MouseInput(x, y);
+    }
 }
 
 static void mouse_button_callback(GLFWwindow* window, int button, int action, int /*mods*/)
 {
     void* windowUserPointer = glfwGetWindowUserPointer(window);
-    assert(windowUserPointer);
 
-    InputListener* inputListener = reinterpret_cast<InputListener*>(windowUserPointer);
-    inputListener->MouseKeyInput(ToFIREMouseKey(button), ToFIREKeyAction(action));
+    if(windowUserPointer)
+    {
+        InputListener* inputListener = reinterpret_cast<InputListener*>(windowUserPointer);
+        inputListener->MouseKeyInput(ToFIREMouseKey(button), ToFIREKeyAction(action));
+    }
 }
 
 class GLRenderContext::Impl
@@ -167,8 +171,9 @@ public:
     bool ShouldClose();
     void Close();
     void Resize(unsigned int width, unsigned int height);
-
     void RegisterInputListener(InputListener* inputListener);
+    void CaptureCursor();
+    void ReleaseCursor();
 
 private:
     GLFWwindow* m_window;
@@ -203,7 +208,6 @@ GLRenderContext::Impl::Impl(Window& window)
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
     glfwSetKeyCallback(m_window, key_callback);
-    glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     glfwSetCursorPosCallback(m_window, mouse_callback);
 
@@ -245,6 +249,16 @@ void GLRenderContext::Impl::RegisterInputListener(InputListener* inputListener)
     glfwSetWindowUserPointer(m_window, reinterpret_cast<void*>(inputListener));
 }
 
+void GLRenderContext::Impl::CaptureCursor()
+{
+    glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+}
+
+void GLRenderContext::Impl::ReleaseCursor()
+{
+    glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+}
+
 GLRenderContext::GLRenderContext(Window& window)
     : m_impl(std::make_unique<GLRenderContext::Impl>(window))
 {
@@ -282,4 +296,13 @@ void GLRenderContext::RegisterInputListener(InputListener* inputListener)
     m_impl->RegisterInputListener(inputListener);
 }
 
+void GLRenderContext::CaptureCursor()
+{
+    m_impl->CaptureCursor();
+}
+
+void GLRenderContext::ReleaseCursor()
+{
+    m_impl->ReleaseCursor();
+}
 } // namespace FIRE

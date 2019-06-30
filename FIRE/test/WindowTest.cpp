@@ -19,6 +19,8 @@ public:
     MOCK_METHOD0(Close, void(void));
     MOCK_METHOD2(Resize, void(unsigned int width, unsigned int height));
     MOCK_METHOD1(RegisterInputListener, void(InputListener*));
+    MOCK_METHOD0(CaptureCursor, void(void));
+    MOCK_METHOD0(ReleaseCursor, void(void));
 };
 } // namespace FIRE
 
@@ -116,4 +118,18 @@ TEST_F(AWindow, MayHaveAnInputListener)
     EXPECT_CALL(*context, RegisterInputListener(_));
     window.SetRenderContext(std::move(context));
     window.SetInputListener(std::move(inputListener));
+}
+
+TEST_F(AWindow, CanCaptureTheCursor)
+{
+    EXPECT_CALL(*context, CaptureCursor());
+    window.SetRenderContext(std::move(context));
+    window.CaptureCursor();
+}
+
+TEST_F(AWindow, CanReleaseTheCursor)
+{
+    EXPECT_CALL(*context, ReleaseCursor());
+    window.SetRenderContext(std::move(context));
+    window.ReleaseCursor();
 }

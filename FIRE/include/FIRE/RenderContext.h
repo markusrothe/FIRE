@@ -14,6 +14,8 @@ public:
     virtual void Close() = 0;
     virtual void Resize(unsigned int width, unsigned int height) = 0;
     virtual void RegisterInputListener(InputListener* inputListener) = 0;
+    virtual void CaptureCursor() = 0;
+    virtual void ReleaseCursor() = 0;
 };
 } // namespace FIRE
 #endif // FIRE_RenderContext_h

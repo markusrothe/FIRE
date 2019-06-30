@@ -35,6 +35,8 @@ class InputListener
 public:
     void RegisterKeyEvent(Key key, KeyAction action, std::function<void(void)> callback);
     void RegisterMouseEvent(std::function<void(double x, double y)> callback);
+    void UnregisterMouseEvent();
+
     void RegisterMouseButtonEvent(MouseKey key, KeyAction action, std::function<void(void)> callback);
 
     void KeyboardInput(Key key, KeyAction action);

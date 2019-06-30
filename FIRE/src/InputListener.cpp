@@ -13,6 +13,11 @@ void InputListener::RegisterMouseEvent(std::function<void(double x, double y)> m
     m_mouseCallback = std::move(mouseCallback);
 }
 
+void InputListener::UnregisterMouseEvent()
+{
+    m_mouseCallback = nullptr;
+}
+
 void InputListener::RegisterMouseButtonEvent(MouseKey key, KeyAction action, std::function<void(void)> callback)
 {
     m_mouseButtonCallbacks.insert(std::make_pair(std::make_pair(key, action), callback));

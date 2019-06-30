@@ -42,3 +42,14 @@ TEST_F(AnInputListener, CallsARegisteredCallbackForAMouseButtonInputEvent)
     inputListener.MouseKeyInput(FIRE::MouseKey::LEFT_BUTTON, FIRE::KeyAction::PRESS);
     EXPECT_TRUE(called);
 }
+
+TEST_F(AnInputListener, DoesNotCallAnUnregisteredCallbackForAMouseInputEvent)
+{
+    bool called = false;
+    auto callback = [&called](double, double) { called = true; };
+
+    inputListener.RegisterMouseEvent(callback);
+    inputListener.UnregisterMouseEvent();
+    inputListener.MouseInput(1.0, 2.0);
+    EXPECT_FALSE(called);
+}

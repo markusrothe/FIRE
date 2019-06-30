@@ -3,8 +3,8 @@ if(NOT BUILD_TESTING)
 endif()
 
 add_executable(FIRE_tests
+    ./Utilities.h
     ./WindowTest.cpp
-    ./RenderableTest.cpp
     ./RendererTest.cpp
     ./MeshTest.cpp
     ./MaterialFactoryTest.cpp
@@ -14,6 +14,7 @@ add_executable(FIRE_tests
     ./SceneTest.cpp
     ./TransformTest.cpp
     ./InputListenerTest.cpp
+    ./MeshManagerTest.cpp
 )
 
 target_include_directories(FIRE_tests
@@ -37,7 +38,7 @@ gtest_discover_tests(FIRE_tests)
 
 add_custom_command(
     TARGET FIRE_tests POST_BUILD                   
-    COMMAND ctest -C $<CONFIGURATION> --output-on-failure
+    COMMAND ctest --output-on-failure -C $<CONFIGURATION> 
 )
 
 install(

@@ -98,7 +98,7 @@ unsigned int GLShaderFactory::CreateDefaultShader()
         "#version 440\n"
         "in vec3 posVS;"
         "out vec4 color;"
-        "void main() { color = vec4(0.4,0.4,0.4,1.0) + vec4(posVS.xyz, 1.0); }";
+        "void main() { color = vec4(1.0 , 1.0 , 1.0, 1.0);}";
 
     std::vector<std::pair<ShaderType, std::string>> shaders = {
         {ShaderType::VERTEX_SHADER, vsCode},

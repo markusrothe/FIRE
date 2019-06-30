@@ -1,4 +1,5 @@
 #include "GLDrawAgent.h"
+#include <FIRE/MeshManager.h>
 #include <FIRE/Renderable.h>
 #include <any>
 namespace FIRE
@@ -30,12 +31,14 @@ void SetShaderUniforms(GLuint shader, std::map<std::string, std::pair<ShaderPara
     }
 }
 
-GLDrawAgent::GLDrawAgent()
+GLDrawAgent::GLDrawAgent(MeshManager& meshManager)
+    : m_meshManager(meshManager)
 {
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
-    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+    glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 
 void GLDrawAgent::Clear()
@@ -47,13 +50,16 @@ void GLDrawAgent::Draw(Renderable const& renderable, GLVertexArrayObject arrObj)
 {
     glBindVertexArray(arrObj.m_vao);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, arrObj.m_ibo);
-    auto const shader = renderable.GetMaterial().ShaderId();
+    auto const shader = renderable.material.ShaderId();
     glUseProgram(shader);
 
-    SetShaderUniforms(shader, renderable.GetMaterial().GetShaderParameters());
+    SetShaderUniforms(shader, renderable.material.GetShaderParameters());
 
-    glDrawElements(
-        GL_TRIANGLES, static_cast<GLsizei>(renderable.GetMesh().Indices().size()), GL_UNSIGNED_INT, 0);
+    Mesh* mesh = m_meshManager.Lookup(renderable.mesh);
+    if(mesh)
+    {
+        glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->Indices().size()), GL_UNSIGNED_INT, 0);
+    }
 
     glUseProgram(0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

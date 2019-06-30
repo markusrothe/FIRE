@@ -72,4 +72,16 @@ void Window::PollEvents()
     m_context->PollEvents();
 }
 
+void Window::CaptureCursor()
+{
+    assert(m_context);
+    m_context->CaptureCursor();
+}
+
+void Window::ReleaseCursor()
+{
+    assert(m_context);
+    m_context->ReleaseCursor();
+}
+
 } // namespace FIRE

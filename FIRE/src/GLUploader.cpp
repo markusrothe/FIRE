@@ -1,6 +1,7 @@
 #include "GLUploader.h"
 #include <FIRE/Material.h>
 #include <FIRE/Mesh.h>
+#include <FIRE/MeshManager.h>
 #include <FIRE/Renderable.h>
 #include <FIRE/VertexDeclaration.h>
 
@@ -22,7 +23,7 @@ void SpecifyVertexAttributes(VertexDeclaration const& vDecl, GLuint shader)
         glEnableVertexAttribArray(attribLocation);
         glVertexAttribPointer(
             attribLocation,
-            vertexDeclSection.second.size,
+            static_cast<GLint>(vertexDeclSection.second.size),
             GL_FLOAT,
             GL_FALSE,
             stride,
@@ -30,19 +31,20 @@ void SpecifyVertexAttributes(VertexDeclaration const& vDecl, GLuint shader)
     }
 }
 
-void Write(std::vector<float> const& data, unsigned int offset)
+void Write(std::vector<float> const& data, size_t offset)
 {
     glBufferSubData(GL_ARRAY_BUFFER, offset, data.size() * sizeof(float), &data[0]);
 }
 
-GLuint UploadVertices(Mesh const& mesh, GLuint shader)
+GLuint UploadVertices(Mesh* mesh, GLuint shader)
 {
     GLuint vbo;
+
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-    auto const positions = mesh.PositionsAsArray();
-    auto const normals = mesh.NormalsAsArray();
+    auto const positions = mesh->PositionsAsArray();
+    auto const normals = mesh->NormalsAsArray();
 
     auto bufferSize = (positions.size() + normals.size()) * sizeof(float);
     glBufferData(GL_ARRAY_BUFFER, bufferSize, NULL, GL_STATIC_DRAW);
@@ -57,7 +59,7 @@ GLuint UploadVertices(Mesh const& mesh, GLuint shader)
         Write(normals, positions.size() * sizeof(float));
     }
 
-    SpecifyVertexAttributes(mesh.GetVertexDeclaration(), shader);
+    SpecifyVertexAttributes(mesh->GetVertexDeclaration(), shader);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     return vbo;
 }
@@ -81,9 +83,14 @@ GLuint UploadIndices(std::vector<unsigned int> const& indices)
 
 } // namespace
 
+GLUploader::GLUploader(MeshManager& meshFactory)
+    : m_meshFactory(meshFactory)
+{
+}
+
 GLVertexArrayObject GLUploader::Upload(Renderable const& renderable)
 {
-    auto const it = m_uploadedRenderables.find(renderable.Name());
+    auto const it = m_uploadedRenderables.find(renderable.name);
     if(it != m_uploadedRenderables.end())
     {
         return it->second;
@@ -93,13 +100,17 @@ GLVertexArrayObject GLUploader::Upload(Renderable const& renderable)
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
-    Mesh const& mesh = renderable.GetMesh();
+    Mesh* mesh = m_meshFactory.Lookup(renderable.mesh);
+    if(!mesh)
+    {
+        return GLVertexArrayObject(0, 0, 0);
+    }
 
-    GLuint const vbo = UploadVertices(mesh, renderable.GetMaterial().ShaderId());
-    GLuint const ibo = UploadIndices(mesh.Indices());
+    GLuint const vbo = UploadVertices(mesh, renderable.material.ShaderId());
+    GLuint const ibo = UploadIndices(mesh->Indices());
 
     GLVertexArrayObject arrObj(vao, vbo, ibo);
-    m_uploadedRenderables.insert(std::make_pair(renderable.Name(), arrObj));
+    m_uploadedRenderables.insert(std::make_pair(renderable.name, arrObj));
     return arrObj;
 }
 

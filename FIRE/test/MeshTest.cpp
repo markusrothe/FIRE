@@ -5,7 +5,7 @@
 namespace
 {
 std::string const name{"name"};
-std::initializer_list<FIRE::Vector3> const vecs = {
+std::vector<FIRE::Vector3> const vecs = {
     {0.0f, 1.0f, 2.0f},
     {4.0f, 3.0f, 0.0f}};
 

@@ -1,7 +1,8 @@
 add_library(FIRE STATIC
     include/FIRE/Camera.h
     include/FIRE/Window.h
-    include/FIRE/RenderContext.h        
+    include/FIRE/RenderContext.h
+    include/FIRE/MeshManager.h
     include/FIRE/Mesh.h
     include/FIRE/Renderable.h  
     include/FIRE/Renderer.h 
@@ -10,6 +11,7 @@ add_library(FIRE STATIC
     include/FIRE/VertexDeclaration.h
     include/FIRE/GLFactory.h
     include/FIRE/Scene.h
+    include/FIRE/SceneComponent.h
     include/FIRE/Transform.h
     include/FIRE/InputListener.h
     include/FIRE/Key.h
@@ -46,6 +48,7 @@ add_library(FIRE STATIC
     src/Transform.cpp
     src/InputListener.cpp
     src/Material.cpp
+    src/MeshManager.cpp
 )
 
 target_include_directories(FIRE
@@ -64,5 +67,10 @@ target_link_libraries(FIRE
     CompileOptions
     MeasureCoverage
 )
+
+if(MSVC)
+    set_target_properties(FIRE PROPERTIES COMPILE_FLAGS /D_USE_MATH_DEFINES)
+endif()
+
 
 add_subdirectory(test)
