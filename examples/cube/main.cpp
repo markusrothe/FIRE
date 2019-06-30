@@ -30,7 +30,6 @@ int main(int, char**)
         window.PollEvents();
 
         scene.Update();
-
         renderer->Render(scene);
         window.SwapBuffers();
     }

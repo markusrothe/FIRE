@@ -166,10 +166,10 @@ MeshHandle MeshManager::CreateSphere(std::string name, uint32_t segments)
             double const azimuth = 2.0 * M_PI * double(i) / double(segments); // 0° - 360° divided into segments
             double const sinAzimuth = std::sin(azimuth);
             double const cosAzimuth = std::cos(azimuth);
-            double const x = sinPolar * cosAzimuth;
-            double const y = cosPolar;
-            double const z = sinPolar * sinAzimuth;
-            Vector3 pos(static_cast<float>(x), static_cast<float>(y), static_cast<float>(z));
+            Vector3 pos(
+                static_cast<float>(sinPolar * cosAzimuth),
+                static_cast<float>(cosPolar),
+                static_cast<float>(sinPolar * sinAzimuth));
             positions.push_back(pos);
             normals.push_back(pos);
         }
