@@ -66,6 +66,7 @@ target_link_libraries(FIRE
     glm
     CompileOptions
     MeasureCoverage
+    freetype
 )
 
 if(MSVC)
