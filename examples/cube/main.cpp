@@ -1,4 +1,4 @@
-
+#include "CubeSceneComponent.h"
 #include <FIRE/Camera.h>
 #include <FIRE/GLFactory.h>
 #include <FIRE/MeshManager.h>
@@ -8,6 +8,7 @@
 #include <FIRE/Window.h>
 #include <SceneTemplate/SceneTemplate.h>
 #include <memory>
+
 
 namespace
 {
@@ -23,7 +24,7 @@ int main(int, char**)
     FIRE::Scene scene(FIRE::Camera("cam", {0.0f, 2.0f, 10.0f}, {0.0f, 2.0f, 0.0f}));
     FIRE::Camera& cam = scene.GetCamera();
     scene.AddSceneComponent(std::make_shared<SceneTemplate::SceneTemplate>(cam, window, meshManager));
-
+    scene.AddSceneComponent(std::make_shared<examples::CubeSceneComponent>(window, meshManager));
     auto renderer{FIRE::GLFactory::CreateRenderer(meshManager)};
     while(!window.ShouldClose())
     {

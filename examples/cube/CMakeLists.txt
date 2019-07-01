@@ -1,4 +1,6 @@
 add_executable(cube
+    CubeSceneComponent.h
+    CubeSceneComponent.cpp
     main.cpp
 )
 
