@@ -1,6 +1,5 @@
 #include <FIRE/Material.h>
 #include <FIRE/MaterialFactory.h>
-#include <FIRE/ShaderFactory.h>
 
 namespace FIRE
 {

@@ -2,6 +2,7 @@
 #define FIRE_MaterialFactory_h
 
 #include <FIRE/Material.h>
+#include <FIRE/ShaderFactory.h>
 #include <FIRE/ShaderType.h>
 
 #include <memory>
@@ -12,7 +13,6 @@
 namespace FIRE
 {
 
-class ShaderFactory;
 class MaterialFactory
 {
 public:
