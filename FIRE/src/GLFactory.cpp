@@ -1,7 +1,8 @@
 
+#include "GLShaderFactory.h"
+
 #include "GLDrawAgent.h"
 #include "GLRenderContext.h"
-#include "GLShaderFactory.h"
 #include "GLUploader.h"
 #include "RendererImpl.h"
 #include <FIRE/GLFactory.h>

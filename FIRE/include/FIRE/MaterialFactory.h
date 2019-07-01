@@ -1,8 +1,9 @@
-#ifndef FIRE_MaterialManager_h
-#define FIRE_MaterialManager_h
+#ifndef FIRE_MaterialFactory_h
+#define FIRE_MaterialFactory_h
 
 #include <FIRE/Material.h>
 #include <FIRE/ShaderType.h>
+
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -10,14 +11,22 @@
 
 namespace FIRE
 {
+
 class ShaderFactory;
-namespace MaterialFactory
+class MaterialFactory
 {
+public:
+    explicit MaterialFactory(std::unique_ptr<ShaderFactory> shaderFactory);
 
-Material Create(std::string const& name, std::vector<std::pair<ShaderType, std::string>> const& shaderCode, ShaderFactory& shaderFactory);
-Material CreateDefault(ShaderFactory& shaderFactory);
+    ~MaterialFactory();
 
-} // namespace MaterialFactory
+    Material CreateDefaultMaterial();
+
+    Material CreateMaterial(std::string const& name, std::vector<std::pair<ShaderType, std::string>> const& shaders);
+
+private:
+    std::unique_ptr<ShaderFactory> m_shaderFactory;
+};
 } // namespace FIRE
 
-#endif // !FIRE_MaterialManager_h
+#endif // !FIRE_MaterialFactory_h

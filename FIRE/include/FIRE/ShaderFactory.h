@@ -1,5 +1,6 @@
 #ifndef FIRE_ShaderFactory_h
 #define FIRE_ShaderFactory_h
+
 #include <FIRE/ShaderType.h>
 #include <string>
 #include <vector>

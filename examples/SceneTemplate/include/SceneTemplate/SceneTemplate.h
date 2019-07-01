@@ -12,6 +12,7 @@ namespace FIRE
 class Camera;
 class Window;
 class MeshManager;
+class MaterialFactory;
 } // namespace FIRE
 
 namespace SceneTemplate
@@ -19,9 +20,10 @@ namespace SceneTemplate
 class SceneTemplate : public FIRE::SceneComponent
 {
 public:
-    explicit SceneTemplate(FIRE::Camera& cam, FIRE::Window& window, FIRE::MeshManager& factory);
+    explicit SceneTemplate(FIRE::Camera& cam, FIRE::Window& window, FIRE::MeshManager& factory, FIRE::MaterialFactory& materialFactory);
 
     void Update(FIRE::Camera& cam) override;
+
     std::vector<FIRE::Renderable> CollectRenderables() const override;
 
 private:

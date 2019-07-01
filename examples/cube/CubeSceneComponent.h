@@ -11,6 +11,7 @@ namespace FIRE
 class Window;
 class MeshManager;
 class Camera;
+class MaterialFactory;
 } // namespace FIRE
 
 namespace examples
@@ -18,7 +19,7 @@ namespace examples
 class CubeSceneComponent : public FIRE::SceneComponent
 {
 public:
-    CubeSceneComponent(FIRE::Window const& window, FIRE::MeshManager& meshManager);
+    CubeSceneComponent(FIRE::Window const& window, FIRE::MeshManager& meshManager, FIRE::MaterialFactory& materialFactory);
 
     void Update(FIRE::Camera& cam) override;
 
