@@ -10,7 +10,6 @@ add_executable(FIRE_tests
     ./MaterialFactoryTest.cpp
     ./MaterialTest.cpp
     ./CameraTest.cpp
-    ./MatrixTest.cpp
     ./SceneTest.cpp
     ./TransformTest.cpp
     ./InputListenerTest.cpp

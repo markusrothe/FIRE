@@ -11,7 +11,7 @@ CubeSceneComponent::CubeSceneComponent(
     FIRE::Window const& window,
     FIRE::MeshManager& meshManager,
     FIRE::MaterialFactory& materialFactory)
-    : m_proj(FIRE::CreatePerspectiveMatrix(70.0f, static_cast<float>(window.GetWidth()) / static_cast<float>(window.GetHeight()), 0.01f, 500.0f))
+    : m_proj(glm::perspective(70.0f, static_cast<float>(window.GetWidth()) / static_cast<float>(window.GetHeight()), 0.01f, 500.0f))
 {
 
     m_cube.name = "cubeRenderable";

@@ -1,10 +1,9 @@
 #ifndef SceneTemplate_SceneTemplate_h
 #define SceneTemplate_SceneTemplate_h
 
-#include <FIRE/Matrix.h>
 #include <FIRE/Renderable.h>
 #include <FIRE/SceneComponent.h>
-#include <FIRE/Vector.h>
+
 #include <vector>
 
 namespace FIRE
@@ -20,17 +19,18 @@ namespace SceneTemplate
 class SceneTemplate : public FIRE::SceneComponent
 {
 public:
-    explicit SceneTemplate(FIRE::Camera& cam, FIRE::Window& window, FIRE::MeshManager& factory, FIRE::MaterialFactory& materialFactory);
+    explicit SceneTemplate(FIRE::Camera& cam, FIRE::Window& window, FIRE::MeshManager& meshManager, FIRE::MaterialFactory& materialFactory);
 
     void Update(FIRE::Camera& cam) override;
 
     std::vector<FIRE::Renderable> CollectRenderables() const override;
 
 private:
-    FIRE::Vector3 m_lightPos;
-    FIRE::Matrix4x4 m_proj;
+    glm::vec3 m_lightPos;
+    glm::mat4x4 m_proj;
     FIRE::Renderable m_plane;
     FIRE::Renderable m_lightCube;
+    FIRE::Renderable m_textBox;
 };
 } // namespace SceneTemplate
 #endif // SceneTemplate_SceneTemplate_h

@@ -14,8 +14,8 @@ public:
     {
     }
 
-    virtual void Update(FIRE::Camera& cam) = 0;
-    virtual std::vector<FIRE::Renderable> CollectRenderables() const = 0;
+    virtual void Update(Camera& cam) = 0;
+    virtual std::vector<Renderable> CollectRenderables() const = 0;
 };
 } // namespace FIRE
 #endif // FIRE_SceneComponent_h

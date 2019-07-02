@@ -8,6 +8,7 @@
 #include <FIRE/MeshManager.h>
 #include <FIRE/ShaderFactory.h>
 #include <FIRE/Window.h>
+#include <FIRE/glmfwd.h>
 #include <fstream>
 #include <iterator>
 #include <string>
@@ -52,12 +53,12 @@ FIRE::Renderable CreateCube(FIRE::MeshManager& factory, FIRE::MaterialFactory& m
 
 SceneTemplate::SceneTemplate(FIRE::Camera& cam, FIRE::Window& window, FIRE::MeshManager& meshManager, FIRE::MaterialFactory& materialFactory)
     : m_lightPos{5.0f, 10.0f, 7.0f}
-    , m_proj(FIRE::CreatePerspectiveMatrix(70.0f, static_cast<float>(window.GetWidth()) / static_cast<float>(window.GetHeight()), 0.01f, 500.0f))
+    , m_proj(glm::perspective(70.0f, static_cast<float>(window.GetWidth()) / static_cast<float>(window.GetHeight()), 0.01f, 500.0f))
 {
     MapInput(cam, window);
 
     m_plane = CreatePlane(meshManager, materialFactory);
-    m_plane.transform.Scale(FIRE::Vector3(20.0f, 1.0f, 20.0f));
+    m_plane.transform.Scale(glm::vec3(20.0f, 1.0f, 20.0f));
     m_plane.material.SetShaderParameter("LightPos", FIRE::ShaderParameterType::VEC3, m_lightPos);
 
     m_lightCube = CreateCube(meshManager, materialFactory);

@@ -29,69 +29,69 @@ MeshHandle MeshManager::CreateCube(std::string name)
         return {name, MeshType::Cube};
     }
 
-    std::vector<FIRE::Vector3> positions = {{-1.0f, -1.0f, -1.0f},
-                                            {-1.0f, -1.0f, -1.0f},
-                                            {-1.0f, -1.0f, -1.0f},
+    std::vector<glm::vec3> positions = {{-1.0f, -1.0f, -1.0f},
+                                        {-1.0f, -1.0f, -1.0f},
+                                        {-1.0f, -1.0f, -1.0f},
 
-                                            {1.0f, -1.0f, 1.0f},
-                                            {1.0f, -1.0f, 1.0f},
-                                            {1.0f, -1.0f, 1.0f},
+                                        {1.0f, -1.0f, 1.0f},
+                                        {1.0f, -1.0f, 1.0f},
+                                        {1.0f, -1.0f, 1.0f},
 
-                                            {1.0f, -1.0f, -1.0f},
-                                            {1.0f, -1.0f, -1.0f},
-                                            {1.0f, -1.0f, -1.0f},
+                                        {1.0f, -1.0f, -1.0f},
+                                        {1.0f, -1.0f, -1.0f},
+                                        {1.0f, -1.0f, -1.0f},
 
-                                            {-1.0f, -1.0f, 1.0f},
-                                            {-1.0f, -1.0f, 1.0f},
-                                            {-1.0f, -1.0f, 1.0f},
+                                        {-1.0f, -1.0f, 1.0f},
+                                        {-1.0f, -1.0f, 1.0f},
+                                        {-1.0f, -1.0f, 1.0f},
 
-                                            {-1.0f, 1.0f, 1.0f},
-                                            {-1.0f, 1.0f, 1.0f},
-                                            {-1.0f, 1.0f, 1.0f},
+                                        {-1.0f, 1.0f, 1.0f},
+                                        {-1.0f, 1.0f, 1.0f},
+                                        {-1.0f, 1.0f, 1.0f},
 
-                                            {1.0f, 1.0f, 1.0f},
-                                            {1.0f, 1.0f, 1.0f},
-                                            {1.0f, 1.0f, 1.0f},
+                                        {1.0f, 1.0f, 1.0f},
+                                        {1.0f, 1.0f, 1.0f},
+                                        {1.0f, 1.0f, 1.0f},
 
-                                            {1.0f, 1.0f, -1.0f},
-                                            {1.0f, 1.0f, -1.0f},
-                                            {1.0f, 1.0f, -1.0f},
+                                        {1.0f, 1.0f, -1.0f},
+                                        {1.0f, 1.0f, -1.0f},
+                                        {1.0f, 1.0f, -1.0f},
 
-                                            {-1.0f, 1.0f, -1.0f},
-                                            {-1.0f, 1.0f, -1.0f},
-                                            {-1.0f, 1.0f, -1.0f}};
+                                        {-1.0f, 1.0f, -1.0f},
+                                        {-1.0f, 1.0f, -1.0f},
+                                        {-1.0f, 1.0f, -1.0f}};
 
-    std::vector<FIRE::Vector3> normals = {{0.0f, -1.0f, 0.0f},
-                                          {0.0f, 0.0f, -1.0f},
-                                          {-1.0f, 0.0f, 0.0f},
+    std::vector<glm::vec3> normals = {{0.0f, -1.0f, 0.0f},
+                                      {0.0f, 0.0f, -1.0f},
+                                      {-1.0f, 0.0f, 0.0f},
 
-                                          {0.0f, 0.0f, 1.0f},
-                                          {1.0f, 0.0f, 0.0f},
-                                          {0.0f, -1.0f, 0.0f},
+                                      {0.0f, 0.0f, 1.0f},
+                                      {1.0f, 0.0f, 0.0f},
+                                      {0.0f, -1.0f, 0.0f},
 
-                                          {0.0f, -1.0f, 0.0f},
-                                          {1.0f, 0.0f, 0.0f},
-                                          {0.0f, 0.0f, -1.0f},
+                                      {0.0f, -1.0f, 0.0f},
+                                      {1.0f, 0.0f, 0.0f},
+                                      {0.0f, 0.0f, -1.0f},
 
-                                          {0.0f, -1.0f, 0.0f},
-                                          {-1.0f, 0.0f, 0.0f},
-                                          {0.0f, 0.0f, 1.0f},
+                                      {0.0f, -1.0f, 0.0f},
+                                      {-1.0f, 0.0f, 0.0f},
+                                      {0.0f, 0.0f, 1.0f},
 
-                                          {-1.0f, 0.0f, 0.0f},
-                                          {0.0f, 0.0f, 1.0f},
-                                          {0.0f, 1.0f, 0.0f},
+                                      {-1.0f, 0.0f, 0.0f},
+                                      {0.0f, 0.0f, 1.0f},
+                                      {0.0f, 1.0f, 0.0f},
 
-                                          {1.0f, 0.0f, 0.0f},
-                                          {0.0f, 1.0f, 0.0f},
-                                          {0.0f, 0.0f, 1.0f},
+                                      {1.0f, 0.0f, 0.0f},
+                                      {0.0f, 1.0f, 0.0f},
+                                      {0.0f, 0.0f, 1.0f},
 
-                                          {1.0f, 0.0f, 0.0f},
-                                          {0.0f, 1.0f, 0.0f},
-                                          {0.0f, 0.0f, -1.0f},
+                                      {1.0f, 0.0f, 0.0f},
+                                      {0.0f, 1.0f, 0.0f},
+                                      {0.0f, 0.0f, -1.0f},
 
-                                          {-1.0f, 0.0f, 0.0f},
-                                          {0.0f, 1.0f, 0.0f},
-                                          {0.0f, 0.0f, -1.0f}};
+                                      {-1.0f, 0.0f, 0.0f},
+                                      {0.0f, 1.0f, 0.0f},
+                                      {0.0f, 0.0f, -1.0f}};
 
     std::vector<unsigned int> indices = {
         11, 3, 17, 11, 17, 13,  // front
@@ -117,12 +117,12 @@ MeshHandle MeshManager::CreatePlane(std::string name)
         return {name, MeshType::Plane};
     }
 
-    std::vector<FIRE::Vector3> positions = {{-1.0f, 0.0f, -1.0f},
-                                            {-1.0f, 0.0f, 1.0f},
-                                            {1.0f, 0.0f, 1.0f},
-                                            {1.0f, 0.0f, -1.0f}};
+    std::vector<glm::vec3> positions = {{-1.0f, 0.0f, -1.0f},
+                                        {-1.0f, 0.0f, 1.0f},
+                                        {1.0f, 0.0f, 1.0f},
+                                        {1.0f, 0.0f, -1.0f}};
 
-    std::vector<FIRE::Vector3> normals;
+    std::vector<glm::vec3> normals;
     normals.reserve(4u);
     for(auto i = 0u; i < 4u; ++i)
     {
@@ -146,8 +146,8 @@ MeshHandle MeshManager::CreateSphere(std::string name, uint32_t segments)
         return {name, MeshType::Sphere};
     }
 
-    std::vector<FIRE::Vector3> positions;
-    std::vector<FIRE::Vector3> normals;
+    std::vector<glm::vec3> positions;
+    std::vector<glm::vec3> normals;
     std::vector<unsigned int> indices;
 
     // top
@@ -157,16 +157,16 @@ MeshHandle MeshManager::CreateSphere(std::string name, uint32_t segments)
     // middle
     for(auto j = 0u; j < segments - 1; ++j)
     {
-        double polarAngle = M_PI * double(j + 1) / double(segments); // 0° - 180° divided into segments
+        double polarAngle = glm::pi<double>() * double(j + 1) / double(segments); // 0° - 180° divided into segments
         double const sinPolar = std::sin(polarAngle);
         double const cosPolar = std::cos(polarAngle);
 
         for(auto i = 0u; i < segments; ++i)
         {
-            double const azimuth = 2.0 * M_PI * double(i) / double(segments); // 0° - 360° divided into segments
+            double const azimuth = 2.0 * glm::pi<double>() * double(i) / double(segments); // 0° - 360° divided into segments
             double const sinAzimuth = std::sin(azimuth);
             double const cosAzimuth = std::cos(azimuth);
-            Vector3 pos(
+            glm::vec3 pos(
                 static_cast<float>(sinPolar * cosAzimuth),
                 static_cast<float>(cosPolar),
                 static_cast<float>(sinPolar * sinAzimuth));
@@ -225,11 +225,40 @@ MeshHandle MeshManager::CreateSphere(std::string name, uint32_t segments)
         std::move(indices));
 }
 
+//MeshHandle MeshManager::Create2DRect(std::string name, float x, float y, float width, float height)
+MeshHandle MeshManager::Create2DRect(std::string name, float, float, float, float)
+{
+    if(Lookup({name, MeshType::Rect2D}))
+    {
+        return {name, MeshType::Rect2D};
+    }
+
+    std::vector<glm::vec2> positions;
+    std::vector<unsigned int> indices;
+
+    return Create(MeshType::Rect2D, std::move(name), std::move(positions), std::move(indices));
+}
+
 MeshHandle MeshManager::Create(
     MeshType meshType,
     std::string name,
-    std::vector<FIRE::Vector3>&& positions,
-    std::vector<FIRE::Vector3>&& normals,
+    std::vector<glm::vec2> positions,
+    std::vector<unsigned int> indices)
+{
+    auto mesh = std::make_unique<Mesh>(name);
+    mesh->AddPositions(positions);
+    mesh->AddIndices(indices);
+    mesh->GetVertexDeclaration().AddSection("vPos", 2u, 0u);
+
+    m_cache.insert(std::make_pair(name, std::make_pair(meshType, std::move(mesh))));
+    return {name, meshType};
+}
+
+MeshHandle MeshManager::Create(
+    MeshType meshType,
+    std::string name,
+    std::vector<glm::vec3>&& positions,
+    std::vector<glm::vec3>&& normals,
     std::vector<unsigned int>&& indices)
 {
     auto mesh = std::make_unique<Mesh>(name);

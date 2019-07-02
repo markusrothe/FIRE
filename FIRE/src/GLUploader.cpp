@@ -31,9 +31,9 @@ void SpecifyVertexAttributes(VertexDeclaration const& vDecl, GLuint shader)
     }
 }
 
-void Write(std::vector<float> const& data, size_t offset)
+void Write(std::vector<glm::vec3> const& data, size_t offset)
 {
-    glBufferSubData(GL_ARRAY_BUFFER, offset, data.size() * sizeof(float), &data[0]);
+    glBufferSubData(GL_ARRAY_BUFFER, offset, data.size() * sizeof(data[0]), &data[0]);
 }
 
 GLuint UploadVertices(Mesh* mesh, GLuint shader)
@@ -43,10 +43,10 @@ GLuint UploadVertices(Mesh* mesh, GLuint shader)
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-    auto const positions = mesh->PositionsAsArray();
-    auto const normals = mesh->NormalsAsArray();
+    auto const positions = mesh->Positions();
+    auto const normals = mesh->Normals();
 
-    auto bufferSize = (positions.size() + normals.size()) * sizeof(float);
+    auto bufferSize = (positions.size() + normals.size()) * sizeof(glm::vec3);
     glBufferData(GL_ARRAY_BUFFER, bufferSize, NULL, GL_STATIC_DRAW);
 
     if(!positions.empty())
@@ -56,7 +56,7 @@ GLuint UploadVertices(Mesh* mesh, GLuint shader)
 
     if(!normals.empty())
     {
-        Write(normals, positions.size() * sizeof(float));
+        Write(normals, positions.size() * sizeof(positions[0]));
     }
 
     SpecifyVertexAttributes(mesh->GetVertexDeclaration(), shader);

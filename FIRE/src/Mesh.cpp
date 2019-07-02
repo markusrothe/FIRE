@@ -6,7 +6,7 @@ namespace FIRE
 
 namespace
 {
-std::vector<float> FlattenVectors(std::vector<Vector3> const& vecs)
+std::vector<float> FlattenVectors(std::vector<glm::vec3> const& vecs)
 {
     std::vector<float> result;
     for(auto const& vec : vecs)
@@ -31,24 +31,24 @@ std::string Mesh::Name() const
     return m_name;
 }
 
-void Mesh::AddPosition(Vector3 vertex)
+void Mesh::AddPosition(glm::vec3 vertex)
 {
     m_positions.push_back(std::move(vertex));
 }
 
-void Mesh::AddPositions(std::vector<Vector3> vertices)
+void Mesh::AddPositions(std::vector<glm::vec3> vertices)
 {
     m_positions.insert(m_positions.end(), vertices.begin(), vertices.end());
 }
 
-std::vector<Vector3> Mesh::Positions() const
+void Mesh::AddPositions(std::vector<glm::vec2> positions)
 {
-    return m_positions;
+    m_positions2D.insert(m_positions2D.end(), positions.begin(), positions.end());
 }
 
-std::vector<float> Mesh::PositionsAsArray() const
+std::vector<glm::vec3> Mesh::Positions() const
 {
-    return FlattenVectors(m_positions);
+    return m_positions;
 }
 
 void Mesh::AddIndex(unsigned int idx)
@@ -74,24 +74,19 @@ std::vector<unsigned int> Mesh::Indices() const
     return m_indices;
 }
 
-void Mesh::AddNormal(Vector3 normal)
+void Mesh::AddNormal(glm::vec3 normal)
 {
     m_normals.push_back(std::move(normal));
 }
 
-void Mesh::AddNormals(std::vector<Vector3> normals)
+void Mesh::AddNormals(std::vector<glm::vec3> normals)
 {
     m_normals.insert(m_normals.end(), normals.begin(), normals.end());
 }
 
-std::vector<Vector3> Mesh::Normals() const
+std::vector<glm::vec3> Mesh::Normals() const
 {
     return m_normals;
-}
-
-std::vector<float> Mesh::NormalsAsArray() const
-{
-    return FlattenVectors(m_normals);
 }
 
 VertexDeclaration& Mesh::GetVertexDeclaration()

@@ -6,8 +6,6 @@ add_library(FIRE STATIC
     include/FIRE/Mesh.h
     include/FIRE/Renderable.h  
     include/FIRE/Renderer.h 
-    include/FIRE/Vector.h
-    include/FIRE/Matrix.h
     include/FIRE/VertexDeclaration.h
     include/FIRE/GLFactory.h
     include/FIRE/Scene.h
@@ -21,8 +19,8 @@ add_library(FIRE STATIC
     include/FIRE/ShaderType.h
     include/FIRE/MaterialFactory.h
     include/FIRE/Material.h
+    include/FIRE/glmfwd.h
     
-    src/glm_wrapper.h
     src/Uploader.h
     src/DrawAgent.h
     src/GLUploader.h    
@@ -43,7 +41,6 @@ add_library(FIRE STATIC
     src/RendererImpl.cpp
     src/MaterialFactory.cpp
     src/VertexDeclaration.cpp
-    src/Matrix.cpp
     src/Scene.cpp
     src/Transform.cpp
     src/InputListener.cpp
@@ -60,10 +57,12 @@ PRIVATE
 )
 
 target_link_libraries(FIRE
+    PUBLIC
+    glm
+
     PRIVATE
     glfw
     glad
-    glm
     CompileOptions
     MeasureCoverage
     freetype

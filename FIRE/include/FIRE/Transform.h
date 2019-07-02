@@ -1,8 +1,7 @@
 #ifndef FIRE_Transform_h
 #define FIRE_Transform_h
 
-#include <FIRE/Matrix.h>
-#include <FIRE/Vector.h>
+#include <FIRE/glmfwd.h>
 #include <memory>
 
 namespace FIRE
@@ -12,31 +11,28 @@ class Transform
 {
 public:
     explicit Transform(
-        Vector3 pos = Vector3(0.0f, 0.0f, 0.0f),
-        Vector3 lookAt = Vector3(0.0f, 0.0f, -1.0f));
+        glm::vec3 pos = glm::vec3(0.0f, 0.0f, 0.0f),
+        glm::vec3 lookAt = glm::vec3(0.0f, 0.0f, -1.0f));
 
-    Transform(Transform const& other);
-    Transform& operator=(Transform other);
-
-    ~Transform();
-
-    Vector3 Position() const;
-    Vector3 LookAt() const;
-    Vector3 GetScaling() const;
-    Vector3 Right() const;
-    Vector3 Up() const;
-    void SetLookAt(Vector3 dir);
+    glm::vec3 Position() const;
+    glm::vec3 LookAt() const;
+    glm::vec3 GetScaling() const;
+    glm::vec3 Right() const;
+    glm::vec3 Up() const;
+    void SetLookAt(glm::vec3 dir);
 
     void Translate(float x, float y, float z);
-    void Translate(Vector3 const& vec);
-    void Rotate(Vector3 const& axis, float angle);
-    void Scale(Vector3 const& scale);
+    void Translate(glm::vec3 const& vec);
+    void Rotate(glm::vec3 const& axis, float angle);
+    void Scale(glm::vec3 const& scale);
 
-    Matrix4x4 ModelMatrix() const;
+    glm::mat4x4 ModelMatrix() const;
 
 private:
-    class Impl;
-    std::unique_ptr<Impl> m_impl;
+    glm::vec3 m_pos;
+    glm::vec3 m_scale;
+    glm::vec3 m_lookAt;
+    glm::quat m_rotation;
 };
 } // namespace FIRE
 

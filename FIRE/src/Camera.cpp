@@ -1,13 +1,12 @@
 #include <FIRE/Camera.h>
-
-#include "glm_wrapper.h"
+#include <FIRE/glmfwd.h>
 
 namespace FIRE
 {
 Camera::Camera(
     std::string name,
-    Vector3 pos /* = Vertex(0.0f, 0.0f, 0.0f) */,
-    Vector3 viewDir /*= Vertex(0.0f, 0.0f, -1.0f) */)
+    glm::vec3 pos /* = Vertex(0.0f, 0.0f, 0.0f) */,
+    glm::vec3 viewDir /*= Vertex(0.0f, 0.0f, -1.0f) */)
     : m_name(std::move(name))
     , m_transform(pos, viewDir)
 {
@@ -23,9 +22,9 @@ Transform& Camera::GetTransform()
     return m_transform;
 }
 
-Matrix4x4 Camera::ViewMatrix() const
+glm::mat4x4 Camera::ViewMatrix() const
 {
-    return CreateViewMatrix(m_transform.Position(), m_transform.LookAt(), m_transform.Up());
+    return glm::lookAt(m_transform.Position(), m_transform.LookAt(), m_transform.Up());
 }
 
 bool operator==(FIRE::Camera const& lhs, FIRE::Camera const& rhs)
