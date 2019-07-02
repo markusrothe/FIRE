@@ -1,4 +1,4 @@
-#include <FIRE/Mesh.h>
+#include <FIRE/Mesh3D.h>
 #include <gtest/gtest.h>
 #include <string>
 namespace
@@ -12,7 +12,7 @@ class AMesh : public ::testing::Test
 {
 public:
 protected:
-    FIRE::Mesh mesh{name};
+    FIRE::Mesh3D mesh{name};
 };
 
 } // namespace

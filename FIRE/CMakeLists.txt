@@ -3,7 +3,8 @@ add_library(FIRE STATIC
     include/FIRE/Window.h
     include/FIRE/RenderContext.h
     include/FIRE/MeshManager.h
-    include/FIRE/Mesh.h
+    include/FIRE/Mesh3D.h
+    include/FIRE/Mesh2D.h
     include/FIRE/Renderable.h  
     include/FIRE/Renderer.h 
     include/FIRE/VertexDeclaration.h
@@ -20,6 +21,7 @@ add_library(FIRE STATIC
     include/FIRE/MaterialFactory.h
     include/FIRE/Material.h
     include/FIRE/glmfwd.h
+    include/FIRE/MeshType.h
     
     src/Uploader.h
     src/DrawAgent.h
@@ -32,7 +34,8 @@ add_library(FIRE STATIC
     src/Camera.cpp
     src/Window.cpp    
     src/Renderable.cpp
-    src/Mesh.cpp
+    src/Mesh3D.cpp
+    src/Mesh2D.cpp
     src/GLFactory.cpp
     src/GLUploader.cpp
     src/GLDrawAgent.cpp

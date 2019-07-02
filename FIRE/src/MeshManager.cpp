@@ -1,11 +1,10 @@
-#include <FIRE/Mesh.h>
 #include <FIRE/MeshManager.h>
 #include <algorithm>
 #include <cmath>
 #include <iostream>
 namespace FIRE
 {
-Mesh* MeshManager::Lookup(MeshHandle const& handle)
+Mesh3D* MeshManager::Lookup3D(MeshHandle const& handle)
 {
     auto mesh = m_cache.find(handle.name);
     if(mesh != std::cend(m_cache))
@@ -24,7 +23,7 @@ Mesh* MeshManager::Lookup(MeshHandle const& handle)
 
 MeshHandle MeshManager::CreateCube(std::string name)
 {
-    if(Lookup({name, MeshType::Cube}))
+    if(Lookup3D({name, MeshType::Cube}))
     {
         return {name, MeshType::Cube};
     }
@@ -112,7 +111,7 @@ MeshHandle MeshManager::CreateCube(std::string name)
 MeshHandle MeshManager::CreatePlane(std::string name)
 {
 
-    if(Lookup({name, MeshType::Plane}))
+    if(Lookup3D({name, MeshType::Plane}))
     {
         return {name, MeshType::Plane};
     }
@@ -141,7 +140,7 @@ MeshHandle MeshManager::CreatePlane(std::string name)
 
 MeshHandle MeshManager::CreateSphere(std::string name, uint32_t segments)
 {
-    if(Lookup({name, MeshType::Sphere}))
+    if(Lookup3D({name, MeshType::Sphere}))
     {
         return {name, MeshType::Sphere};
     }
@@ -225,34 +224,34 @@ MeshHandle MeshManager::CreateSphere(std::string name, uint32_t segments)
         std::move(indices));
 }
 
-//MeshHandle MeshManager::Create2DRect(std::string name, float x, float y, float width, float height)
-MeshHandle MeshManager::Create2DRect(std::string name, float, float, float, float)
-{
-    if(Lookup({name, MeshType::Rect2D}))
-    {
-        return {name, MeshType::Rect2D};
-    }
+// //MeshHandle MeshManager::Create2DRect(std::string name, float x, float y, float width, float height)
+// MeshHandle MeshManager::Create2DRect(std::string name, float, float, float, float)
+// {
+//     if(Lookup3D({name, MeshType::Rect2D}))
+//     {
+//         return {name, MeshType::Rect2D};
+//     }
 
-    std::vector<glm::vec2> positions;
-    std::vector<unsigned int> indices;
+//     std::vector<glm::vec2> positions;
+//     std::vector<unsigned int> indices;
 
-    return Create(MeshType::Rect2D, std::move(name), std::move(positions), std::move(indices));
-}
+//     return Create(MeshType::Rect2D, std::move(name), std::move(positions), std::move(indices));
+// }
 
-MeshHandle MeshManager::Create(
-    MeshType meshType,
-    std::string name,
-    std::vector<glm::vec2> positions,
-    std::vector<unsigned int> indices)
-{
-    auto mesh = std::make_unique<Mesh>(name);
-    mesh->AddPositions(positions);
-    mesh->AddIndices(indices);
-    mesh->GetVertexDeclaration().AddSection("vPos", 2u, 0u);
+// MeshHandle MeshManager::Create(
+//     MeshType meshType,
+//     std::string name,
+//     std::vector<glm::vec2> positions,
+//     std::vector<unsigned int> indices)
+// {
+//     auto mesh = std::make_unique<Mesh2D>(name);
+//     mesh->AddPositions(positions);
+//     mesh->AddIndices(indices);
+//     mesh->GetVertexDeclaration().AddSection("vPos", 2u, 0u);
 
-    m_cache.insert(std::make_pair(name, std::make_pair(meshType, std::move(mesh))));
-    return {name, meshType};
-}
+//     m_cache.insert(std::make_pair(name, std::make_pair(meshType, std::move(mesh))));
+//     return {name, meshType};
+// }
 
 MeshHandle MeshManager::Create(
     MeshType meshType,
@@ -261,7 +260,7 @@ MeshHandle MeshManager::Create(
     std::vector<glm::vec3>&& normals,
     std::vector<unsigned int>&& indices)
 {
-    auto mesh = std::make_unique<Mesh>(name);
+    auto mesh = std::make_unique<Mesh3D>(name);
     mesh->AddPositions(positions);
     mesh->AddNormals(normals);
     mesh->AddIndices(indices);

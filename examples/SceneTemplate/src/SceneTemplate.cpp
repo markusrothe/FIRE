@@ -4,7 +4,7 @@
 #include <FIRE/Camera.h>
 #include <FIRE/GLFactory.h>
 #include <FIRE/MaterialFactory.h>
-#include <FIRE/Mesh.h>
+#include <FIRE/Mesh3D.h>
 #include <FIRE/MeshManager.h>
 #include <FIRE/ShaderFactory.h>
 #include <FIRE/Window.h>

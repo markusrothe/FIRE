@@ -1,6 +1,6 @@
 #include "GLUploader.h"
 #include <FIRE/Material.h>
-#include <FIRE/Mesh.h>
+#include <FIRE/Mesh3D.h>
 #include <FIRE/MeshManager.h>
 #include <FIRE/Renderable.h>
 #include <FIRE/VertexDeclaration.h>
@@ -36,7 +36,7 @@ void Write(std::vector<glm::vec3> const& data, size_t offset)
     glBufferSubData(GL_ARRAY_BUFFER, offset, data.size() * sizeof(data[0]), &data[0]);
 }
 
-GLuint UploadVertices(Mesh* mesh, GLuint shader)
+GLuint UploadVertices(Mesh3D* mesh, GLuint shader)
 {
     GLuint vbo;
 
@@ -100,7 +100,7 @@ GLVertexArrayObject GLUploader::Upload(Renderable const& renderable)
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
-    Mesh* mesh = m_meshFactory.Lookup(renderable.mesh);
+    Mesh3D* mesh = m_meshFactory.Lookup3D(renderable.mesh);
     if(!mesh)
     {
         return GLVertexArrayObject(0, 0, 0);

@@ -1,5 +1,5 @@
 #include "Utilities.h"
-#include <FIRE/Mesh.h>
+#include <FIRE/Mesh3D.h>
 #include <FIRE/MeshManager.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
@@ -24,7 +24,7 @@ using TestUtil::EXPECT_VEC_EQ;
 TEST_F(AMeshManager, CreatesACube)
 {
     FIRE::MeshHandle mesh = meshManager.CreateCube(CUBE);
-    FIRE::Mesh* cube = meshManager.Lookup(mesh);
+    FIRE::Mesh3D* cube = meshManager.Lookup3D(mesh);
     ASSERT_TRUE(cube);
 
     auto const positions = cube->Positions();
@@ -48,7 +48,7 @@ TEST_F(AMeshManager, CreatesACube)
 TEST_F(AMeshManager, CreatesAPlane)
 {
     FIRE::MeshHandle mesh = meshManager.CreatePlane(PLANE);
-    FIRE::Mesh* planeMesh = meshManager.Lookup(mesh);
+    auto planeMesh = meshManager.Lookup3D(mesh);
     ASSERT_TRUE(planeMesh);
 
     auto const positions = planeMesh->Positions();
@@ -73,27 +73,27 @@ TEST_F(AMeshManager, CreatesASphere)
 {
     auto const numSegments = 4;
     auto const meshHandle = meshManager.CreateSphere(SPHERE, numSegments);
-    auto const mesh = meshManager.Lookup(meshHandle);
+    auto const mesh = meshManager.Lookup3D(meshHandle);
     ASSERT_TRUE(mesh);
     EXPECT_EQ(14u, mesh->Positions().size());
     EXPECT_EQ(14u, mesh->Normals().size());
     EXPECT_EQ(72u, mesh->Indices().size());
 }
 
-TEST_F(AMeshManager, Creates2DRectangles)
-{
-    auto const meshHandle = meshManager.Create2DRect("2d_rect", 0, 0, 10, 10);
-    auto const mesh = meshManager.Lookup(meshHandle);
-    ASSERT_TRUE(mesh);
-}
+// TEST_F(AMeshManager, Creates2DRectangles)
+// {
+//     auto const meshHandle = meshManager.Create2DRect("2d_rect", 0, 0, 10, 10);
+//     auto const mesh = meshManager.Lookup(meshHandle);
+//     ASSERT_TRUE(mesh);
+// }
 
 TEST_F(AMeshManager, CachesACreatedMesh)
 {
     auto const meshHandle1 = meshManager.CreateCube(CUBE);
     auto const meshHandle2 = meshManager.CreateCube(CUBE);
 
-    auto mesh1 = meshManager.Lookup(meshHandle1);
-    auto mesh2 = meshManager.Lookup(meshHandle2);
+    auto mesh1 = meshManager.Lookup3D(meshHandle1);
+    auto mesh2 = meshManager.Lookup3D(meshHandle2);
 
     EXPECT_EQ(mesh1, mesh2);
 }
