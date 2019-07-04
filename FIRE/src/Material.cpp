@@ -1,5 +1,4 @@
 #include <FIRE/Material.h>
-#include <FIRE/Matrix.h>
 
 namespace FIRE
 {
