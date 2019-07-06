@@ -54,14 +54,15 @@ FIRE::Renderable CreateCube(FIRE::MeshManager& factory, FIRE::MaterialFactory& m
 SceneTemplate::SceneTemplate(FIRE::Camera& cam, FIRE::Window& window, FIRE::MeshManager& meshManager, FIRE::MaterialFactory& materialFactory)
     : m_lightPos{5.0f, 10.0f, 7.0f}
     , m_proj(glm::perspective(70.0f, static_cast<float>(window.GetWidth()) / static_cast<float>(window.GetHeight()), 0.01f, 500.0f))
+    , m_plane(CreatePlane(meshManager, materialFactory))
+    , m_lightCube(CreateCube(meshManager, materialFactory))
+    , m_text("FIRE fire 12345 0.5", 0.5, 0.5)
 {
     MapInput(cam, window);
 
-    m_plane = CreatePlane(meshManager, materialFactory);
     m_plane.transform.Scale(glm::vec3(20.0f, 1.0f, 20.0f));
     m_plane.material.SetShaderParameter("LightPos", FIRE::ShaderParameterType::VEC3, m_lightPos);
 
-    m_lightCube = CreateCube(meshManager, materialFactory);
     m_lightCube.transform.Translate(m_lightPos);
     m_lightCube.transform.Scale({0.1f, 0.1f, 0.1f});
 }
@@ -72,12 +73,17 @@ void SceneTemplate::Update(FIRE::Camera& cam)
 
     m_plane.material.SetShaderParameter("M", FIRE::ShaderParameterType::MAT4x4, m_plane.transform.ModelMatrix());
     m_plane.material.SetShaderParameter("VP", FIRE::ShaderParameterType::MAT4x4, VP);
-
     m_lightCube.material.SetShaderParameter("MVP", FIRE::ShaderParameterType::MAT4x4, VP * m_lightCube.transform.ModelMatrix());
 }
 
 std::vector<FIRE::Renderable> SceneTemplate::CollectRenderables() const
 {
     return {m_plane, m_lightCube};
+}
+
+std::vector<FIRE::TextOverlay> SceneTemplate::CollectTextOverlays() const
+{
+
+    return {m_text};
 }
 } // namespace SceneTemplate

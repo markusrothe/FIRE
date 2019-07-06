@@ -22,6 +22,7 @@ add_library(FIRE STATIC
     include/FIRE/Material.h
     include/FIRE/glmfwd.h
     include/FIRE/MeshType.h
+    include/FIRE/TextOverlay.h
     
     src/Uploader.h
     src/DrawAgent.h
@@ -30,6 +31,10 @@ add_library(FIRE STATIC
     src/GLShaderFactory.h
     src/GLRenderContext.h
     src/RendererImpl.h
+    src/TextureFactory.h
+    src/FontTextureFactory.h
+    src/GLFontTextureFactory.h
+    src/GLTextRenderer.h
       
     src/Camera.cpp
     src/Window.cpp    
@@ -49,6 +54,10 @@ add_library(FIRE STATIC
     src/InputListener.cpp
     src/Material.cpp
     src/MeshManager.cpp
+    src/TextOverlay.cpp
+    src/TextureFactory.cpp
+    src/GLFontTextureFactory.cpp
+    src/GLTextRenderer.cpp
 )
 
 target_include_directories(FIRE
@@ -75,5 +84,10 @@ if(MSVC)
     set_target_properties(FIRE PROPERTIES COMPILE_FLAGS /D_USE_MATH_DEFINES)
 endif()
 
+file(GLOB_RECURSE assets ${CMAKE_CURRENT_SOURCE_DIR}/assets/**/*)
+set_target_properties(FIRE
+    PROPERTIES 
+    RESOURCE "${assets}"
+)
 
 add_subdirectory(test)

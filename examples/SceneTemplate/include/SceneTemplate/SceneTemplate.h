@@ -3,7 +3,7 @@
 
 #include <FIRE/Renderable.h>
 #include <FIRE/SceneComponent.h>
-
+#include <FIRE/TextOverlay.h>
 #include <vector>
 
 namespace FIRE
@@ -24,13 +24,14 @@ public:
     void Update(FIRE::Camera& cam) override;
 
     std::vector<FIRE::Renderable> CollectRenderables() const override;
+    std::vector<FIRE::TextOverlay> CollectTextOverlays() const override;
 
 private:
     glm::vec3 m_lightPos;
     glm::mat4x4 m_proj;
     FIRE::Renderable m_plane;
     FIRE::Renderable m_lightCube;
-    FIRE::Renderable m_textBox;
+    FIRE::TextOverlay m_text;
 };
 } // namespace SceneTemplate
 #endif // SceneTemplate_SceneTemplate_h

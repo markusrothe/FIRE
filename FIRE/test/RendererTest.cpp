@@ -10,7 +10,7 @@
 #include <gtest/gtest.h>
 #include <memory>
 #include <tuple>
-
+/*
 namespace
 {
 using ::testing::_;
@@ -102,3 +102,4 @@ TEST_F(ARenderer, DoesNotDoAnythingWithASceneWithoutRenderables)
 
     renderer.Render(scene);
 }
+*/

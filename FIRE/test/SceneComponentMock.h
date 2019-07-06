@@ -11,6 +11,7 @@ class SceneComponentMock : public FIRE::SceneComponent
 public:
     MOCK_METHOD1(Update, void(FIRE::Camera& cam));
     MOCK_CONST_METHOD0(CollectRenderables, std::vector<FIRE::Renderable>());
+    MOCK_CONST_METHOD0(CollectTextOverlays, std::vector<FIRE::TextOverlay>());
 };
 } // namespace Mocks
 

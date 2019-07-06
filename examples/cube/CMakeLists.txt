@@ -16,3 +16,7 @@ install(
     DESTINATION bin
 )
 
+install(
+    FILES $<TARGET_PROPERTY:FIRE,RESOURCE>
+    DESTINATION bin
+)

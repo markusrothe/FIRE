@@ -14,6 +14,8 @@ add_executable(FIRE_tests
     ./TransformTest.cpp
     ./InputListenerTest.cpp
     ./MeshManagerTest.cpp
+    ./TextOverlayTest.cpp
+    ./TextureFactoryTest.cpp
 )
 
 target_include_directories(FIRE_tests
@@ -45,7 +47,3 @@ install(
     DESTINATION bin
 )
 
-install(
-    FILES $<TARGET_FILE:FIRE>
-    DESTINATION bin
-)

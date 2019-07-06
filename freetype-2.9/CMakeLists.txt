@@ -366,7 +366,10 @@ endif ()
 
 if (NOT CMAKE_VERSION VERSION_LESS 2.8.12)
   target_include_directories(freetype
-    PUBLIC $<INSTALL_INTERFACE:include/freetype2>)
+    PUBLIC 
+    $<INSTALL_INTERFACE:include/freetype2>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    )
 endif ()
 
 if (CMAKE_VERSION VERSION_LESS 2.8.12)
