@@ -31,7 +31,6 @@ private:
     glm::mat4x4 m_proj;
     FIRE::Renderable m_plane;
     FIRE::Renderable m_lightCube;
-    FIRE::TextOverlay m_text;
 };
 } // namespace SceneTemplate
 #endif // SceneTemplate_SceneTemplate_h

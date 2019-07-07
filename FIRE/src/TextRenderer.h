@@ -8,7 +8,7 @@ class TextRenderer
 {
 public:
     virtual ~TextRenderer() = default;
-    virtual void Render(TextOverlay overlay) = 0;
+    virtual void Render(TextOverlay overlay, float windowWidth, float windowHeight) = 0;
 };
 } // namespace FIRE
 

@@ -14,10 +14,11 @@ class GLTextRenderer : public TextRenderer
 public:
     explicit GLTextRenderer(std::unique_ptr<TextureFactory> texFactory);
     ~GLTextRenderer();
-    void Render(TextOverlay overlay);
+    void Render(TextOverlay overlay, float windowWidth, float windowHeight) override;
 
 private:
     std::unique_ptr<TextureFactory> m_texFactory;
+    uint32_t texVAO, texVBO;
     uint32_t m_texShader;
 };
 } // namespace FIRE

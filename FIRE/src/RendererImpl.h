@@ -21,7 +21,7 @@ public:
 
     ~RendererImpl() override;
 
-    void Render(Scene const& scene) override;
+    void Render(Scene const& scene, float windowWidth, float windowHeight) override;
 
 private:
     std::unique_ptr<Uploader> m_uploader;

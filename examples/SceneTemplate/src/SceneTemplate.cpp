@@ -56,7 +56,6 @@ SceneTemplate::SceneTemplate(FIRE::Camera& cam, FIRE::Window& window, FIRE::Mesh
     , m_proj(glm::perspective(70.0f, static_cast<float>(window.GetWidth()) / static_cast<float>(window.GetHeight()), 0.01f, 500.0f))
     , m_plane(CreatePlane(meshManager, materialFactory))
     , m_lightCube(CreateCube(meshManager, materialFactory))
-    , m_text("FIRE fire 12345 0.5", 0.5, 0.5)
 {
     MapInput(cam, window);
 
@@ -83,7 +82,8 @@ std::vector<FIRE::Renderable> SceneTemplate::CollectRenderables() const
 
 std::vector<FIRE::TextOverlay> SceneTemplate::CollectTextOverlays() const
 {
-
-    return {m_text};
+    return {
+        FIRE::TextOverlay("Fire SceneTemplate", 0.02f, 0.02f),
+        FIRE::TextOverlay("2nd text overlay", 0.02f, 0.12f)};
 }
 } // namespace SceneTemplate

@@ -17,6 +17,10 @@ namespace
 using ::testing::_;
 using ::testing::Ref;
 using ::testing::Return;
+
+float constexpr WIDTH = 800.0f;
+float constexpr HEIGHT = 600.0f;
+
 class UploaderMock : public FIRE::Uploader
 {
 public:
@@ -33,7 +37,7 @@ public:
 class TextRendererMock : public FIRE::TextRenderer
 {
 public:
-    MOCK_METHOD1(Render, void(FIRE::TextOverlay));
+    MOCK_METHOD3(Render, void(FIRE::TextOverlay, float, float));
 };
 
 class ARenderer : public ::testing::Test
@@ -79,7 +83,7 @@ TEST_F(ARenderer, UploadsRenderableToGPU)
     EXPECT_CALL(uploader, Upload(renderable))
         .WillOnce(Return(FIRE::GLVertexArrayObject(0, 0, 0)));
 
-    renderer.Render(scene);
+    renderer.Render(scene, WIDTH, HEIGHT);
 }
 
 TEST_F(ARenderer, RendersAScene)
@@ -91,7 +95,7 @@ TEST_F(ARenderer, RendersAScene)
         .WillByDefault(Return(FIRE::GLVertexArrayObject(0, 0, 0)));
 
     EXPECT_CALL(drawAgent, Draw(renderable, _));
-    renderer.Render(scene);
+    renderer.Render(scene, WIDTH, HEIGHT);
 }
 
 TEST_F(ARenderer, DoesNotDoAnythingWithAnEmptyScene)
@@ -100,7 +104,7 @@ TEST_F(ARenderer, DoesNotDoAnythingWithAnEmptyScene)
     EXPECT_CALL(drawAgent, Draw(_, _)).Times(0);
 
     FIRE::Scene emptyScene(FIRE::Camera(""));
-    renderer.Render(emptyScene);
+    renderer.Render(emptyScene, WIDTH, HEIGHT);
 }
 
 TEST_F(ARenderer, DoesNotDoAnythingWithASceneWithoutRenderables)
@@ -111,7 +115,7 @@ TEST_F(ARenderer, DoesNotDoAnythingWithASceneWithoutRenderables)
     EXPECT_CALL(uploader, Upload(_)).Times(0);
     EXPECT_CALL(drawAgent, Draw(_, _)).Times(0);
 
-    renderer.Render(scene);
+    renderer.Render(scene, WIDTH, HEIGHT);
 }
 
 TEST_F(ARenderer, RendersTextOverlays)
@@ -119,6 +123,17 @@ TEST_F(ARenderer, RendersTextOverlays)
     FIRE::TextOverlay overlay("", 0.4f, 0.4f);
     std::vector<FIRE::TextOverlay> textOverlays = {overlay};
     ON_CALL(*sceneComponent, CollectTextOverlays).WillByDefault(Return(textOverlays));
-    EXPECT_CALL(textRenderer, Render(overlay));
-    renderer.Render(scene);
+    EXPECT_CALL(textRenderer, Render(overlay, _, _));
+    renderer.Render(scene, WIDTH, HEIGHT);
+}
+
+TEST_F(ARenderer, UsesWindowResolutionWhenRenderingText)
+{
+    FIRE::TextOverlay overlay("", 0.0f, 0.0f);
+    std::vector<FIRE::TextOverlay> textOverlays = {overlay};
+
+    ON_CALL(*sceneComponent, CollectTextOverlays).WillByDefault(Return(textOverlays));
+
+    EXPECT_CALL(textRenderer, Render(_, WIDTH, HEIGHT));
+    renderer.Render(scene, WIDTH, HEIGHT);
 }

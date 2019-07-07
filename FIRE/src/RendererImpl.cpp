@@ -22,7 +22,7 @@ RendererImpl::RendererImpl(
 
 RendererImpl::~RendererImpl() = default;
 
-void RendererImpl::Render(Scene const& scene)
+void RendererImpl::Render(Scene const& scene, float windowWidth, float windowHeight)
 {
     m_drawAgent->Clear();
 
@@ -34,7 +34,7 @@ void RendererImpl::Render(Scene const& scene)
 
     for(auto const& textOverlay : scene.CollectTextOverlays())
     {
-        m_textRenderer->Render(textOverlay);
+        m_textRenderer->Render(textOverlay, windowWidth, windowHeight);
     }
 }
 } // namespace FIRE

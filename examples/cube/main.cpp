@@ -33,7 +33,7 @@ int main(int, char**)
     {
         window.PollEvents();
         scene.Update();
-        renderer->Render(scene);
+        renderer->Render(scene, WINDOW_WIDTH, WINDOW_HEIGHT);
         window.SwapBuffers();
     }
 }
