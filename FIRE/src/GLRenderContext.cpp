@@ -210,7 +210,7 @@ GLRenderContext::Impl::Impl(Window& window)
     glfwSetKeyCallback(m_window, key_callback);
 
     glfwSetCursorPosCallback(m_window, mouse_callback);
-
+    glfwSwapInterval(0);
     glfwSetMouseButtonCallback(m_window, mouse_button_callback);
 }
 

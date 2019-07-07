@@ -74,11 +74,3 @@ TEST_F(AMesh, HasAVertexDeclaration)
     EXPECT_EQ(size, sections.at(attributeName).size);
     EXPECT_EQ(offset, sections.at(attributeName).offset);
 }
-
-using MeshDeathTest = AMesh;
-TEST_F(MeshDeathTest, IndicesCannotBeHigherThanVertexCount)
-{
-    mesh.AddPosition({0.0f, 0.0f, 0.0f});
-    EXPECT_DEATH(mesh.AddIndices({0, 1}), "");
-    EXPECT_DEATH(mesh.AddIndex(2), "");
-}

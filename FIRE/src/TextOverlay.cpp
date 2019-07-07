@@ -2,33 +2,20 @@
 
 namespace FIRE
 {
-TextOverlay::TextOverlay(std::string text, float x, float y)
-    : m_text(text)
-    , m_x(x)
-    , m_y(y)
+TextOverlay::TextOverlay(std::string text, float x, float y, float scale /*= 1.0f */)
+    : text(text)
+    , x(x)
+    , y(y)
+    , scale(scale)
 {
-}
-
-std::string TextOverlay::GetText() const
-{
-    return m_text;
-}
-
-float TextOverlay::x() const
-{
-    return m_x;
-}
-
-float TextOverlay::y() const
-{
-    return m_y;
 }
 
 bool operator==(TextOverlay const& lhs, TextOverlay const& rhs)
 {
-    return lhs.x() == rhs.x() &&
-           lhs.y() == rhs.y() &&
-           lhs.GetText() == rhs.GetText();
+    return lhs.x == rhs.x &&
+           lhs.y == rhs.y &&
+           lhs.scale == rhs.scale &&
+           lhs.text == rhs.text;
 }
 
 bool operator!=(TextOverlay const& lhs, TextOverlay const& rhs)

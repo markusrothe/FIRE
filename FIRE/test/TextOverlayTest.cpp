@@ -3,18 +3,21 @@
 #include <gtest/gtest.h>
 #include <string>
 
-TEST(ATextOverlay, HasAPosition)
+TEST(ATextOverlay, CanBeCompared)
 {
-    float const x = 0.5f;
-    float const y = 0.3f;
-    FIRE::TextOverlay textOverlay("", x, y);
-    EXPECT_EQ(x, textOverlay.x());
-    EXPECT_EQ(y, textOverlay.y());
-}
+    FIRE::TextOverlay lhs("text", 0.5f, 0.5f, 1.3f);
+    FIRE::TextOverlay rhs("tab", 0.1f, 0.2f, 0.3f);
+    EXPECT_NE(lhs, rhs);
 
-TEST(ATextOverlay, HasAText)
-{
-    std::string const text("text");
-    FIRE::TextOverlay textOverlay(text, 0.5f, 0.5f);
-    EXPECT_EQ(text, textOverlay.GetText());
+    rhs.x = lhs.x;
+    EXPECT_NE(lhs, rhs);
+
+    rhs.y = lhs.y;
+    EXPECT_NE(lhs, rhs);
+
+    rhs.scale = lhs.scale;
+    EXPECT_NE(lhs, rhs);
+
+    rhs.text = lhs.text;
+    EXPECT_EQ(lhs, rhs);
 }

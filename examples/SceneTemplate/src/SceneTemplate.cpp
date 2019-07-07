@@ -9,6 +9,7 @@
 #include <FIRE/ShaderFactory.h>
 #include <FIRE/Window.h>
 #include <FIRE/glmfwd.h>
+#include <chrono>
 #include <fstream>
 #include <iterator>
 #include <sstream>
@@ -18,6 +19,7 @@ namespace SceneTemplate
 {
 namespace
 {
+
 std::string const PLANE{"plane"};
 std::string const LIGHT{"light"};
 
@@ -83,11 +85,17 @@ std::vector<FIRE::Renderable> SceneTemplate::CollectRenderables() const
 
 std::vector<FIRE::TextOverlay> SceneTemplate::CollectTextOverlays() const
 {
-    static int i = 0;
+    static std::chrono::system_clock::time_point currentTime = std::chrono::system_clock::now();
+    static std::chrono::system_clock::time_point lastTime = std::chrono::system_clock::now();
+
+    currentTime = std::chrono::system_clock::now();
+    std::chrono::duration<double> timeDiff = currentTime - lastTime;
+    lastTime = currentTime;
+
     std::stringstream ss;
-    ss << i++;
+    ss << (1.0 / timeDiff.count());
     return {
-        FIRE::TextOverlay("Fire SceneTemplate", 0.02f, 0.02f),
-        FIRE::TextOverlay(ss.str(), 0.02f, 0.12f)};
+        FIRE::TextOverlay("Fire SceneTemplate", 0.02f, 0.02f, 0.5f),
+        FIRE::TextOverlay(ss.str(), 0.02f, 0.12f, 0.5f)};
 }
 } // namespace SceneTemplate

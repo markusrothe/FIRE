@@ -7,16 +7,12 @@ namespace FIRE
 class TextOverlay
 {
 public:
-    TextOverlay(std::string text, float x, float y);
+    TextOverlay(std::string text, float x, float y, float scale = 1.0f);
 
-    std::string GetText() const;
-    float x() const;
-    float y() const;
-
-private:
-    std::string m_text;
-    float m_x;
-    float m_y;
+    std::string text;
+    float x;
+    float y;
+    float scale;
 };
 
 bool operator==(TextOverlay const& lhs, TextOverlay const& rhs);
