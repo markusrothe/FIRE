@@ -11,6 +11,7 @@
 #include <FIRE/glmfwd.h>
 #include <fstream>
 #include <iterator>
+#include <sstream>
 #include <string>
 
 namespace SceneTemplate
@@ -82,8 +83,11 @@ std::vector<FIRE::Renderable> SceneTemplate::CollectRenderables() const
 
 std::vector<FIRE::TextOverlay> SceneTemplate::CollectTextOverlays() const
 {
+    static int i = 0;
+    std::stringstream ss;
+    ss << i++;
     return {
         FIRE::TextOverlay("Fire SceneTemplate", 0.02f, 0.02f),
-        FIRE::TextOverlay("2nd text overlay", 0.02f, 0.12f)};
+        FIRE::TextOverlay(ss.str(), 0.02f, 0.12f)};
 }
 } // namespace SceneTemplate

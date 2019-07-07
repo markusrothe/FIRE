@@ -4,7 +4,6 @@ add_library(FIRE STATIC
     include/FIRE/RenderContext.h
     include/FIRE/MeshManager.h
     include/FIRE/Mesh3D.h
-    include/FIRE/Mesh2D.h
     include/FIRE/Renderable.h  
     include/FIRE/Renderer.h 
     include/FIRE/VertexDeclaration.h
@@ -41,7 +40,6 @@ add_library(FIRE STATIC
     src/Window.cpp    
     src/Renderable.cpp
     src/Mesh3D.cpp
-    src/Mesh2D.cpp
     src/GLFactory.cpp
     src/GLUploader.cpp
     src/GLDrawAgent.cpp

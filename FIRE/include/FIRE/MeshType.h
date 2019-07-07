@@ -7,8 +7,7 @@ enum class MeshType
 {
     Plane,
     Cube,
-    Sphere,
-    Rect2D
+    Sphere
 };
 } // namespace FIRE
 

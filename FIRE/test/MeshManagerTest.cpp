@@ -80,13 +80,6 @@ TEST_F(AMeshManager, CreatesASphere)
     EXPECT_EQ(72u, mesh->Indices().size());
 }
 
-// TEST_F(AMeshManager, Creates2DRectangles)
-// {
-//     auto const meshHandle = meshManager.Create2DRect("2d_rect", 0, 0, 10, 10);
-//     auto const mesh = meshManager.Lookup(meshHandle);
-//     ASSERT_TRUE(mesh);
-// }
-
 TEST_F(AMeshManager, CachesACreatedMesh)
 {
     auto const meshHandle1 = meshManager.CreateCube(CUBE);

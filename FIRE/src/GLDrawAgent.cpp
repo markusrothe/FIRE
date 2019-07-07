@@ -39,7 +39,7 @@ GLDrawAgent::GLDrawAgent(MeshManager& meshManager)
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
-    glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
+    glClearColor(0.4f, 0.4f, 1.0f, 1.0f);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 

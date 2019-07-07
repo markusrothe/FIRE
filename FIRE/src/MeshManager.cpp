@@ -223,36 +223,6 @@ MeshHandle MeshManager::CreateSphere(std::string name, uint32_t segments)
         std::move(normals),
         std::move(indices));
 }
-
-// //MeshHandle MeshManager::Create2DRect(std::string name, float x, float y, float width, float height)
-// MeshHandle MeshManager::Create2DRect(std::string name, float, float, float, float)
-// {
-//     if(Lookup3D({name, MeshType::Rect2D}))
-//     {
-//         return {name, MeshType::Rect2D};
-//     }
-
-//     std::vector<glm::vec2> positions;
-//     std::vector<unsigned int> indices;
-
-//     return Create(MeshType::Rect2D, std::move(name), std::move(positions), std::move(indices));
-// }
-
-// MeshHandle MeshManager::Create(
-//     MeshType meshType,
-//     std::string name,
-//     std::vector<glm::vec2> positions,
-//     std::vector<unsigned int> indices)
-// {
-//     auto mesh = std::make_unique<Mesh2D>(name);
-//     mesh->AddPositions(positions);
-//     mesh->AddIndices(indices);
-//     mesh->GetVertexDeclaration().AddSection("vPos", 2u, 0u);
-
-//     m_cache.insert(std::make_pair(name, std::make_pair(meshType, std::move(mesh))));
-//     return {name, meshType};
-// }
-
 MeshHandle MeshManager::Create(
     MeshType meshType,
     std::string name,

@@ -19,17 +19,10 @@ public:
     MeshHandle CreateCube(std::string name);
     MeshHandle CreatePlane(std::string name);
     MeshHandle CreateSphere(std::string name, uint32_t segments);
-    // MeshHandle Create2DRect(std::string name, float x, float y, float width, float height);
 
     Mesh3D* Lookup3D(MeshHandle const& handle);
 
 private:
-    // MeshHandle Create(
-    //     MeshType meshType,
-    //     std::string name,
-    //     std::vector<glm::vec2> positions,
-    //     std::vector<unsigned int> indices);
-
     MeshHandle Create(
         MeshType meshType,
         std::string name,
