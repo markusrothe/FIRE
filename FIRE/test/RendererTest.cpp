@@ -1,6 +1,7 @@
 #include "DrawAgent.h"
 #include "RendererImpl.h"
 #include "SceneComponentMock.h"
+#include "TextRenderer.h"
 #include "Uploader.h"
 #include <FIRE/Camera.h>
 #include <FIRE/Renderable.h>
@@ -16,6 +17,10 @@ namespace
 using ::testing::_;
 using ::testing::Ref;
 using ::testing::Return;
+
+float constexpr WIDTH = 800.0f;
+float constexpr HEIGHT = 600.0f;
+
 class UploaderMock : public FIRE::Uploader
 {
 public:
@@ -29,16 +34,24 @@ public:
     MOCK_METHOD0(Clear, void(void));
 };
 
+class TextRendererMock : public FIRE::TextRenderer
+{
+public:
+    MOCK_METHOD3(Render, void(FIRE::TextOverlay, float, float));
+};
+
 class ARenderer : public ::testing::Test
 {
 public:
     ARenderer()
         : uploaderPtr(std::make_unique<UploaderMock>())
         , drawAgentPtr(std::make_unique<DrawAgentMock>())
+        , textRendererPtr(std::make_unique<TextRendererMock>())
         , uploader(*uploaderPtr)
         , drawAgent(*drawAgentPtr)
+        , textRenderer(*textRendererPtr)
         , sceneComponent(std::make_shared<Mocks::SceneComponentMock>())
-        , renderer(std::move(uploaderPtr), std::move(drawAgentPtr))
+        , renderer(std::move(uploaderPtr), std::move(drawAgentPtr), std::move(textRendererPtr))
         , scene(FIRE::Camera("cam"))
     {
         scene.AddSceneComponent(sceneComponent);
@@ -47,10 +60,12 @@ public:
 private:
     std::unique_ptr<UploaderMock> uploaderPtr;
     std::unique_ptr<DrawAgentMock> drawAgentPtr;
+    std::unique_ptr<TextRendererMock> textRendererPtr;
 
 protected:
     UploaderMock& uploader;
     DrawAgentMock& drawAgent;
+    TextRendererMock& textRenderer;
     std::shared_ptr<Mocks::SceneComponentMock> sceneComponent;
     FIRE::RendererImpl renderer;
     FIRE::Scene scene;
@@ -63,24 +78,24 @@ protected:
 TEST_F(ARenderer, UploadsRenderableToGPU)
 {
     ON_CALL(*sceneComponent, CollectRenderables())
-        .WillByDefault(::testing::Return(renderables));
+        .WillByDefault(Return(renderables));
 
     EXPECT_CALL(uploader, Upload(renderable))
         .WillOnce(Return(FIRE::GLVertexArrayObject(0, 0, 0)));
 
-    renderer.Render(scene);
+    renderer.Render(scene, WIDTH, HEIGHT);
 }
 
 TEST_F(ARenderer, RendersAScene)
 {
     ON_CALL(*sceneComponent, CollectRenderables())
-        .WillByDefault(::testing::Return(renderables));
+        .WillByDefault(Return(renderables));
 
     ON_CALL(uploader, Upload(_))
         .WillByDefault(Return(FIRE::GLVertexArrayObject(0, 0, 0)));
 
     EXPECT_CALL(drawAgent, Draw(renderable, _));
-    renderer.Render(scene);
+    renderer.Render(scene, WIDTH, HEIGHT);
 }
 
 TEST_F(ARenderer, DoesNotDoAnythingWithAnEmptyScene)
@@ -89,16 +104,36 @@ TEST_F(ARenderer, DoesNotDoAnythingWithAnEmptyScene)
     EXPECT_CALL(drawAgent, Draw(_, _)).Times(0);
 
     FIRE::Scene emptyScene(FIRE::Camera(""));
-    renderer.Render(emptyScene);
+    renderer.Render(emptyScene, WIDTH, HEIGHT);
 }
 
 TEST_F(ARenderer, DoesNotDoAnythingWithASceneWithoutRenderables)
 {
     ON_CALL(*sceneComponent, CollectRenderables())
-        .WillByDefault(::testing::Return(std::vector<FIRE::Renderable>()));
+        .WillByDefault(Return(std::vector<FIRE::Renderable>()));
 
     EXPECT_CALL(uploader, Upload(_)).Times(0);
     EXPECT_CALL(drawAgent, Draw(_, _)).Times(0);
 
-    renderer.Render(scene);
+    renderer.Render(scene, WIDTH, HEIGHT);
+}
+
+TEST_F(ARenderer, RendersTextOverlays)
+{
+    FIRE::TextOverlay overlay("", 0.4f, 0.4f);
+    std::vector<FIRE::TextOverlay> textOverlays = {overlay};
+    ON_CALL(*sceneComponent, CollectTextOverlays).WillByDefault(Return(textOverlays));
+    EXPECT_CALL(textRenderer, Render(overlay, _, _));
+    renderer.Render(scene, WIDTH, HEIGHT);
+}
+
+TEST_F(ARenderer, UsesWindowResolutionWhenRenderingText)
+{
+    FIRE::TextOverlay overlay("", 0.0f, 0.0f);
+    std::vector<FIRE::TextOverlay> textOverlays = {overlay};
+
+    ON_CALL(*sceneComponent, CollectTextOverlays).WillByDefault(Return(textOverlays));
+
+    EXPECT_CALL(textRenderer, Render(_, WIDTH, HEIGHT));
+    renderer.Render(scene, WIDTH, HEIGHT);
 }

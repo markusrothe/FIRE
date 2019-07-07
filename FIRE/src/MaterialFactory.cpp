@@ -1,19 +1,24 @@
 #include <FIRE/Material.h>
 #include <FIRE/MaterialFactory.h>
-#include <FIRE/ShaderFactory.h>
 
 namespace FIRE
 {
-namespace MaterialFactory
+
+MaterialFactory::MaterialFactory(std::unique_ptr<ShaderFactory> shaderFactory)
+    : m_shaderFactory(std::move(shaderFactory))
 {
-Material Create(std::string const& name, std::vector<std::pair<ShaderType, std::string>> const& shaderCode, ShaderFactory& shaderFactory)
-{
-    return Material(name, shaderFactory.Create(shaderCode));
 }
 
-Material CreateDefault(ShaderFactory& shaderFactory)
+MaterialFactory::~MaterialFactory() = default;
+
+Material MaterialFactory::CreateDefaultMaterial()
 {
-    return Material("Default", shaderFactory.CreateDefaultShader());
+    return Material("Default", m_shaderFactory->CreateDefaultShader());
 }
-} // namespace MaterialFactory
+
+Material MaterialFactory::CreateMaterial(std::string const& name, std::vector<std::pair<ShaderType, std::string>> const& shaderCode)
+{
+    return Material(name, m_shaderFactory->Create(shaderCode));
+}
+
 } // namespace FIRE

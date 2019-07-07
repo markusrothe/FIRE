@@ -1,4 +1,6 @@
 add_executable(cube
+    CubeSceneComponent.h
+    CubeSceneComponent.cpp
     main.cpp
 )
 
@@ -14,3 +16,7 @@ install(
     DESTINATION bin
 )
 
+install(
+    FILES $<TARGET_PROPERTY:FIRE,RESOURCE>
+    DESTINATION bin
+)

@@ -2,7 +2,7 @@
 #define FIRE_Renderable_h
 
 #include <FIRE/Material.h>
-#include <FIRE/Mesh.h>
+#include <FIRE/MeshHandle.h>
 #include <FIRE/Transform.h>
 #include <string>
 

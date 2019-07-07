@@ -3,11 +3,9 @@ add_library(FIRE STATIC
     include/FIRE/Window.h
     include/FIRE/RenderContext.h
     include/FIRE/MeshManager.h
-    include/FIRE/Mesh.h
+    include/FIRE/Mesh3D.h
     include/FIRE/Renderable.h  
     include/FIRE/Renderer.h 
-    include/FIRE/Vector.h
-    include/FIRE/Matrix.h
     include/FIRE/VertexDeclaration.h
     include/FIRE/GLFactory.h
     include/FIRE/Scene.h
@@ -21,8 +19,10 @@ add_library(FIRE STATIC
     include/FIRE/ShaderType.h
     include/FIRE/MaterialFactory.h
     include/FIRE/Material.h
+    include/FIRE/glmfwd.h
+    include/FIRE/MeshType.h
+    include/FIRE/TextOverlay.h
     
-    src/glm_wrapper.h
     src/Uploader.h
     src/DrawAgent.h
     src/GLUploader.h    
@@ -30,11 +30,16 @@ add_library(FIRE STATIC
     src/GLShaderFactory.h
     src/GLRenderContext.h
     src/RendererImpl.h
+    src/TextureFactory.h
+    src/FontTextureFactory.h
+    src/GLFontTextureFactory.h
+    src/TextRenderer.h
+    src/GLTextRenderer.h
       
     src/Camera.cpp
     src/Window.cpp    
     src/Renderable.cpp
-    src/Mesh.cpp
+    src/Mesh3D.cpp
     src/GLFactory.cpp
     src/GLUploader.cpp
     src/GLDrawAgent.cpp
@@ -43,12 +48,15 @@ add_library(FIRE STATIC
     src/RendererImpl.cpp
     src/MaterialFactory.cpp
     src/VertexDeclaration.cpp
-    src/Matrix.cpp
     src/Scene.cpp
     src/Transform.cpp
     src/InputListener.cpp
     src/Material.cpp
     src/MeshManager.cpp
+    src/TextOverlay.cpp
+    src/TextureFactory.cpp
+    src/GLFontTextureFactory.cpp
+    src/GLTextRenderer.cpp
 )
 
 target_include_directories(FIRE
@@ -60,17 +68,25 @@ PRIVATE
 )
 
 target_link_libraries(FIRE
+    PUBLIC
+    glm
+
     PRIVATE
     glfw
     glad
-    glm
     CompileOptions
     MeasureCoverage
+    freetype
 )
 
 if(MSVC)
     set_target_properties(FIRE PROPERTIES COMPILE_FLAGS /D_USE_MATH_DEFINES)
 endif()
 
+file(GLOB_RECURSE assets ${CMAKE_CURRENT_SOURCE_DIR}/assets/**/*)
+set_target_properties(FIRE
+    PROPERTIES 
+    RESOURCE "${assets}"
+)
 
 add_subdirectory(test)

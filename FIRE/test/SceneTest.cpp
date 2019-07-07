@@ -4,6 +4,7 @@
 #include <FIRE/Renderable.h>
 #include <FIRE/Scene.h>
 #include <FIRE/SceneComponent.h>
+#include <FIRE/TextOverlay.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
@@ -11,7 +12,8 @@
 
 namespace
 {
-
+using ::testing::ContainerEq;
+using ::testing::Return;
 class AScene : public ::testing::Test
 {
 public:
@@ -38,10 +40,16 @@ TEST_F(AScene, UpdatesSceneComponents)
 
 TEST_F(AScene, CollectsRenderablesFromSceneComponents)
 {
-    std::vector<FIRE::Renderable> renderables;
-    renderables.push_back(FIRE::Renderable());
-    EXPECT_CALL(*sceneComponent, CollectRenderables())
-        .WillOnce(::testing::Return(renderables));
+    std::vector<FIRE::Renderable> renderables = {FIRE::Renderable()};
+    EXPECT_CALL(*sceneComponent, CollectRenderables()).WillOnce(Return(renderables));
 
     EXPECT_THAT(scene.CollectRenderables(), ::testing::ContainerEq(renderables));
+}
+
+TEST_F(AScene, CollectsTextOverlaysFromSceneComponents)
+{
+    std::vector<FIRE::TextOverlay> textOverlays = {FIRE::TextOverlay("text", 0.5, 0.5)};
+    EXPECT_CALL(*sceneComponent, CollectTextOverlays()).WillOnce(Return(textOverlays));
+
+    EXPECT_THAT(scene.CollectTextOverlays(), ContainerEq(textOverlays));
 }

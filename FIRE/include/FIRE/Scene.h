@@ -9,7 +9,9 @@ namespace FIRE
 {
 
 class SceneComponent;
+class TextOverlay;
 struct Renderable;
+
 class Scene
 {
 public:
@@ -20,6 +22,7 @@ public:
     void AddSceneComponent(std::shared_ptr<SceneComponent> const& sceneComponent);
     void Update();
     std::vector<Renderable> CollectRenderables() const;
+    std::vector<TextOverlay> CollectTextOverlays() const;
 
 private:
     FIRE::Camera m_cam;

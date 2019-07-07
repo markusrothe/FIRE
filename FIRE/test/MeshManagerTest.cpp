@@ -1,5 +1,5 @@
 #include "Utilities.h"
-#include <FIRE/Mesh.h>
+#include <FIRE/Mesh3D.h>
 #include <FIRE/MeshManager.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
@@ -24,76 +24,14 @@ using TestUtil::EXPECT_VEC_EQ;
 TEST_F(AMeshManager, CreatesACube)
 {
     FIRE::MeshHandle mesh = meshManager.CreateCube(CUBE);
-    FIRE::Mesh* cube = meshManager.Lookup(mesh);
+    FIRE::Mesh3D* cube = meshManager.Lookup3D(mesh);
     ASSERT_TRUE(cube);
 
     auto const positions = cube->Positions();
     ASSERT_EQ(24u, positions.size());
-    EXPECT_VEC_EQ(positions[0], FIRE::Vector3(-1.0f, -1.0f, -1.0f));
-    EXPECT_VEC_EQ(positions[1], FIRE::Vector3(-1.0f, -1.0f, -1.0f));
-    EXPECT_VEC_EQ(positions[2], FIRE::Vector3(-1.0f, -1.0f, -1.0f));
-
-    EXPECT_VEC_EQ(positions[3], FIRE::Vector3(1.0f, -1.0f, 1.0f));
-    EXPECT_VEC_EQ(positions[4], FIRE::Vector3(1.0f, -1.0f, 1.0f));
-    EXPECT_VEC_EQ(positions[5], FIRE::Vector3(1.0f, -1.0f, 1.0f));
-
-    EXPECT_VEC_EQ(positions[6], FIRE::Vector3(1.0f, -1.0f, -1.0f));
-    EXPECT_VEC_EQ(positions[7], FIRE::Vector3(1.0f, -1.0f, -1.0f));
-    EXPECT_VEC_EQ(positions[8], FIRE::Vector3(1.0f, -1.0f, -1.0f));
-
-    EXPECT_VEC_EQ(positions[9], FIRE::Vector3(-1.0f, -1.0f, 1.0f));
-    EXPECT_VEC_EQ(positions[10], FIRE::Vector3(-1.0f, -1.0f, 1.0f));
-    EXPECT_VEC_EQ(positions[11], FIRE::Vector3(-1.0f, -1.0f, 1.0f));
-
-    EXPECT_VEC_EQ(positions[12], FIRE::Vector3(-1.0f, 1.0f, 1.0f));
-    EXPECT_VEC_EQ(positions[13], FIRE::Vector3(-1.0f, 1.0f, 1.0f));
-    EXPECT_VEC_EQ(positions[14], FIRE::Vector3(-1.0f, 1.0f, 1.0f));
-
-    EXPECT_VEC_EQ(positions[15], FIRE::Vector3(1.0f, 1.0f, 1.0f));
-    EXPECT_VEC_EQ(positions[16], FIRE::Vector3(1.0f, 1.0f, 1.0f));
-    EXPECT_VEC_EQ(positions[17], FIRE::Vector3(1.0f, 1.0f, 1.0f));
-
-    EXPECT_VEC_EQ(positions[18], FIRE::Vector3(1.0f, 1.0f, -1.0f));
-    EXPECT_VEC_EQ(positions[19], FIRE::Vector3(1.0f, 1.0f, -1.0f));
-    EXPECT_VEC_EQ(positions[20], FIRE::Vector3(1.0f, 1.0f, -1.0f));
-
-    EXPECT_VEC_EQ(positions[21], FIRE::Vector3(-1.0f, 1.0f, -1.0f));
-    EXPECT_VEC_EQ(positions[22], FIRE::Vector3(-1.0f, 1.0f, -1.0f));
-    EXPECT_VEC_EQ(positions[23], FIRE::Vector3(-1.0f, 1.0f, -1.0f));
 
     auto const normals = cube->Normals();
     ASSERT_EQ(24u, normals.size());
-    EXPECT_VEC_EQ(normals[0], FIRE::Vector3(0.0f, -1.0f, 0.0f)); // down
-    EXPECT_VEC_EQ(normals[1], FIRE::Vector3(0.0f, 0.0f, -1.0f)); // back
-    EXPECT_VEC_EQ(normals[2], FIRE::Vector3(-1.0f, 0.0f, 0.0f)); // left
-
-    EXPECT_VEC_EQ(normals[3], FIRE::Vector3(0.0f, 0.0f, 1.0f));  // front
-    EXPECT_VEC_EQ(normals[4], FIRE::Vector3(1.0f, 0.0f, 0.0f));  // right
-    EXPECT_VEC_EQ(normals[5], FIRE::Vector3(0.0f, -1.0f, 0.0f)); // down
-
-    EXPECT_VEC_EQ(normals[6], FIRE::Vector3(0.0f, -1.0f, 0.0f)); // down
-    EXPECT_VEC_EQ(normals[7], FIRE::Vector3(1.0f, 0.0f, 0.0f));  // right
-    EXPECT_VEC_EQ(normals[8], FIRE::Vector3(0.0f, 0.0f, -1.0f)); // back
-
-    EXPECT_VEC_EQ(normals[9], FIRE::Vector3(0.0f, -1.0f, 0.0f));  // down
-    EXPECT_VEC_EQ(normals[10], FIRE::Vector3(-1.0f, 0.0f, 0.0f)); // left
-    EXPECT_VEC_EQ(normals[11], FIRE::Vector3(0.0f, 0.0f, 1.0f));  // front
-
-    EXPECT_VEC_EQ(normals[12], FIRE::Vector3(-1.0f, 0.0f, 0.0f)); // left
-    EXPECT_VEC_EQ(normals[13], FIRE::Vector3(0.0f, 0.0f, 1.0f));  // front
-    EXPECT_VEC_EQ(normals[14], FIRE::Vector3(0.0f, 1.0f, 0.0f));  // top
-
-    EXPECT_VEC_EQ(normals[15], FIRE::Vector3(1.0f, 0.0f, 0.0f)); // right
-    EXPECT_VEC_EQ(normals[16], FIRE::Vector3(0.0f, 1.0f, 0.0f)); // top
-    EXPECT_VEC_EQ(normals[17], FIRE::Vector3(0.0f, 0.0f, 1.0f)); // front
-
-    EXPECT_VEC_EQ(normals[18], FIRE::Vector3(1.0f, 0.0f, 0.0f));  // right
-    EXPECT_VEC_EQ(normals[19], FIRE::Vector3(0.0f, 1.0f, 0.0f));  // top
-    EXPECT_VEC_EQ(normals[20], FIRE::Vector3(0.0f, 0.0f, -1.0f)); // back
-
-    EXPECT_VEC_EQ(normals[21], FIRE::Vector3(-1.0f, 0.0f, 0.0f)); // left
-    EXPECT_VEC_EQ(normals[22], FIRE::Vector3(0.0f, 1.0f, 0.0f));  // top
-    EXPECT_VEC_EQ(normals[23], FIRE::Vector3(0.0f, 0.0f, -1.0f)); // back
 
     std::vector<unsigned int> const expectedIndices = {
         11, 3, 17, 11, 17, 13,  // front
@@ -110,21 +48,21 @@ TEST_F(AMeshManager, CreatesACube)
 TEST_F(AMeshManager, CreatesAPlane)
 {
     FIRE::MeshHandle mesh = meshManager.CreatePlane(PLANE);
-    FIRE::Mesh* planeMesh = meshManager.Lookup(mesh);
+    auto planeMesh = meshManager.Lookup3D(mesh);
     ASSERT_TRUE(planeMesh);
 
     auto const positions = planeMesh->Positions();
     ASSERT_EQ(4u, positions.size());
-    EXPECT_VEC_EQ(positions[0], FIRE::Vector3(-1.0f, 0.0f, -1.0f));
-    EXPECT_VEC_EQ(positions[1], FIRE::Vector3(-1.0f, 0.0f, 1.0f));
-    EXPECT_VEC_EQ(positions[2], FIRE::Vector3(1.0f, 0.0f, 1.0f));
-    EXPECT_VEC_EQ(positions[3], FIRE::Vector3(1.0f, 0.0f, -1.0f));
+    EXPECT_VEC_EQ(positions[0], glm::vec3(-1.0f, 0.0f, -1.0f));
+    EXPECT_VEC_EQ(positions[1], glm::vec3(-1.0f, 0.0f, 1.0f));
+    EXPECT_VEC_EQ(positions[2], glm::vec3(1.0f, 0.0f, 1.0f));
+    EXPECT_VEC_EQ(positions[3], glm::vec3(1.0f, 0.0f, -1.0f));
 
     auto const normals = planeMesh->Normals();
     ASSERT_EQ(4u, normals.size());
     for(auto i = 0u; i < 4u; ++i)
     {
-        EXPECT_VEC_EQ(normals[i], FIRE::Vector3(0.0f, 1.0f, 0.0f));
+        EXPECT_VEC_EQ(normals[i], glm::vec3(0.0f, 1.0f, 0.0f));
     }
 
     std::vector<unsigned int> const expectedIndices = {0, 1, 2, 0, 2, 3};
@@ -134,7 +72,12 @@ TEST_F(AMeshManager, CreatesAPlane)
 TEST_F(AMeshManager, CreatesASphere)
 {
     auto const numSegments = 4;
-    auto const mesh = meshManager.CreateSphere(SPHERE, numSegments);
+    auto const meshHandle = meshManager.CreateSphere(SPHERE, numSegments);
+    auto const mesh = meshManager.Lookup3D(meshHandle);
+    ASSERT_TRUE(mesh);
+    EXPECT_EQ(14u, mesh->Positions().size());
+    EXPECT_EQ(14u, mesh->Normals().size());
+    EXPECT_EQ(72u, mesh->Indices().size());
 }
 
 TEST_F(AMeshManager, CachesACreatedMesh)
@@ -142,8 +85,8 @@ TEST_F(AMeshManager, CachesACreatedMesh)
     auto const meshHandle1 = meshManager.CreateCube(CUBE);
     auto const meshHandle2 = meshManager.CreateCube(CUBE);
 
-    auto mesh1 = meshManager.Lookup(meshHandle1);
-    auto mesh2 = meshManager.Lookup(meshHandle2);
+    auto mesh1 = meshManager.Lookup3D(meshHandle1);
+    auto mesh2 = meshManager.Lookup3D(meshHandle2);
 
     EXPECT_EQ(mesh1, mesh2);
 }

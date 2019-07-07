@@ -1,7 +1,9 @@
 #include "GLDrawAgent.h"
 #include <FIRE/MeshManager.h>
 #include <FIRE/Renderable.h>
+#include <FIRE/glmfwd.h>
 #include <any>
+
 namespace FIRE
 {
 void SetShaderUniforms(GLuint shader, std::map<std::string, std::pair<ShaderParameterType, std::any>> const& params)
@@ -17,14 +19,14 @@ void SetShaderUniforms(GLuint shader, std::map<std::string, std::pair<ShaderPara
         {
         case ShaderParameterType::MAT4x4:
         {
-            auto const& uniformVal = std::any_cast<Matrix4x4>(paramVal);
-            glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, uniformVal.Raw().data());
+            auto const& uniformVal = std::any_cast<glm::mat4x4>(paramVal);
+            glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(uniformVal));
             break;
         }
         case ShaderParameterType::VEC3:
         {
-            auto const& uniformVal = std::any_cast<Vector3>(paramVal);
-            glUniform3fv(uniformLocation, 1, uniformVal.Raw().data());
+            auto const& uniformVal = std::any_cast<glm::vec3>(paramVal);
+            glUniform3fv(uniformLocation, 1, glm::value_ptr(uniformVal));
             break;
         }
         }
@@ -37,7 +39,7 @@ GLDrawAgent::GLDrawAgent(MeshManager& meshManager)
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
-    glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
+    glClearColor(0.4f, 0.4f, 1.0f, 1.0f);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 
@@ -55,7 +57,7 @@ void GLDrawAgent::Draw(Renderable const& renderable, GLVertexArrayObject arrObj)
 
     SetShaderUniforms(shader, renderable.material.GetShaderParameters());
 
-    Mesh* mesh = m_meshManager.Lookup(renderable.mesh);
+    auto mesh = m_meshManager.Lookup3D(renderable.mesh);
     if(mesh)
     {
         glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->Indices().size()), GL_UNSIGNED_INT, 0);

@@ -39,4 +39,15 @@ std::vector<Renderable> Scene::CollectRenderables() const
     return renderables;
 }
 
+std::vector<TextOverlay> Scene::CollectTextOverlays() const
+{
+    std::vector<TextOverlay> overlays;
+    for(auto& sceneComponent : m_sceneComponents)
+    {
+        auto const sceneComponentOverlays = sceneComponent->CollectTextOverlays();
+        overlays.insert(std::end(overlays), std::begin(sceneComponentOverlays), std::end(sceneComponentOverlays));
+    }
+    return overlays;
+}
+
 } // namespace FIRE
