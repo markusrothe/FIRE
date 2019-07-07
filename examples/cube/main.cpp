@@ -21,17 +21,17 @@ int main(int, char**)
     FIRE::Window window = FIRE::GLFactory::InitWindow("FIRE - cube", WINDOW_WIDTH, WINDOW_HEIGHT);
 
     FIRE::MeshManager meshManager;
-    auto shaderFactory = FIRE::GLFactory::CreateShaderFactory();
-    FIRE::MaterialFactory materialFactory(std::move(shaderFactory));
+    FIRE::MaterialFactory materialFactory(FIRE::GLFactory::CreateShaderFactory());
+
     FIRE::Scene scene(FIRE::Camera("cam", {0.0f, 2.0f, 10.0f}, {0.0f, 2.0f, 0.0f}));
     FIRE::Camera& cam = scene.GetCamera();
     scene.AddSceneComponent(std::make_shared<SceneTemplate::SceneTemplate>(cam, window, meshManager, materialFactory));
     scene.AddSceneComponent(std::make_shared<examples::CubeSceneComponent>(window, meshManager, materialFactory));
+
     auto renderer{FIRE::GLFactory::CreateRenderer(meshManager)};
     while(!window.ShouldClose())
     {
         window.PollEvents();
-
         scene.Update();
         renderer->Render(scene);
         window.SwapBuffers();

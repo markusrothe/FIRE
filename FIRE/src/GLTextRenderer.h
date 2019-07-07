@@ -1,13 +1,15 @@
 #ifndef FIRE_GLTextRenderer_h
 #define FIRE_GLTextRenderer_h
 
+#include "TextRenderer.h"
 #include <cstdint>
 #include <memory>
+
 namespace FIRE
 {
 class TextOverlay;
 class TextureFactory;
-class GLTextRenderer
+class GLTextRenderer : public TextRenderer
 {
 public:
     explicit GLTextRenderer(std::unique_ptr<TextureFactory> texFactory);

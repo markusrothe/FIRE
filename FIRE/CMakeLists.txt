@@ -34,6 +34,7 @@ add_library(FIRE STATIC
     src/TextureFactory.h
     src/FontTextureFactory.h
     src/GLFontTextureFactory.h
+    src/TextRenderer.h
     src/GLTextRenderer.h
       
     src/Camera.cpp

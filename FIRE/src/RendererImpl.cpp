@@ -13,7 +13,7 @@ namespace FIRE
 RendererImpl::RendererImpl(
     std::unique_ptr<Uploader> uploader,
     std::unique_ptr<DrawAgent> drawAgent,
-    std::unique_ptr<GLTextRenderer> textRenderer)
+    std::unique_ptr<TextRenderer> textRenderer)
     : m_uploader(std::move(uploader))
     , m_drawAgent(std::move(drawAgent))
     , m_textRenderer(std::move(textRenderer))
@@ -34,13 +34,7 @@ void RendererImpl::Render(Scene const& scene)
 
     for(auto const& textOverlay : scene.CollectTextOverlays())
     {
-        RenderTextOverlay(textOverlay);
+        m_textRenderer->Render(textOverlay);
     }
 }
-
-void RendererImpl::RenderTextOverlay(TextOverlay overlay)
-{
-    m_textRenderer->Render(overlay);
-}
-
 } // namespace FIRE
