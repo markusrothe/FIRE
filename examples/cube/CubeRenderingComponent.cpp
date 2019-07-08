@@ -18,16 +18,16 @@ CubeRenderingComponent::CubeRenderingComponent(FIRE::Renderer& renderer, FIRE::M
     m_cube.mesh = meshManager.CreateCube("cube");
 }
 
-void CubeRenderingComponent::DoUpdate(FIRE::SceneObject& sceneObject, FIRE::Scene& scene)
+void CubeRenderingComponent::DoUpdate(FIRE::SceneObject& sceneObject, FIRE::Scene&)
 {
     auto& transform = sceneObject.GetTransform();
     transform.SetPosition({0, 2, 0});
     transform.Rotate({1, 1, 1}, 1.0f);
 
-    FIRE::CameraComponent const* cam = scene.GetCamera();
+    //FIRE::CameraComponent const* cam = scene.GetCamera();
 
-    auto const MVP = cam->GetProjectionMatrix() * cam->GetViewMatrix() * transform.ModelMatrix();
-    m_cube.material.SetShaderParameter("MVP", FIRE::ShaderParameterType::MAT4x4, MVP);
+    //auto const MVP = cam->GetProjectionMatrix() * cam->GetViewMatrix() * transform.ModelMatrix();
+    //m_cube.material.SetShaderParameter("MVP", FIRE::ShaderParameterType::MAT4x4, MVP);
 
     m_renderer.Submit(m_cube);
 }

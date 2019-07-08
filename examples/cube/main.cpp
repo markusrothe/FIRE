@@ -28,12 +28,12 @@ int main(int, char**)
 
     FIRE::Scene scene;
     auto& cubeObject = scene.CreateSceneObject("cube");
-    cubeObject.SetRenderingComponent(
+    cubeObject.AddComponent(
         std::make_unique<examples::CubeRenderingComponent>(
             *renderer, meshManager, materialFactory));
 
     auto& mainCamera = scene.CreateSceneObject("cam");
-    mainCamera.SetCameraComponent(
+    mainCamera.AddComponent(
         std::make_unique<examples::CubeCameraComponent>(
             70.0f, static_cast<float>(window.GetWidth()) / static_cast<float>(window.GetHeight()), 0.01f, 500.0f));
 

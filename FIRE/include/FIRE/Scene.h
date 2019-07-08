@@ -15,7 +15,7 @@ public:
     SceneObject& CreateSceneObject(std::string name);
 
     void Update();
-    CameraComponent const* GetCamera();
+    //CameraComponent const* GetCamera();
 
 private:
     std::list<SceneObject> m_sceneObjects;

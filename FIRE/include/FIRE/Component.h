@@ -9,6 +9,7 @@ class Component
 {
 public:
     virtual ~Component() = default;
+    virtual void Update(SceneObject& sceneObject, Scene& scene) = 0;
 };
 } // namespace FIRE
 

@@ -14,19 +14,9 @@ SceneObject::~SceneObject() = default;
 SceneObject::SceneObject(SceneObject&& other) = default;
 SceneObject& SceneObject::operator=(SceneObject&& other) = default;
 
-void SceneObject::SetRenderingComponent(std::unique_ptr<RenderingComponent> rendering)
+void SceneObject::AddComponent(std::unique_ptr<Component> component)
 {
-    m_rendering = std::move(rendering);
-}
-
-void SceneObject::SetCameraComponent(std::unique_ptr<CameraComponent> camera)
-{
-    m_camera = std::move(camera);
-}
-
-void SceneObject::SetLightComponent(std::unique_ptr<LightComponent> light)
-{
-    m_light = std::move(light);
+    m_components.push_back(std::move(component));
 }
 
 Transform& SceneObject::GetTransform()
@@ -36,19 +26,9 @@ Transform& SceneObject::GetTransform()
 
 void SceneObject::Update(Scene& scene)
 {
-    if(m_rendering)
+    for(auto& component : m_components)
     {
-        m_rendering->Update(*this, scene);
-    }
-
-    if(m_camera)
-    {
-        m_camera->Update(*this, scene);
-    }
-
-    if(m_light)
-    {
-        //  m_light->Update(*this, scene);
+        component->Update(*this, scene);
     }
 }
 } // namespace FIRE

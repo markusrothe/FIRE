@@ -1,15 +1,14 @@
 #ifndef FIRE_SceneObject_h
 #define FIRE_SceneObject_h
 
+#include <FIRE/Component.h>
 #include <FIRE/Transform.h>
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace FIRE
 {
-class CameraComponent;
-class RenderingComponent;
-class LightComponent;
 class Scene;
 class SceneObject
 {
@@ -23,19 +22,13 @@ public:
     Transform& GetTransform();
 
     void Update(Scene& scene);
-
-    void SetRenderingComponent(std::unique_ptr<RenderingComponent> rendering);
-    void SetCameraComponent(std::unique_ptr<CameraComponent> camera);
-    void SetLightComponent(std::unique_ptr<LightComponent> light);
+    void AddComponent(std::unique_ptr<Component> component);
 
 private:
     std::string m_name;
     Transform m_transform;
 
-public:
-    std::unique_ptr<RenderingComponent> m_rendering;
-    std::unique_ptr<CameraComponent> m_camera;
-    std::unique_ptr<LightComponent> m_light;
+    std::vector<std::unique_ptr<Component>> m_components;
 };
 } // namespace FIRE
 

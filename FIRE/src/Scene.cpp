@@ -21,17 +21,16 @@ void Scene::Update()
     }
 }
 
-CameraComponent const* Scene::GetCamera()
-{
-    for(auto& sceneObj : m_sceneObjects)
-    {
-        if(sceneObj.m_camera)
-        {
-            return sceneObj.m_camera.get();
-        }
-    }
-
-    return nullptr;
-}
+// CameraComponent const* Scene::GetCamera()
+// {
+//     for(auto& sceneObj : m_sceneObjects)
+//     {
+//         if(sceneObj.m_camera)
+//         {
+//             return sceneObj.m_camera.get();
+//         }
+//     }
+//     return nullptr;
+//}
 
 } // namespace FIRE

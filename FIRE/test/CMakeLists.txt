@@ -4,12 +4,16 @@ endif()
 
 add_executable(FIRE_tests
     ./Utilities.h
+
+    ./CameraComponentTest.cpp
+    ./RenderingComponentTest.cpp
     ./WindowTest.cpp
     ./RendererTest.cpp
     ./MeshTest.cpp
     ./MaterialFactoryTest.cpp
     ./MaterialTest.cpp
     ./SceneTest.cpp
+    ./SceneObjectTest.cpp
     ./TransformTest.cpp
     ./InputListenerTest.cpp
     ./MeshManagerTest.cpp
