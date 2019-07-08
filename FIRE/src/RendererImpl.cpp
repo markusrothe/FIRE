@@ -27,7 +27,7 @@ void RendererImpl::Submit(Renderable const& renderable)
     m_renderables.push_back(renderable);
 }
 
-void RendererImpl::Render(Scene const&, float, float)
+void RendererImpl::Render(float, float)
 {
     m_drawAgent->Clear();
 

@@ -25,7 +25,7 @@ public:
 
     void Submit(Renderable const& renderable) override;
 
-    void Render(Scene const& scene, float windowWidth, float windowHeight) override;
+    void Render(float windowWidth, float windowHeight) override;
 
 private:
     std::vector<Renderable> m_renderables;
