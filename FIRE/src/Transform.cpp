@@ -39,6 +39,13 @@ glm::vec3 Transform::Up() const
     return glm::vec3(0.0f, 1.0f, 0.0f);
 }
 
+void Transform::SetPosition(glm::vec3 pos)
+{
+    auto const viewDir = m_lookAt - m_pos;
+    m_pos = pos;
+    m_lookAt = m_pos + viewDir;
+}
+
 void Transform::SetLookAt(glm::vec3 lookAt)
 {
     m_lookAt = std::move(lookAt);

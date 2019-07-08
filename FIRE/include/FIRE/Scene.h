@@ -1,32 +1,24 @@
 #ifndef FIRE_Scene_h
 #define FIRE_Scene_h
 
-#include <FIRE/Camera.h>
+#include <FIRE/SceneObject.h>
+
+#include <list>
 #include <memory>
-#include <vector>
 
 namespace FIRE
 {
-
-class SceneComponent;
-class TextOverlay;
-struct Renderable;
-
+class CameraComponent;
 class Scene
 {
 public:
-    explicit Scene(FIRE::Camera cam);
+    SceneObject& CreateSceneObject(std::string name);
 
-    FIRE::Camera& GetCamera();
-
-    void AddSceneComponent(std::shared_ptr<SceneComponent> const& sceneComponent);
     void Update();
-    std::vector<Renderable> CollectRenderables() const;
-    std::vector<TextOverlay> CollectTextOverlays() const;
+    CameraComponent const* GetCamera();
 
 private:
-    FIRE::Camera m_cam;
-    std::vector<std::shared_ptr<SceneComponent>> m_sceneComponents;
+    std::list<SceneObject> m_sceneObjects;
 };
 
 } // namespace FIRE

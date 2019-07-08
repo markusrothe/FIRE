@@ -12,7 +12,6 @@ namespace FIRE
 struct Renderable
 {
     std::string name;
-    Transform transform;
     Material material;
     MeshHandle mesh;
 };

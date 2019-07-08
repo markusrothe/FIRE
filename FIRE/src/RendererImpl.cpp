@@ -22,19 +22,25 @@ RendererImpl::RendererImpl(
 
 RendererImpl::~RendererImpl() = default;
 
-void RendererImpl::Render(Scene const& scene, float windowWidth, float windowHeight)
+void RendererImpl::Submit(Renderable const& renderable)
+{
+    m_renderables.push_back(renderable);
+}
+
+void RendererImpl::Render(Scene const&, float, float)
 {
     m_drawAgent->Clear();
 
-    for(auto const& renderable : scene.CollectRenderables())
+    for(auto const& renderable : m_renderables)
     {
         auto buffers = m_uploader->Upload(renderable);
         m_drawAgent->Draw(renderable, buffers);
     }
 
-    for(auto const& textOverlay : scene.CollectTextOverlays())
-    {
-        m_textRenderer->Render(textOverlay, windowWidth, windowHeight);
-    }
+    m_renderables.clear();
+    // for(auto const& textOverlay : scene.CollectTextOverlays())
+    // {
+    //     m_textRenderer->Render(textOverlay, windowWidth, windowHeight);
+    // }
 }
 } // namespace FIRE

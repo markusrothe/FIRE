@@ -1,53 +1,37 @@
 #include <FIRE/Scene.h>
 
+#include <FIRE/CameraComponent.h>
 #include <FIRE/Renderable.h>
-#include <FIRE/SceneComponent.h>
+
 #include <algorithm>
 namespace FIRE
 {
-Scene::Scene(FIRE::Camera cam)
-    : m_cam(cam)
-{
-}
 
-FIRE::Camera& Scene::GetCamera()
+SceneObject& Scene::CreateSceneObject(std::string name)
 {
-    return m_cam;
-}
-
-void Scene::AddSceneComponent(std::shared_ptr<SceneComponent> const& sceneComponent)
-{
-    m_sceneComponents.push_back(sceneComponent);
+    m_sceneObjects.emplace_back(std::move(name));
+    return m_sceneObjects.back();
 }
 
 void Scene::Update()
 {
-    for(auto& sceneComponent : m_sceneComponents)
+    for(auto& obj : m_sceneObjects)
     {
-        sceneComponent->Update(m_cam);
+        obj.Update(*this);
     }
 }
 
-std::vector<Renderable> Scene::CollectRenderables() const
+CameraComponent const* Scene::GetCamera()
 {
-    std::vector<Renderable> renderables;
-    for(auto& sceneComponent : m_sceneComponents)
+    for(auto& sceneObj : m_sceneObjects)
     {
-        auto const sceneComponentRenderables = sceneComponent->CollectRenderables();
-        renderables.insert(renderables.end(), sceneComponentRenderables.begin(), sceneComponentRenderables.end());
+        if(sceneObj.m_camera)
+        {
+            return sceneObj.m_camera.get();
+        }
     }
-    return renderables;
-}
 
-std::vector<TextOverlay> Scene::CollectTextOverlays() const
-{
-    std::vector<TextOverlay> overlays;
-    for(auto& sceneComponent : m_sceneComponents)
-    {
-        auto const sceneComponentOverlays = sceneComponent->CollectTextOverlays();
-        overlays.insert(std::end(overlays), std::begin(sceneComponentOverlays), std::end(sceneComponentOverlays));
-    }
-    return overlays;
+    return nullptr;
 }
 
 } // namespace FIRE
