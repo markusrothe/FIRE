@@ -1,6 +1,5 @@
 #version 440
 
-uniform mat4 MVP;
 uniform vec3 LightPos;
 
 in vec3 posVS;
@@ -20,10 +19,10 @@ void main()
     }
 
     vec3 ambient = vec3(.1, .1, .1);
-    vec3 diffuse = 2. * vec3(nDotL);
+    vec3 diffuse = 0.7 * vec3(nDotL);
 
     float distanceToLight = length(LightPos - posVS);
-    float attenuation = 1. / (1. + .02 * pow(distanceToLight, 2));
+    float attenuation = 1. / (1. + .001 * pow(distanceToLight, 2));
 
     vec3 gamma = vec3(1. / 2.2);
 

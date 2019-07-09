@@ -55,6 +55,7 @@ add_library(FIRE STATIC
     src/SceneObject.cpp
     src/RenderingComponent.cpp
     src/CameraComponent.cpp
+    src/LightComponent.cpp
     src/Transform.cpp
     src/InputListener.cpp
     src/Material.cpp

@@ -1,8 +1,10 @@
 add_executable(cube
     CubeRenderingComponent.h
     CubeCameraComponent.h
+    CubeLightComponent.h    
     CubeRenderingComponent.cpp
     CubeCameraComponent.cpp
+    CubeLightComponent.cpp
     main.cpp
 )
 

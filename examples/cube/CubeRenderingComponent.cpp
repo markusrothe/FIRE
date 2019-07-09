@@ -6,15 +6,32 @@
 #include <FIRE/Scene.h>
 #include <FIRE/SceneObject.h>
 #include <FIRE/Window.h>
+#include <fstream>
+#include <iterator>
+#include <string>
 
 namespace examples
 {
+namespace
+{
+std::string GetFileContent(std::string const& filePath)
+{
+    std::ifstream file(filePath);
+    std::string const content{(std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>()};
+    return content;
+}
+} // namespace
 
 CubeRenderingComponent::CubeRenderingComponent(FIRE::Renderer& renderer, FIRE::MeshManager& meshManager, FIRE::MaterialFactory& materialFactory)
     : FIRE::RenderingComponent(renderer)
 {
     m_cube.name = "cubeRenderable";
-    m_cube.material = materialFactory.CreateDefaultMaterial();
+
+    FIRE::Shaders const shaders = {
+        {FIRE::ShaderType::VERTEX_SHADER, GetFileContent("PhongVS.glsl")},
+        {FIRE::ShaderType::FRAGMENT_SHADER, GetFileContent("PhongFS.glsl")}};
+    m_cube.material = materialFactory.CreateMaterial("phong", shaders);
+
     m_cube.mesh = meshManager.CreateCube("cube");
 }
 
@@ -26,9 +43,11 @@ void CubeRenderingComponent::DoUpdate(FIRE::SceneObject& sceneObject, FIRE::Scen
 
     auto viewMatrix = std::any_cast<glm::mat4x4>(scene.Send(FIRE::Message(0)).value());
     auto projMatrix = std::any_cast<glm::mat4x4>(scene.Send(FIRE::Message(1)).value());
+    auto lightPos = std::any_cast<glm::vec3>(scene.Send(FIRE::Message(2)).value());
 
-    auto const MVP = projMatrix * viewMatrix * transform.ModelMatrix();
-    m_cube.material.SetShaderParameter("MVP", FIRE::ShaderParameterType::MAT4x4, MVP);
+    m_cube.material.SetShaderParameter("M", FIRE::ShaderParameterType::MAT4x4, transform.ModelMatrix());
+    m_cube.material.SetShaderParameter("VP", FIRE::ShaderParameterType::MAT4x4, projMatrix * viewMatrix);
+    m_cube.material.SetShaderParameter("LightPos", FIRE::ShaderParameterType::VEC3, lightPos);
 
     m_renderer.Submit(m_cube);
 }

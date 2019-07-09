@@ -1,5 +1,6 @@
 
 #include "CubeCameraComponent.h"
+#include "CubeLightComponent.h"
 #include "CubeRenderingComponent.h"
 
 #include <FIRE/GLFactory.h>
@@ -36,6 +37,10 @@ int main(int, char**)
     mainCamera.AddComponent(
         std::make_unique<examples::CubeCameraComponent>(
             70.0f, static_cast<float>(window.GetWidth()) / static_cast<float>(window.GetHeight()), 0.01f, 500.0f));
+
+    auto& sceneLight = scene.CreateSceneObject("light");
+    sceneLight.AddComponent(
+        std::make_unique<examples::CubeLightComponent>());
 
     while(!window.ShouldClose())
     {
