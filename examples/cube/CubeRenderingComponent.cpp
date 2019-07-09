@@ -1,6 +1,5 @@
 #include "CubeRenderingComponent.h"
 
-#include <FIRE/CameraComponent.h>
 #include <FIRE/MaterialFactory.h>
 #include <FIRE/MeshManager.h>
 #include <FIRE/Message.h>

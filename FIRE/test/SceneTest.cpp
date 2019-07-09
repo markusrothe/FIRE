@@ -1,8 +1,10 @@
 #include <FIRE/Component.h>
 #include <FIRE/Message.h>
 #include <FIRE/Scene.h>
+#include <any>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
+#include <optional>
 
 namespace
 {
@@ -37,7 +39,8 @@ TEST_F(AScene, BroadcastsMessagesToSceneObjects)
     EXPECT_CALL(*component, Receive(message)).WillOnce(Return(responseValue));
     obj.AddComponent(std::move(component));
 
-    EXPECT_EQ(responseValue, std::any_cast<int>(scene.Send(message).value()));
+    auto actualValue = std::any_cast<int>(scene.Send(message).value());
+    EXPECT_EQ(responseValue, actualValue);
 }
 
 } // namespace
