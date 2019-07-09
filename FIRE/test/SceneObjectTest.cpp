@@ -12,7 +12,10 @@ class ComponentMock : public FIRE::Component
 {
 public:
     MOCK_METHOD2(Update, void(FIRE::SceneObject& sceneObject, FIRE::Scene& scene));
-    MOCK_METHOD1(Receive, std::optional<std::any>(FIRE::Message));
+
+    std::optional<std::any> Receive(FIRE::Message)
+    {
+    }
 };
 } // namespace
 
