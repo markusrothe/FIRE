@@ -15,6 +15,7 @@ public:
 
     std::optional<std::any> Receive(FIRE::Message)
     {
+        return std::nullopt;
     }
 };
 } // namespace
