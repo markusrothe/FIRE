@@ -3,19 +3,23 @@
 
 #include <FIRE/SceneObject.h>
 
+#include <any>
 #include <list>
 #include <memory>
+#include <optional>
 
 namespace FIRE
 {
 class CameraComponent;
+class Message;
 class Scene
 {
 public:
     SceneObject& CreateSceneObject(std::string name);
 
     void Update();
-    //CameraComponent const* GetCamera();
+
+    std::optional<std::any> Send(Message msg);
 
 private:
     std::list<SceneObject> m_sceneObjects;

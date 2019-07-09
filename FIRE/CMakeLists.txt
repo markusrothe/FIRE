@@ -25,6 +25,7 @@ add_library(FIRE STATIC
     include/FIRE/glmfwd.h
     include/FIRE/MeshType.h
     include/FIRE/TextOverlay.h
+    include/FIRE/Message.h
     
     src/Uploader.h
     src/DrawAgent.h

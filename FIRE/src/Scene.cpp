@@ -1,6 +1,7 @@
 #include <FIRE/Scene.h>
 
 #include <FIRE/CameraComponent.h>
+#include <FIRE/Message.h>
 #include <FIRE/Renderable.h>
 
 #include <algorithm>
@@ -19,6 +20,20 @@ void Scene::Update()
     {
         obj.Update(*this);
     }
+}
+
+std::optional<std::any> Scene::Send(Message msg)
+{
+    for(auto& obj : m_sceneObjects)
+    {
+        std::optional<std::any> response = obj.Send(msg);
+        if(response)
+        {
+            return response;
+        }
+    }
+
+    return std::nullopt;
 }
 
 // CameraComponent const* Scene::GetCamera()

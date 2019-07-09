@@ -12,9 +12,9 @@ class RenderingComponent : public Component
 {
 public:
     explicit RenderingComponent(Renderer& renderer);
-    void Update(SceneObject& sceneObject, Scene& scene);
-
     virtual ~RenderingComponent() override;
+
+    void Update(SceneObject& sceneObject, Scene& scene) override;
 
 protected:
     Renderer& m_renderer;

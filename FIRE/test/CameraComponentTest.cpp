@@ -1,4 +1,5 @@
 #include <FIRE/CameraComponent.h>
+#include <FIRE/Message.h>
 #include <FIRE/Scene.h>
 #include <FIRE/SceneObject.h>
 #include <gmock/gmock.h>
@@ -18,10 +19,15 @@ public:
     }
 
 private:
-    void DoUpdate(FIRE::SceneObject& sceneObject, FIRE::Scene&)
+    void DoUpdate(FIRE::SceneObject& sceneObject, FIRE::Scene&) override
     {
         sceneObject.GetTransform().SetPosition(pos);
         sceneObject.GetTransform().SetLookAt(lookAt);
+    }
+
+    std::optional<std::any> Receive(FIRE::Message) override
+    {
+        return std::nullopt;
     }
 };
 

@@ -19,8 +19,9 @@ public:
 
     ~CubeCameraComponent() override;
 
-protected:
+private:
     void DoUpdate(FIRE::SceneObject& sceneObject, FIRE::Scene& scene) override;
+    std::optional<std::any> Receive(FIRE::Message msg) override;
 };
 } // namespace examples
 

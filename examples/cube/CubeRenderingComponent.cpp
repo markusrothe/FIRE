@@ -3,6 +3,7 @@
 #include <FIRE/CameraComponent.h>
 #include <FIRE/MaterialFactory.h>
 #include <FIRE/MeshManager.h>
+#include <FIRE/Message.h>
 #include <FIRE/Scene.h>
 #include <FIRE/SceneObject.h>
 #include <FIRE/Window.h>
@@ -18,18 +19,24 @@ CubeRenderingComponent::CubeRenderingComponent(FIRE::Renderer& renderer, FIRE::M
     m_cube.mesh = meshManager.CreateCube("cube");
 }
 
-void CubeRenderingComponent::DoUpdate(FIRE::SceneObject& sceneObject, FIRE::Scene&)
+void CubeRenderingComponent::DoUpdate(FIRE::SceneObject& sceneObject, FIRE::Scene& scene)
 {
     auto& transform = sceneObject.GetTransform();
     transform.SetPosition({0, 2, 0});
     transform.Rotate({1, 1, 1}, 1.0f);
 
-    //FIRE::CameraComponent const* cam = scene.GetCamera();
+    auto viewMatrix = std::any_cast<glm::mat4x4>(scene.Send(FIRE::Message(0)).value());
+    auto projMatrix = std::any_cast<glm::mat4x4>(scene.Send(FIRE::Message(1)).value());
 
-    //auto const MVP = cam->GetProjectionMatrix() * cam->GetViewMatrix() * transform.ModelMatrix();
-    //m_cube.material.SetShaderParameter("MVP", FIRE::ShaderParameterType::MAT4x4, MVP);
+    auto const MVP = projMatrix * viewMatrix * transform.ModelMatrix();
+    m_cube.material.SetShaderParameter("MVP", FIRE::ShaderParameterType::MAT4x4, MVP);
 
     m_renderer.Submit(m_cube);
+}
+
+std::optional<std::any> CubeRenderingComponent::Receive(FIRE::Message)
+{
+    return std::nullopt;
 }
 
 } // namespace examples

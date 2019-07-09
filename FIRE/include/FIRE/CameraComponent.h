@@ -13,7 +13,7 @@ public:
 
     virtual ~CameraComponent() override;
 
-    void Update(SceneObject& sceneObject, Scene& scene);
+    void Update(SceneObject& sceneObject, Scene& scene) override;
 
     glm::mat4x4 GetViewMatrix() const;
     glm::mat4x4 GetProjectionMatrix() const;

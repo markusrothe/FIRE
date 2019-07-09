@@ -12,6 +12,7 @@ class Window;
 class MeshManager;
 class Camera;
 class MaterialFactory;
+class Message;
 } // namespace FIRE
 
 namespace examples
@@ -21,10 +22,10 @@ class CubeRenderingComponent : public FIRE::RenderingComponent
 public:
     CubeRenderingComponent(FIRE::Renderer& renderer, FIRE::MeshManager& meshManager, FIRE::MaterialFactory& materialFactory);
 
-protected:
-    void DoUpdate(FIRE::SceneObject& sceneObject, FIRE::Scene& scene) override;
-
 private:
+    void DoUpdate(FIRE::SceneObject& sceneObject, FIRE::Scene& scene) override;
+    std::optional<std::any> Receive(FIRE::Message msg) override;
+
     FIRE::Renderable m_cube;
 };
 } // namespace examples

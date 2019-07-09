@@ -1,3 +1,4 @@
+#include <FIRE/Message.h>
 #include <FIRE/Renderer.h>
 #include <FIRE/RenderingComponent.h>
 #include <FIRE/Scene.h>
@@ -34,6 +35,11 @@ private:
     void DoUpdate(FIRE::SceneObject& sceneObject, FIRE::Scene&)
     {
         sceneObject.GetTransform().SetPosition(pos);
+    }
+
+    std::optional<std::any> Receive(FIRE::Message)
+    {
+        return std::nullopt;
     }
 };
 } // namespace

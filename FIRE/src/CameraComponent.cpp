@@ -1,4 +1,5 @@
 #include <FIRE/CameraComponent.h>
+#include <FIRE/Message.h>
 #include <FIRE/SceneObject.h>
 #include <FIRE/Transform.h>
 

@@ -1,5 +1,6 @@
 #include "CubeCameraComponent.h"
 
+#include <FIRE/Message.h>
 #include <FIRE/SceneObject.h>
 namespace examples
 {
@@ -16,5 +17,19 @@ void CubeCameraComponent::DoUpdate(FIRE::SceneObject& sceneObject, FIRE::Scene&)
     auto& transform = sceneObject.GetTransform();
     transform.SetPosition({0.0f, 2.0f, 10.0f});
     transform.SetLookAt({0.0f, 2.0f, 0.0f});
+}
+
+std::optional<std::any> CubeCameraComponent::Receive(FIRE::Message msg)
+{
+    if(msg.id == 0)
+    {
+        return GetViewMatrix();
+    }
+    else if(msg.id == 1)
+    {
+        return GetProjectionMatrix();
+    }
+
+    return std::nullopt;
 }
 } // namespace examples

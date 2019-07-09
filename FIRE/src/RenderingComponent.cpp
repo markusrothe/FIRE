@@ -13,4 +13,5 @@ void RenderingComponent::Update(SceneObject& sceneObject, Scene& scene)
 {
     DoUpdate(sceneObject, scene);
 }
+
 } // namespace FIRE

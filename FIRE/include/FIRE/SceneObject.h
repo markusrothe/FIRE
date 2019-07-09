@@ -3,7 +3,9 @@
 
 #include <FIRE/Component.h>
 #include <FIRE/Transform.h>
+#include <any>
 #include <memory>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -21,8 +23,11 @@ public:
 
     Transform& GetTransform();
 
+    std::string GetName() const;
     void Update(Scene& scene);
     void AddComponent(std::unique_ptr<Component> component);
+
+    std::optional<std::any> Send(Message msg);
 
 private:
     std::string m_name;
