@@ -9,11 +9,18 @@
 namespace
 {
 using ::testing::Return;
+auto const messageResponse = 42;
 class TestComponent : public FIRE::Component
 {
 public:
-    MOCK_METHOD2(Update, void(FIRE::SceneObject&, FIRE::Scene&));
-    MOCK_METHOD1(Receive, std::optional<std::any>(FIRE::Message));
+    void Update(FIRE::SceneObject&, FIRE::Scene&) override
+    {
+    }
+
+    std::optional<std::any> Receive(FIRE::Message) override
+    {
+        return messageResponse;
+    }
 };
 
 class AScene : public ::testing::Test
@@ -29,18 +36,15 @@ TEST_F(AScene, CreatesSceneObjectsWithAName)
     EXPECT_EQ(obj.GetName(), name);
 }
 
-TEST_F(AScene, BroadcastsMessagesToSceneObjects)
+TEST_F(AScene, BroadcastsMessagesToSceneObjectsAndThusToComponents)
 {
-    auto const responseValue = 42;
     FIRE::Message message(0);
     auto& obj = scene.CreateSceneObject("obj");
 
     auto component = std::make_unique<TestComponent>();
-    EXPECT_CALL(*component, Receive(message)).WillOnce(Return(responseValue));
     obj.AddComponent(std::move(component));
 
-    auto actualValue = std::any_cast<int>(scene.Send(message).value());
-    EXPECT_EQ(responseValue, actualValue);
+    EXPECT_EQ(messageResponse, std::any_cast<int>(scene.Send(message).value()));
 }
 
 } // namespace
