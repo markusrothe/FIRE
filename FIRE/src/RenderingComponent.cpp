@@ -9,9 +9,9 @@ RenderingComponent::RenderingComponent(Renderer& renderer)
 
 RenderingComponent::~RenderingComponent() = default;
 
-void RenderingComponent::Update(SceneObject& sceneObject, Scene& scene)
+void RenderingComponent::Update(double deltaTime, SceneObject& sceneObject, Scene& scene)
 {
-    DoUpdate(sceneObject, scene);
+    DoUpdate(deltaTime, sceneObject, scene);
 }
 
 } // namespace FIRE

@@ -10,9 +10,9 @@ CameraComponent::CameraComponent(float fovy, float aspect, float near, float far
 {
 }
 
-void CameraComponent::Update(SceneObject& sceneObject, Scene& scene)
+void CameraComponent::Update(double deltaTime, SceneObject& sceneObject, Scene& scene)
 {
-    DoUpdate(sceneObject, scene);
+    DoUpdate(deltaTime, sceneObject, scene);
     auto& transform = sceneObject.GetTransform();
     m_view = glm::lookAt(transform.Position(), transform.LookAt(), transform.Up());
 }

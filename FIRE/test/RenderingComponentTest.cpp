@@ -32,7 +32,7 @@ public:
     }
 
 private:
-    void DoUpdate(FIRE::SceneObject& sceneObject, FIRE::Scene&)
+    void DoUpdate(double, FIRE::SceneObject& sceneObject, FIRE::Scene&)
     {
         sceneObject.GetTransform().SetPosition(pos);
     }
@@ -52,7 +52,7 @@ TEST(ARenderingComponent, CallsItsDerivedDoUpdateFunction)
     FIRE::SceneObject obj("");
     FIRE::Scene scene;
 
-    renderingComponent.Update(obj, scene);
+    renderingComponent.Update(0.0, obj, scene);
 
     EXPECT_EQ(pos, obj.GetTransform().Position());
 }

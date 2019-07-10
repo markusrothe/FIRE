@@ -18,7 +18,6 @@ add_executable(FIRE_tests
     ./InputListenerTest.cpp
     ./MeshManagerTest.cpp
     ./TextureFactoryTest.cpp
-    ./TextOverlayTest.cpp
 )
 
 target_include_directories(FIRE_tests

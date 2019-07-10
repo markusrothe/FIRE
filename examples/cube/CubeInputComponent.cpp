@@ -77,7 +77,7 @@ void CubeInputComponent::Init(FIRE::SceneObject& sceneObject)
         });
 }
 
-void CubeInputComponent::DoUpdate(FIRE::SceneObject& sceneObject, FIRE::Scene&)
+void CubeInputComponent::DoUpdate(double, FIRE::SceneObject& sceneObject, FIRE::Scene&)
 {
     static bool initialized = false;
 

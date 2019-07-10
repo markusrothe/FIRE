@@ -2,8 +2,9 @@
 #define FIRE_RendererImpl_h
 
 #include <FIRE/Renderer.h>
+#include <map>
 #include <memory>
-#include <vector>
+#include <string>
 namespace FIRE
 {
 class Uploader;
@@ -25,7 +26,7 @@ public:
     void Render(float windowWidth, float windowHeight) override;
 
 private:
-    std::vector<Renderable> m_renderables;
+    std::map<std::string, Renderable> m_renderables;
 
     std::unique_ptr<Uploader> m_uploader;
     std::unique_ptr<DrawAgent> m_drawAgent;

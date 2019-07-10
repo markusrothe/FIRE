@@ -11,10 +11,10 @@ class LightComponent : public Component
 {
 public:
     virtual ~LightComponent() override;
-    void Update(SceneObject& sceneObject, Scene& scene) override;
+    void Update(double deltaTime, SceneObject& sceneObject, Scene& scene) override;
 
 private:
-    virtual void DoUpdate(SceneObject& sceneObject, Scene& scene) = 0;
+    virtual void DoUpdate(double deltaTime, SceneObject& sceneObject, Scene& scene) = 0;
 };
 } // namespace FIRE
 

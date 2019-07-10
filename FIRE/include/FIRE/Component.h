@@ -12,7 +12,7 @@ class Component
 {
 public:
     virtual ~Component() = default;
-    virtual void Update(SceneObject& sceneObject, Scene& scene) = 0;
+    virtual void Update(double deltaTime, SceneObject& sceneObject, Scene& scene) = 0;
     virtual std::optional<std::any> Receive(Message msg) = 0;
 };
 } // namespace FIRE

@@ -12,7 +12,7 @@ CubeCameraComponent::CubeCameraComponent(float fovy, float aspect, float near, f
 
 CubeCameraComponent::~CubeCameraComponent() = default;
 
-void CubeCameraComponent::DoUpdate(FIRE::SceneObject& sceneObject, FIRE::Scene&)
+void CubeCameraComponent::DoUpdate(double, FIRE::SceneObject& sceneObject, FIRE::Scene&)
 {
     static bool init = false;
     if(!init)

@@ -7,8 +7,10 @@ namespace FIRE
 class TextOverlay
 {
 public:
-    TextOverlay(std::string text, float x, float y, float scale = 1.0f);
+    TextOverlay() = default;
+    TextOverlay(int id, std::string text, float x, float y, float scale = 1.0f);
 
+    int id;
     std::string text;
     float x;
     float y;

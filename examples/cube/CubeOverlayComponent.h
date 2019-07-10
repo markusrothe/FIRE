@@ -13,7 +13,7 @@ public:
 
 private:
     std::optional<std::any> Receive(FIRE::Message msg) override;
-    void DoUpdate(FIRE::SceneObject& sceneObject, FIRE::Scene& scene) override;
+    void DoUpdate(double deltaTime, FIRE::SceneObject& sceneObject, FIRE::Scene& scene) override;
 };
 } // namespace examples
 

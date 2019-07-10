@@ -7,9 +7,9 @@ namespace FIRE
 
 LightComponent::~LightComponent() = default;
 
-void LightComponent::Update(SceneObject& sceneObject, Scene& scene)
+void LightComponent::Update(double deltaTime, SceneObject& sceneObject, Scene& scene)
 {
-    DoUpdate(sceneObject, scene);
+    DoUpdate(deltaTime, sceneObject, scene);
 }
 
 } // namespace FIRE

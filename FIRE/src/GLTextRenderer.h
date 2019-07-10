@@ -4,8 +4,8 @@
 #include <FIRE/TextOverlay.h>
 #include <FIRE/TextRenderer.h>
 #include <cstdint>
+#include <map>
 #include <memory>
-#include <vector>
 
 namespace FIRE
 {
@@ -22,7 +22,7 @@ public:
 private:
     void Render(TextOverlay const& overlay, float width, float height);
 
-    std::vector<TextOverlay> m_renderables;
+    std::map<int, TextOverlay> m_renderables;
     std::unique_ptr<TextureFactory> m_texFactory;
     uint32_t texVAO, texVBO;
     uint32_t m_texShader;

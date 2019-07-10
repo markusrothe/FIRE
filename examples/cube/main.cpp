@@ -15,8 +15,11 @@
 #include <FIRE/SceneObject.h>
 #include <FIRE/TextRenderer.h>
 #include <FIRE/Window.h>
-#include <memory>
+#include <chrono>
 
+#include <memory>
+#include <thread>
+using namespace std::chrono_literals;
 namespace
 {
 unsigned int constexpr WINDOW_WIDTH = 800;
@@ -55,10 +58,24 @@ int main(int, char**)
     overlay.AddComponent(
         std::make_unique<examples::CubeOverlayComponent>(*textRenderer));
 
+    auto lastTime = std::chrono::high_resolution_clock::now();
+    std::chrono::nanoseconds lag{0ns};
+    std::chrono::nanoseconds timestep{16ms};
     while(!window.ShouldClose())
     {
+        auto currentTime = std::chrono::high_resolution_clock::now();
+        auto deltaTime = currentTime - lastTime;
+
+        lastTime = currentTime;
+        lag += deltaTime;
         window.PollEvents();
-        scene.Update();
+
+        while(lag >= timestep)
+        {
+            scene.Update(std::chrono::duration<double>(lag).count());
+            lag -= timestep;
+        }
+
         renderer->Render(WINDOW_WIDTH, WINDOW_HEIGHT);
         textRenderer->Render(WINDOW_WIDTH, WINDOW_HEIGHT);
         window.SwapBuffers();

@@ -35,11 +35,11 @@ CubeRenderingComponent::CubeRenderingComponent(FIRE::Renderer& renderer, FIRE::M
     m_cube.mesh = meshManager.CreateCube("cube");
 }
 
-void CubeRenderingComponent::DoUpdate(FIRE::SceneObject& sceneObject, FIRE::Scene& scene)
+void CubeRenderingComponent::DoUpdate(double deltaTime, FIRE::SceneObject& sceneObject, FIRE::Scene& scene)
 {
     auto& transform = sceneObject.GetTransform();
     transform.SetPosition({0, 2, 0});
-    transform.Rotate({1, 1, 1}, 1.0f);
+    transform.Rotate({1, 1, 1}, 100.0f * static_cast<float>(deltaTime));
 
     auto viewMatrix = std::any_cast<glm::mat4x4>(scene.Send(FIRE::Message(0)).value());
     auto projMatrix = std::any_cast<glm::mat4x4>(scene.Send(FIRE::Message(1)).value());

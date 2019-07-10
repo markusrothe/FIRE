@@ -15,13 +15,13 @@ public:
 
     virtual ~OverlayComponent();
 
-    void Update(SceneObject& sceneObject, Scene& scene) override;
+    void Update(double deltaTime, SceneObject& sceneObject, Scene& scene) override;
 
 protected:
     TextRenderer& renderer;
 
 private:
-    virtual void DoUpdate(SceneObject& sceneObject, Scene& scene) = 0;
+    virtual void DoUpdate(double deltaTime, SceneObject& sceneObject, Scene& scene) = 0;
 };
 } // namespace FIRE
 

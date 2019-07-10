@@ -24,7 +24,7 @@ public:
     Transform& GetTransform();
 
     std::string GetName() const;
-    void Update(Scene& scene);
+    void Update(double deltaTime, Scene& scene);
     void AddComponent(std::unique_ptr<Component> component);
 
     std::optional<std::any> Send(Message msg);

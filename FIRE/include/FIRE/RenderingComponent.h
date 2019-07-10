@@ -14,13 +14,13 @@ public:
     explicit RenderingComponent(Renderer& renderer);
     virtual ~RenderingComponent() override;
 
-    void Update(SceneObject& sceneObject, Scene& scene) override;
+    void Update(double deltaTime, SceneObject& sceneObject, Scene& scene) override;
 
 protected:
     Renderer& m_renderer;
 
 private:
-    virtual void DoUpdate(SceneObject& sceneObject, Scene& scene) = 0;
+    virtual void DoUpdate(double deltaTime, SceneObject& sceneObject, Scene& scene) = 0;
 };
 } // namespace FIRE
 

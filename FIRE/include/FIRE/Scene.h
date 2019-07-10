@@ -17,7 +17,7 @@ class Scene
 public:
     SceneObject& CreateSceneObject(std::string name);
 
-    void Update();
+    void Update(double deltaTime);
 
     std::optional<std::any> Send(Message msg);
 

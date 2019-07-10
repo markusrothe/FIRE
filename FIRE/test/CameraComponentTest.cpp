@@ -19,7 +19,7 @@ public:
     }
 
 private:
-    void DoUpdate(FIRE::SceneObject& sceneObject, FIRE::Scene&) override
+    void DoUpdate(double, FIRE::SceneObject& sceneObject, FIRE::Scene&) override
     {
         sceneObject.GetTransform().SetPosition(pos);
         sceneObject.GetTransform().SetLookAt(lookAt);
@@ -43,18 +43,18 @@ public:
 
 TEST_F(ACameraComponent, CallsItsDerivedDoUpdateFunction)
 {
-    cameraComponent.Update(sceneObject, scene);
+    cameraComponent.Update(0.0, sceneObject, scene);
     EXPECT_EQ(pos, sceneObject.GetTransform().Position());
 }
 
 TEST_F(ACameraComponent, UpdatesItsViewMatrix)
 {
-    cameraComponent.Update(sceneObject, scene);
+    cameraComponent.Update(0.0, sceneObject, scene);
     EXPECT_EQ(glm::lookAt(pos, lookAt, up), cameraComponent.GetViewMatrix());
 }
 
 TEST_F(ACameraComponent, UpdatesItsProjectionMatrix)
 {
-    cameraComponent.Update(sceneObject, scene);
+    cameraComponent.Update(0.0, sceneObject, scene);
     EXPECT_EQ(glm::perspective(1.0f, 2.0f, 3.0f, 4.0f), cameraComponent.GetProjectionMatrix());
 }

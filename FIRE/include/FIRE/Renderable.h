@@ -18,6 +18,7 @@ struct Renderable
 
 bool operator==(Renderable const& lhs, Renderable const& rhs);
 bool operator!=(Renderable const& lhs, Renderable const& rhs);
+bool operator<(Renderable const& lhs, Renderable const& rhs);
 
 } // namespace FIRE
 

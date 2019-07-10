@@ -13,13 +13,13 @@ public:
 
     virtual ~CameraComponent() override;
 
-    void Update(SceneObject& sceneObject, Scene& scene) override;
+    void Update(double deltaTime, SceneObject& sceneObject, Scene& scene) override;
 
     glm::mat4x4 GetViewMatrix() const;
     glm::mat4x4 GetProjectionMatrix() const;
 
 private:
-    virtual void DoUpdate(SceneObject& sceneObject, Scene& scene) = 0;
+    virtual void DoUpdate(double deltaTime, SceneObject& sceneObject, Scene& scene) = 0;
 
     glm::mat4x4 m_view;
     glm::mat4x4 m_proj;

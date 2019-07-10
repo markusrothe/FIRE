@@ -13,7 +13,7 @@ auto const messageResponse = 42;
 class TestComponent : public FIRE::Component
 {
 public:
-    void Update(FIRE::SceneObject&, FIRE::Scene&) override
+    void Update(double, FIRE::SceneObject&, FIRE::Scene&) override
     {
     }
 

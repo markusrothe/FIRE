@@ -30,11 +30,11 @@ Transform& SceneObject::GetTransform()
     return m_transform;
 }
 
-void SceneObject::Update(Scene& scene)
+void SceneObject::Update(double deltaTime, Scene& scene)
 {
     for(auto& component : m_components)
     {
-        component->Update(*this, scene);
+        component->Update(deltaTime, *this, scene);
     }
 }
 

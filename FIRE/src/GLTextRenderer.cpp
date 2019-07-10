@@ -69,9 +69,8 @@ void GLTextRenderer::Render(float windowWidth, float windowHeight)
 {
     for(auto const& overlay : m_renderables)
     {
-        Render(overlay, windowWidth, windowHeight);
+        Render(overlay.second, windowWidth, windowHeight);
     }
-    m_renderables.clear();
 }
 
 void GLTextRenderer::Render(TextOverlay const& overlay, float width, float height)
@@ -111,7 +110,7 @@ void GLTextRenderer::Render(TextOverlay const& overlay, float width, float heigh
 
 void GLTextRenderer::Submit(TextOverlay overlay)
 {
-    m_renderables.push_back(std::move(overlay));
+    m_renderables[overlay.id] = overlay;
 }
 
 } // namespace FIRE

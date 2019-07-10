@@ -14,4 +14,9 @@ bool operator!=(Renderable const& lhs, Renderable const& rhs)
     return !(lhs == rhs);
 }
 
+bool operator<(Renderable const& lhs, Renderable const& rhs)
+{
+    return lhs.name < rhs.name;
+}
+
 } // namespace FIRE

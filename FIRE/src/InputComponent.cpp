@@ -9,9 +9,9 @@ InputComponent::InputComponent(InputListener& inputListener)
 
 InputComponent::~InputComponent() = default;
 
-void InputComponent::Update(SceneObject& sceneObject, Scene& scene)
+void InputComponent::Update(double deltaTime, SceneObject& sceneObject, Scene& scene)
 {
-    DoUpdate(sceneObject, scene);
+    DoUpdate(deltaTime, sceneObject, scene);
 }
 
 } // namespace FIRE

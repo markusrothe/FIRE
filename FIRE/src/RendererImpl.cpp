@@ -20,7 +20,7 @@ RendererImpl::~RendererImpl() = default;
 
 void RendererImpl::Submit(Renderable const& renderable)
 {
-    m_renderables.push_back(renderable);
+    m_renderables[renderable.name] = renderable;
 }
 
 void RendererImpl::Render(float, float)
@@ -29,10 +29,10 @@ void RendererImpl::Render(float, float)
 
     for(auto const& renderable : m_renderables)
     {
-        auto buffers = m_uploader->Upload(renderable);
-        m_drawAgent->Draw(renderable, buffers);
+        auto buffers = m_uploader->Upload(renderable.second);
+        m_drawAgent->Draw(renderable.second, buffers);
     }
 
-    m_renderables.clear();
+    //m_renderables.clear();
 }
 } // namespace FIRE

@@ -23,7 +23,7 @@ public:
 private:
     void Init(FIRE::SceneObject& sceneObject);
     FIRE::Window& window;
-    void DoUpdate(FIRE::SceneObject& sceneObject, FIRE::Scene& scene) override;
+    void DoUpdate(double deltaTime, FIRE::SceneObject& sceneObject, FIRE::Scene& scene) override;
     std::optional<std::any> Receive(FIRE::Message msg) override;
 };
 } // namespace examples
