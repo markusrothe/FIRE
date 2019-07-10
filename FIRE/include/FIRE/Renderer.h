@@ -4,11 +4,13 @@
 namespace FIRE
 {
 class Scene;
+struct Renderable;
 class Renderer
 {
 public:
     virtual ~Renderer() = default;
-    virtual void Render(Scene const&, float windowWidth, float windowHeight) = 0;
+    virtual void Submit(Renderable const& renderable) = 0;
+    virtual void Render(float windowWidth, float windowHeight) = 0;
 };
 } // namespace FIRE
 

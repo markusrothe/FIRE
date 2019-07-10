@@ -1,5 +1,4 @@
 add_library(FIRE STATIC
-    include/FIRE/Camera.h
     include/FIRE/Window.h
     include/FIRE/RenderContext.h
     include/FIRE/MeshManager.h
@@ -8,8 +7,14 @@ add_library(FIRE STATIC
     include/FIRE/Renderer.h 
     include/FIRE/VertexDeclaration.h
     include/FIRE/GLFactory.h
+    include/FIRE/Component.h
+    include/FIRE/RenderingComponent.h
+    include/FIRE/LightComponent.h
+    include/FIRE/CameraComponent.h
+    include/FIRE/OverlayComponent.h
+    include/FIRE/InputComponent.h
     include/FIRE/Scene.h
-    include/FIRE/SceneComponent.h
+    include/FIRE/SceneObject.h
     include/FIRE/Transform.h
     include/FIRE/InputListener.h
     include/FIRE/Key.h
@@ -22,6 +27,8 @@ add_library(FIRE STATIC
     include/FIRE/glmfwd.h
     include/FIRE/MeshType.h
     include/FIRE/TextOverlay.h
+    include/FIRE/TextRenderer.h
+    include/FIRE/Message.h
     
     src/Uploader.h
     src/DrawAgent.h
@@ -32,11 +39,9 @@ add_library(FIRE STATIC
     src/RendererImpl.h
     src/TextureFactory.h
     src/FontTextureFactory.h
-    src/GLFontTextureFactory.h
-    src/TextRenderer.h
+    src/GLFontTextureFactory.h    
     src/GLTextRenderer.h
       
-    src/Camera.cpp
     src/Window.cpp    
     src/Renderable.cpp
     src/Mesh3D.cpp
@@ -49,6 +54,12 @@ add_library(FIRE STATIC
     src/MaterialFactory.cpp
     src/VertexDeclaration.cpp
     src/Scene.cpp
+    src/SceneObject.cpp
+    src/RenderingComponent.cpp
+    src/CameraComponent.cpp
+    src/LightComponent.cpp
+    src/OverlayComponent.cpp
+    src/InputComponent.cpp
     src/Transform.cpp
     src/InputListener.cpp
     src/Material.cpp

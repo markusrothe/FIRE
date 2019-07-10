@@ -12,13 +12,13 @@ namespace FIRE
 struct Renderable
 {
     std::string name;
-    Transform transform;
     Material material;
     MeshHandle mesh;
 };
 
 bool operator==(Renderable const& lhs, Renderable const& rhs);
 bool operator!=(Renderable const& lhs, Renderable const& rhs);
+bool operator<(Renderable const& lhs, Renderable const& rhs);
 
 } // namespace FIRE
 

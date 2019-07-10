@@ -19,8 +19,8 @@ public:
     glm::vec3 GetScaling() const;
     glm::vec3 Right() const;
     glm::vec3 Up() const;
+    void SetPosition(glm::vec3 pos);
     void SetLookAt(glm::vec3 dir);
-
     void Translate(float x, float y, float z);
     void Translate(glm::vec3 const& vec);
     void Rotate(glm::vec3 const& axis, float angle);

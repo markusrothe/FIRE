@@ -1,53 +1,39 @@
 #include <FIRE/Scene.h>
 
+#include <FIRE/CameraComponent.h>
+#include <FIRE/Message.h>
 #include <FIRE/Renderable.h>
-#include <FIRE/SceneComponent.h>
+
 #include <algorithm>
 namespace FIRE
 {
-Scene::Scene(FIRE::Camera cam)
-    : m_cam(cam)
+
+SceneObject& Scene::CreateSceneObject(std::string name)
 {
+    m_sceneObjects.emplace_back(std::move(name));
+    return m_sceneObjects.back();
 }
 
-FIRE::Camera& Scene::GetCamera()
+void Scene::Update(double deltaTime)
 {
-    return m_cam;
-}
-
-void Scene::AddSceneComponent(std::shared_ptr<SceneComponent> const& sceneComponent)
-{
-    m_sceneComponents.push_back(sceneComponent);
-}
-
-void Scene::Update()
-{
-    for(auto& sceneComponent : m_sceneComponents)
+    for(auto& obj : m_sceneObjects)
     {
-        sceneComponent->Update(m_cam);
+        obj.Update(deltaTime, *this);
     }
 }
 
-std::vector<Renderable> Scene::CollectRenderables() const
+std::optional<std::any> Scene::Send(Message msg)
 {
-    std::vector<Renderable> renderables;
-    for(auto& sceneComponent : m_sceneComponents)
+    for(auto& obj : m_sceneObjects)
     {
-        auto const sceneComponentRenderables = sceneComponent->CollectRenderables();
-        renderables.insert(renderables.end(), sceneComponentRenderables.begin(), sceneComponentRenderables.end());
+        std::optional<std::any> response = obj.Send(msg);
+        if(response)
+        {
+            return response;
+        }
     }
-    return renderables;
-}
 
-std::vector<TextOverlay> Scene::CollectTextOverlays() const
-{
-    std::vector<TextOverlay> overlays;
-    for(auto& sceneComponent : m_sceneComponents)
-    {
-        auto const sceneComponentOverlays = sceneComponent->CollectTextOverlays();
-        overlays.insert(std::end(overlays), std::begin(sceneComponentOverlays), std::end(sceneComponentOverlays));
-    }
-    return overlays;
+    return std::nullopt;
 }
 
 } // namespace FIRE

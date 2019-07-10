@@ -4,18 +4,20 @@ endif()
 
 add_executable(FIRE_tests
     ./Utilities.h
+
+    ./CameraComponentTest.cpp
+    ./RenderingComponentTest.cpp
     ./WindowTest.cpp
     ./RendererTest.cpp
     ./MeshTest.cpp
     ./MaterialFactoryTest.cpp
     ./MaterialTest.cpp
-    ./CameraTest.cpp
     ./SceneTest.cpp
+    ./SceneObjectTest.cpp
     ./TransformTest.cpp
     ./InputListenerTest.cpp
     ./MeshManagerTest.cpp
     ./TextureFactoryTest.cpp
-    ./TextOverlayTest.cpp
 )
 
 target_include_directories(FIRE_tests

@@ -2,31 +2,34 @@
 #define FIRE_RendererImpl_h
 
 #include <FIRE/Renderer.h>
+#include <map>
 #include <memory>
+#include <string>
 namespace FIRE
 {
 class Uploader;
 class DrawAgent;
 class Scene;
-class TextOverlay;
-class TextRenderer;
+struct Renderable;
 
 class RendererImpl : public Renderer
 {
 public:
     explicit RendererImpl(
         std::unique_ptr<Uploader> uploader,
-        std::unique_ptr<DrawAgent> drawAgent,
-        std::unique_ptr<TextRenderer> textRenderer);
+        std::unique_ptr<DrawAgent> drawAgent);
 
     ~RendererImpl() override;
 
-    void Render(Scene const& scene, float windowWidth, float windowHeight) override;
+    void Submit(Renderable const& renderable) override;
+
+    void Render(float windowWidth, float windowHeight) override;
 
 private:
+    std::map<std::string, Renderable> m_renderables;
+
     std::unique_ptr<Uploader> m_uploader;
     std::unique_ptr<DrawAgent> m_drawAgent;
-    std::unique_ptr<TextRenderer> m_textRenderer;
 };
 } // namespace FIRE
 

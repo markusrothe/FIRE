@@ -1,55 +1,50 @@
-#include "SceneComponentMock.h"
-
-#include <FIRE/Camera.h>
-#include <FIRE/Renderable.h>
+#include <FIRE/Component.h>
+#include <FIRE/Message.h>
 #include <FIRE/Scene.h>
-#include <FIRE/SceneComponent.h>
-#include <FIRE/TextOverlay.h>
+#include <any>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
-
-#include <vector>
+#include <optional>
 
 namespace
 {
-using ::testing::ContainerEq;
 using ::testing::Return;
+auto const messageResponse = 42;
+class TestComponent : public FIRE::Component
+{
+public:
+    void Update(double, FIRE::SceneObject&, FIRE::Scene&) override
+    {
+    }
+
+    std::optional<std::any> Receive(FIRE::Message) override
+    {
+        return messageResponse;
+    }
+};
+
 class AScene : public ::testing::Test
 {
 public:
-    AScene()
-        : cam{"cam"}
-        , scene{cam}
-        , sceneComponent{std::make_shared<Mocks::SceneComponentMock>()}
-    {
-        scene.AddSceneComponent(sceneComponent);
-    }
-
-    FIRE::Camera cam;
     FIRE::Scene scene;
-    std::shared_ptr<Mocks::SceneComponentMock> sceneComponent;
 };
 
+TEST_F(AScene, CreatesSceneObjectsWithAName)
+{
+    std::string const name{"obj"};
+    auto& obj = scene.CreateSceneObject(name);
+    EXPECT_EQ(obj.GetName(), name);
+}
+
+TEST_F(AScene, BroadcastsMessagesToSceneObjectsAndThusToComponents)
+{
+    FIRE::Message message(0);
+    auto& obj = scene.CreateSceneObject("obj");
+
+    auto component = std::make_unique<TestComponent>();
+    obj.AddComponent(std::move(component));
+
+    EXPECT_EQ(messageResponse, std::any_cast<int>(scene.Send(message).value()));
+}
+
 } // namespace
-
-TEST_F(AScene, UpdatesSceneComponents)
-{
-    EXPECT_CALL(*sceneComponent, Update(cam));
-    scene.Update();
-}
-
-TEST_F(AScene, CollectsRenderablesFromSceneComponents)
-{
-    std::vector<FIRE::Renderable> renderables = {FIRE::Renderable()};
-    EXPECT_CALL(*sceneComponent, CollectRenderables()).WillOnce(Return(renderables));
-
-    EXPECT_THAT(scene.CollectRenderables(), ::testing::ContainerEq(renderables));
-}
-
-TEST_F(AScene, CollectsTextOverlaysFromSceneComponents)
-{
-    std::vector<FIRE::TextOverlay> textOverlays = {FIRE::TextOverlay("text", 0.5, 0.5)};
-    EXPECT_CALL(*sceneComponent, CollectTextOverlays()).WillOnce(Return(textOverlays));
-
-    EXPECT_THAT(scene.CollectTextOverlays(), ContainerEq(textOverlays));
-}

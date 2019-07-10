@@ -1,13 +1,20 @@
 add_executable(cube
-    CubeSceneComponent.h
-    CubeSceneComponent.cpp
+    CubeRenderingComponent.h
+    CubeCameraComponent.h
+    CubeLightComponent.h    
+    CubeOverlayComponent.h
+    CubeInputComponent.h
+    CubeRenderingComponent.cpp
+    CubeCameraComponent.cpp
+    CubeLightComponent.cpp
+    CubeOverlayComponent.cpp
+    CubeInputComponent.cpp
     main.cpp
 )
 
 target_link_libraries(cube
     PRIVATE
     FIRE
-    SceneTemplate
     CompileOptions
 )
 
