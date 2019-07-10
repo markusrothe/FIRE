@@ -14,9 +14,14 @@ CubeCameraComponent::~CubeCameraComponent() = default;
 
 void CubeCameraComponent::DoUpdate(FIRE::SceneObject& sceneObject, FIRE::Scene&)
 {
-    auto& transform = sceneObject.GetTransform();
-    transform.SetPosition({0.0f, 2.0f, 10.0f});
-    transform.SetLookAt({0.0f, 2.0f, 0.0f});
+    static bool init = false;
+    if(!init)
+    {
+        auto& transform = sceneObject.GetTransform();
+        transform.SetPosition({0.0f, 2.0f, 10.0f});
+        transform.SetLookAt({0.0f, 2.0f, 0.0f});
+        init = true;
+    }
 }
 
 std::optional<std::any> CubeCameraComponent::Receive(FIRE::Message msg)

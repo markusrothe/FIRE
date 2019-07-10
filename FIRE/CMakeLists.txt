@@ -12,6 +12,7 @@ add_library(FIRE STATIC
     include/FIRE/LightComponent.h
     include/FIRE/CameraComponent.h
     include/FIRE/OverlayComponent.h
+    include/FIRE/InputComponent.h
     include/FIRE/Scene.h
     include/FIRE/SceneObject.h
     include/FIRE/Transform.h
@@ -58,6 +59,7 @@ add_library(FIRE STATIC
     src/CameraComponent.cpp
     src/LightComponent.cpp
     src/OverlayComponent.cpp
+    src/InputComponent.cpp
     src/Transform.cpp
     src/InputListener.cpp
     src/Material.cpp
