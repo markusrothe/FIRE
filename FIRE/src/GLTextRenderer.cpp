@@ -2,7 +2,7 @@
 #include "FontCharacter.h"
 #include "GLShaderFactory.h"
 #include "TextureFactory.h"
-#include <FIRE/TextOverlay.h>
+
 #include <FIRE/glmfwd.h>
 
 #include <glad/glad.h>
@@ -65,9 +65,18 @@ GLTextRenderer::GLTextRenderer(std::unique_ptr<TextureFactory> texFactory)
 
 GLTextRenderer::~GLTextRenderer() = default;
 
-void GLTextRenderer::Render(TextOverlay overlay, float windowWidth, float windowHeight)
+void GLTextRenderer::Render(float windowWidth, float windowHeight)
 {
-    glm::mat4 projection = glm::ortho(0.0f, windowWidth, 0.0f, windowHeight);
+    for(auto const& overlay : m_renderables)
+    {
+        Render(overlay, windowWidth, windowHeight);
+    }
+    m_renderables.clear();
+}
+
+void GLTextRenderer::Render(TextOverlay const& overlay, float width, float height)
+{
+    glm::mat4 projection = glm::ortho(0.0f, width, 0.0f, height);
 
     glUseProgram(m_texShader);
     glUniform3f(glGetUniformLocation(m_texShader, "textColor"), 1.0f, 0.0f, 0.0f);
@@ -76,8 +85,8 @@ void GLTextRenderer::Render(TextOverlay overlay, float windowWidth, float window
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(texVAO);
 
-    float x = overlay.x * windowWidth;
-    float y = overlay.y * windowHeight;
+    float x = overlay.x * width;
+    float y = overlay.y * height;
 
     for(auto const& c : overlay.text)
     {
@@ -98,6 +107,11 @@ void GLTextRenderer::Render(TextOverlay overlay, float windowWidth, float window
 
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void GLTextRenderer::Submit(TextOverlay overlay)
+{
+    m_renderables.push_back(std::move(overlay));
 }
 
 } // namespace FIRE

@@ -1,15 +1,14 @@
 #include "DrawAgent.h"
 #include "RendererImpl.h"
-#include "TextRenderer.h"
 #include "Uploader.h"
 #include <FIRE/Renderable.h>
 #include <FIRE/Scene.h>
 #include <FIRE/TextOverlay.h>
+#include <FIRE/TextRenderer.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <memory>
 #include <tuple>
-
 
 namespace
 {
@@ -33,23 +32,15 @@ public:
     MOCK_METHOD0(Clear, void(void));
 };
 
-class TextRendererMock : public FIRE::TextRenderer
-{
-public:
-    MOCK_METHOD3(Render, void(FIRE::TextOverlay, float, float));
-};
-
 class ARenderer : public ::testing::Test
 {
 public:
     ARenderer()
         : uploaderPtr(std::make_unique<UploaderMock>())
         , drawAgentPtr(std::make_unique<DrawAgentMock>())
-        , textRendererPtr(std::make_unique<TextRendererMock>())
         , uploader(*uploaderPtr)
         , drawAgent(*drawAgentPtr)
-        , textRenderer(*textRendererPtr)
-        , renderer(std::move(uploaderPtr), std::move(drawAgentPtr), std::move(textRendererPtr))
+        , renderer(std::move(uploaderPtr), std::move(drawAgentPtr))
         , scene()
     {
     }
@@ -57,12 +48,10 @@ public:
 private:
     std::unique_ptr<UploaderMock> uploaderPtr;
     std::unique_ptr<DrawAgentMock> drawAgentPtr;
-    std::unique_ptr<TextRendererMock> textRendererPtr;
 
 protected:
     UploaderMock& uploader;
     DrawAgentMock& drawAgent;
-    TextRendererMock& textRenderer;
     FIRE::RendererImpl renderer;
     FIRE::Scene scene;
     FIRE::Renderable renderable;

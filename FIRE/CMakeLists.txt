@@ -11,6 +11,7 @@ add_library(FIRE STATIC
     include/FIRE/RenderingComponent.h
     include/FIRE/LightComponent.h
     include/FIRE/CameraComponent.h
+    include/FIRE/OverlayComponent.h
     include/FIRE/Scene.h
     include/FIRE/SceneObject.h
     include/FIRE/Transform.h
@@ -25,6 +26,7 @@ add_library(FIRE STATIC
     include/FIRE/glmfwd.h
     include/FIRE/MeshType.h
     include/FIRE/TextOverlay.h
+    include/FIRE/TextRenderer.h
     include/FIRE/Message.h
     
     src/Uploader.h
@@ -36,8 +38,7 @@ add_library(FIRE STATIC
     src/RendererImpl.h
     src/TextureFactory.h
     src/FontTextureFactory.h
-    src/GLFontTextureFactory.h
-    src/TextRenderer.h
+    src/GLFontTextureFactory.h    
     src/GLTextRenderer.h
       
     src/Window.cpp    
@@ -56,6 +57,7 @@ add_library(FIRE STATIC
     src/RenderingComponent.cpp
     src/CameraComponent.cpp
     src/LightComponent.cpp
+    src/OverlayComponent.cpp
     src/Transform.cpp
     src/InputListener.cpp
     src/Material.cpp

@@ -1,6 +1,7 @@
 
 #include "CubeCameraComponent.h"
 #include "CubeLightComponent.h"
+#include "CubeOverlayComponent.h"
 #include "CubeRenderingComponent.h"
 
 #include <FIRE/GLFactory.h>
@@ -10,8 +11,8 @@
 #include <FIRE/Renderer.h>
 #include <FIRE/Scene.h>
 #include <FIRE/SceneObject.h>
+#include <FIRE/TextRenderer.h>
 #include <FIRE/Window.h>
-//#include <SceneTemplate/SceneTemplate.h>
 #include <memory>
 
 namespace
@@ -26,6 +27,7 @@ int main(int, char**)
     FIRE::MeshManager meshManager;
     FIRE::MaterialFactory materialFactory(FIRE::GLFactory::CreateShaderFactory());
     auto renderer{FIRE::GLFactory::CreateRenderer(meshManager)};
+    auto textRenderer{FIRE::GLFactory::CreateTextRenderer()};
 
     FIRE::Scene scene;
     auto& cubeObject = scene.CreateSceneObject("cube");
@@ -42,11 +44,16 @@ int main(int, char**)
     sceneLight.AddComponent(
         std::make_unique<examples::CubeLightComponent>());
 
+    auto& overlay = scene.CreateSceneObject("overlay");
+    overlay.AddComponent(
+        std::make_unique<examples::CubeOverlayComponent>(*textRenderer));
+
     while(!window.ShouldClose())
     {
         window.PollEvents();
         scene.Update();
         renderer->Render(WINDOW_WIDTH, WINDOW_HEIGHT);
+        textRenderer->Render(WINDOW_WIDTH, WINDOW_HEIGHT);
         window.SwapBuffers();
     }
 }

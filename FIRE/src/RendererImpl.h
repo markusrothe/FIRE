@@ -9,8 +9,6 @@ namespace FIRE
 class Uploader;
 class DrawAgent;
 class Scene;
-class TextOverlay;
-class TextRenderer;
 struct Renderable;
 
 class RendererImpl : public Renderer
@@ -18,8 +16,7 @@ class RendererImpl : public Renderer
 public:
     explicit RendererImpl(
         std::unique_ptr<Uploader> uploader,
-        std::unique_ptr<DrawAgent> drawAgent,
-        std::unique_ptr<TextRenderer> textRenderer);
+        std::unique_ptr<DrawAgent> drawAgent);
 
     ~RendererImpl() override;
 
@@ -32,7 +29,6 @@ private:
 
     std::unique_ptr<Uploader> m_uploader;
     std::unique_ptr<DrawAgent> m_drawAgent;
-    std::unique_ptr<TextRenderer> m_textRenderer;
 };
 } // namespace FIRE
 
