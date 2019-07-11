@@ -15,7 +15,7 @@ namespace examples
 class CubeCameraComponent : public FIRE::CameraComponent
 {
 public:
-    CubeCameraComponent(float fovy, float aspect, float near, float far);
+    CubeCameraComponent(FIRE::SceneObject& sceneObject, float fovy, float aspect, float near, float far);
 
     ~CubeCameraComponent() override;
 

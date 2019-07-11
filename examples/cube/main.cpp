@@ -45,10 +45,10 @@ int main(int, char**)
 
     auto& mainCamera = scene.CreateSceneObject("cam");
     mainCamera.AddComponent(
-        std::make_unique<examples::CubeInputComponent>(*input, window));
+        std::make_unique<examples::CubeInputComponent>(mainCamera, *input, window));
     mainCamera.AddComponent(
         std::make_unique<examples::CubeCameraComponent>(
-            70.0f, static_cast<float>(window.GetWidth()) / static_cast<float>(window.GetHeight()), 0.01f, 500.0f));
+            mainCamera, 70.0f, static_cast<float>(window.GetWidth()) / static_cast<float>(window.GetHeight()), 0.01f, 500.0f));
 
     auto& sceneLight = scene.CreateSceneObject("light");
     sceneLight.AddComponent(

@@ -5,23 +5,18 @@
 namespace examples
 {
 
-CubeCameraComponent::CubeCameraComponent(float fovy, float aspect, float near, float far)
+CubeCameraComponent::CubeCameraComponent(FIRE::SceneObject& sceneObject, float fovy, float aspect, float near, float far)
     : FIRE::CameraComponent(fovy, aspect, near, far)
 {
+    auto& transform = sceneObject.GetTransform();
+    transform.SetPosition({0.0f, 2.0f, 10.0f});
+    transform.SetLookAt({0.0f, 2.0f, 0.0f});
 }
 
 CubeCameraComponent::~CubeCameraComponent() = default;
 
-void CubeCameraComponent::DoUpdate(double, FIRE::SceneObject& sceneObject, FIRE::Scene&)
+void CubeCameraComponent::DoUpdate(double, FIRE::SceneObject&, FIRE::Scene&)
 {
-    static bool init = false;
-    if(!init)
-    {
-        auto& transform = sceneObject.GetTransform();
-        transform.SetPosition({0.0f, 2.0f, 10.0f});
-        transform.SetLookAt({0.0f, 2.0f, 0.0f});
-        init = true;
-    }
 }
 
 std::optional<std::any> CubeCameraComponent::Receive(FIRE::Message msg)

@@ -7,13 +7,8 @@
 
 namespace examples
 {
-CubeInputComponent::CubeInputComponent(FIRE::InputListener& inputListener, FIRE::Window& window)
+CubeInputComponent::CubeInputComponent(FIRE::SceneObject& sceneObject, FIRE::InputListener& inputListener, FIRE::Window& window)
     : FIRE::InputComponent(inputListener)
-    , window(window)
-{
-}
-
-void CubeInputComponent::Init(FIRE::SceneObject& sceneObject)
 {
     auto& transform = sceneObject.GetTransform();
     auto moveRight = [&transform] { transform.Translate(transform.Right()); };
@@ -40,11 +35,11 @@ void CubeInputComponent::Init(FIRE::SceneObject& sceneObject)
     inputListener.RegisterKeyEvent(FIRE::Key::KEY_S, FIRE::KeyAction::PRESS, moveBackward);
     inputListener.RegisterKeyEvent(FIRE::Key::KEY_S, FIRE::KeyAction::REPEAT, moveBackward);
 
-    auto closeWindow = [this] { window.Close(); };
+    auto closeWindow = [&window, &inputListener] { window.Close(); };
     inputListener.RegisterKeyEvent(FIRE::Key::KEY_ESC, FIRE::KeyAction::PRESS, closeWindow);
 
     inputListener.RegisterMouseButtonEvent(
-        FIRE::MouseKey::LEFT_BUTTON, FIRE::KeyAction::PRESS, [&transform, this] {
+        FIRE::MouseKey::LEFT_BUTTON, FIRE::KeyAction::PRESS, [&transform, &window, &inputListener] {
             window.CaptureCursor();
 
             bool firstCallback = true;
@@ -71,21 +66,14 @@ void CubeInputComponent::Init(FIRE::SceneObject& sceneObject)
         });
 
     inputListener.RegisterMouseButtonEvent(
-        FIRE::MouseKey::LEFT_BUTTON, FIRE::KeyAction::RELEASE, [this] {
+        FIRE::MouseKey::LEFT_BUTTON, FIRE::KeyAction::RELEASE, [&window, &inputListener] {
             inputListener.UnregisterMouseEvent();
             window.ReleaseCursor();
         });
 }
 
-void CubeInputComponent::DoUpdate(double, FIRE::SceneObject& sceneObject, FIRE::Scene&)
+void CubeInputComponent::DoUpdate(double, FIRE::SceneObject&, FIRE::Scene&)
 {
-    static bool initialized = false;
-
-    if(!initialized)
-    {
-        Init(sceneObject);
-        initialized = true;
-    }
 }
 
 std::optional<std::any> CubeInputComponent::Receive(FIRE::Message)
