@@ -11,29 +11,31 @@ CubeInputComponent::CubeInputComponent(FIRE::SceneObject& sceneObject, FIRE::Inp
     : FIRE::InputComponent(inputListener)
 {
     auto& transform = sceneObject.GetTransform();
-    auto moveRight = [&transform] { transform.Translate(transform.Right()); };
+    auto moveRight = [&transform] { transform.Accelerate(transform.Right()); };
+    auto moveLeft = [&transform] { transform.Accelerate(-transform.Right()); };
+    auto moveUp = [&transform] { transform.Accelerate(transform.Up()); };
+    auto moveDown = [&transform] { transform.Accelerate(-transform.Up()); };
+    auto moveForward = [&transform] { transform.Accelerate(glm::normalize(transform.LookAt() - transform.Position())); };
+    auto moveBackward = [&transform] { transform.Accelerate(glm::normalize(-(transform.LookAt() - transform.Position())); };
+    auto reset = [&transform] { transform.SetAcceleration({0.0f, 0.0f, 0.0f}); };
+
     inputListener.RegisterKeyEvent(FIRE::Key::KEY_D, FIRE::KeyAction::PRESS, moveRight);
-    inputListener.RegisterKeyEvent(FIRE::Key::KEY_D, FIRE::KeyAction::REPEAT, moveRight);
+    inputListener.RegisterKeyEvent(FIRE::Key::KEY_D, FIRE::KeyAction::RELEASE, reset);
 
-    auto moveLeft = [&transform] { transform.Translate(-transform.Right()); };
     inputListener.RegisterKeyEvent(FIRE::Key::KEY_A, FIRE::KeyAction::PRESS, moveLeft);
-    inputListener.RegisterKeyEvent(FIRE::Key::KEY_A, FIRE::KeyAction::REPEAT, moveLeft);
+    inputListener.RegisterKeyEvent(FIRE::Key::KEY_A, FIRE::KeyAction::RELEASE, reset);
 
-    auto moveUp = [&transform] { transform.Translate(transform.Up()); };
     inputListener.RegisterKeyEvent(FIRE::Key::KEY_Q, FIRE::KeyAction::PRESS, moveUp);
-    inputListener.RegisterKeyEvent(FIRE::Key::KEY_Q, FIRE::KeyAction::REPEAT, moveUp);
+    inputListener.RegisterKeyEvent(FIRE::Key::KEY_Q, FIRE::KeyAction::RELEASE, reset);
 
-    auto moveDown = [&transform] { transform.Translate(-transform.Up()); };
     inputListener.RegisterKeyEvent(FIRE::Key::KEY_E, FIRE::KeyAction::PRESS, moveDown);
-    inputListener.RegisterKeyEvent(FIRE::Key::KEY_E, FIRE::KeyAction::REPEAT, moveDown);
+    inputListener.RegisterKeyEvent(FIRE::Key::KEY_E, FIRE::KeyAction::RELEASE, reset);
 
-    auto moveForward = [&transform] { transform.Translate(transform.LookAt() - transform.Position()); };
     inputListener.RegisterKeyEvent(FIRE::Key::KEY_W, FIRE::KeyAction::PRESS, moveForward);
-    inputListener.RegisterKeyEvent(FIRE::Key::KEY_W, FIRE::KeyAction::REPEAT, moveForward);
+    inputListener.RegisterKeyEvent(FIRE::Key::KEY_W, FIRE::KeyAction::RELEASE, reset);
 
-    auto moveBackward = [&transform] { transform.Translate(-(transform.LookAt() - transform.Position())); };
     inputListener.RegisterKeyEvent(FIRE::Key::KEY_S, FIRE::KeyAction::PRESS, moveBackward);
-    inputListener.RegisterKeyEvent(FIRE::Key::KEY_S, FIRE::KeyAction::REPEAT, moveBackward);
+    inputListener.RegisterKeyEvent(FIRE::Key::KEY_S, FIRE::KeyAction::RELEASE, reset);
 
     auto closeWindow = [&window, &inputListener] { window.Close(); };
     inputListener.RegisterKeyEvent(FIRE::Key::KEY_ESC, FIRE::KeyAction::PRESS, closeWindow);

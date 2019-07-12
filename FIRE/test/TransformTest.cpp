@@ -152,3 +152,12 @@ TEST_F(ATransform, ChangesItsLookAtPointWhenRotatedAfterTranslation)
     transform.Rotate(transform.Up(), 90.0f);
     EXPECT_VEC_EQ(glm::vec3(0.0f, 1.0f, 1.0f), transform.LookAt());
 }
+
+TEST_F(ATransform, DescribesLinearAcceleration)
+{
+    glm::vec3 const acceleration{1.0f, 2.0f, 3.0f};
+    transform.Accelerate(acceleration);
+    EXPECT_VEC_EQ(acceleration, transform.Acceleration());
+    transform.Accelerate({0.0f, -1.0f, 0.0f});
+    EXPECT_VEC_EQ(glm::vec3(1.0f, 1.0f, 3.0f), transform.Acceleration());
+}

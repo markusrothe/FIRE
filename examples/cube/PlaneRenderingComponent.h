@@ -1,9 +1,7 @@
-#ifndef FIRE_examples_CubeRenderingComponent_h
-#define FIRE_examples_CubeRenderingComponent_h
-
+#ifndef examples_PlaneRenderingComponent_h
+#define examples_PlaneRenderingComponent_h
 #include <FIRE/Renderable.h>
 #include <FIRE/RenderingComponent.h>
-#include <FIRE/glmfwd.h>
 
 namespace FIRE
 {
@@ -16,18 +14,21 @@ class Message;
 
 namespace examples
 {
-class CubeRenderingComponent : public FIRE::RenderingComponent
+class PlaneRenderingComponent : public FIRE::RenderingComponent
 {
 public:
-    CubeRenderingComponent(FIRE::Renderer& renderer, FIRE::MeshManager& meshManager, FIRE::MaterialFactory& materialFactory);
+    PlaneRenderingComponent(
+        FIRE::SceneObject& sceneObject,
+        FIRE::Renderer& renderer,
+        FIRE::MeshManager& meshManager,
+        FIRE::MaterialFactory& materialFactory);
 
 private:
     void DoUpdate(double deltaTime, FIRE::SceneObject& sceneObject, FIRE::Scene& scene) override;
     std::optional<std::any> Receive(FIRE::Message msg) override;
 
-    FIRE::Renderable m_cube;
     FIRE::Renderable m_plane;
 };
 } // namespace examples
 
-#endif //FIRE_examples_CubeRenderingComponent_h
+#endif //examples_PlaneRenderingComponent_h

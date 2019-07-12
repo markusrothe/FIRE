@@ -78,7 +78,7 @@ void GLTextRenderer::Render(TextOverlay const& overlay, float width, float heigh
     glm::mat4 projection = glm::ortho(0.0f, width, 0.0f, height);
 
     glUseProgram(m_texShader);
-    glUniform3f(glGetUniformLocation(m_texShader, "textColor"), 1.0f, 1.0f, 1.0f);
+    glUniform3f(glGetUniformLocation(m_texShader, "textColor"), 1.0f, 0.0f, 0.0f);
 
     glUniformMatrix4fv(glGetUniformLocation(m_texShader, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
     glActiveTexture(GL_TEXTURE0);

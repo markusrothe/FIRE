@@ -9,12 +9,18 @@ Transform::Transform(
     , m_scale(1.0f, 1.0f, 1.0f)
     , m_lookAt(lookAt)
     , m_rotation(1.0, 0.0, 0.0, 0.0)
+    , m_acceleration(0.0f, 0.0f, 0.0f)
 {
 }
 
 glm::vec3 Transform::Position() const
 {
     return m_pos;
+}
+
+glm::vec3 Transform::Acceleration() const
+{
+    return m_acceleration;
 }
 
 glm::vec3 Transform::LookAt() const
@@ -46,6 +52,11 @@ void Transform::SetPosition(glm::vec3 pos)
     m_lookAt = m_pos + viewDir;
 }
 
+void Transform::SetAcceleration(glm::vec3 acceleration)
+{
+    m_acceleration = std::move(acceleration);
+}
+
 void Transform::SetLookAt(glm::vec3 lookAt)
 {
     m_lookAt = std::move(lookAt);
@@ -60,6 +71,11 @@ void Transform::Translate(glm::vec3 const& vec)
 {
     m_pos += vec;
     m_lookAt += vec;
+}
+
+void Transform::Accelerate(glm::vec3 const& vec)
+{
+    m_acceleration += vec;
 }
 
 void Transform::Rotate(glm::vec3 const& axis, float angle)

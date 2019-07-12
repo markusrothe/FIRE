@@ -30,7 +30,8 @@ CubeRenderingComponent::CubeRenderingComponent(FIRE::Renderer& renderer, FIRE::M
     FIRE::Shaders const shaders = {
         {FIRE::ShaderType::VERTEX_SHADER, GetFileContent("PhongVS.glsl")},
         {FIRE::ShaderType::FRAGMENT_SHADER, GetFileContent("PhongFS.glsl")}};
-    m_cube.material = materialFactory.CreateMaterial("phong", shaders);
+    auto mat = materialFactory.CreateMaterial("phong", shaders);
+    m_cube.material = mat;
 
     m_cube.mesh = meshManager.CreateCube("cube");
 }

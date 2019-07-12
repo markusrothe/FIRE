@@ -15,8 +15,10 @@ CubeCameraComponent::CubeCameraComponent(FIRE::SceneObject& sceneObject, float f
 
 CubeCameraComponent::~CubeCameraComponent() = default;
 
-void CubeCameraComponent::DoUpdate(double, FIRE::SceneObject&, FIRE::Scene&)
+void CubeCameraComponent::DoUpdate(double, FIRE::SceneObject& sceneObject, FIRE::Scene&)
 {
+    auto& transform = sceneObject.GetTransform();
+    transform.Translate(transform.Acceleration());
 }
 
 std::optional<std::any> CubeCameraComponent::Receive(FIRE::Message msg)

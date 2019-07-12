@@ -4,7 +4,7 @@
 #include "CubeLightComponent.h"
 #include "CubeOverlayComponent.h"
 #include "CubeRenderingComponent.h"
-
+#include "PlaneRenderingComponent.h"
 #include <FIRE/GLFactory.h>
 #include <FIRE/InputListener.h>
 #include <FIRE/MaterialFactory.h>
@@ -38,10 +38,13 @@ int main(int, char**)
     auto textRenderer{FIRE::GLFactory::CreateTextRenderer()};
 
     FIRE::Scene scene;
+    auto& planeObject = scene.CreateSceneObject("plane");
+    planeObject.AddComponent(
+        std::make_unique<examples::PlaneRenderingComponent>(planeObject, *renderer, meshManager, materialFactory));
+
     auto& cubeObject = scene.CreateSceneObject("cube");
     cubeObject.AddComponent(
-        std::make_unique<examples::CubeRenderingComponent>(
-            *renderer, meshManager, materialFactory));
+        std::make_unique<examples::CubeRenderingComponent>(*renderer, meshManager, materialFactory));
 
     auto& mainCamera = scene.CreateSceneObject("cam");
     mainCamera.AddComponent(
