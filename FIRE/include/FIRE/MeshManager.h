@@ -28,6 +28,7 @@ public:
     MeshHandle CreateCube(std::string name);
     MeshHandle CreatePlane(std::string name);
     MeshHandle CreateSphere(std::string name, uint32_t segments);
+    MeshHandle CreateLineGrid(std::string name, uint32_t numLinesX, uint32_t numLinesY);
 
     Mesh3D* Lookup3D(MeshHandle const& handle);
 

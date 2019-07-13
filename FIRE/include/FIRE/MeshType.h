@@ -8,6 +8,7 @@ enum class MeshCategory
     Plane,
     Cube,
     Sphere,
+    LineGrid,
     Custom
 };
 

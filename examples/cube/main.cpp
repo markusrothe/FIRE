@@ -4,7 +4,7 @@
 #include "CubeLightComponent.h"
 #include "CubeOverlayComponent.h"
 #include "CubeRenderingComponent.h"
-#include "PlaneRenderingComponent.h"
+#include "GridRenderingComponent.h"
 #include <FIRE/GLFactory.h>
 #include <FIRE/InputListener.h>
 #include <FIRE/MaterialFactory.h>
@@ -40,7 +40,7 @@ int main(int, char**)
     FIRE::Scene scene;
     auto& planeObject = scene.CreateSceneObject("plane");
     planeObject.AddComponent(
-        std::make_unique<examples::PlaneRenderingComponent>(planeObject, *renderer, meshManager, materialFactory));
+        std::make_unique<examples::GridRenderingComponent>(planeObject, *renderer, meshManager, materialFactory));
 
     auto& cubeObject = scene.CreateSceneObject("cube");
     cubeObject.AddComponent(
@@ -63,7 +63,7 @@ int main(int, char**)
 
     auto lastTime = std::chrono::high_resolution_clock::now();
     std::chrono::nanoseconds lag{0ns};
-    std::chrono::nanoseconds timestep{2ms};
+    std::chrono::nanoseconds timestep{16ms};
     while(!window.ShouldClose())
     {
         auto currentTime = std::chrono::high_resolution_clock::now();

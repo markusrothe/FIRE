@@ -1,5 +1,5 @@
-#ifndef examples_PlaneRenderingComponent_h
-#define examples_PlaneRenderingComponent_h
+#ifndef examples_GridRenderingComponent_h
+#define examples_GridRenderingComponent_h
 #include <FIRE/Renderable.h>
 #include <FIRE/RenderingComponent.h>
 
@@ -14,10 +14,10 @@ class Message;
 
 namespace examples
 {
-class PlaneRenderingComponent : public FIRE::RenderingComponent
+class GridRenderingComponent : public FIRE::RenderingComponent
 {
 public:
-    PlaneRenderingComponent(
+    GridRenderingComponent(
         FIRE::SceneObject& sceneObject,
         FIRE::Renderer& renderer,
         FIRE::MeshManager& meshManager,
@@ -31,4 +31,4 @@ private:
 };
 } // namespace examples
 
-#endif //examples_PlaneRenderingComponent_h
+#endif //examples_GridRenderingComponent_h

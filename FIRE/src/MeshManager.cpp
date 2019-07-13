@@ -247,6 +247,42 @@ MeshHandle MeshManager::CreateSphere(std::string name, uint32_t segments)
         std::move(indices));
 }
 
+MeshHandle MeshManager::CreateLineGrid(std::string name, uint32_t numLinesX, uint32_t numLinesY)
+{
+    MeshHandle handle(name, MeshCategory::LineGrid, MeshPrimitives::Lines);
+    if(Lookup3D(handle))
+    {
+        return handle;
+    }
+
+    std::vector<glm::vec3> positions, normals;
+    std::vector<unsigned int> indices;
+
+    unsigned int count = 0;
+    for(auto i = -1.0f; i <= 1.0f; i += 2.0f / static_cast<float>(numLinesX))
+    {
+        positions.emplace_back(i, 0.0f, -1.0f);
+        positions.emplace_back(i, 0.0f, 1.0f);
+        indices.push_back(count++);
+        indices.push_back(count++);
+    }
+    for(auto i = -1.0f; i <= 1.0f; i += 2.0f / static_cast<float>(numLinesY))
+    {
+        positions.emplace_back(-1.0f, 0.0f, i);
+        positions.emplace_back(1.0f, 0.0f, i);
+        indices.push_back(count++);
+        indices.push_back(count++);
+    }
+
+    return DoCreate(
+        MeshCategory::LineGrid,
+        MeshPrimitives::Lines,
+        std::move(name),
+        std::move(positions),
+        std::move(normals),
+        std::move(indices));
+}
+
 MeshHandle MeshManager::DoCreate(
     MeshCategory meshCategory,
     MeshPrimitives primitives,

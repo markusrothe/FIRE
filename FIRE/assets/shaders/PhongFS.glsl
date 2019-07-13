@@ -11,21 +11,9 @@ void main()
 {
     vec3 normal = normalize(normalVS);
 
-    vec3 l = normalize(LightPos - posVS);
-    float nDotL = dot(normal, l);
-    if(nDotL < 0.)
-    {
-        nDotL = 0.;
-    }
+    vec3 L = abs(normalize(LightPos - posVS));
+    float NDotL = max(dot(normal, L), 0.0);
 
-    vec3 ambient = vec3(.1, .1, .1);
-    vec3 diffuse = 0.7 * vec3(nDotL);
-
-    float distanceToLight = length(LightPos - posVS);
-    float attenuation = 1. / (1. + .001 * pow(distanceToLight, 2));
-
-    vec3 gamma = vec3(1. / 2.2);
-
-    color = vec4(ambient, 1.) + attenuation * vec4(diffuse, 1.);
-    color = vec4(pow(color.xyz, gamma), 1.);
+    vec4 col = vec4(1.0);
+    color = clamp(col * 0.2 + col * 0.8 * NDotL, 0.0, 1.0);
 }

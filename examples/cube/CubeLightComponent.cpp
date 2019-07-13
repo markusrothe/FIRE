@@ -8,7 +8,7 @@ namespace examples
 
 void CubeLightComponent::DoUpdate(double, FIRE::SceneObject& sceneObject, FIRE::Scene&)
 {
-    sceneObject.GetTransform().SetPosition({7.0f, 8.0f, 2.0f});
+    sceneObject.GetTransform().SetPosition({0.0f, 8.0f, 0.0f});
     m_transform = sceneObject.GetTransform();
 }
 
