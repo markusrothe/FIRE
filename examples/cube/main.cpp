@@ -51,7 +51,7 @@ int main(int, char**)
         std::make_unique<examples::CubeInputComponent>(mainCamera, *input, window));
     mainCamera.AddComponent(
         std::make_unique<examples::CubeCameraComponent>(
-            mainCamera, 70.0f, static_cast<float>(window.GetWidth()) / static_cast<float>(window.GetHeight()), 0.01f, 500.0f));
+            mainCamera, 70.0f, static_cast<float>(window.GetWidth()) / static_cast<float>(window.GetHeight()), 0.01f, 1000.0f));
 
     auto& sceneLight = scene.CreateSceneObject("light");
     sceneLight.AddComponent(
@@ -63,7 +63,7 @@ int main(int, char**)
 
     auto lastTime = std::chrono::high_resolution_clock::now();
     std::chrono::nanoseconds lag{0ns};
-    std::chrono::nanoseconds timestep{16ms};
+    std::chrono::nanoseconds timestep{2ms};
     while(!window.ShouldClose())
     {
         auto currentTime = std::chrono::high_resolution_clock::now();

@@ -16,6 +16,15 @@ namespace FIRE
 class MeshManager
 {
 public:
+    MeshHandle Create(
+        MeshCategory meshType,
+        MeshPrimitives primitives,
+        std::string name,
+        std::vector<glm::vec3>&& positions,
+        std::vector<glm::vec3>&& normals,
+        std::vector<unsigned int>&& indices);
+
+    /* Triangle meshes */
     MeshHandle CreateCube(std::string name);
     MeshHandle CreatePlane(std::string name);
     MeshHandle CreateSphere(std::string name, uint32_t segments);
@@ -23,8 +32,9 @@ public:
     Mesh3D* Lookup3D(MeshHandle const& handle);
 
 private:
-    MeshHandle Create(
-        MeshType meshType,
+    MeshHandle DoCreate(
+        MeshCategory meshType,
+        MeshPrimitives primitives,
         std::string name,
         std::vector<glm::vec3>&& positions,
         std::vector<glm::vec3>&& normals,

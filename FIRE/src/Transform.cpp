@@ -83,6 +83,7 @@ void Transform::Rotate(glm::vec3 const& axis, float angle)
     auto quat = glm::angleAxis(glm::radians(angle), glm::normalize(axis));
     m_rotation = glm::normalize(quat * m_rotation);
     m_lookAt = m_pos + glm::rotate(glm::normalize(m_lookAt - m_pos), glm::radians(angle), glm::normalize(axis));
+    m_acceleration = glm::rotate(m_acceleration, glm::radians(angle), glm::normalize(axis));
 }
 
 void Transform::Scale(glm::vec3 const& scale)
