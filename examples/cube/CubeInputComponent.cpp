@@ -1,13 +1,18 @@
 #include "CubeInputComponent.h"
 #include <FIRE/InputListener.h>
 #include <FIRE/Message.h>
+#include <FIRE/Renderer.h>
 #include <FIRE/Scene.h>
 #include <FIRE/SceneObject.h>
 #include <FIRE/Window.h>
 
 namespace examples
 {
-CubeInputComponent::CubeInputComponent(FIRE::SceneObject& sceneObject, FIRE::InputListener& inputListener, FIRE::Window& window)
+CubeInputComponent::CubeInputComponent(
+    FIRE::SceneObject& sceneObject,
+    FIRE::InputListener& inputListener,
+    FIRE::Window& window,
+    FIRE::Renderer& renderer)
     : FIRE::InputComponent(inputListener)
 {
     auto& transform = sceneObject.GetTransform();
@@ -37,8 +42,9 @@ CubeInputComponent::CubeInputComponent(FIRE::SceneObject& sceneObject, FIRE::Inp
     inputListener.RegisterKeyEvent(FIRE::Key::KEY_S, FIRE::KeyAction::PRESS, moveBackward);
     inputListener.RegisterKeyEvent(FIRE::Key::KEY_S, FIRE::KeyAction::RELEASE, reset);
 
-    auto closeWindow = [&window, &inputListener] { window.Close(); };
-    inputListener.RegisterKeyEvent(FIRE::Key::KEY_ESC, FIRE::KeyAction::PRESS, closeWindow);
+    inputListener.RegisterKeyEvent(FIRE::Key::KEY_ESC, FIRE::KeyAction::PRESS, [&window, &inputListener] { window.Close(); });
+
+    inputListener.RegisterKeyEvent(FIRE::Key::KEY_R, FIRE::KeyAction::PRESS, [&renderer] { renderer.ToggleWireframe(); });
 
     inputListener.RegisterMouseButtonEvent(
         FIRE::MouseKey::LEFT_BUTTON, FIRE::KeyAction::PRESS, [&transform, &window, &inputListener] {

@@ -36,7 +36,7 @@ add_library(FIRE STATIC
     src/GLDrawAgent.h
     src/GLShaderFactory.h
     src/GLRenderContext.h
-    src/RendererImpl.h
+    src/GLRenderer.h
     src/TextureFactory.h
     src/FontTextureFactory.h
     src/GLFontTextureFactory.h    
@@ -50,7 +50,7 @@ add_library(FIRE STATIC
     src/GLDrawAgent.cpp
     src/GLShaderFactory.cpp
     src/GLRenderContext.cpp    
-    src/RendererImpl.cpp
+    src/GLRenderer.cpp
     src/MaterialFactory.cpp
     src/VertexDeclaration.cpp
     src/Scene.cpp

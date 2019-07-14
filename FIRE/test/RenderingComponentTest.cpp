@@ -21,6 +21,10 @@ public:
     void Render(float, float) override
     {
     }
+
+    void ToggleWireframe() override
+    {
+    }
 };
 
 class TestRenderingComponent : public FIRE::RenderingComponent

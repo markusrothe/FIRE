@@ -1,4 +1,4 @@
-#include "RendererImpl.h"
+#include "GLRenderer.h"
 #include "DrawAgent.h"
 #include "GLShaderFactory.h"
 #include "Uploader.h"
@@ -8,7 +8,7 @@
 namespace FIRE
 {
 
-RendererImpl::RendererImpl(
+GLRenderer::GLRenderer(
     std::unique_ptr<Uploader> uploader,
     std::unique_ptr<DrawAgent> drawAgent)
     : m_uploader(std::move(uploader))
@@ -16,14 +16,14 @@ RendererImpl::RendererImpl(
 {
 }
 
-RendererImpl::~RendererImpl() = default;
+GLRenderer::~GLRenderer() = default;
 
-void RendererImpl::Submit(Renderable const& renderable)
+void GLRenderer::Submit(Renderable const& renderable)
 {
     m_renderables[renderable.name] = renderable;
 }
 
-void RendererImpl::Render(float, float)
+void GLRenderer::Render(float, float)
 {
     m_drawAgent->Clear();
 
@@ -32,7 +32,10 @@ void RendererImpl::Render(float, float)
         auto buffers = m_uploader->Upload(renderable.second);
         m_drawAgent->Draw(renderable.second, buffers);
     }
+}
 
-    //m_renderables.clear();
+void GLRenderer::ToggleWireframe()
+{
+    m_drawAgent->ToggleWireframe();
 }
 } // namespace FIRE

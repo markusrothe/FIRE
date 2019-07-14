@@ -59,7 +59,6 @@ GLDrawAgent::GLDrawAgent(MeshManager& meshManager)
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 
 void GLDrawAgent::Clear()
@@ -85,6 +84,22 @@ void GLDrawAgent::Draw(Renderable const& renderable, GLVertexArrayObject arrObj)
     glUseProgram(0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+}
+
+void GLDrawAgent::ToggleWireframe()
+{
+    static bool on = false;
+
+    if(on)
+    {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
+    else
+    {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    }
+
+    on = !on;
 }
 
 } // namespace FIRE

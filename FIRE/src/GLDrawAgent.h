@@ -13,8 +13,8 @@ class GLDrawAgent : public DrawAgent
 public:
     explicit GLDrawAgent(MeshManager& meshFactory);
     void Clear() override;
-
     void Draw(Renderable const& renderable, GLVertexArrayObject arrObj) override;
+    void ToggleWireframe() override;
 
 private:
     MeshManager& m_meshManager;
