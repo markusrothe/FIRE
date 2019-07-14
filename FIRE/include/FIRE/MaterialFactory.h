@@ -21,8 +21,8 @@ public:
     ~MaterialFactory();
 
     Material CreateDefaultMaterial();
-
-    Material CreateMaterial(std::string const& name, std::vector<std::pair<ShaderType, std::string>> const& shaders);
+    Material CreateMaterial(std::string const& name, std::vector<std::pair<ShaderType, std::string>> const& shaderCode);
+    Material CreateMaterialFromFiles(std::string const& name, std::vector<std::pair<ShaderType, std::string>> const& shaders);
 
 private:
     std::unique_ptr<ShaderFactory> m_shaderFactory;

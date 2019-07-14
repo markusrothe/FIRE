@@ -11,15 +11,6 @@
 
 namespace examples
 {
-namespace
-{
-std::string GetFileContent(std::string const& filePath)
-{
-    std::ifstream file(filePath);
-    std::string const content{(std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>()};
-    return content;
-}
-} // namespace
 
 GridRenderingComponent::GridRenderingComponent(
     FIRE::SceneObject& sceneObject,

@@ -88,17 +88,8 @@ void GLDrawAgent::Draw(Renderable const& renderable, GLVertexArrayObject arrObj)
 
 void GLDrawAgent::ToggleWireframe()
 {
-    static bool on = false;
-
-    if(on)
-    {
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    }
-    else
-    {
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    }
-
+    static bool on = true;
+    glPolygonMode(GL_FRONT_AND_BACK, on ? GL_LINE : GL_FILL);
     on = !on;
 }
 

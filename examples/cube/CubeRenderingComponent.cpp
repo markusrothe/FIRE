@@ -12,15 +12,6 @@
 
 namespace examples
 {
-namespace
-{
-std::string GetFileContent(std::string const& filePath)
-{
-    std::ifstream file(filePath);
-    std::string const content{(std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>()};
-    return content;
-}
-} // namespace
 
 CubeRenderingComponent::CubeRenderingComponent(FIRE::Renderer& renderer, FIRE::MeshManager& meshManager, FIRE::MaterialFactory& materialFactory)
     : FIRE::RenderingComponent(renderer)
@@ -28,9 +19,10 @@ CubeRenderingComponent::CubeRenderingComponent(FIRE::Renderer& renderer, FIRE::M
     m_cube.name = "cubeRenderable";
 
     FIRE::Shaders const shaders = {
-        {FIRE::ShaderType::VERTEX_SHADER, GetFileContent("PhongVS.glsl")},
-        {FIRE::ShaderType::FRAGMENT_SHADER, GetFileContent("PhongFS.glsl")}};
-    auto mat = materialFactory.CreateMaterial("phong", shaders);
+        {FIRE::ShaderType::VERTEX_SHADER, "PhongVS.glsl"},
+        {FIRE::ShaderType::FRAGMENT_SHADER, "PhongFS.glsl"}};
+
+    auto mat = materialFactory.CreateMaterialFromFiles("phong", shaders);
     m_cube.material = mat;
 
     m_cube.mesh = meshManager.CreateCube("cube");
