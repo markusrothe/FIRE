@@ -42,7 +42,7 @@ CubeInputComponent::CubeInputComponent(
     inputListener.RegisterKeyEvent(FIRE::Key::KEY_S, FIRE::KeyAction::PRESS, moveBackward);
     inputListener.RegisterKeyEvent(FIRE::Key::KEY_S, FIRE::KeyAction::RELEASE, reset);
 
-    inputListener.RegisterKeyEvent(FIRE::Key::KEY_ESC, FIRE::KeyAction::PRESS, [&window, &inputListener] { window.Close(); });
+    inputListener.RegisterKeyEvent(FIRE::Key::KEY_ESC, FIRE::KeyAction::PRESS, [&window] { window.Close(); });
 
     inputListener.RegisterKeyEvent(FIRE::Key::KEY_R, FIRE::KeyAction::PRESS, [&renderer] { renderer.ToggleWireframe(); });
 
