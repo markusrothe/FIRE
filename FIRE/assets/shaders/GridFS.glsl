@@ -1,9 +1,6 @@
 #version 440
 
-uniform vec3 LightPos;
-
 in vec3 posVS;
-
 out vec4 color;
 
 void main()

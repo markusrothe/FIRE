@@ -15,13 +15,14 @@ CubeInputComponent::CubeInputComponent(
     FIRE::Renderer& renderer)
     : FIRE::InputComponent(inputListener)
 {
+    auto speed = 2.0f;
     auto& transform = sceneObject.GetTransform();
-    auto moveRight = [&transform] { transform.Accelerate(transform.Right()); };
-    auto moveLeft = [&transform] { transform.Accelerate(-transform.Right()); };
-    auto moveUp = [&transform] { transform.Accelerate(transform.Up()); };
-    auto moveDown = [&transform] { transform.Accelerate(-transform.Up()); };
-    auto moveForward = [&transform] { transform.Accelerate(glm::normalize(transform.LookAt() - transform.Position())); };
-    auto moveBackward = [&transform] { transform.Accelerate(glm::normalize(-(transform.LookAt() - transform.Position()))); };
+    auto moveRight = [speed, &transform] { transform.Accelerate(speed * transform.Right()); };
+    auto moveLeft = [speed, &transform] { transform.Accelerate(speed * -transform.Right()); };
+    auto moveUp = [speed, &transform] { transform.Accelerate(speed * transform.Up()); };
+    auto moveDown = [speed, &transform] { transform.Accelerate(speed * -transform.Up()); };
+    auto moveForward = [speed, &transform] { transform.Accelerate(speed * glm::normalize(transform.LookAt() - transform.Position())); };
+    auto moveBackward = [speed, &transform] { transform.Accelerate(speed * glm::normalize(-(transform.LookAt() - transform.Position()))); };
     auto reset = [&transform] { transform.SetAcceleration({0.0f, 0.0f, 0.0f}); };
 
     inputListener.RegisterKeyEvent(FIRE::Key::KEY_D, FIRE::KeyAction::PRESS, moveRight);

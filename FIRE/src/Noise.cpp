@@ -16,9 +16,7 @@ std::vector<std::vector<float>> CreateHeightmap(unsigned int x, unsigned int y)
     }
 
     FastNoise noise;
-    noise.SetNoiseType(FastNoise::Cellular);
-    noise.SetFrequency(0.02f);
-    noise.SetCellularReturnType(FastNoise::Distance2Add);
+    noise.SetNoiseType(FastNoise::Simplex);
 
     for(auto i = 0u; i < x; ++i)
     {

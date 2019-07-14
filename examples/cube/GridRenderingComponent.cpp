@@ -62,12 +62,12 @@ GridRenderingComponent::GridRenderingComponent(
     transform.Scale({1000.0f, 100.0f, 1000.0f});
 
     m_plane.name = "gridRenderable";
-    // FIRE::Shaders const shaders = {
-    //     {FIRE::ShaderType::VERTEX_SHADER, "PhongVS.glsl"},
-    //     {FIRE::ShaderType::FRAGMENT_SHADER, "PhongFS.glsl"}};
+    FIRE::Shaders const shaders = {
+        {FIRE::ShaderType::VERTEX_SHADER, "HeightVS.glsl"},
+        {FIRE::ShaderType::FRAGMENT_SHADER, "HeightFS.glsl"}};
 
-    // auto mat = materialFactory.CreateMaterialFromFiles("phong", shaders);
-    auto mat = materialFactory.CreateDefaultMaterial();
+    auto mat = materialFactory.CreateMaterialFromFiles("phong", shaders);
+    //auto mat = materialFactory.CreateDefaultMaterial();
     m_plane.material = mat;
     m_plane.mesh = meshManager.Create(
         FIRE::MeshCategory::Custom, FIRE::MeshPrimitives::Triangles, "grid", std::move(positions), std::move(normals), std::move(indices));
@@ -79,9 +79,9 @@ void GridRenderingComponent::DoUpdate(double, FIRE::SceneObject& sceneObject, FI
     auto viewMatrix = std::any_cast<glm::mat4x4>(scene.Send(FIRE::Message(0)).value());
     auto projMatrix = std::any_cast<glm::mat4x4>(scene.Send(FIRE::Message(1)).value());
 
-    m_plane.material.SetShaderParameter("MVP", FIRE::ShaderParameterType::MAT4x4, projMatrix * viewMatrix * transform.ModelMatrix());
-    // m_plane.material.SetShaderParameter("M", FIRE::ShaderParameterType::MAT4x4, transform.ModelMatrix());
-    // m_plane.material.SetShaderParameter("VP", FIRE::ShaderParameterType::MAT4x4, projMatrix * viewMatrix);
+    //m_plane.material.SetShaderParameter("MVP", FIRE::ShaderParameterType::MAT4x4, projMatrix * viewMatrix * transform.ModelMatrix());
+    m_plane.material.SetShaderParameter("M", FIRE::ShaderParameterType::MAT4x4, transform.ModelMatrix());
+    m_plane.material.SetShaderParameter("VP", FIRE::ShaderParameterType::MAT4x4, projMatrix * viewMatrix);
 
     m_renderer.Submit(m_plane);
 }

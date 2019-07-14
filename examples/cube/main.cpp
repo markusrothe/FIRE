@@ -52,7 +52,7 @@ int main(int, char**)
 
     mainCamera.AddComponent(
         std::make_unique<examples::CubeCameraComponent>(
-            mainCamera, 70.0f, static_cast<float>(window.GetWidth()) / static_cast<float>(window.GetHeight()), 0.01f, 1000.0f));
+            mainCamera, 70.0f, static_cast<float>(window.GetWidth()) / static_cast<float>(window.GetHeight()), 0.01f, 2000.0f));
 
     auto& sceneLight = scene.CreateSceneObject("light");
     sceneLight.AddComponent(
