@@ -3,7 +3,6 @@
 uniform vec3 LightPos;
 
 in vec3 posVS;
-in vec3 normalVS;
 
 out vec4 color;
 

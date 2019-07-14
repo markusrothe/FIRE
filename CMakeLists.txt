@@ -25,6 +25,7 @@ add_subdirectory(glfw)
 add_subdirectory(glad)
 add_subdirectory(glm EXCLUDE_FROM_ALL)
 add_subdirectory(freetype-2.9 EXCLUDE_FROM_ALL)
+add_subdirectory(FastNoise)
 
 find_package(OpenGL REQUIRED)
 

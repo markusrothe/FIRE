@@ -29,6 +29,7 @@ add_library(FIRE STATIC
     include/FIRE/TextOverlay.h
     include/FIRE/TextRenderer.h
     include/FIRE/Message.h
+    include/FIRE/Noise.h
     
     src/Uploader.h
     src/DrawAgent.h
@@ -68,6 +69,7 @@ add_library(FIRE STATIC
     src/TextureFactory.cpp
     src/GLFontTextureFactory.cpp
     src/GLTextRenderer.cpp
+    src/Noise.cpp
 )
 
 target_include_directories(FIRE
@@ -88,6 +90,7 @@ target_link_libraries(FIRE
     CompileOptions
     MeasureCoverage
     freetype
+    FastNoise
 )
 
 if(MSVC)
