@@ -20,57 +20,13 @@ GridRenderingComponent::GridRenderingComponent(
     FIRE::MaterialFactory& materialFactory)
     : FIRE::RenderingComponent(renderer)
 {
-
-    std::vector<glm::vec3> positions, normals;
-    std::vector<unsigned int> indices;
-
-    auto heightmap = FIRE::Noise::CreateHeightmap(1001, 1001);
-    unsigned int count = 0;
-    unsigned int y = 999;
-    for(auto j = 1.0f; j > -1.0f; j -= 0.01f)
-    {
-        unsigned int x = 0;
-        for(auto i = -1.0f; i < 1.0f; i += 0.01f)
-        {
-
-            positions.emplace_back(i, heightmap[x][y], j);
-            positions.emplace_back(i + 0.01f, heightmap[x + 1][y], j);
-            positions.emplace_back(i, heightmap[x][y - 1], j - 0.01f);
-            positions.emplace_back(i + 0.01f, heightmap[x + 1][y], j);
-            positions.emplace_back(i + 0.01f, heightmap[x + 1][y - 1], j - 0.01f);
-            positions.emplace_back(i, heightmap[x][y - 1], j - 0.01f);
-
-            normals.emplace_back(0.0f, 1.0f, 0.0f);
-            normals.emplace_back(0.0f, 1.0f, 0.0f);
-            normals.emplace_back(0.0f, 1.0f, 0.0f);
-            normals.emplace_back(0.0f, 1.0f, 0.0f);
-            normals.emplace_back(0.0f, 1.0f, 0.0f);
-            normals.emplace_back(0.0f, 1.0f, 0.0f);
-
-            indices.push_back(count++);
-            indices.push_back(count++);
-            indices.push_back(count++);
-            indices.push_back(count++);
-            indices.push_back(count++);
-            indices.push_back(count++);
-            x++;
-        }
-        y--;
-    }
+    m_plane.mesh = meshManager.CreateTriangleGrid("TriangleGrid", 100, 100);
 
     auto& transform = sceneObject.GetTransform();
-    transform.Scale({1000.0f, 100.0f, 1000.0f});
+    transform.Scale({1000.0f, 1.0f, 1000.0f});
 
     m_plane.name = "gridRenderable";
-    FIRE::Shaders const shaders = {
-        {FIRE::ShaderType::VERTEX_SHADER, "HeightVS.glsl"},
-        {FIRE::ShaderType::FRAGMENT_SHADER, "HeightFS.glsl"}};
-
-    auto mat = materialFactory.CreateMaterialFromFiles("phong", shaders);
-    //auto mat = materialFactory.CreateDefaultMaterial();
-    m_plane.material = mat;
-    m_plane.mesh = meshManager.Create(
-        FIRE::MeshCategory::Custom, FIRE::MeshPrimitives::Triangles, "grid", std::move(positions), std::move(normals), std::move(indices));
+    m_plane.material = materialFactory.CreateDefaultMaterial();
 }
 
 void GridRenderingComponent::DoUpdate(double, FIRE::SceneObject& sceneObject, FIRE::Scene& scene)
@@ -79,9 +35,7 @@ void GridRenderingComponent::DoUpdate(double, FIRE::SceneObject& sceneObject, FI
     auto viewMatrix = std::any_cast<glm::mat4x4>(scene.Send(FIRE::Message(0)).value());
     auto projMatrix = std::any_cast<glm::mat4x4>(scene.Send(FIRE::Message(1)).value());
 
-    //m_plane.material.SetShaderParameter("MVP", FIRE::ShaderParameterType::MAT4x4, projMatrix * viewMatrix * transform.ModelMatrix());
-    m_plane.material.SetShaderParameter("M", FIRE::ShaderParameterType::MAT4x4, transform.ModelMatrix());
-    m_plane.material.SetShaderParameter("VP", FIRE::ShaderParameterType::MAT4x4, projMatrix * viewMatrix);
+    m_plane.material.SetShaderParameter("MVP", FIRE::ShaderParameterType::MAT4x4, projMatrix * viewMatrix * transform.ModelMatrix());
 
     m_renderer.Submit(m_plane);
 }

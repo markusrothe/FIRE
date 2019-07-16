@@ -9,6 +9,7 @@ enum class MeshCategory
     Cube,
     Sphere,
     LineGrid,
+    TriangleGrid,
     Custom
 };
 

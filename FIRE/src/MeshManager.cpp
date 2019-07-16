@@ -283,6 +283,51 @@ MeshHandle MeshManager::CreateLineGrid(std::string name, uint32_t numLinesX, uin
         std::move(indices));
 }
 
+MeshHandle MeshManager::CreateTriangleGrid(std::string name, uint32_t width, uint32_t height)
+{
+    MeshHandle handle(name, MeshCategory::TriangleGrid, MeshPrimitives::Triangles);
+    if(Lookup3D(handle))
+    {
+        return handle;
+    }
+
+    std::vector<glm::vec3> positions, normals;
+    std::vector<unsigned int> indices;
+
+    unsigned int count = 0;
+    auto const stepY = 2.0f / static_cast<float>(height);
+    auto const stepX = 2.0f / static_cast<float>(width);
+    for(auto j = height; j > 0; --j)
+    {
+        auto const y = j * stepY - 1.0f;
+        for(auto i = 0u; i < width; ++i)
+        {
+            auto const x = i * stepX - 1.0f;
+
+            positions.emplace_back(x, 0.0f, y);
+            positions.emplace_back(x + stepX, 0.0f, y);
+            positions.emplace_back(x, 0.0f, y - stepY);
+            positions.emplace_back(x + stepX, 0.0f, y);
+            positions.emplace_back(x + stepX, 0.0f, y - stepY);
+            positions.emplace_back(x, 0.0f, y - stepY);
+
+            for(auto k = 0; k < 6; ++k)
+            {
+                normals.emplace_back(0.0f, 1.0f, 0.0f);
+                indices.push_back(count++);
+            }
+        }
+    }
+
+    return DoCreate(
+        MeshCategory::TriangleGrid,
+        MeshPrimitives::Triangles,
+        std::move(name),
+        std::move(positions),
+        std::move(normals),
+        std::move(indices));
+}
+
 MeshHandle MeshManager::DoCreate(
     MeshCategory meshCategory,
     MeshPrimitives primitives,
