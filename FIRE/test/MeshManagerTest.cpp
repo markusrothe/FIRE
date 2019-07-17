@@ -114,19 +114,15 @@ class MeshManagerCachingTest : public testing::TestWithParam<MeshCreationFunc>
 public:
     FIRE::MeshManager meshManager;
 };
+} // namespace
 
-// clang-format off
-SUPPRESS_UnusedFunction
-std::ostream& operator<<(std::ostream& os, MeshCreationFunc const&)
+static std::ostream& operator<<(std::ostream& os, MeshCreationFunc const&)
 {
     static int i = 0;
     os << i++;
     return os;
 }
-SUPPRESS_Pop
-// clang-format on
 
-} // namespace
 TEST_P(MeshManagerCachingTest, CachesACreatedMesh)
 {
     auto func = GetParam();
