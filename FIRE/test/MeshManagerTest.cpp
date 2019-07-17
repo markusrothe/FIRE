@@ -118,7 +118,7 @@ std::ostream& operator<<(std::ostream& os, MeshCreationFunc const&)
     static int i = 0;
     os << i++;
     return os;
-};
+}
 } // namespace
 TEST_P(MeshManagerCachingTest, CachesACreatedMesh)
 {
