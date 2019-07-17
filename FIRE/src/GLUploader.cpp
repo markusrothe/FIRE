@@ -100,7 +100,7 @@ GLVertexArrayObject GLUploader::Upload(Renderable const& renderable)
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
-    Mesh3D* mesh = m_meshFactory.Lookup3D(renderable.mesh);
+    Mesh3D* mesh = m_meshFactory.Lookup(renderable.mesh);
     if(!mesh)
     {
         return GLVertexArrayObject(0, 0, 0);

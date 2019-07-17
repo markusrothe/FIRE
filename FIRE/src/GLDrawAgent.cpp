@@ -75,7 +75,7 @@ void GLDrawAgent::Draw(Renderable const& renderable, GLVertexArrayObject arrObj)
 
     SetShaderUniforms(shader, renderable.material.GetShaderParameters());
 
-    auto mesh = m_meshManager.Lookup3D(renderable.mesh);
+    auto mesh = m_meshManager.Lookup(renderable.mesh);
     if(mesh)
     {
         glDrawElements(MapPrimitiveType(renderable.mesh.type.primitives), static_cast<GLsizei>(mesh->Indices().size()), GL_UNSIGNED_INT, 0);

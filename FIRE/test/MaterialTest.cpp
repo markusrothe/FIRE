@@ -31,6 +31,12 @@ TEST(AMaterial, HasParametersForItsShaders)
     EXPECT_EQ(std::any_cast<glm::mat4x4>(materialParam.value().second), glm::mat4x4(1.0f));
 }
 
+TEST(AMaterial, MayHaveNoShaderParameters)
+{
+    FIRE::Material mat;
+    EXPECT_FALSE(mat.GetShaderParameter("Param"));
+}
+
 TEST(AMaterial, AllowsAccessToAllShaderParameters)
 {
     FIRE::Material material("", 0u);

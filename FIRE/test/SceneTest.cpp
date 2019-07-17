@@ -15,12 +15,15 @@ class TestComponent : public FIRE::Component
 public:
     void Update(double, FIRE::SceneObject&, FIRE::Scene&) override
     {
+        updated = true;
     }
 
     std::optional<std::any> Receive(FIRE::Message) override
     {
         return messageResponse;
     }
+
+    bool updated{false};
 };
 
 class AScene : public ::testing::Test
@@ -36,6 +39,17 @@ TEST_F(AScene, CreatesSceneObjectsWithAName)
     EXPECT_EQ(obj.GetName(), name);
 }
 
+TEST_F(AScene, UpdatesSceneObjectsAndThusComponents)
+{
+    auto& obj = scene.CreateSceneObject("obj");
+    auto component = std::make_unique<TestComponent>();
+    bool& updated = component->updated; // keep a reference to "component->updated"
+    obj.AddComponent(std::move(component));
+
+    scene.Update(0.0);
+    EXPECT_TRUE(updated);
+}
+
 TEST_F(AScene, BroadcastsMessagesToSceneObjectsAndThusToComponents)
 {
     FIRE::Message message(0);
@@ -45,6 +59,12 @@ TEST_F(AScene, BroadcastsMessagesToSceneObjectsAndThusToComponents)
     obj.AddComponent(std::move(component));
 
     EXPECT_EQ(messageResponse, std::any_cast<int>(scene.Send(message).value()));
+}
+
+TEST_F(AScene, MayContainNoComponentOrSceneObjectThatCanHandleAMessage)
+{
+    auto response = scene.Send(FIRE::Message(42));
+    EXPECT_FALSE(response);
 }
 
 } // namespace

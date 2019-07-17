@@ -4,7 +4,7 @@
 #include <iostream>
 namespace FIRE
 {
-Mesh3D* MeshManager::Lookup3D(MeshHandle const& handle)
+Mesh3D* MeshManager::Lookup(MeshHandle const& handle)
 {
     auto mesh = m_cache.find(handle.name);
     if(mesh != std::cend(m_cache))
@@ -30,7 +30,7 @@ MeshHandle MeshManager::Create(
     std::vector<unsigned int>&& indices)
 {
     MeshHandle handle(name, meshCategory, primitives);
-    if(Lookup3D(handle))
+    if(Lookup(handle))
     {
         return handle;
     }
@@ -41,7 +41,7 @@ MeshHandle MeshManager::Create(
 MeshHandle MeshManager::CreateCube(std::string name)
 {
     MeshHandle handle(name, MeshCategory::Cube, MeshPrimitives::Triangles);
-    if(Lookup3D(handle))
+    if(Lookup(handle))
     {
         return handle;
     }
@@ -131,7 +131,7 @@ MeshHandle MeshManager::CreateCube(std::string name)
 MeshHandle MeshManager::CreatePlane(std::string name)
 {
     MeshHandle handle(name, MeshCategory::Plane, MeshPrimitives::Triangles);
-    if(Lookup3D(handle))
+    if(Lookup(handle))
     {
         return handle;
     }
@@ -162,7 +162,7 @@ MeshHandle MeshManager::CreatePlane(std::string name)
 MeshHandle MeshManager::CreateSphere(std::string name, uint32_t segments)
 {
     MeshHandle handle(name, MeshCategory::Sphere, MeshPrimitives::Triangles);
-    if(Lookup3D(handle))
+    if(Lookup(handle))
     {
         return handle;
     }
@@ -247,10 +247,10 @@ MeshHandle MeshManager::CreateSphere(std::string name, uint32_t segments)
         std::move(indices));
 }
 
-MeshHandle MeshManager::CreateLineGrid(std::string name, uint32_t numLinesX, uint32_t numLinesY)
+MeshHandle MeshManager::CreateLineGrid(std::string name, uint32_t width, uint32_t height)
 {
     MeshHandle handle(name, MeshCategory::LineGrid, MeshPrimitives::Lines);
-    if(Lookup3D(handle))
+    if(Lookup(handle))
     {
         return handle;
     }
@@ -259,17 +259,26 @@ MeshHandle MeshManager::CreateLineGrid(std::string name, uint32_t numLinesX, uin
     std::vector<unsigned int> indices;
 
     unsigned int count = 0;
-    for(auto i = -1.0f; i <= 1.0f; i += 2.0f / static_cast<float>(numLinesX))
+    auto const stepY = 2.0f / static_cast<float>(height);
+    auto const stepX = 2.0f / static_cast<float>(width);
+    for(auto i = 0u; i < width; ++i)
     {
-        positions.emplace_back(i, 0.0f, -1.0f);
-        positions.emplace_back(i, 0.0f, 1.0f);
+        auto const x = i * stepX - 1.0f;
+        positions.emplace_back(x, 0.0f, -1.0f);
+        positions.emplace_back(x, 0.0f, 1.0f);
+        normals.emplace_back(0.0f, 1.0f, 0.0f);
+        normals.emplace_back(0.0f, 1.0f, 0.0f);
         indices.push_back(count++);
         indices.push_back(count++);
     }
-    for(auto i = -1.0f; i <= 1.0f; i += 2.0f / static_cast<float>(numLinesY))
+
+    for(auto i = 0u; i < height; ++i)
     {
-        positions.emplace_back(-1.0f, 0.0f, i);
-        positions.emplace_back(1.0f, 0.0f, i);
+        auto const y = i * stepY - 1.0f;
+        positions.emplace_back(-1.0f, 0.0f, y);
+        positions.emplace_back(1.0f, 0.0f, y);
+        normals.emplace_back(0.0f, 1.0f, 0.0f);
+        normals.emplace_back(0.0f, 1.0f, 0.0f);
         indices.push_back(count++);
         indices.push_back(count++);
     }
@@ -286,7 +295,7 @@ MeshHandle MeshManager::CreateLineGrid(std::string name, uint32_t numLinesX, uin
 MeshHandle MeshManager::CreateTriangleGrid(std::string name, uint32_t width, uint32_t height)
 {
     MeshHandle handle(name, MeshCategory::TriangleGrid, MeshPrimitives::Triangles);
-    if(Lookup3D(handle))
+    if(Lookup(handle))
     {
         return handle;
     }

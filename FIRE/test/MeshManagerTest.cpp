@@ -1,15 +1,14 @@
 #include "Utilities.h"
 #include <FIRE/Mesh3D.h>
 #include <FIRE/MeshManager.h>
+#include <functional>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <stdexcept>
 
 namespace
 {
-std::string const CUBE{"cube"};
-std::string const PLANE{"plane"};
-std::string const SPHERE("sphere");
+std::string const NAME{"mesh_name"};
 
 class AMeshManager : public ::testing::Test
 {
@@ -23,8 +22,8 @@ using TestUtil::EXPECT_VEC_EQ;
 
 TEST_F(AMeshManager, CreatesACube)
 {
-    FIRE::MeshHandle mesh = meshManager.CreateCube(CUBE);
-    FIRE::Mesh3D* cube = meshManager.Lookup3D(mesh);
+    FIRE::MeshHandle mesh = meshManager.CreateCube(NAME);
+    FIRE::Mesh3D* cube = meshManager.Lookup(mesh);
     ASSERT_TRUE(cube);
 
     auto const positions = cube->Positions();
@@ -47,8 +46,8 @@ TEST_F(AMeshManager, CreatesACube)
 
 TEST_F(AMeshManager, CreatesAPlane)
 {
-    FIRE::MeshHandle mesh = meshManager.CreatePlane(PLANE);
-    auto planeMesh = meshManager.Lookup3D(mesh);
+    FIRE::MeshHandle mesh = meshManager.CreatePlane(NAME);
+    auto planeMesh = meshManager.Lookup(mesh);
     ASSERT_TRUE(planeMesh);
 
     auto const positions = planeMesh->Positions();
@@ -72,28 +71,77 @@ TEST_F(AMeshManager, CreatesAPlane)
 TEST_F(AMeshManager, CreatesASphere)
 {
     auto const numSegments = 4;
-    auto const meshHandle = meshManager.CreateSphere(SPHERE, numSegments);
-    auto const mesh = meshManager.Lookup3D(meshHandle);
+    auto const meshHandle = meshManager.CreateSphere(NAME, numSegments);
+    auto const mesh = meshManager.Lookup(meshHandle);
     ASSERT_TRUE(mesh);
     EXPECT_EQ(14u, mesh->Positions().size());
     EXPECT_EQ(14u, mesh->Normals().size());
     EXPECT_EQ(72u, mesh->Indices().size());
 }
 
-TEST_F(AMeshManager, CachesACreatedMesh)
+TEST_F(AMeshManager, CreatesALineGrid)
 {
-    auto const meshHandle1 = meshManager.CreateCube(CUBE);
-    auto const meshHandle2 = meshManager.CreateCube(CUBE);
+    auto const meshHandle = meshManager.CreateLineGrid(NAME, 10, 10);
+    auto const mesh = meshManager.Lookup(meshHandle);
+    ASSERT_TRUE(mesh);
+    EXPECT_EQ(40u, mesh->Positions().size());
+    EXPECT_EQ(40u, mesh->Normals().size());
+    EXPECT_EQ(40u, mesh->Indices().size());
+}
 
-    auto mesh1 = meshManager.Lookup3D(meshHandle1);
-    auto mesh2 = meshManager.Lookup3D(meshHandle2);
-
-    EXPECT_EQ(mesh1, mesh2);
+TEST_F(AMeshManager, CreatesATriangleGrid)
+{
+    auto const meshHandle = meshManager.CreateTriangleGrid(NAME, 10, 10);
+    auto const mesh = meshManager.Lookup(meshHandle);
+    ASSERT_TRUE(mesh);
+    EXPECT_EQ(600u, mesh->Positions().size());
+    EXPECT_EQ(600u, mesh->Normals().size());
+    EXPECT_EQ(600u, mesh->Indices().size());
 }
 
 TEST_F(AMeshManager, ThrowsIfADifferentMeshTypeIsCreatedWithTheSameName)
 {
-    auto const mesh = meshManager.CreateCube(CUBE);
-
-    EXPECT_THROW(meshManager.CreatePlane(CUBE), std::runtime_error);
+    auto const mesh = meshManager.CreateCube(NAME);
+    EXPECT_THROW(meshManager.CreatePlane(NAME), std::runtime_error);
 }
+
+namespace
+{
+using MeshCreationFunc = std::function<FIRE::MeshHandle(FIRE::MeshManager&)>;
+class MeshManagerCachingTest : public testing::TestWithParam<MeshCreationFunc>
+{
+public:
+    FIRE::MeshManager meshManager;
+};
+std::ostream& operator<<(std::ostream& os, MeshCreationFunc const&)
+{
+    static int i = 0;
+    os << i++;
+    return os;
+};
+} // namespace
+TEST_P(MeshManagerCachingTest, CachesACreatedMesh)
+{
+    auto func = GetParam();
+    auto const meshHandle1 = func(meshManager);
+    auto const meshHandle2 = func(meshManager);
+
+    auto const mesh1 = meshManager.Lookup(meshHandle1);
+    auto const mesh2 = meshManager.Lookup(meshHandle2);
+
+    EXPECT_EQ(mesh1, mesh2);
+}
+INSTANTIATE_TEST_SUITE_P(
+    MeshManagerCachingParamTest,
+    MeshManagerCachingTest,
+    ::testing::Values(
+        [](FIRE::MeshManager& meshManager) { return meshManager.CreateCube(NAME); },
+        [](FIRE::MeshManager& meshManager) { return meshManager.CreateSphere(NAME, 10); },
+        [](FIRE::MeshManager& meshManager) { return meshManager.CreatePlane(NAME); },
+        [](FIRE::MeshManager& meshManager) { return meshManager.CreateLineGrid(NAME, 2, 2); },
+        [](FIRE::MeshManager& meshManager) { return meshManager.CreateTriangleGrid(NAME, 2, 2); },
+        [](FIRE::MeshManager& meshManager) { return meshManager.Create(
+                                                 FIRE::MeshCategory::Custom,
+                                                 FIRE::MeshPrimitives::Points,
+                                                 NAME, std::vector<glm::vec3>(),
+                                                 std::vector<glm::vec3>(), std::vector<unsigned int>()); }));

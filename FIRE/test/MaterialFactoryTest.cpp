@@ -42,7 +42,7 @@ TEST(AMaterialFactory, CreatesADefaultMaterial)
     EXPECT_EQ("Default", material.Name());
 }
 
-TEST(AMaterialFactory, CreatesMaterialsFromCode)
+TEST(AMaterialFactory, CreatesMaterialsFromShaderCode)
 {
     auto shaderFactory = std::make_unique<FakeShaderFactory>();
 
