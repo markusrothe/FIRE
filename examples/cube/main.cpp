@@ -24,6 +24,25 @@ namespace
 {
 unsigned int constexpr WINDOW_WIDTH = 800;
 unsigned int constexpr WINDOW_HEIGHT = 600;
+
+void SubmitShaders(FIRE::MaterialFactory& materialFactory)
+{
+    FIRE::Shaders shaders = {
+        {FIRE::ShaderType::VERTEX_SHADER, "PhongVS.glsl"},
+        {FIRE::ShaderType::FRAGMENT_SHADER, "PhongFS.glsl"}};
+    materialFactory.CreateMaterialFromFiles("phong", shaders);
+
+    shaders = {
+        {FIRE::ShaderType::VERTEX_SHADER, "HeightVS.glsl"},
+        {FIRE::ShaderType::FRAGMENT_SHADER, "HeightFS.glsl"}};
+    materialFactory.CreateMaterialFromFiles("height", shaders);
+
+    shaders = {
+        {FIRE::ShaderType::VERTEX_SHADER, "GridVS.glsl"},
+        {FIRE::ShaderType::FRAGMENT_SHADER, "GridFS.glsl"}};
+    materialFactory.CreateMaterialFromFiles("grid", shaders);
+}
+
 } // namespace
 
 int main(int, char**)
@@ -34,6 +53,8 @@ int main(int, char**)
 
     FIRE::MeshManager meshManager;
     FIRE::MaterialFactory materialFactory(FIRE::GLFactory::CreateShaderFactory());
+    SubmitShaders(materialFactory);
+
     auto renderer{FIRE::GLFactory::CreateRenderer(meshManager)};
     auto textRenderer{FIRE::GLFactory::CreateTextRenderer()};
 

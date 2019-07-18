@@ -21,6 +21,9 @@ public:
     std::optional<std::pair<ShaderParameterType, std::any>> GetShaderParameter(std::string const& paramName) const;
     std::map<std::string, std::pair<ShaderParameterType, std::any>> GetShaderParameters() const;
 
+    bool operator==(Material const& other) const;
+    bool operator!=(Material const& other) const;
+
 private:
     std::string m_name{""};
     unsigned int m_shaderId{0};
