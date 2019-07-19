@@ -138,7 +138,8 @@ TEST_P(MeshManagerCachingTest, CachesACreatedMesh)
 
     EXPECT_EQ(mesh1, mesh2);
 }
-INSTANTIATE_TEST_SUITE_P(
+
+INSTANTIATE_TEST_CASE_P(
     MeshManagerCachingParamTest,
     MeshManagerCachingTest,
     ::testing::Values(
