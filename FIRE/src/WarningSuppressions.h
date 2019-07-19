@@ -9,7 +9,7 @@
 
 #define SUPPRESS_ZeroVariadicMacroArguments \
     _Pragma("GCC diagnostic push") \
-    _Pragma("GCC diagnostic ignored \"-Wgnu-zero-variadic-macro-argumnets\"")
+    _Pragma("GCC diagnostic ignored \"-Wgnu-zero-variadic-macro-arguments\"")
 
 #define SUPPRESS_Pop \
     _Pragma("GCC diagnostic pop")
