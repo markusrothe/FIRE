@@ -1,7 +1,9 @@
 #include <FIRE/MeshManager.h>
 #include <algorithm>
+#include <assimp/Importer.hpp>
 #include <cmath>
 #include <iostream>
+
 namespace FIRE
 {
 Mesh3D* MeshManager::Lookup(MeshHandle const& handle)

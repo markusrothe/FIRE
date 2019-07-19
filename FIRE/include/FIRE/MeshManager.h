@@ -4,6 +4,7 @@
 #include <FIRE/Mesh3D.h>
 #include <FIRE/MeshHandle.h>
 #include <FIRE/MeshType.h>
+
 #include <cstdint>
 #include <memory>
 #include <string>

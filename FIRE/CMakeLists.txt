@@ -91,6 +91,7 @@ target_link_libraries(FIRE
     MeasureCoverage
     freetype
     FastNoise
+    assimp::assimp
 )
 
 if(MSVC)
