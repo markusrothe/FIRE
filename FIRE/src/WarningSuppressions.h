@@ -2,7 +2,7 @@
 #define FIRE_WarningSuppressions_h
 
 // clang-format off
-#ifndef _WIN32
+#ifdef __clang__
 #define SUPPRESS_UnusedFunction    \
     _Pragma("GCC diagnostic push") \
     _Pragma("GCC diagnostic ignored \"-Wunused-function\"")
