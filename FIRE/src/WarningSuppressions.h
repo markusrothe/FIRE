@@ -7,10 +7,16 @@
     _Pragma("GCC diagnostic push") \
     _Pragma("GCC diagnostic ignored \"-Wunused-function\"")
 
+#define SUPPRESS_ZeroVariadicMacroArguments \
+    _Pragma("GCC diagnostic push") \
+    _Pragma("GCC diagnostic ignored \"-Wgnu-zero-variadic-macro-argumnets\"")
+
 #define SUPPRESS_Pop \
     _Pragma("GCC diagnostic pop")
+
 #else
 #define SUPPRESS_UnusedFunction
+#define SUPPRESS_ZeroVariadicMacroArguments
 #define SUPPRESS_Pop
 #endif
 // clang-format on

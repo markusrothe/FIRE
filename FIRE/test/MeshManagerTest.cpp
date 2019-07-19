@@ -117,12 +117,14 @@ public:
 
 // clang-format off
 SUPPRESS_UnusedFunction
+
 std::ostream& operator<<(std::ostream& os, MeshCreationFunc const&)
 {
     static int i = 0;
     os << i++;
     return os;
 }
+
 SUPPRESS_Pop
 //clang-format on
 } // namespace
@@ -139,6 +141,8 @@ TEST_P(MeshManagerCachingTest, CachesACreatedMesh)
     EXPECT_EQ(mesh1, mesh2);
 }
 
+SUPPRESS_ZeroVariadicMacroArguments
+
 INSTANTIATE_TEST_CASE_P(
     MeshManagerCachingParamTest,
     MeshManagerCachingTest,
@@ -152,4 +156,7 @@ INSTANTIATE_TEST_CASE_P(
                                                  FIRE::MeshCategory::Custom,
                                                  FIRE::MeshPrimitives::Points,
                                                  NAME, std::vector<glm::vec3>(),
-                                                 std::vector<glm::vec3>(), std::vector<unsigned int>()); }));
+                                                 std::vector<glm::vec3>(), 
+                                                 std::vector<unsigned int>()); }));
+
+SUPPRESS_Pop
