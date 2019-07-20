@@ -16,4 +16,5 @@ void main()
 
     vec4 col = vec4(1.0);
     color = clamp(col * 0.2 + col * 0.8 * NDotL, 0.0, 1.0);
+    color.w = 1.0;
 }

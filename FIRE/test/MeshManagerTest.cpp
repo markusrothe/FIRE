@@ -33,16 +33,8 @@ TEST_F(AMeshManager, CreatesACube)
     auto const normals = cube->Normals();
     ASSERT_EQ(24u, normals.size());
 
-    std::vector<unsigned int> const expectedIndices = {
-        11, 3, 17, 11, 17, 13,  // front
-        4, 7, 18, 4, 18, 15,    // right
-        8, 1, 23, 8, 23, 20,    // back
-        2, 10, 12, 2, 12, 21,   // left
-        14, 16, 19, 14, 19, 22, // top
-        0, 6, 5, 0, 5, 9        // down
-    };
-
-    EXPECT_THAT(cube->Indices(), ::testing::ContainerEq(expectedIndices));
+    auto const indices = cube->Indices();
+    ASSERT_EQ(36u, indices.size());
 }
 
 TEST_F(AMeshManager, CreatesAPlane)

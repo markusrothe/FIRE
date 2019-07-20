@@ -98,7 +98,7 @@ if(MSVC)
     set_target_properties(FIRE PROPERTIES COMPILE_FLAGS /D_USE_MATH_DEFINES)
 endif()
 
-file(GLOB_RECURSE assets ${CMAKE_CURRENT_SOURCE_DIR}/assets/**/*)
+file(GLOB_RECURSE assets ${CMAKE_CURRENT_SOURCE_DIR}/assets/*)
 set_target_properties(FIRE
     PROPERTIES 
     RESOURCE "${assets}"

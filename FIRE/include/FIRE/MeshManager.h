@@ -25,12 +25,13 @@ public:
         std::vector<glm::vec3>&& normals,
         std::vector<unsigned int>&& indices);
 
-    /* Triangle meshes */
     MeshHandle CreateCube(std::string name);
     MeshHandle CreatePlane(std::string name);
     MeshHandle CreateSphere(std::string name, uint32_t segments);
     MeshHandle CreateLineGrid(std::string name, uint32_t width, uint32_t height);
     MeshHandle CreateTriangleGrid(std::string name, uint32_t width, uint32_t height);
+
+    std::vector<MeshHandle> CreateFromFile(std::string name, std::string filename);
 
     Mesh3D* Lookup(MeshHandle const& handle);
 

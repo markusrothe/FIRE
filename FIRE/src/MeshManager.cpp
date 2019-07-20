@@ -1,8 +1,14 @@
 #include <FIRE/MeshManager.h>
 #include <algorithm>
 #include <assimp/Importer.hpp>
+#include <assimp/cimport.h>
+#include <assimp/matrix4x4.h>
+#include <assimp/postprocess.h>
+#include <assimp/scene.h>
+
 #include <cmath>
 #include <iostream>
+#include <sstream>
 
 namespace FIRE
 {
@@ -337,6 +343,45 @@ MeshHandle MeshManager::CreateTriangleGrid(std::string name, uint32_t width, uin
         std::move(positions),
         std::move(normals),
         std::move(indices));
+}
+
+std::vector<MeshHandle> MeshManager::CreateFromFile(std::string name, std::string filename)
+{
+    std::vector<MeshHandle> meshHandles;
+    Assimp::Importer importer;
+    const aiScene* scene = importer.ReadFile(filename.c_str(), aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices);
+    int c = 0;
+    for(auto i = 0u; i < scene->mNumMeshes; ++i)
+    {
+        const aiMesh* mesh = scene->mMeshes[i];
+        std::vector<glm::vec3> positions, normals;
+        for(auto j = 0u; j < mesh->mNumVertices; ++j)
+        {
+            auto const& pos = mesh->mVertices[j];
+            auto const& normal = mesh->mNormals[j];
+            positions.emplace_back(pos.x, pos.y, pos.z);
+            normals.emplace_back(normal.x, normal.y, normal.z);
+        }
+
+        std::vector<unsigned int> indices;
+        for(auto j = 0u; j < mesh->mNumFaces; ++j)
+        {
+            auto const& face = mesh->mFaces[j];
+            indices.push_back(face.mIndices[0]);
+            indices.push_back(face.mIndices[1]);
+            indices.push_back(face.mIndices[2]);
+        }
+        std::stringstream ss;
+        ss << name << c++;
+        meshHandles.push_back(DoCreate(
+            FIRE::MeshCategory::Custom,
+            FIRE::MeshPrimitives::Triangles,
+            std::move(ss.str()),
+            std::move(positions),
+            std::move(normals),
+            std::move(indices)));
+    }
+    return meshHandles;
 }
 
 MeshHandle MeshManager::DoCreate(

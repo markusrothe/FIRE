@@ -26,7 +26,7 @@ private:
     std::optional<std::any> Receive(FIRE::Message msg) override;
 
     FIRE::Renderable m_cube;
-    FIRE::Renderable m_plane;
+    std::vector<FIRE::Renderable> renderables;
 };
 } // namespace examples
 
