@@ -6,11 +6,14 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
+namespace
+{
 class AnInputListener : public ::testing::Test
 {
 protected:
     FIRE::InputListener inputListener;
 };
+} // namespace
 
 TEST_F(AnInputListener, CallsARegisteredCallbackForAKeyEvent)
 {

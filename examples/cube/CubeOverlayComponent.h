@@ -1,7 +1,6 @@
 #ifndef examples_CubeOverlayComponent_h
 #define examples_CubeOverlayComponent_h
 #include <FIRE/OverlayComponent.h>
-
 namespace examples
 {
 class SceneObject;

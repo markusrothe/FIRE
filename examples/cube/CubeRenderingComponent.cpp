@@ -8,38 +8,37 @@
 #include <FIRE/Window.h>
 #include <fstream>
 #include <iterator>
+#include <sstream>
 #include <string>
 
 namespace examples
 {
-namespace
-{
-std::string GetFileContent(std::string const& filePath)
-{
-    std::ifstream file(filePath);
-    std::string const content{(std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>()};
-    return content;
-}
-} // namespace
 
 CubeRenderingComponent::CubeRenderingComponent(FIRE::Renderer& renderer, FIRE::MeshManager& meshManager, FIRE::MaterialFactory& materialFactory)
     : FIRE::RenderingComponent(renderer)
 {
+    auto meshHandles = meshManager.CreateFromFile("sponza", "sponza.obj");
+    int i = 0;
+    for(auto handle : meshHandles)
+    {
+        std::stringstream ss;
+        ss << "sponza_mesh_" << i++;
+        FIRE::Renderable r;
+        r.name = ss.str();
+        r.material = materialFactory.GetMaterial("phong");
+        r.mesh = handle;
+        renderables.push_back(r);
+    }
     m_cube.name = "cubeRenderable";
-
-    FIRE::Shaders const shaders = {
-        {FIRE::ShaderType::VERTEX_SHADER, GetFileContent("PhongVS.glsl")},
-        {FIRE::ShaderType::FRAGMENT_SHADER, GetFileContent("PhongFS.glsl")}};
-    m_cube.material = materialFactory.CreateMaterial("phong", shaders);
-
+    m_cube.material = materialFactory.GetMaterial("phong");
     m_cube.mesh = meshManager.CreateCube("cube");
 }
 
-void CubeRenderingComponent::DoUpdate(double deltaTime, FIRE::SceneObject& sceneObject, FIRE::Scene& scene)
+void CubeRenderingComponent::DoUpdate(double, FIRE::SceneObject& sceneObject, FIRE::Scene& scene)
 {
     auto& transform = sceneObject.GetTransform();
-    transform.SetPosition({0, 2, 0});
-    transform.Rotate({1, 1, 1}, 100.0f * static_cast<float>(deltaTime));
+    //transform.SetPosition({0, 2, 0});
+    //transform.Rotate({1, 1, 1}, 100.0f * static_cast<float>(deltaTime));
 
     auto viewMatrix = std::any_cast<glm::mat4x4>(scene.Send(FIRE::Message(0)).value());
     auto projMatrix = std::any_cast<glm::mat4x4>(scene.Send(FIRE::Message(1)).value());
@@ -48,6 +47,14 @@ void CubeRenderingComponent::DoUpdate(double deltaTime, FIRE::SceneObject& scene
     m_cube.material.SetShaderParameter("M", FIRE::ShaderParameterType::MAT4x4, transform.ModelMatrix());
     m_cube.material.SetShaderParameter("VP", FIRE::ShaderParameterType::MAT4x4, projMatrix * viewMatrix);
     m_cube.material.SetShaderParameter("LightPos", FIRE::ShaderParameterType::VEC3, lightPos);
+
+    for(auto& renderable : renderables)
+    {
+        renderable.material.SetShaderParameter("M", FIRE::ShaderParameterType::MAT4x4, transform.ModelMatrix());
+        renderable.material.SetShaderParameter("VP", FIRE::ShaderParameterType::MAT4x4, projMatrix * viewMatrix);
+        renderable.material.SetShaderParameter("LightPos", FIRE::ShaderParameterType::VEC3, lightPos);
+        m_renderer.Submit(renderable);
+    }
 
     m_renderer.Submit(m_cube);
 }

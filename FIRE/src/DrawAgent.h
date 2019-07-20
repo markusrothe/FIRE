@@ -12,7 +12,7 @@ public:
     virtual ~DrawAgent() = default;
 
     virtual void Draw(Renderable const&, GLVertexArrayObject buffers) = 0;
-
+    virtual void ToggleWireframe() = 0;
     virtual void Clear() = 0;
 };
 

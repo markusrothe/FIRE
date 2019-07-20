@@ -15,14 +15,18 @@ public:
         glm::vec3 lookAt = glm::vec3(0.0f, 0.0f, -1.0f));
 
     glm::vec3 Position() const;
+    glm::vec3 Acceleration() const;
     glm::vec3 LookAt() const;
     glm::vec3 GetScaling() const;
     glm::vec3 Right() const;
     glm::vec3 Up() const;
+
     void SetPosition(glm::vec3 pos);
+    void SetAcceleration(glm::vec3 acceleration);
     void SetLookAt(glm::vec3 dir);
     void Translate(float x, float y, float z);
     void Translate(glm::vec3 const& vec);
+    void Accelerate(glm::vec3 const& vec);
     void Rotate(glm::vec3 const& axis, float angle);
     void Scale(glm::vec3 const& scale);
 
@@ -33,6 +37,7 @@ private:
     glm::vec3 m_scale;
     glm::vec3 m_lookAt;
     glm::quat m_rotation;
+    glm::vec3 m_acceleration;
 };
 } // namespace FIRE
 

@@ -4,7 +4,6 @@
 #include <FIRE/Renderable.h>
 #include <FIRE/RenderingComponent.h>
 #include <FIRE/glmfwd.h>
-#include <vector>
 
 namespace FIRE
 {
@@ -27,6 +26,7 @@ private:
     std::optional<std::any> Receive(FIRE::Message msg) override;
 
     FIRE::Renderable m_cube;
+    std::vector<FIRE::Renderable> renderables;
 };
 } // namespace examples
 

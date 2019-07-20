@@ -6,7 +6,7 @@
 #include "GLRenderContext.h"
 #include "GLTextRenderer.h"
 #include "GLUploader.h"
-#include "RendererImpl.h"
+#include "GLRenderer.h"
 #include "TextureFactory.h"
 #include <FIRE/GLFactory.h>
 #include <FIRE/Window.h>
@@ -29,7 +29,7 @@ std::unique_ptr<RenderContext> CreateRenderContext(Window& window)
 
 std::unique_ptr<Renderer> CreateRenderer(MeshManager& meshManager)
 {
-    return std::make_unique<RendererImpl>(
+    return std::make_unique<GLRenderer>(
         std::make_unique<GLUploader>(meshManager),
         std::make_unique<GLDrawAgent>(meshManager));
 }

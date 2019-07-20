@@ -10,6 +10,7 @@ class Scene;
 class InputListener;
 class Message;
 class Window;
+class Renderer;
 } // namespace FIRE
 
 namespace examples
@@ -18,11 +19,13 @@ namespace examples
 class CubeInputComponent : public FIRE::InputComponent
 {
 public:
-    explicit CubeInputComponent(FIRE::InputListener& inputListener, FIRE::Window& window);
+    explicit CubeInputComponent(
+        FIRE::SceneObject& sceneObject,
+        FIRE::InputListener& inputListener,
+        FIRE::Window& window,
+        FIRE::Renderer& renderer);
 
 private:
-    void Init(FIRE::SceneObject& sceneObject);
-    FIRE::Window& window;
     void DoUpdate(double deltaTime, FIRE::SceneObject& sceneObject, FIRE::Scene& scene) override;
     std::optional<std::any> Receive(FIRE::Message msg) override;
 };

@@ -4,7 +4,7 @@
 #include "CubeLightComponent.h"
 #include "CubeOverlayComponent.h"
 #include "CubeRenderingComponent.h"
-
+#include "GridRenderingComponent.h"
 #include <FIRE/GLFactory.h>
 #include <FIRE/InputListener.h>
 #include <FIRE/MaterialFactory.h>
@@ -24,6 +24,25 @@ namespace
 {
 unsigned int constexpr WINDOW_WIDTH = 800;
 unsigned int constexpr WINDOW_HEIGHT = 600;
+
+void SubmitShaders(FIRE::MaterialFactory& materialFactory)
+{
+    FIRE::Shaders shaders = {
+        {FIRE::ShaderType::VERTEX_SHADER, "PhongVS.glsl"},
+        {FIRE::ShaderType::FRAGMENT_SHADER, "PhongFS.glsl"}};
+    materialFactory.CreateMaterialFromFiles("phong", shaders);
+
+    shaders = {
+        {FIRE::ShaderType::VERTEX_SHADER, "HeightVS.glsl"},
+        {FIRE::ShaderType::FRAGMENT_SHADER, "HeightFS.glsl"}};
+    materialFactory.CreateMaterialFromFiles("height", shaders);
+
+    shaders = {
+        {FIRE::ShaderType::VERTEX_SHADER, "GridVS.glsl"},
+        {FIRE::ShaderType::FRAGMENT_SHADER, "GridFS.glsl"}};
+    materialFactory.CreateMaterialFromFiles("grid", shaders);
+}
+
 } // namespace
 
 int main(int, char**)
@@ -34,21 +53,27 @@ int main(int, char**)
 
     FIRE::MeshManager meshManager;
     FIRE::MaterialFactory materialFactory(FIRE::GLFactory::CreateShaderFactory());
+    SubmitShaders(materialFactory);
+
     auto renderer{FIRE::GLFactory::CreateRenderer(meshManager)};
     auto textRenderer{FIRE::GLFactory::CreateTextRenderer()};
 
     FIRE::Scene scene;
+    // auto& planeObject = scene.CreateSceneObject("plane");
+    // planeObject.AddComponent(
+    //     std::make_unique<examples::GridRenderingComponent>(planeObject, *renderer, meshManager, materialFactory));
+
     auto& cubeObject = scene.CreateSceneObject("cube");
     cubeObject.AddComponent(
-        std::make_unique<examples::CubeRenderingComponent>(
-            *renderer, meshManager, materialFactory));
+        std::make_unique<examples::CubeRenderingComponent>(*renderer, meshManager, materialFactory));
 
     auto& mainCamera = scene.CreateSceneObject("cam");
     mainCamera.AddComponent(
-        std::make_unique<examples::CubeInputComponent>(*input, window));
+        std::make_unique<examples::CubeInputComponent>(mainCamera, *input, window, *renderer));
+
     mainCamera.AddComponent(
         std::make_unique<examples::CubeCameraComponent>(
-            70.0f, static_cast<float>(window.GetWidth()) / static_cast<float>(window.GetHeight()), 0.01f, 500.0f));
+            mainCamera, 70.0f, static_cast<float>(window.GetWidth()) / static_cast<float>(window.GetHeight()), 0.1f, 3000.0f));
 
     auto& sceneLight = scene.CreateSceneObject("light");
     sceneLight.AddComponent(

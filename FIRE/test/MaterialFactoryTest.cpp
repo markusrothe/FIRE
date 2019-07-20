@@ -18,20 +18,28 @@ public:
     MOCK_METHOD0(CreateDefaultShader, unsigned int(void));
     MOCK_METHOD1(Create, unsigned int(std::vector<std::pair<FIRE::ShaderType, std::string>> const&));
 };
+
+class AMaterialFactory : public ::testing::Test
+{
+public:
+    std::vector<std::pair<FIRE::ShaderType, std::string>> const shaderCode = {
+        {FIRE::ShaderType::VERTEX_SHADER, "VertexShaderCode"},
+        {FIRE::ShaderType::FRAGMENT_SHADER, "FragmentShaderCode"}};
+    std::unique_ptr<FakeShaderFactory> shaderFactory{std::make_unique<FakeShaderFactory>()};
+};
+
 } // namespace
 
-TEST(AMaterialFactory, UsesAShaderFactory)
+TEST_F(AMaterialFactory, UsesAShaderFactory)
 {
-    auto shaderFactory = std::make_unique<FakeShaderFactory>();
     EXPECT_CALL(*shaderFactory, CreateDefaultShader());
 
     FIRE::MaterialFactory materialFactory(std::move(shaderFactory));
     materialFactory.CreateDefaultMaterial();
 }
 
-TEST(AMaterialFactory, CreatesADefaultMaterial)
+TEST_F(AMaterialFactory, CreatesADefaultMaterial)
 {
-    auto shaderFactory = std::make_unique<FakeShaderFactory>();
     EXPECT_CALL(*shaderFactory, CreateDefaultShader())
         .WillOnce(Return(DEFAULT_MATERIAL_ID));
 
@@ -42,18 +50,39 @@ TEST(AMaterialFactory, CreatesADefaultMaterial)
     EXPECT_EQ("Default", material.Name());
 }
 
-TEST(AMaterialFactory, CreatesMaterialsFromCode)
+TEST_F(AMaterialFactory, CreatesMaterialsFromShaderCode)
 {
-    auto shaderFactory = std::make_unique<FakeShaderFactory>();
-
-    std::vector<std::pair<FIRE::ShaderType, std::string>> const shaderCode = {
-        {FIRE::ShaderType::VERTEX_SHADER, "VertexShaderCode"},
-        {FIRE::ShaderType::FRAGMENT_SHADER, "FragmentShaderCode"}};
-
     EXPECT_CALL(*shaderFactory, Create(shaderCode))
         .WillOnce(Return(CUSTOM_MATERIAL_ID));
 
     FIRE::MaterialFactory materialFactory(std::move(shaderFactory));
     auto const material = materialFactory.CreateMaterial("name", shaderCode);
     EXPECT_EQ(CUSTOM_MATERIAL_ID, material.ShaderId());
+}
+
+TEST_F(AMaterialFactory, CachesShaders)
+{
+    EXPECT_CALL(*shaderFactory, Create(shaderCode))
+        .Times(1)
+        .WillOnce(Return(CUSTOM_MATERIAL_ID));
+
+    FIRE::MaterialFactory materialFactory(std::move(shaderFactory));
+    auto const material = materialFactory.CreateMaterial("name", shaderCode);
+    auto const sameMaterial = materialFactory.CreateMaterial("name", shaderCode);
+    EXPECT_EQ(material, sameMaterial);
+}
+
+TEST_F(AMaterialFactory, AllowsToLookupAlreadyCreatedMaterials)
+{
+    FIRE::MaterialFactory materialFactory(std::move(shaderFactory));
+    auto const createdMaterial = materialFactory.CreateMaterial("name", shaderCode);
+    auto const lookedUpMaterial = materialFactory.GetMaterial("name");
+
+    EXPECT_EQ(createdMaterial, lookedUpMaterial);
+}
+
+TEST_F(AMaterialFactory, ThrowsIfANonExistentMaterialIsLookedUp)
+{
+    FIRE::MaterialFactory materialFactory(std::move(shaderFactory));
+    EXPECT_THROW(materialFactory.GetMaterial("name"), std::logic_error);
 }

@@ -1,10 +1,18 @@
 #include <FIRE/MeshManager.h>
 #include <algorithm>
+#include <assimp/Importer.hpp>
+#include <assimp/cimport.h>
+#include <assimp/matrix4x4.h>
+#include <assimp/postprocess.h>
+#include <assimp/scene.h>
+
 #include <cmath>
 #include <iostream>
+#include <sstream>
+
 namespace FIRE
 {
-Mesh3D* MeshManager::Lookup3D(MeshHandle const& handle)
+Mesh3D* MeshManager::Lookup(MeshHandle const& handle)
 {
     auto mesh = m_cache.find(handle.name);
     if(mesh != std::cend(m_cache))
@@ -21,11 +29,29 @@ Mesh3D* MeshManager::Lookup3D(MeshHandle const& handle)
     return nullptr;
 }
 
+MeshHandle MeshManager::Create(
+    MeshCategory meshCategory,
+    MeshPrimitives primitives,
+    std::string name,
+    std::vector<glm::vec3>&& positions,
+    std::vector<glm::vec3>&& normals,
+    std::vector<unsigned int>&& indices)
+{
+    MeshHandle handle(name, meshCategory, primitives);
+    if(Lookup(handle))
+    {
+        return handle;
+    }
+
+    return DoCreate(meshCategory, primitives, name, std::move(positions), std::move(normals), std::move(indices));
+}
+
 MeshHandle MeshManager::CreateCube(std::string name)
 {
-    if(Lookup3D({name, MeshType::Cube}))
+    MeshHandle handle(name, MeshCategory::Cube, MeshPrimitives::Triangles);
+    if(Lookup(handle))
     {
-        return {name, MeshType::Cube};
+        return handle;
     }
 
     std::vector<glm::vec3> positions = {{-1.0f, -1.0f, -1.0f},
@@ -100,8 +126,10 @@ MeshHandle MeshManager::CreateCube(std::string name)
         14, 16, 19, 14, 19, 22, // top
         0, 6, 5, 0, 5, 9        // down
     };
-    return Create(
-        MeshType::Cube,
+
+    return DoCreate(
+        MeshCategory::Cube,
+        MeshPrimitives::Triangles,
         std::move(name),
         std::move(positions),
         std::move(normals),
@@ -110,10 +138,10 @@ MeshHandle MeshManager::CreateCube(std::string name)
 
 MeshHandle MeshManager::CreatePlane(std::string name)
 {
-
-    if(Lookup3D({name, MeshType::Plane}))
+    MeshHandle handle(name, MeshCategory::Plane, MeshPrimitives::Triangles);
+    if(Lookup(handle))
     {
-        return {name, MeshType::Plane};
+        return handle;
     }
 
     std::vector<glm::vec3> positions = {{-1.0f, 0.0f, -1.0f},
@@ -130,8 +158,9 @@ MeshHandle MeshManager::CreatePlane(std::string name)
 
     std::vector<unsigned int> indices = {0, 1, 2, 0, 2, 3};
 
-    return Create(
-        MeshType::Plane,
+    return DoCreate(
+        MeshCategory::Plane,
+        MeshPrimitives::Triangles,
         std::move(name),
         std::move(positions),
         std::move(normals),
@@ -140,9 +169,10 @@ MeshHandle MeshManager::CreatePlane(std::string name)
 
 MeshHandle MeshManager::CreateSphere(std::string name, uint32_t segments)
 {
-    if(Lookup3D({name, MeshType::Sphere}))
+    MeshHandle handle(name, MeshCategory::Sphere, MeshPrimitives::Triangles);
+    if(Lookup(handle))
     {
-        return {name, MeshType::Sphere};
+        return handle;
     }
 
     std::vector<glm::vec3> positions;
@@ -216,15 +246,147 @@ MeshHandle MeshManager::CreateSphere(std::string name, uint32_t segments)
         indices.push_back(b);
     }
 
-    return Create(
-        MeshType::Sphere,
+    return DoCreate(
+        MeshCategory::Sphere,
+        MeshPrimitives::Triangles,
         std::move(name),
         std::move(positions),
         std::move(normals),
         std::move(indices));
 }
-MeshHandle MeshManager::Create(
-    MeshType meshType,
+
+MeshHandle MeshManager::CreateLineGrid(std::string name, uint32_t width, uint32_t height)
+{
+    MeshHandle handle(name, MeshCategory::LineGrid, MeshPrimitives::Lines);
+    if(Lookup(handle))
+    {
+        return handle;
+    }
+
+    std::vector<glm::vec3> positions, normals;
+    std::vector<unsigned int> indices;
+
+    unsigned int count = 0;
+    auto const stepY = 2.0f / static_cast<float>(height);
+    auto const stepX = 2.0f / static_cast<float>(width);
+    for(auto i = 0u; i < width; ++i)
+    {
+        auto const x = i * stepX - 1.0f;
+        positions.emplace_back(x, 0.0f, -1.0f);
+        positions.emplace_back(x, 0.0f, 1.0f);
+        normals.emplace_back(0.0f, 1.0f, 0.0f);
+        normals.emplace_back(0.0f, 1.0f, 0.0f);
+        indices.push_back(count++);
+        indices.push_back(count++);
+    }
+
+    for(auto i = 0u; i < height; ++i)
+    {
+        auto const y = i * stepY - 1.0f;
+        positions.emplace_back(-1.0f, 0.0f, y);
+        positions.emplace_back(1.0f, 0.0f, y);
+        normals.emplace_back(0.0f, 1.0f, 0.0f);
+        normals.emplace_back(0.0f, 1.0f, 0.0f);
+        indices.push_back(count++);
+        indices.push_back(count++);
+    }
+
+    return DoCreate(
+        MeshCategory::LineGrid,
+        MeshPrimitives::Lines,
+        std::move(name),
+        std::move(positions),
+        std::move(normals),
+        std::move(indices));
+}
+
+MeshHandle MeshManager::CreateTriangleGrid(std::string name, uint32_t width, uint32_t height)
+{
+    MeshHandle handle(name, MeshCategory::TriangleGrid, MeshPrimitives::Triangles);
+    if(Lookup(handle))
+    {
+        return handle;
+    }
+
+    std::vector<glm::vec3> positions, normals;
+    std::vector<unsigned int> indices;
+
+    unsigned int count = 0;
+    auto const stepY = 2.0f / static_cast<float>(height);
+    auto const stepX = 2.0f / static_cast<float>(width);
+    for(auto j = height; j > 0; --j)
+    {
+        auto const y = j * stepY - 1.0f;
+        for(auto i = 0u; i < width; ++i)
+        {
+            auto const x = i * stepX - 1.0f;
+
+            positions.emplace_back(x, 0.0f, y);
+            positions.emplace_back(x + stepX, 0.0f, y);
+            positions.emplace_back(x, 0.0f, y - stepY);
+            positions.emplace_back(x + stepX, 0.0f, y);
+            positions.emplace_back(x + stepX, 0.0f, y - stepY);
+            positions.emplace_back(x, 0.0f, y - stepY);
+
+            for(auto k = 0; k < 6; ++k)
+            {
+                normals.emplace_back(0.0f, 1.0f, 0.0f);
+                indices.push_back(count++);
+            }
+        }
+    }
+
+    return DoCreate(
+        MeshCategory::TriangleGrid,
+        MeshPrimitives::Triangles,
+        std::move(name),
+        std::move(positions),
+        std::move(normals),
+        std::move(indices));
+}
+
+std::vector<MeshHandle> MeshManager::CreateFromFile(std::string name, std::string filename)
+{
+    std::vector<MeshHandle> meshHandles;
+    Assimp::Importer importer;
+    const aiScene* scene = importer.ReadFile(filename.c_str(), aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices);
+    int c = 0;
+    for(auto i = 0u; i < scene->mNumMeshes; ++i)
+    {
+        const aiMesh* mesh = scene->mMeshes[i];
+        std::vector<glm::vec3> positions, normals;
+        for(auto j = 0u; j < mesh->mNumVertices; ++j)
+        {
+            auto const& pos = mesh->mVertices[j];
+            auto const& normal = mesh->mNormals[j];
+            positions.emplace_back(pos.x, pos.y, pos.z);
+            normals.emplace_back(normal.x, normal.y, normal.z);
+        }
+
+        std::vector<unsigned int> indices;
+        for(auto j = 0u; j < mesh->mNumFaces; ++j)
+        {
+            auto const& face = mesh->mFaces[j];
+            indices.push_back(face.mIndices[0]);
+            indices.push_back(face.mIndices[1]);
+            indices.push_back(face.mIndices[2]);
+        }
+        std::stringstream ss;
+        ss << name << c++;
+        meshHandles.push_back(DoCreate(
+            FIRE::MeshCategory::Custom,
+            FIRE::MeshPrimitives::Triangles,
+            ss.str(),
+            std::move(positions),
+            std::move(normals),
+            std::move(indices)));
+    }
+    return meshHandles;
+}
+
+MeshHandle MeshManager::DoCreate(
+    MeshCategory meshCategory,
+    MeshPrimitives primitives,
     std::string name,
     std::vector<glm::vec3>&& positions,
     std::vector<glm::vec3>&& normals,
@@ -238,8 +400,8 @@ MeshHandle MeshManager::Create(
     mesh->GetVertexDeclaration().AddSection("vPos", 3u, 0u);
     mesh->GetVertexDeclaration().AddSection("vNormal", 3u, positions.size() * sizeof(float) * 3);
 
-    m_cache.insert(std::make_pair(name, std::make_pair(meshType, std::move(mesh))));
-    return {name, meshType};
+    m_cache.insert(std::make_pair(name, std::make_pair(MeshType(meshCategory, primitives), std::move(mesh))));
+    return MeshHandle{name, meshCategory, primitives};
 }
 
 } // namespace FIRE

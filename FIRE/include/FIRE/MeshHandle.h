@@ -8,6 +8,14 @@ namespace FIRE
 {
 struct MeshHandle
 {
+    MeshHandle() = default;
+
+    MeshHandle(std::string name, MeshCategory category, MeshPrimitives primitives)
+        : name(std::move(name))
+        , type({category, primitives})
+    {
+    }
+
     std::string name;
     MeshType type;
 };

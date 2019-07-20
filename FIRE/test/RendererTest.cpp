@@ -1,5 +1,5 @@
 #include "DrawAgent.h"
-#include "RendererImpl.h"
+#include "GLRenderer.h"
 #include "Uploader.h"
 #include <FIRE/Renderable.h>
 #include <FIRE/Scene.h>
@@ -30,6 +30,7 @@ class DrawAgentMock : public FIRE::DrawAgent
 public:
     MOCK_METHOD2(Draw, void(FIRE::Renderable const&, FIRE::GLVertexArrayObject));
     MOCK_METHOD0(Clear, void(void));
+    MOCK_METHOD0(ToggleWireframe, void(void));
 };
 
 class ARenderer : public ::testing::Test
@@ -52,7 +53,7 @@ private:
 protected:
     UploaderMock& uploader;
     DrawAgentMock& drawAgent;
-    FIRE::RendererImpl renderer;
+    FIRE::GLRenderer renderer;
     FIRE::Scene scene;
     FIRE::Renderable renderable;
     std::vector<FIRE::Renderable> renderables = {renderable};

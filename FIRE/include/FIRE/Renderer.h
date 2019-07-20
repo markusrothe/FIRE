@@ -11,6 +11,7 @@ public:
     virtual ~Renderer() = default;
     virtual void Submit(Renderable const& renderable) = 0;
     virtual void Render(float windowWidth, float windowHeight) = 0;
+    virtual void ToggleWireframe() = 0;
 };
 } // namespace FIRE
 

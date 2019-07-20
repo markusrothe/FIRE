@@ -4,6 +4,7 @@
 #include <FIRE/Mesh3D.h>
 #include <FIRE/MeshHandle.h>
 #include <FIRE/MeshType.h>
+
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -16,15 +17,28 @@ namespace FIRE
 class MeshManager
 {
 public:
+    MeshHandle Create(
+        MeshCategory meshType,
+        MeshPrimitives primitives,
+        std::string name,
+        std::vector<glm::vec3>&& positions,
+        std::vector<glm::vec3>&& normals,
+        std::vector<unsigned int>&& indices);
+
     MeshHandle CreateCube(std::string name);
     MeshHandle CreatePlane(std::string name);
     MeshHandle CreateSphere(std::string name, uint32_t segments);
+    MeshHandle CreateLineGrid(std::string name, uint32_t width, uint32_t height);
+    MeshHandle CreateTriangleGrid(std::string name, uint32_t width, uint32_t height);
 
-    Mesh3D* Lookup3D(MeshHandle const& handle);
+    std::vector<MeshHandle> CreateFromFile(std::string name, std::string filename);
+
+    Mesh3D* Lookup(MeshHandle const& handle);
 
 private:
-    MeshHandle Create(
-        MeshType meshType,
+    MeshHandle DoCreate(
+        MeshCategory meshType,
+        MeshPrimitives primitives,
         std::string name,
         std::vector<glm::vec3>&& positions,
         std::vector<glm::vec3>&& normals,

@@ -6,6 +6,8 @@
 
 namespace FIRE
 {
+namespace
+{
 void SetShaderUniforms(GLuint shader, std::map<std::string, std::pair<ShaderParameterType, std::any>> const& params)
 {
     for(auto const& param : params)
@@ -33,14 +35,30 @@ void SetShaderUniforms(GLuint shader, std::map<std::string, std::pair<ShaderPara
     }
 }
 
+GLenum MapPrimitiveType(MeshPrimitives primitives)
+{
+    switch(primitives)
+    {
+    case MeshPrimitives::Points:
+        return GL_POINTS;
+    case MeshPrimitives::Lines:
+        return GL_LINES;
+    case MeshPrimitives::Triangles:
+        return GL_TRIANGLES;
+    default:
+        assert(false);
+        return GL_POINTS;
+    }
+}
+
+} // namespace
 GLDrawAgent::GLDrawAgent(MeshManager& meshManager)
     : m_meshManager(meshManager)
 {
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
-    glClearColor(0.4f, 0.4f, 1.0f, 1.0f);
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 }
 
 void GLDrawAgent::Clear()
@@ -57,15 +75,22 @@ void GLDrawAgent::Draw(Renderable const& renderable, GLVertexArrayObject arrObj)
 
     SetShaderUniforms(shader, renderable.material.GetShaderParameters());
 
-    auto mesh = m_meshManager.Lookup3D(renderable.mesh);
+    auto mesh = m_meshManager.Lookup(renderable.mesh);
     if(mesh)
     {
-        glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->Indices().size()), GL_UNSIGNED_INT, 0);
+        glDrawElements(MapPrimitiveType(renderable.mesh.type.primitives), static_cast<GLsizei>(mesh->Indices().size()), GL_UNSIGNED_INT, 0);
     }
 
     glUseProgram(0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+}
+
+void GLDrawAgent::ToggleWireframe()
+{
+    static bool on = true;
+    glPolygonMode(GL_FRONT_AND_BACK, on ? GL_LINE : GL_FILL);
+    on = !on;
 }
 
 } // namespace FIRE

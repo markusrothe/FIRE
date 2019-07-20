@@ -5,9 +5,9 @@
 #include <FIRE/ShaderFactory.h>
 #include <FIRE/ShaderType.h>
 
+#include <map>
 #include <memory>
 #include <string>
-#include <unordered_map>
 #include <vector>
 
 namespace FIRE
@@ -21,11 +21,14 @@ public:
     ~MaterialFactory();
 
     Material CreateDefaultMaterial();
+    Material CreateMaterial(std::string const& name, std::vector<std::pair<ShaderType, std::string>> const& shaderCode);
+    Material CreateMaterialFromFiles(std::string const& name, std::vector<std::pair<ShaderType, std::string>> const& shaders);
 
-    Material CreateMaterial(std::string const& name, std::vector<std::pair<ShaderType, std::string>> const& shaders);
+    Material GetMaterial(std::string const& name) const;
 
 private:
     std::unique_ptr<ShaderFactory> m_shaderFactory;
+    std::map<std::string, uint32_t> m_cachedShaders;
 };
 } // namespace FIRE
 

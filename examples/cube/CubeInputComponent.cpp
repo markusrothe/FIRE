@@ -1,50 +1,54 @@
 #include "CubeInputComponent.h"
 #include <FIRE/InputListener.h>
 #include <FIRE/Message.h>
+#include <FIRE/Renderer.h>
 #include <FIRE/Scene.h>
 #include <FIRE/SceneObject.h>
 #include <FIRE/Window.h>
 
 namespace examples
 {
-CubeInputComponent::CubeInputComponent(FIRE::InputListener& inputListener, FIRE::Window& window)
+CubeInputComponent::CubeInputComponent(
+    FIRE::SceneObject& sceneObject,
+    FIRE::InputListener& inputListener,
+    FIRE::Window& window,
+    FIRE::Renderer& renderer)
     : FIRE::InputComponent(inputListener)
-    , window(window)
 {
-}
-
-void CubeInputComponent::Init(FIRE::SceneObject& sceneObject)
-{
+    auto speed = 2.0f;
     auto& transform = sceneObject.GetTransform();
-    auto moveRight = [&transform] { transform.Translate(transform.Right()); };
+    auto moveRight = [speed, &transform] { transform.Accelerate(speed * transform.Right()); };
+    auto moveLeft = [speed, &transform] { transform.Accelerate(speed * -transform.Right()); };
+    auto moveUp = [speed, &transform] { transform.Accelerate(speed * transform.Up()); };
+    auto moveDown = [speed, &transform] { transform.Accelerate(speed * -transform.Up()); };
+    auto moveForward = [speed, &transform] { transform.Accelerate(speed * glm::normalize(transform.LookAt() - transform.Position())); };
+    auto moveBackward = [speed, &transform] { transform.Accelerate(speed * glm::normalize(-(transform.LookAt() - transform.Position()))); };
+    auto reset = [&transform] { transform.SetAcceleration({0.0f, 0.0f, 0.0f}); };
+
     inputListener.RegisterKeyEvent(FIRE::Key::KEY_D, FIRE::KeyAction::PRESS, moveRight);
-    inputListener.RegisterKeyEvent(FIRE::Key::KEY_D, FIRE::KeyAction::REPEAT, moveRight);
+    inputListener.RegisterKeyEvent(FIRE::Key::KEY_D, FIRE::KeyAction::RELEASE, reset);
 
-    auto moveLeft = [&transform] { transform.Translate(-transform.Right()); };
     inputListener.RegisterKeyEvent(FIRE::Key::KEY_A, FIRE::KeyAction::PRESS, moveLeft);
-    inputListener.RegisterKeyEvent(FIRE::Key::KEY_A, FIRE::KeyAction::REPEAT, moveLeft);
+    inputListener.RegisterKeyEvent(FIRE::Key::KEY_A, FIRE::KeyAction::RELEASE, reset);
 
-    auto moveUp = [&transform] { transform.Translate(transform.Up()); };
     inputListener.RegisterKeyEvent(FIRE::Key::KEY_Q, FIRE::KeyAction::PRESS, moveUp);
-    inputListener.RegisterKeyEvent(FIRE::Key::KEY_Q, FIRE::KeyAction::REPEAT, moveUp);
+    inputListener.RegisterKeyEvent(FIRE::Key::KEY_Q, FIRE::KeyAction::RELEASE, reset);
 
-    auto moveDown = [&transform] { transform.Translate(-transform.Up()); };
     inputListener.RegisterKeyEvent(FIRE::Key::KEY_E, FIRE::KeyAction::PRESS, moveDown);
-    inputListener.RegisterKeyEvent(FIRE::Key::KEY_E, FIRE::KeyAction::REPEAT, moveDown);
+    inputListener.RegisterKeyEvent(FIRE::Key::KEY_E, FIRE::KeyAction::RELEASE, reset);
 
-    auto moveForward = [&transform] { transform.Translate(transform.LookAt() - transform.Position()); };
     inputListener.RegisterKeyEvent(FIRE::Key::KEY_W, FIRE::KeyAction::PRESS, moveForward);
-    inputListener.RegisterKeyEvent(FIRE::Key::KEY_W, FIRE::KeyAction::REPEAT, moveForward);
+    inputListener.RegisterKeyEvent(FIRE::Key::KEY_W, FIRE::KeyAction::RELEASE, reset);
 
-    auto moveBackward = [&transform] { transform.Translate(-(transform.LookAt() - transform.Position())); };
     inputListener.RegisterKeyEvent(FIRE::Key::KEY_S, FIRE::KeyAction::PRESS, moveBackward);
-    inputListener.RegisterKeyEvent(FIRE::Key::KEY_S, FIRE::KeyAction::REPEAT, moveBackward);
+    inputListener.RegisterKeyEvent(FIRE::Key::KEY_S, FIRE::KeyAction::RELEASE, reset);
 
-    auto closeWindow = [this] { window.Close(); };
-    inputListener.RegisterKeyEvent(FIRE::Key::KEY_ESC, FIRE::KeyAction::PRESS, closeWindow);
+    inputListener.RegisterKeyEvent(FIRE::Key::KEY_ESC, FIRE::KeyAction::PRESS, [&window] { window.Close(); });
+
+    inputListener.RegisterKeyEvent(FIRE::Key::KEY_R, FIRE::KeyAction::PRESS, [&renderer] { renderer.ToggleWireframe(); });
 
     inputListener.RegisterMouseButtonEvent(
-        FIRE::MouseKey::LEFT_BUTTON, FIRE::KeyAction::PRESS, [&transform, this] {
+        FIRE::MouseKey::LEFT_BUTTON, FIRE::KeyAction::PRESS, [&transform, &window, &inputListener] {
             window.CaptureCursor();
 
             bool firstCallback = true;
@@ -71,21 +75,14 @@ void CubeInputComponent::Init(FIRE::SceneObject& sceneObject)
         });
 
     inputListener.RegisterMouseButtonEvent(
-        FIRE::MouseKey::LEFT_BUTTON, FIRE::KeyAction::RELEASE, [this] {
+        FIRE::MouseKey::LEFT_BUTTON, FIRE::KeyAction::RELEASE, [&window, &inputListener] {
             inputListener.UnregisterMouseEvent();
             window.ReleaseCursor();
         });
 }
 
-void CubeInputComponent::DoUpdate(double, FIRE::SceneObject& sceneObject, FIRE::Scene&)
+void CubeInputComponent::DoUpdate(double, FIRE::SceneObject&, FIRE::Scene&)
 {
-    static bool initialized = false;
-
-    if(!initialized)
-    {
-        Init(sceneObject);
-        initialized = true;
-    }
 }
 
 std::optional<std::any> CubeInputComponent::Receive(FIRE::Message)

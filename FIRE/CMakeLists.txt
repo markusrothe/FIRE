@@ -29,6 +29,7 @@ add_library(FIRE STATIC
     include/FIRE/TextOverlay.h
     include/FIRE/TextRenderer.h
     include/FIRE/Message.h
+    include/FIRE/Noise.h
     
     src/Uploader.h
     src/DrawAgent.h
@@ -36,7 +37,7 @@ add_library(FIRE STATIC
     src/GLDrawAgent.h
     src/GLShaderFactory.h
     src/GLRenderContext.h
-    src/RendererImpl.h
+    src/GLRenderer.h
     src/TextureFactory.h
     src/FontTextureFactory.h
     src/GLFontTextureFactory.h    
@@ -50,7 +51,7 @@ add_library(FIRE STATIC
     src/GLDrawAgent.cpp
     src/GLShaderFactory.cpp
     src/GLRenderContext.cpp    
-    src/RendererImpl.cpp
+    src/GLRenderer.cpp
     src/MaterialFactory.cpp
     src/VertexDeclaration.cpp
     src/Scene.cpp
@@ -68,6 +69,7 @@ add_library(FIRE STATIC
     src/TextureFactory.cpp
     src/GLFontTextureFactory.cpp
     src/GLTextRenderer.cpp
+    src/Noise.cpp
 )
 
 target_include_directories(FIRE
@@ -88,13 +90,15 @@ target_link_libraries(FIRE
     CompileOptions
     MeasureCoverage
     freetype
+    FastNoise
+    assimp::assimp
 )
 
 if(MSVC)
     set_target_properties(FIRE PROPERTIES COMPILE_FLAGS /D_USE_MATH_DEFINES)
 endif()
 
-file(GLOB_RECURSE assets ${CMAKE_CURRENT_SOURCE_DIR}/assets/**/*)
+file(GLOB_RECURSE assets ${CMAKE_CURRENT_SOURCE_DIR}/assets/*)
 set_target_properties(FIRE
     PROPERTIES 
     RESOURCE "${assets}"

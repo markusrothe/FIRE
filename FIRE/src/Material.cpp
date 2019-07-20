@@ -39,4 +39,14 @@ std::map<std::string, std::pair<ShaderParameterType, std::any>> Material::GetSha
     return m_shaderParams;
 }
 
+bool Material::operator==(Material const& other) const
+{
+    return m_name == other.m_name;
+}
+
+bool Material::operator!=(Material const& other) const
+{
+    return !(*this == other);
+}
+
 } // namespace FIRE
