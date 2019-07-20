@@ -11,10 +11,10 @@ void main()
 {
     vec3 normal = normalize(normalVS);
 
-    vec3 L = abs(normalize(LightPos - posVS));
+    vec3 L = normalize(LightPos - posVS);
     float NDotL = max(dot(normal, L), 0.0);
 
-    vec4 col = vec4(1.0);
+    vec4 col = vec4(0.8);
     color = clamp(col * 0.2 + col * 0.8 * NDotL, 0.0, 1.0);
     color.w = 1.0;
 }

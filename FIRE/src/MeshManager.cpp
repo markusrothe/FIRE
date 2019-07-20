@@ -376,7 +376,7 @@ std::vector<MeshHandle> MeshManager::CreateFromFile(std::string name, std::strin
         meshHandles.push_back(DoCreate(
             FIRE::MeshCategory::Custom,
             FIRE::MeshPrimitives::Triangles,
-            std::move(ss.str()),
+            ss.str(),
             std::move(positions),
             std::move(normals),
             std::move(indices)));

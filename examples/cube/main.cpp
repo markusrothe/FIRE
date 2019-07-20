@@ -59,9 +59,9 @@ int main(int, char**)
     auto textRenderer{FIRE::GLFactory::CreateTextRenderer()};
 
     FIRE::Scene scene;
-    auto& planeObject = scene.CreateSceneObject("plane");
-    planeObject.AddComponent(
-        std::make_unique<examples::GridRenderingComponent>(planeObject, *renderer, meshManager, materialFactory));
+    // auto& planeObject = scene.CreateSceneObject("plane");
+    // planeObject.AddComponent(
+    //     std::make_unique<examples::GridRenderingComponent>(planeObject, *renderer, meshManager, materialFactory));
 
     auto& cubeObject = scene.CreateSceneObject("cube");
     cubeObject.AddComponent(
