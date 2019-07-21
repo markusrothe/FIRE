@@ -13,12 +13,16 @@ auto const messageResponse = 42;
 class TestComponent : public FIRE::Component
 {
 public:
+    void Setup(FIRE::SceneObject&) override
+    {
+    }
+
     void Update(double, FIRE::SceneObject&, FIRE::Scene&) override
     {
         updated = true;
     }
 
-    std::optional<std::any> Receive(FIRE::Message) override
+    std::optional<std::any> Receive(FIRE::Message, FIRE::SceneObject&) override
     {
         return messageResponse;
     }

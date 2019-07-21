@@ -11,6 +11,9 @@ namespace FIRE
 
 struct Renderable
 {
+    Renderable() = default;
+    Renderable(std::string name, Material mat, MeshHandle mesh);
+
     std::string name;
     Material material;
     MeshHandle mesh;

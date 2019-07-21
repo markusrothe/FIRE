@@ -13,7 +13,11 @@ class ComponentMock : public FIRE::Component
 public:
     MOCK_METHOD3(Update, void(double, FIRE::SceneObject& sceneObject, FIRE::Scene& scene));
 
-    std::optional<std::any> Receive(FIRE::Message)
+    void Setup(FIRE::SceneObject&) override
+    {
+    }
+
+    std::optional<std::any> Receive(FIRE::Message, FIRE::SceneObject&) override
     {
         return std::nullopt;
     }

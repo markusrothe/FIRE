@@ -9,6 +9,10 @@ OverlayComponent::OverlayComponent(TextRenderer& renderer)
 
 OverlayComponent::~OverlayComponent() = default;
 
+void OverlayComponent::Setup(SceneObject&)
+{
+}
+
 void OverlayComponent::Update(double deltaTime, SceneObject& sceneObject, Scene& scene)
 {
     DoUpdate(deltaTime, sceneObject, scene);

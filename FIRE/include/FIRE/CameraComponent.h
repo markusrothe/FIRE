@@ -13,6 +13,7 @@ public:
 
     virtual ~CameraComponent() override;
 
+    void Setup(SceneObject& sceneObject) override;
     void Update(double deltaTime, SceneObject& sceneObject, Scene& scene) override;
 
     glm::mat4x4 GetViewMatrix() const;

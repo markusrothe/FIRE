@@ -85,7 +85,7 @@ void InputMappingComponent::DoUpdate(double, FIRE::SceneObject&, FIRE::Scene&)
 {
 }
 
-std::optional<std::any> InputMappingComponent::Receive(FIRE::Message)
+std::optional<std::any> InputMappingComponent::Receive(FIRE::Message, FIRE::SceneObject&)
 {
     return std::nullopt;
 }

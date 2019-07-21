@@ -20,7 +20,7 @@ void FPSOverlayComponent::DoUpdate(double deltaTime, FIRE::SceneObject&, FIRE::S
     renderer.Submit(FIRE::TextOverlay(0, ss.str(), 0.02f, 0.02f, 0.5f));
 }
 
-std::optional<std::any> FPSOverlayComponent::Receive(FIRE::Message)
+std::optional<std::any> FPSOverlayComponent::Receive(FIRE::Message, FIRE::SceneObject&)
 {
     return std::nullopt;
 }

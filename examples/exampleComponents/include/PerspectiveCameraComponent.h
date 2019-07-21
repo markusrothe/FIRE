@@ -15,13 +15,13 @@ namespace examples
 class PerspectiveCameraComponent : public FIRE::CameraComponent
 {
 public:
-    PerspectiveCameraComponent(FIRE::SceneObject& sceneObject, float fovy, float aspect, float near, float far);
-
+    PerspectiveCameraComponent(float fovy, float aspect, float near, float far);
     ~PerspectiveCameraComponent() override;
 
 private:
+    void Setup(FIRE::SceneObject& sceneObject) override;
     void DoUpdate(double deltaTime, FIRE::SceneObject& sceneObject, FIRE::Scene& scene) override;
-    std::optional<std::any> Receive(FIRE::Message msg) override;
+    std::optional<std::any> Receive(FIRE::Message msg, FIRE::SceneObject& sceneObject) override;
 };
 } // namespace examples
 

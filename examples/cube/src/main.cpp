@@ -6,6 +6,7 @@
 #include "PointLightComponent.h"
 #include <FIRE/GLFactory.h>
 #include <FIRE/InputListener.h>
+#include <FIRE/MainLoop.h>
 #include <FIRE/MaterialFactory.h>
 #include <FIRE/MeshManager.h>
 #include <FIRE/RenderContext.h>
@@ -31,13 +32,44 @@ void SubmitShaders(FIRE::MaterialFactory& materialFactory)
     materialFactory.CreateMaterialFromFiles("grid", "GridVS.glsl", "GridFS.glsl");
 }
 
+void SetupScene(
+    FIRE::Window& window,
+    FIRE::Scene& scene,
+    FIRE::Renderer& renderer,
+    FIRE::TextRenderer& textRenderer,
+    FIRE::MaterialFactory& materialFactory,
+    FIRE::MeshManager& meshManager)
+{
+    auto input{std::make_shared<FIRE::InputListener>()};
+    window.SetInputListener(input);
+
+    auto& cubeObject = scene.CreateSceneObject("cube");
+    std::vector<FIRE::Renderable> renderables;
+    renderables.emplace_back("cubeRenderable", materialFactory.GetMaterial("phong"), meshManager.CreateCube("cubeMesh"));
+    cubeObject.AddComponent(std::make_unique<examples::Mesh3DRenderingComponent>(renderer, std::move(renderables)));
+
+    auto& mainCamera = scene.CreateSceneObject("cam");
+    mainCamera.AddComponent(
+        std::make_unique<examples::InputMappingComponent>(mainCamera, *input, window, renderer));
+
+    mainCamera.AddComponent(
+        std::make_unique<examples::PerspectiveCameraComponent>(
+            70.0f, static_cast<float>(window.GetWidth()) / static_cast<float>(window.GetHeight()), 0.1f, 3000.0f));
+
+    auto& sceneLight = scene.CreateSceneObject("light");
+    sceneLight.AddComponent(std::make_unique<examples::PointLightComponent>());
+
+    auto& overlay = scene.CreateSceneObject("overlay");
+    overlay.AddComponent(std::make_unique<examples::FPSOverlayComponent>(textRenderer));
+
+    scene.Setup();
+}
+
 } // namespace
 
 int main(int, char**)
 {
     FIRE::Window window = FIRE::GLFactory::InitWindow("FIRE - cube", WINDOW_WIDTH, WINDOW_HEIGHT);
-    auto input{std::make_shared<FIRE::InputListener>()};
-    window.SetInputListener(input);
 
     FIRE::MeshManager meshManager;
     FIRE::MaterialFactory materialFactory(FIRE::GLFactory::CreateShaderFactory());
@@ -47,47 +79,7 @@ int main(int, char**)
     auto textRenderer{FIRE::GLFactory::CreateTextRenderer()};
 
     FIRE::Scene scene;
+    SetupScene(window, scene, *renderer, *textRenderer, materialFactory, meshManager);
 
-    auto& cubeObject = scene.CreateSceneObject("cube");
-    cubeObject.AddComponent(
-        std::make_unique<examples::Mesh3DRenderingComponent>(*renderer, meshManager, materialFactory));
-
-    auto& mainCamera = scene.CreateSceneObject("cam");
-    mainCamera.AddComponent(
-        std::make_unique<examples::InputMappingComponent>(mainCamera, *input, window, *renderer));
-
-    mainCamera.AddComponent(
-        std::make_unique<examples::PerspectiveCameraComponent>(
-            mainCamera, 70.0f, static_cast<float>(window.GetWidth()) / static_cast<float>(window.GetHeight()), 0.1f, 3000.0f));
-
-    auto& sceneLight = scene.CreateSceneObject("light");
-    sceneLight.AddComponent(
-        std::make_unique<examples::PointLightComponent>());
-
-    auto& overlay = scene.CreateSceneObject("overlay");
-    overlay.AddComponent(
-        std::make_unique<examples::FPSOverlayComponent>(*textRenderer));
-
-    auto lastTime = std::chrono::high_resolution_clock::now();
-    std::chrono::nanoseconds lag{0ns};
-    std::chrono::nanoseconds timestep{16ms};
-    while(!window.ShouldClose())
-    {
-        auto currentTime = std::chrono::high_resolution_clock::now();
-        auto deltaTime = currentTime - lastTime;
-
-        lastTime = currentTime;
-        lag += deltaTime;
-        window.PollEvents();
-
-        while(lag >= timestep)
-        {
-            scene.Update(std::chrono::duration<double>(lag).count());
-            lag -= timestep;
-        }
-
-        renderer->Render(WINDOW_WIDTH, WINDOW_HEIGHT);
-        textRenderer->Render(WINDOW_WIDTH, WINDOW_HEIGHT);
-        window.SwapBuffers();
-    }
+    FIRE::MainLoop(window, scene, *renderer, *textRenderer);
 }

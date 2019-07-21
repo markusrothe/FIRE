@@ -27,7 +27,7 @@ public:
 
 private:
     void DoUpdate(double deltaTime, FIRE::SceneObject& sceneObject, FIRE::Scene& scene) override;
-    std::optional<std::any> Receive(FIRE::Message msg) override;
+    std::optional<std::any> Receive(FIRE::Message msg, FIRE::SceneObject& sceneObject) override;
 };
 } // namespace examples
 

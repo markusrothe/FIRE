@@ -17,9 +17,9 @@ namespace examples
 class PointLightComponent : public FIRE::LightComponent
 {
 private:
-    FIRE::Transform m_transform;
+    void Setup(FIRE::SceneObject& sceneObject);
     void DoUpdate(double deltaTime, FIRE::SceneObject& sceneObject, FIRE::Scene& scene) override;
-    std::optional<std::any> Receive(FIRE::Message msg) override;
+    std::optional<std::any> Receive(FIRE::Message msg, FIRE::SceneObject& sceneObject) override;
 };
 } // namespace examples
 

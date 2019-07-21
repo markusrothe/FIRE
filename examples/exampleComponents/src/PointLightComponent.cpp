@@ -6,17 +6,20 @@
 namespace examples
 {
 
-void PointLightComponent::DoUpdate(double, FIRE::SceneObject& sceneObject, FIRE::Scene&)
+void PointLightComponent::Setup(FIRE::SceneObject& sceneObject)
 {
-    sceneObject.GetTransform().SetPosition({130.0f, 2000.0f, 15.0f});
-    m_transform = sceneObject.GetTransform();
+    sceneObject.GetTransform().SetPosition({100.0f, 50.0f, 150.0f});
 }
 
-std::optional<std::any> PointLightComponent::Receive(FIRE::Message msg)
+void PointLightComponent::DoUpdate(double, FIRE::SceneObject&, FIRE::Scene&)
+{
+}
+
+std::optional<std::any> PointLightComponent::Receive(FIRE::Message msg, FIRE::SceneObject& sceneObject)
 {
     if(msg.id == 2)
     {
-        return m_transform.Position();
+        return sceneObject.GetTransform().Position();
     }
 
     return std::nullopt;

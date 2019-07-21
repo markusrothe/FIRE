@@ -5,15 +5,19 @@
 namespace examples
 {
 
-PerspectiveCameraComponent::PerspectiveCameraComponent(FIRE::SceneObject& sceneObject, float fovy, float aspect, float near, float far)
+PerspectiveCameraComponent::PerspectiveCameraComponent(float fovy, float aspect, float near, float far)
     : FIRE::CameraComponent(fovy, aspect, near, far)
+{
+}
+
+PerspectiveCameraComponent::~PerspectiveCameraComponent() = default;
+
+void PerspectiveCameraComponent::Setup(FIRE::SceneObject& sceneObject)
 {
     auto& transform = sceneObject.GetTransform();
     transform.SetPosition({0.0f, 2.0f, 10.0f});
     transform.SetLookAt({0.0f, 2.0f, 0.0f});
 }
-
-PerspectiveCameraComponent::~PerspectiveCameraComponent() = default;
 
 void PerspectiveCameraComponent::DoUpdate(double, FIRE::SceneObject& sceneObject, FIRE::Scene&)
 {
@@ -21,7 +25,7 @@ void PerspectiveCameraComponent::DoUpdate(double, FIRE::SceneObject& sceneObject
     transform.Translate(transform.Acceleration());
 }
 
-std::optional<std::any> PerspectiveCameraComponent::Receive(FIRE::Message msg)
+std::optional<std::any> PerspectiveCameraComponent::Receive(FIRE::Message msg, FIRE::SceneObject&)
 {
     if(msg.id == 0)
     {

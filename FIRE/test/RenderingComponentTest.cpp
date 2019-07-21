@@ -41,7 +41,7 @@ private:
         sceneObject.GetTransform().SetPosition(pos);
     }
 
-    std::optional<std::any> Receive(FIRE::Message)
+    std::optional<std::any> Receive(FIRE::Message, FIRE::SceneObject&)
     {
         return std::nullopt;
     }

@@ -30,6 +30,7 @@ add_library(FIRE STATIC
     include/FIRE/TextRenderer.h
     include/FIRE/Message.h
     include/FIRE/Noise.h
+    include/FIRE/MainLoop.h
     
     src/Uploader.h
     src/DrawAgent.h
@@ -70,6 +71,7 @@ add_library(FIRE STATIC
     src/GLFontTextureFactory.cpp
     src/GLTextRenderer.cpp
     src/Noise.cpp
+    src/MainLoop.cpp
 )
 
 target_include_directories(FIRE

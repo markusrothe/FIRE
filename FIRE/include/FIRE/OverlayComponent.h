@@ -15,6 +15,7 @@ public:
 
     virtual ~OverlayComponent();
 
+    void Setup(SceneObject& sceneObject) override;
     void Update(double deltaTime, SceneObject& sceneObject, Scene& scene) override;
 
 protected:

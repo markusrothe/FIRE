@@ -11,6 +11,7 @@ class LightComponent : public Component
 {
 public:
     virtual ~LightComponent() override;
+    void Setup(SceneObject& sceneObject) override;
     void Update(double deltaTime, SceneObject& sceneObject, Scene& scene) override;
 
 private:

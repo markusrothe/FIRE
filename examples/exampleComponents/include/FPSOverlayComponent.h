@@ -11,7 +11,7 @@ public:
     explicit FPSOverlayComponent(FIRE::TextRenderer& renderer);
 
 private:
-    std::optional<std::any> Receive(FIRE::Message msg) override;
+    std::optional<std::any> Receive(FIRE::Message msg, FIRE::SceneObject& sceneObject) override;
     void DoUpdate(double deltaTime, FIRE::SceneObject& sceneObject, FIRE::Scene& scene) override;
 };
 } // namespace examples

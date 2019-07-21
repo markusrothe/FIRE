@@ -4,6 +4,13 @@
 #include <utility>
 namespace FIRE
 {
+Renderable::Renderable(std::string name, Material mat, MeshHandle mesh)
+    : name(std::move(name))
+    , material(std::move(mat))
+    , mesh(std::move(mesh))
+{
+}
+
 bool operator==(Renderable const& lhs, Renderable const& rhs)
 {
     return lhs.name == rhs.name;

@@ -19,13 +19,12 @@ namespace examples
 class Mesh3DRenderingComponent : public FIRE::RenderingComponent
 {
 public:
-    Mesh3DRenderingComponent(FIRE::Renderer& renderer, FIRE::MeshManager& meshManager, FIRE::MaterialFactory& materialFactory);
+    Mesh3DRenderingComponent(FIRE::Renderer& renderer, std::vector<FIRE::Renderable>&& renderables);
 
 private:
     void DoUpdate(double deltaTime, FIRE::SceneObject& sceneObject, FIRE::Scene& scene) override;
-    std::optional<std::any> Receive(FIRE::Message msg) override;
+    std::optional<std::any> Receive(FIRE::Message msg, FIRE::SceneObject& sceneObject) override;
 
-    FIRE::Renderable m_cube;
     std::vector<FIRE::Renderable> renderables;
 };
 } // namespace examples

@@ -14,6 +14,14 @@ SceneObject& Scene::CreateSceneObject(std::string name)
     return m_sceneObjects.back();
 }
 
+void Scene::Setup()
+{
+    for(auto& obj : m_sceneObjects)
+    {
+        obj.Setup();
+    }
+}
+
 void Scene::Update(double deltaTime)
 {
     for(auto& obj : m_sceneObjects)

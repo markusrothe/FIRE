@@ -25,7 +25,7 @@ private:
         sceneObject.GetTransform().SetLookAt(lookAt);
     }
 
-    std::optional<std::any> Receive(FIRE::Message) override
+    std::optional<std::any> Receive(FIRE::Message, FIRE::SceneObject&) override
     {
         return std::nullopt;
     }
