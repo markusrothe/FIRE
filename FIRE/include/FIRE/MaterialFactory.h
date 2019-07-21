@@ -23,7 +23,7 @@ public:
     Material CreateDefaultMaterial();
     Material CreateMaterial(std::string const& name, std::vector<std::pair<ShaderType, std::string>> const& shaderCode);
 
-    Material MaterialFactory::CreateMaterialFromFiles(std::string const& name, std::string vertexShaderFile, std::string fragmentShaderFile);
+    Material CreateMaterialFromFiles(std::string const& name, std::string vertexShaderFile, std::string fragmentShaderFile);
 
     Material GetMaterial(std::string const& name) const;
 
