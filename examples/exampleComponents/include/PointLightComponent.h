@@ -1,5 +1,5 @@
-#ifndef examples_CubeLightComponent_h
-#define examples_CubeLightComponent_h
+#ifndef examples_PointLightComponent_h
+#define examples_PointLightComponent_h
 
 #include <FIRE/LightComponent.h>
 #include <FIRE/Transform.h>
@@ -14,7 +14,7 @@ class Message;
 namespace examples
 {
 
-class CubeLightComponent : public FIRE::LightComponent
+class PointLightComponent : public FIRE::LightComponent
 {
 private:
     FIRE::Transform m_transform;
@@ -23,4 +23,4 @@ private:
 };
 } // namespace examples
 
-#endif // examples_CubeLightComponent_h
+#endif

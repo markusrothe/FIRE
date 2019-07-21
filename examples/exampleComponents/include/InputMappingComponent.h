@@ -1,5 +1,5 @@
-#ifndef examples_CubeInputComponent_h
-#define examples_CubeInputComponent_h
+#ifndef examples_InputMappingComponent_h
+#define examples_InputMappingComponent_h
 
 #include <FIRE/InputComponent.h>
 
@@ -16,10 +16,10 @@ class Renderer;
 namespace examples
 {
 
-class CubeInputComponent : public FIRE::InputComponent
+class InputMappingComponent : public FIRE::InputComponent
 {
 public:
-    explicit CubeInputComponent(
+    explicit InputMappingComponent(
         FIRE::SceneObject& sceneObject,
         FIRE::InputListener& inputListener,
         FIRE::Window& window,
@@ -31,4 +31,4 @@ private:
 };
 } // namespace examples
 
-#endif // examples_CubeInputComponent_h
+#endif

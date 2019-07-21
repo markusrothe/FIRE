@@ -7,6 +7,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 project(FIRE)
 
 add_library(CompileOptions INTERFACE)
+add_library(FIRE::CompileOptions ALIAS CompileOptions)
 if(MSVC)
     target_compile_options(CompileOptions INTERFACE /W4 /WX)
 else()
@@ -15,6 +16,7 @@ endif()
 target_compile_features(CompileOptions INTERFACE cxx_std_17)
 
 add_library(MeasureCoverage INTERFACE)
+
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" AND COVERAGE)  
     target_compile_options(MeasureCoverage INTERFACE --coverage)
     target_link_libraries(MeasureCoverage INTERFACE --coverage)    

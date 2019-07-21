@@ -41,16 +41,11 @@ Material MaterialFactory::CreateMaterial(std::string const& name, std::vector<st
     return Material(name, shaderID);
 }
 
-Material MaterialFactory::CreateMaterialFromFiles(std::string const& name, std::vector<std::pair<ShaderType, std::string>> const& shaders)
+Material MaterialFactory::CreateMaterialFromFiles(std::string const& name, std::string vertexShaderFile, std::string fragmentShaderFile)
 {
-    FIRE::Shaders shaderCode;
-    std::transform(
-        shaders.begin(),
-        shaders.end(),
-        std::back_inserter(shaderCode),
-        [](auto const& shaderDescriptor) {
-            return std::make_pair(shaderDescriptor.first, GetFileContent(shaderDescriptor.second));
-        });
+    Shaders const shaderCode = {
+        {ShaderType::VERTEX_SHADER, GetFileContent(vertexShaderFile)},
+        {ShaderType::FRAGMENT_SHADER, GetFileContent(fragmentShaderFile)}};
 
     return CreateMaterial(name, shaderCode);
 }

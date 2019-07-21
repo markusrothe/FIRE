@@ -1,4 +1,4 @@
-#include "CubeInputComponent.h"
+#include "InputMappingComponent.h"
 #include <FIRE/InputListener.h>
 #include <FIRE/Message.h>
 #include <FIRE/Renderer.h>
@@ -8,7 +8,7 @@
 
 namespace examples
 {
-CubeInputComponent::CubeInputComponent(
+InputMappingComponent::InputMappingComponent(
     FIRE::SceneObject& sceneObject,
     FIRE::InputListener& inputListener,
     FIRE::Window& window,
@@ -81,11 +81,11 @@ CubeInputComponent::CubeInputComponent(
         });
 }
 
-void CubeInputComponent::DoUpdate(double, FIRE::SceneObject&, FIRE::Scene&)
+void InputMappingComponent::DoUpdate(double, FIRE::SceneObject&, FIRE::Scene&)
 {
 }
 
-std::optional<std::any> CubeInputComponent::Receive(FIRE::Message)
+std::optional<std::any> InputMappingComponent::Receive(FIRE::Message)
 {
     return std::nullopt;
 }

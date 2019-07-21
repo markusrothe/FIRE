@@ -1,10 +1,9 @@
 
-#include "CubeCameraComponent.h"
-#include "CubeInputComponent.h"
-#include "CubeLightComponent.h"
-#include "CubeOverlayComponent.h"
-#include "CubeRenderingComponent.h"
-#include "GridRenderingComponent.h"
+#include "FPSOverlayComponent.h"
+#include "InputMappingComponent.h"
+#include "Mesh3DRenderingComponent.h"
+#include "PerspectiveCameraComponent.h"
+#include "PointLightComponent.h"
 #include <FIRE/GLFactory.h>
 #include <FIRE/InputListener.h>
 #include <FIRE/MaterialFactory.h>
@@ -27,20 +26,9 @@ unsigned int constexpr WINDOW_HEIGHT = 600;
 
 void SubmitShaders(FIRE::MaterialFactory& materialFactory)
 {
-    FIRE::Shaders shaders = {
-        {FIRE::ShaderType::VERTEX_SHADER, "PhongVS.glsl"},
-        {FIRE::ShaderType::FRAGMENT_SHADER, "PhongFS.glsl"}};
-    materialFactory.CreateMaterialFromFiles("phong", shaders);
-
-    shaders = {
-        {FIRE::ShaderType::VERTEX_SHADER, "HeightVS.glsl"},
-        {FIRE::ShaderType::FRAGMENT_SHADER, "HeightFS.glsl"}};
-    materialFactory.CreateMaterialFromFiles("height", shaders);
-
-    shaders = {
-        {FIRE::ShaderType::VERTEX_SHADER, "GridVS.glsl"},
-        {FIRE::ShaderType::FRAGMENT_SHADER, "GridFS.glsl"}};
-    materialFactory.CreateMaterialFromFiles("grid", shaders);
+    materialFactory.CreateMaterialFromFiles("phong", "PhongVS.glsl", "PhongFS.glsl");
+    materialFactory.CreateMaterialFromFiles("height", "HeightVS.glsl", "HeightFS.glsl");
+    materialFactory.CreateMaterialFromFiles("grid", "GridVS.glsl", "GridFS.glsl");
 }
 
 } // namespace
@@ -59,29 +47,26 @@ int main(int, char**)
     auto textRenderer{FIRE::GLFactory::CreateTextRenderer()};
 
     FIRE::Scene scene;
-    // auto& planeObject = scene.CreateSceneObject("plane");
-    // planeObject.AddComponent(
-    //     std::make_unique<examples::GridRenderingComponent>(planeObject, *renderer, meshManager, materialFactory));
 
     auto& cubeObject = scene.CreateSceneObject("cube");
     cubeObject.AddComponent(
-        std::make_unique<examples::CubeRenderingComponent>(*renderer, meshManager, materialFactory));
+        std::make_unique<examples::Mesh3DRenderingComponent>(*renderer, meshManager, materialFactory));
 
     auto& mainCamera = scene.CreateSceneObject("cam");
     mainCamera.AddComponent(
-        std::make_unique<examples::CubeInputComponent>(mainCamera, *input, window, *renderer));
+        std::make_unique<examples::InputMappingComponent>(mainCamera, *input, window, *renderer));
 
     mainCamera.AddComponent(
-        std::make_unique<examples::CubeCameraComponent>(
+        std::make_unique<examples::PerspectiveCameraComponent>(
             mainCamera, 70.0f, static_cast<float>(window.GetWidth()) / static_cast<float>(window.GetHeight()), 0.1f, 3000.0f));
 
     auto& sceneLight = scene.CreateSceneObject("light");
     sceneLight.AddComponent(
-        std::make_unique<examples::CubeLightComponent>());
+        std::make_unique<examples::PointLightComponent>());
 
     auto& overlay = scene.CreateSceneObject("overlay");
     overlay.AddComponent(
-        std::make_unique<examples::CubeOverlayComponent>(*textRenderer));
+        std::make_unique<examples::FPSOverlayComponent>(*textRenderer));
 
     auto lastTime = std::chrono::high_resolution_clock::now();
     std::chrono::nanoseconds lag{0ns};

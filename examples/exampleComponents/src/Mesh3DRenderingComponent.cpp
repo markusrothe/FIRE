@@ -1,4 +1,4 @@
-#include "CubeRenderingComponent.h"
+#include "Mesh3DRenderingComponent.h"
 
 #include <FIRE/MaterialFactory.h>
 #include <FIRE/MeshManager.h>
@@ -14,7 +14,7 @@
 namespace examples
 {
 
-CubeRenderingComponent::CubeRenderingComponent(FIRE::Renderer& renderer, FIRE::MeshManager& meshManager, FIRE::MaterialFactory& materialFactory)
+Mesh3DRenderingComponent::Mesh3DRenderingComponent(FIRE::Renderer& renderer, FIRE::MeshManager& meshManager, FIRE::MaterialFactory& materialFactory)
     : FIRE::RenderingComponent(renderer)
 {
     auto meshHandles = meshManager.CreateFromFile("sponza", "sponza.obj");
@@ -34,7 +34,7 @@ CubeRenderingComponent::CubeRenderingComponent(FIRE::Renderer& renderer, FIRE::M
     m_cube.mesh = meshManager.CreateCube("cube");
 }
 
-void CubeRenderingComponent::DoUpdate(double, FIRE::SceneObject& sceneObject, FIRE::Scene& scene)
+void Mesh3DRenderingComponent::DoUpdate(double, FIRE::SceneObject& sceneObject, FIRE::Scene& scene)
 {
     auto& transform = sceneObject.GetTransform();
     //transform.SetPosition({0, 2, 0});
@@ -59,7 +59,7 @@ void CubeRenderingComponent::DoUpdate(double, FIRE::SceneObject& sceneObject, FI
     m_renderer.Submit(m_cube);
 }
 
-std::optional<std::any> CubeRenderingComponent::Receive(FIRE::Message)
+std::optional<std::any> Mesh3DRenderingComponent::Receive(FIRE::Message)
 {
     return std::nullopt;
 }

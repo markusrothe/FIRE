@@ -1,11 +1,11 @@
-#include "CubeCameraComponent.h"
+#include "PerspectiveCameraComponent.h"
 
 #include <FIRE/Message.h>
 #include <FIRE/SceneObject.h>
 namespace examples
 {
 
-CubeCameraComponent::CubeCameraComponent(FIRE::SceneObject& sceneObject, float fovy, float aspect, float near, float far)
+PerspectiveCameraComponent::PerspectiveCameraComponent(FIRE::SceneObject& sceneObject, float fovy, float aspect, float near, float far)
     : FIRE::CameraComponent(fovy, aspect, near, far)
 {
     auto& transform = sceneObject.GetTransform();
@@ -13,15 +13,15 @@ CubeCameraComponent::CubeCameraComponent(FIRE::SceneObject& sceneObject, float f
     transform.SetLookAt({0.0f, 2.0f, 0.0f});
 }
 
-CubeCameraComponent::~CubeCameraComponent() = default;
+PerspectiveCameraComponent::~PerspectiveCameraComponent() = default;
 
-void CubeCameraComponent::DoUpdate(double, FIRE::SceneObject& sceneObject, FIRE::Scene&)
+void PerspectiveCameraComponent::DoUpdate(double, FIRE::SceneObject& sceneObject, FIRE::Scene&)
 {
     auto& transform = sceneObject.GetTransform();
     transform.Translate(transform.Acceleration());
 }
 
-std::optional<std::any> CubeCameraComponent::Receive(FIRE::Message msg)
+std::optional<std::any> PerspectiveCameraComponent::Receive(FIRE::Message msg)
 {
     if(msg.id == 0)
     {

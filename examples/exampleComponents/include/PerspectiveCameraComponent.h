@@ -1,5 +1,5 @@
-#ifndef examples_CubeCameraComponent_h
-#define examples_CubeCameraComponent_h
+#ifndef examples_PerspectiveCameraComponent_h
+#define examples_PerspectiveCameraComponent_h
 
 #include <FIRE/CameraComponent.h>
 
@@ -12,12 +12,12 @@ class Scene;
 namespace examples
 {
 
-class CubeCameraComponent : public FIRE::CameraComponent
+class PerspectiveCameraComponent : public FIRE::CameraComponent
 {
 public:
-    CubeCameraComponent(FIRE::SceneObject& sceneObject, float fovy, float aspect, float near, float far);
+    PerspectiveCameraComponent(FIRE::SceneObject& sceneObject, float fovy, float aspect, float near, float far);
 
-    ~CubeCameraComponent() override;
+    ~PerspectiveCameraComponent() override;
 
 private:
     void DoUpdate(double deltaTime, FIRE::SceneObject& sceneObject, FIRE::Scene& scene) override;
@@ -25,4 +25,4 @@ private:
 };
 } // namespace examples
 
-#endif //examples_CubeCameraComponent_h
+#endif
