@@ -20,18 +20,6 @@ Mesh3DRenderingComponent::Mesh3DRenderingComponent(
     : FIRE::RenderingComponent(renderer)
     , renderables(std::move(renderables))
 {
-    // auto meshHandles = meshManager.CreateFromFile("sponza", "sponza.obj");
-    // int i = 0;
-    // for(auto handle : meshHandles)
-    // {
-    //     std::stringstream ss;
-    //     ss << "sponza_mesh_" << i++;
-    //     FIRE::Renderable r;
-    //     r.name = ss.str();
-    //     r.material = materialFactory.GetMaterial("phong");
-    //     r.mesh = handle;
-    //     renderables.push_back(r);
-    // }
 }
 
 void Mesh3DRenderingComponent::DoUpdate(double, FIRE::SceneObject& sceneObject, FIRE::Scene& scene)

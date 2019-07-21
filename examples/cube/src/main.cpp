@@ -15,11 +15,8 @@
 #include <FIRE/SceneObject.h>
 #include <FIRE/TextRenderer.h>
 #include <FIRE/Window.h>
-#include <chrono>
 
 #include <memory>
-#include <thread>
-using namespace std::chrono_literals;
 namespace
 {
 unsigned int constexpr WINDOW_WIDTH = 800;
