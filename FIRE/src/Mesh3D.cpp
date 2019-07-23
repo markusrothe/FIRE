@@ -6,8 +6,6 @@ namespace FIRE
 
 Mesh3D::Mesh3D(std::string name)
     : m_name{std::move(name)}
-    , m_positions{}
-    , m_indices{}
 {
 }
 
@@ -62,6 +60,21 @@ void Mesh3D::AddNormal(glm::vec3 normal)
 void Mesh3D::AddNormals(std::vector<glm::vec3> normals)
 {
     m_normals.insert(m_normals.end(), normals.begin(), normals.end());
+}
+
+void Mesh3D::AddUV(glm::vec2 uv)
+{
+    m_uvs.push_back(std::move(uv));
+}
+
+void Mesh3D::AddUVs(std::vector<glm::vec2> uvs)
+{
+    m_uvs.insert(m_uvs.end(), uvs.begin(), uvs.end());
+}
+
+std::vector<glm::vec2> Mesh3D::UVs() const
+{
+    return m_uvs;
 }
 
 std::vector<glm::vec3> Mesh3D::Normals() const

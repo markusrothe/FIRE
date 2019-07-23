@@ -8,7 +8,7 @@ namespace examples
 
 void PointLightComponent::Setup(FIRE::SceneObject& sceneObject)
 {
-    sceneObject.GetTransform().SetPosition({100.0f, 50.0f, 150.0f});
+    sceneObject.GetTransform().SetPosition({0.0f, 5.0f, 0.0f});
 }
 
 void PointLightComponent::DoUpdate(double, FIRE::SceneObject&, FIRE::Scene&)

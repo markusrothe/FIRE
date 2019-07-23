@@ -149,6 +149,7 @@ INSTANTIATE_TEST_CASE_P(
                                                  FIRE::MeshPrimitives::Points,
                                                  NAME, std::vector<glm::vec3>(),
                                                  std::vector<glm::vec3>(), 
+                                                 std::vector<glm::vec2>(),
                                                  std::vector<unsigned int>()); }));
 
 SUPPRESS_Pop

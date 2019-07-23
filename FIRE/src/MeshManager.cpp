@@ -35,6 +35,7 @@ MeshHandle MeshManager::Create(
     std::string name,
     std::vector<glm::vec3>&& positions,
     std::vector<glm::vec3>&& normals,
+    std::vector<glm::vec2>&& uvs,
     std::vector<unsigned int>&& indices)
 {
     MeshHandle handle(name, meshCategory, primitives);
@@ -43,7 +44,7 @@ MeshHandle MeshManager::Create(
         return handle;
     }
 
-    return DoCreate(meshCategory, primitives, name, std::move(positions), std::move(normals), std::move(indices));
+    return DoCreate(meshCategory, primitives, name, std::move(positions), std::move(normals), std::move(uvs), std::move(indices));
 }
 
 MeshHandle MeshManager::CreateCube(std::string name)
@@ -117,7 +118,7 @@ MeshHandle MeshManager::CreateCube(std::string name)
                                       {-1.0f, 0.0f, 0.0f},
                                       {0.0f, 1.0f, 0.0f},
                                       {0.0f, 0.0f, -1.0f}};
-
+    std::vector<glm::vec2> uvs;
     std::vector<unsigned int> indices = {
         11, 3, 17, 11, 17, 13,  // front
         4, 7, 18, 4, 18, 15,    // right
@@ -133,6 +134,7 @@ MeshHandle MeshManager::CreateCube(std::string name)
         std::move(name),
         std::move(positions),
         std::move(normals),
+        std::move(uvs),
         std::move(indices));
 }
 
@@ -155,7 +157,7 @@ MeshHandle MeshManager::CreatePlane(std::string name)
     {
         normals.emplace_back(0.0f, 1.0f, 0.0f);
     }
-
+    std::vector<glm::vec2> uvs;
     std::vector<unsigned int> indices = {0, 1, 2, 0, 2, 3};
 
     return DoCreate(
@@ -164,6 +166,7 @@ MeshHandle MeshManager::CreatePlane(std::string name)
         std::move(name),
         std::move(positions),
         std::move(normals),
+        std::move(uvs),
         std::move(indices));
 }
 
@@ -177,6 +180,7 @@ MeshHandle MeshManager::CreateSphere(std::string name, uint32_t segments)
 
     std::vector<glm::vec3> positions;
     std::vector<glm::vec3> normals;
+    std::vector<glm::vec2> uvs;
     std::vector<unsigned int> indices;
 
     // top
@@ -252,6 +256,7 @@ MeshHandle MeshManager::CreateSphere(std::string name, uint32_t segments)
         std::move(name),
         std::move(positions),
         std::move(normals),
+        std::move(uvs),
         std::move(indices));
 }
 
@@ -264,6 +269,7 @@ MeshHandle MeshManager::CreateLineGrid(std::string name, uint32_t width, uint32_
     }
 
     std::vector<glm::vec3> positions, normals;
+    std::vector<glm::vec2> uvs;
     std::vector<unsigned int> indices;
 
     unsigned int count = 0;
@@ -297,6 +303,7 @@ MeshHandle MeshManager::CreateLineGrid(std::string name, uint32_t width, uint32_
         std::move(name),
         std::move(positions),
         std::move(normals),
+        std::move(uvs),
         std::move(indices));
 }
 
@@ -309,6 +316,7 @@ MeshHandle MeshManager::CreateTriangleGrid(std::string name, uint32_t width, uin
     }
 
     std::vector<glm::vec3> positions, normals;
+    std::vector<glm::vec2> uvs;
     std::vector<unsigned int> indices;
 
     unsigned int count = 0;
@@ -342,6 +350,7 @@ MeshHandle MeshManager::CreateTriangleGrid(std::string name, uint32_t width, uin
         std::move(name),
         std::move(positions),
         std::move(normals),
+        std::move(uvs),
         std::move(indices));
 }
 
@@ -371,6 +380,9 @@ std::vector<MeshHandle> MeshManager::CreateFromFile(std::string name, std::strin
             indices.push_back(face.mIndices[1]);
             indices.push_back(face.mIndices[2]);
         }
+
+        std::vector<glm::vec2> uvs;
+
         std::stringstream ss;
         ss << name << c++;
         meshHandles.push_back(DoCreate(
@@ -379,6 +391,7 @@ std::vector<MeshHandle> MeshManager::CreateFromFile(std::string name, std::strin
             ss.str(),
             std::move(positions),
             std::move(normals),
+            std::move(uvs),
             std::move(indices)));
     }
     return meshHandles;
@@ -390,12 +403,14 @@ MeshHandle MeshManager::DoCreate(
     std::string name,
     std::vector<glm::vec3>&& positions,
     std::vector<glm::vec3>&& normals,
+    std::vector<glm::vec2>&& uvs,
     std::vector<unsigned int>&& indices)
 {
     auto mesh = std::make_unique<Mesh3D>(name);
-    mesh->AddPositions(positions);
-    mesh->AddNormals(normals);
-    mesh->AddIndices(indices);
+    mesh->AddPositions(std::move(positions));
+    mesh->AddNormals(std::move(normals));
+    mesh->AddUVs(std::move(uvs));
+    mesh->AddIndices(std::move(indices));
 
     mesh->GetVertexDeclaration().AddSection("vPos", 3u, 0u);
     mesh->GetVertexDeclaration().AddSection("vNormal", 3u, positions.size() * sizeof(float) * 3);

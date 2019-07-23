@@ -27,6 +27,10 @@ public:
     void AddNormals(std::vector<glm::vec3> normals);
     std::vector<glm::vec3> Normals() const;
 
+    void AddUV(glm::vec2 uv);
+    void AddUVs(std::vector<glm::vec2> uvs);
+    std::vector<glm::vec2> UVs() const;
+
     VertexDeclaration& GetVertexDeclaration();
     VertexDeclaration const& GetVertexDeclaration() const;
 
@@ -35,6 +39,7 @@ private:
 
     std::vector<glm::vec3> m_positions;
     std::vector<glm::vec3> m_normals;
+    std::vector<glm::vec2> m_uvs;
     std::vector<unsigned int> m_indices;
 
     VertexDeclaration m_vertexDeclaration;

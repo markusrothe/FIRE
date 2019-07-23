@@ -23,6 +23,7 @@ public:
         std::string name,
         std::vector<glm::vec3>&& positions,
         std::vector<glm::vec3>&& normals,
+        std::vector<glm::vec2>&& uvs,
         std::vector<unsigned int>&& indices);
 
     MeshHandle CreateCube(std::string name);
@@ -42,6 +43,7 @@ private:
         std::string name,
         std::vector<glm::vec3>&& positions,
         std::vector<glm::vec3>&& normals,
+        std::vector<glm::vec2>&& uvs,
         std::vector<unsigned int>&& indices);
 
     std::unordered_map<std::string, std::pair<MeshType, std::unique_ptr<Mesh3D>>> m_cache;
