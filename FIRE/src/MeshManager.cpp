@@ -118,7 +118,39 @@ MeshHandle MeshManager::CreateCube(std::string name)
                                       {-1.0f, 0.0f, 0.0f},
                                       {0.0f, 1.0f, 0.0f},
                                       {0.0f, 0.0f, -1.0f}};
-    std::vector<glm::vec2> uvs;
+    std::vector<glm::vec2> uvs = {
+        {0, 0},
+        {1, 0},
+        {0, 0},
+
+        {1, 0},
+        {0, 0},
+        {1, 1},
+
+        {1, 0},
+        {1, 0},
+        {0, 0},
+
+        {0, 1},
+        {1, 0},
+        {0, 0},
+
+        {1, 1},
+        {0, 1},
+        {0, 0},
+
+        {0, 1},
+        {1, 0},
+        {1, 1},
+
+        {1, 1},
+        {1, 1},
+        {0, 1},
+
+        {0, 1},
+        {0, 1},
+        {1, 1}};
+
     std::vector<unsigned int> indices = {
         11, 3, 17, 11, 17, 13,  // front
         4, 7, 18, 4, 18, 15,    // right
@@ -407,13 +439,15 @@ MeshHandle MeshManager::DoCreate(
     std::vector<unsigned int>&& indices)
 {
     auto mesh = std::make_unique<Mesh3D>(name);
+
+    mesh->GetVertexDeclaration().AddSection("vPos", 3u, 0u);
+    mesh->GetVertexDeclaration().AddSection("vNormal", 3u, positions.size() * sizeof(float) * 3);
+    mesh->GetVertexDeclaration().AddSection("vUV", 2u, (positions.size() + normals.size()) * sizeof(float) * 3);
+
     mesh->AddPositions(std::move(positions));
     mesh->AddNormals(std::move(normals));
     mesh->AddUVs(std::move(uvs));
     mesh->AddIndices(std::move(indices));
-
-    mesh->GetVertexDeclaration().AddSection("vPos", 3u, 0u);
-    mesh->GetVertexDeclaration().AddSection("vNormal", 3u, positions.size() * sizeof(float) * 3);
 
     m_cache.insert(std::make_pair(name, std::make_pair(MeshType(meshCategory, primitives), std::move(mesh))));
     return MeshHandle{name, meshCategory, primitives};

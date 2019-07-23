@@ -15,8 +15,8 @@ PerspectiveCameraComponent::~PerspectiveCameraComponent() = default;
 void PerspectiveCameraComponent::Setup(FIRE::SceneObject& sceneObject)
 {
     auto& transform = sceneObject.GetTransform();
-    transform.SetPosition({0.0f, 2.0f, 10.0f});
-    transform.SetLookAt({0.0f, 2.0f, 0.0f});
+    transform.SetPosition({0.0f, 0.0f, 2.0f});
+    transform.SetLookAt({0.0f, 0.0f, 0.0f});
 }
 
 void PerspectiveCameraComponent::DoUpdate(double, FIRE::SceneObject& sceneObject, FIRE::Scene&)

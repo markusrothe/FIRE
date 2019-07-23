@@ -27,6 +27,7 @@ void SubmitShaders(FIRE::MaterialFactory& materialFactory)
     materialFactory.CreateMaterialFromFiles("phong", "PhongVS.glsl", "PhongFS.glsl");
     materialFactory.CreateMaterialFromFiles("height", "HeightVS.glsl", "HeightFS.glsl");
     materialFactory.CreateMaterialFromFiles("grid", "GridVS.glsl", "GridFS.glsl");
+    materialFactory.CreateMaterialFromFiles("texCoords", "texCoordsVS.glsl", "texCoordsFS.glsl");
 }
 
 void SetupScene(
@@ -42,7 +43,7 @@ void SetupScene(
 
     auto& cubeObject = scene.CreateSceneObject("cube");
     std::vector<FIRE::Renderable> renderables;
-    renderables.emplace_back("cubeRenderable", materialFactory.GetMaterial("phong"), meshManager.CreateCube("cubeMesh"));
+    renderables.emplace_back("cubeRenderable", materialFactory.GetMaterial("texCoords"), meshManager.CreateCube("cubeMesh"));
     cubeObject.AddComponent(std::make_unique<examples::Mesh3DRenderingComponent>(renderer, std::move(renderables)));
 
     auto& mainCamera = scene.CreateSceneObject("cam");
