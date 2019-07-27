@@ -1,6 +1,7 @@
 #include "GLFontTextureFactory.h"
 #include <ft2build.h>
 #include FT_FREETYPE_H
+#include <FIRE/Texture.h>
 #include <iostream>
 namespace FIRE
 {
@@ -32,44 +33,30 @@ GLFontTextureFactory::GLFontTextureFactory()
             continue;
         }
         // Generate texture
-        GLuint texture;
-        glGenTextures(1, &texture);
-        glBindTexture(GL_TEXTURE_2D, texture);
-        glTexImage2D(
-            GL_TEXTURE_2D,
-            0,
-            GL_RED,
-            face->glyph->bitmap.width,
-            face->glyph->bitmap.rows,
-            0,
-            GL_RED,
-            GL_UNSIGNED_BYTE,
-            face->glyph->bitmap.buffer);
-        // Set texture options
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        auto const width = face->glyph->bitmap.width;
+        auto const height = face->glyph->bitmap.rows;
+        FIRE::Texture texture(width, height, std::vector<uint8_t>(face->glyph->bitmap.buffer, face->glyph->bitmap.buffer + width * height));
+
         // Now store character for later use
         FontCharacter character = {
-            texture,
+            std::move(texture),
             glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
             glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
             (GLuint)face->glyph->advance.x};
 
-        m_characters.insert(std::make_pair(static_cast<GLchar>(c), character));
+        m_characters.insert(std::make_pair(static_cast<GLchar>(c), std::move(character)));
     }
     FT_Done_Face(face);
     FT_Done_FreeType(ft);
 }
 
-FontCharacter GLFontTextureFactory::CreateTexture(char c)
+FontCharacter* GLFontTextureFactory::CreateTexture(char c)
 {
     auto it = m_characters.find(c);
     if(it == m_characters.end())
     {
-        return FontCharacter();
+        return nullptr;
     }
-    return it->second;
+    return &(it->second);
 }
 } // namespace FIRE

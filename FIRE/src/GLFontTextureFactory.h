@@ -12,10 +12,9 @@ class GLFontTextureFactory : public FontTextureFactory
 {
 public:
     GLFontTextureFactory();
-    FontCharacter CreateTexture(char c) override;
+    FontCharacter* CreateTexture(char c) override;
 
 private:
-    
     std::map<GLchar, FontCharacter> m_characters;
 };
 } // namespace FIRE

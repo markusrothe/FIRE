@@ -1,3 +1,4 @@
+@startuml
 !include skin.iuml
 
 class Scene {
@@ -33,3 +34,4 @@ SceneComponent o- TextOverlay
 Renderable o-- Mesh
 Renderable "1" o-l- "1" Transform
 Renderable o- Material
+@enduml

@@ -10,7 +10,7 @@ TextureFactory::TextureFactory(std::unique_ptr<FontTextureFactory> fontTexFactor
 
 TextureFactory::~TextureFactory() = default;
 
-FontCharacter TextureFactory::CreateFontCharTexture(char c)
+FontCharacter* TextureFactory::CreateFontCharTexture(char c)
 {
     return m_fontTextFactory->CreateTexture(c);
 }

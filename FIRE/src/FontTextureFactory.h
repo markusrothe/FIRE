@@ -9,7 +9,7 @@ class FontTextureFactory
 {
 public:
     virtual ~FontTextureFactory() = default;
-    virtual FontCharacter CreateTexture(char c) = 0;
+    virtual FontCharacter* CreateTexture(char c) = 0;
 };
 } // namespace FIRE
 

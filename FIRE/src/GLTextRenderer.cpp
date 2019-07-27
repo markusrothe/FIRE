@@ -89,11 +89,11 @@ void GLTextRenderer::Render(TextOverlay const& overlay, float width, float heigh
 
     for(auto const& c : overlay.text)
     {
-        FontCharacter ch = m_texFactory->CreateFontCharTexture(c);
+        FontCharacter* ch = m_texFactory->CreateFontCharTexture(c);
 
-        auto vertices = GetFontCharQuad(ch, x, y, overlay.scale);
+        auto vertices = GetFontCharQuad(*ch, x, y, overlay.scale);
 
-        glBindTexture(GL_TEXTURE_2D, ch.textureID);
+        ch->texture.Bind();
 
         glBindBuffer(GL_ARRAY_BUFFER, texVBO);
         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices.data());
@@ -101,7 +101,7 @@ void GLTextRenderer::Render(TextOverlay const& overlay, float width, float heigh
 
         glDrawArrays(GL_TRIANGLES, 0, 6);
         // Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-        x += (ch.advance >> 6) * overlay.scale; // Bitshift by 6 to get value in pixels (2^6 = 64)
+        x += (ch->advance >> 6) * overlay.scale; // Bitshift by 6 to get value in pixels (2^6 = 64)
     }
 
     glBindVertexArray(0);

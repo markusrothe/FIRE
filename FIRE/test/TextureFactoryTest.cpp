@@ -9,7 +9,7 @@ using ::testing::Return;
 class FontTextureFactoryMock : public FIRE::FontTextureFactory
 {
 public:
-    MOCK_METHOD1(CreateTexture, FIRE::FontCharacter(char));
+    MOCK_METHOD1(CreateTexture, FIRE::FontCharacter*(char));
 };
 } // namespace
 

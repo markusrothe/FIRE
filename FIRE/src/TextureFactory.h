@@ -12,7 +12,7 @@ public:
     explicit TextureFactory(std::unique_ptr<FontTextureFactory> fontTexFactory);
     ~TextureFactory();
 
-    FontCharacter CreateFontCharTexture(char c);
+    FontCharacter* CreateFontCharTexture(char c);
 
 private:
     std::unique_ptr<FontTextureFactory> m_fontTextFactory;
