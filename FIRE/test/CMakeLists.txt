@@ -35,7 +35,8 @@ target_link_libraries(FIRE_tests
         CompileOptions
         MeasureCoverage
         assimp::assimp
-        )
+        glad
+)
 
 include(GoogleTest)
 gtest_discover_tests(FIRE_tests)
