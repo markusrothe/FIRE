@@ -3,6 +3,7 @@
 #include <FIRE/RenderingComponent.h>
 #include <FIRE/Scene.h>
 #include <FIRE/SceneObject.h>
+#include <FIRE/TextOverlay.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
@@ -15,6 +16,10 @@ class TestRenderer : public FIRE::Renderer
 public:
     ~TestRenderer() override = default;
     void Submit(FIRE::Renderable const&) override
+    {
+    }
+
+    void Submit(FIRE::TextOverlay) override
     {
     }
 

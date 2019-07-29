@@ -6,12 +6,10 @@ namespace FIRE
 class Window;
 class Scene;
 class Renderer;
-class TextRenderer;
 void MainLoop(
     Window& window,
     Scene& scene,
-    Renderer& renderer,
-    TextRenderer& textRenderer);
+    Renderer& renderer);
 } // namespace FIRE
 
 #endif

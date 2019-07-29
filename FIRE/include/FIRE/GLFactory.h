@@ -18,7 +18,6 @@ Window InitWindow(std::string title, uint32_t width, uint32_t height);
 std::unique_ptr<RenderContext> CreateRenderContext(Window& window);
 std::unique_ptr<Renderer> CreateRenderer(MeshManager& meshManager);
 std::unique_ptr<ShaderFactory> CreateShaderFactory();
-std::unique_ptr<TextRenderer> CreateTextRenderer();
 } // namespace GLFactory
 
 } // namespace FIRE

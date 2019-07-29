@@ -13,7 +13,6 @@
 #include <FIRE/Renderer.h>
 #include <FIRE/Scene.h>
 #include <FIRE/SceneObject.h>
-#include <FIRE/TextRenderer.h>
 #include <FIRE/Window.h>
 
 #include <memory>
@@ -34,7 +33,6 @@ void SetupScene(
     FIRE::Window& window,
     FIRE::Scene& scene,
     FIRE::Renderer& renderer,
-    FIRE::TextRenderer& textRenderer,
     FIRE::MaterialFactory& materialFactory,
     FIRE::MeshManager& meshManager)
 {
@@ -66,7 +64,7 @@ void SetupScene(
     sceneLight.AddComponent(std::make_unique<examples::PointLightComponent>());
 
     auto& overlay = scene.CreateSceneObject("overlay");
-    overlay.AddComponent(std::make_unique<examples::FPSOverlayComponent>(textRenderer));
+    overlay.AddComponent(std::make_unique<examples::FPSOverlayComponent>(renderer));
 
     scene.Setup();
 }
@@ -82,10 +80,9 @@ int main(int, char**)
     SubmitShaders(materialFactory);
 
     auto renderer{FIRE::GLFactory::CreateRenderer(meshManager)};
-    auto textRenderer{FIRE::GLFactory::CreateTextRenderer()};
 
     FIRE::Scene scene;
-    SetupScene(window, scene, *renderer, *textRenderer, materialFactory, meshManager);
+    SetupScene(window, scene, *renderer, materialFactory, meshManager);
 
-    FIRE::MainLoop(window, scene, *renderer, *textRenderer);
+    FIRE::MainLoop(window, scene, *renderer);
 }

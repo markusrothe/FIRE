@@ -11,7 +11,6 @@ add_library(FIRE STATIC
     include/FIRE/RenderingComponent.h
     include/FIRE/LightComponent.h
     include/FIRE/CameraComponent.h
-    include/FIRE/OverlayComponent.h
     include/FIRE/InputComponent.h
     include/FIRE/Scene.h
     include/FIRE/SceneObject.h
@@ -27,7 +26,6 @@ add_library(FIRE STATIC
     include/FIRE/glmfwd.h
     include/FIRE/MeshType.h
     include/FIRE/TextOverlay.h
-    include/FIRE/TextRenderer.h
     include/FIRE/Message.h
     include/FIRE/Noise.h
     include/FIRE/MainLoop.h
@@ -43,8 +41,8 @@ add_library(FIRE STATIC
     src/TextureFactory.h
     src/FontTextureFactory.h
     src/GLFontTextureFactory.h
-    src/GLTextRenderer.h
     src/ImageTextureFactory.h
+    src/GLImageTextureFactory.h
 
     src/Window.cpp
     src/Renderable.cpp
@@ -62,7 +60,6 @@ add_library(FIRE STATIC
     src/RenderingComponent.cpp
     src/CameraComponent.cpp
     src/LightComponent.cpp
-    src/OverlayComponent.cpp
     src/InputComponent.cpp
     src/Transform.cpp
     src/InputListener.cpp
@@ -71,11 +68,10 @@ add_library(FIRE STATIC
     src/TextOverlay.cpp
     src/TextureFactory.cpp
     src/GLFontTextureFactory.cpp
-    src/GLTextRenderer.cpp
     src/Noise.cpp
     src/MainLoop.cpp
     src/Texture.cpp
-    src/GLImageTextureFactory.cpp src/GLImageTextureFactory.h)
+    src/GLImageTextureFactory.cpp)
 
 target_include_directories(FIRE
     PUBLIC

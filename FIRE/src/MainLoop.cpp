@@ -1,7 +1,6 @@
 #include <FIRE/MainLoop.h>
 #include <FIRE/Renderer.h>
 #include <FIRE/Scene.h>
-#include <FIRE/TextRenderer.h>
 #include <FIRE/Window.h>
 #include <chrono>
 using namespace std::chrono_literals;
@@ -11,8 +10,7 @@ namespace FIRE
 void MainLoop(
     Window& window,
     Scene& scene,
-    Renderer& renderer,
-    TextRenderer& textRenderer)
+    Renderer& renderer)
 {
     auto const width = static_cast<float>(window.GetWidth());
     auto const height = static_cast<float>(window.GetHeight());
@@ -35,7 +33,6 @@ void MainLoop(
         }
 
         renderer.Render(width, height);
-        textRenderer.Render(width, height);
         window.SwapBuffers();
     }
 }

@@ -6,7 +6,6 @@
 #include "GLImageTextureFactory.h"
 #include "GLRenderContext.h"
 #include "GLRenderer.h"
-#include "GLTextRenderer.h"
 #include "GLUploader.h"
 #include "TextureFactory.h"
 #include <FIRE/GLFactory.h>
@@ -30,16 +29,10 @@ std::unique_ptr<Renderer> CreateRenderer(MeshManager& meshManager)
 {
     return std::make_unique<GLRenderer>(
         std::make_unique<GLUploader>(meshManager),
-        std::make_unique<GLDrawAgent>(meshManager));
-}
-
-std::unique_ptr<TextRenderer> CreateTextRenderer()
-{
-    auto texFactory = std::make_unique<TextureFactory>(
-        std::make_unique<GLImageTextureFactory>(),
-        std::make_unique<GLFontTextureFactory>());
-
-    return std::make_unique<GLTextRenderer>(std::move(texFactory));
+        std::make_unique<GLDrawAgent>(meshManager),
+        std::make_unique<TextureFactory>(
+            std::make_unique<GLImageTextureFactory>(),
+            std::make_unique<GLFontTextureFactory>()));
 }
 
 std::unique_ptr<ShaderFactory> CreateShaderFactory()
