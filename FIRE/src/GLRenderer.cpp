@@ -1,11 +1,10 @@
 #include "GLRenderer.h"
-#include "DrawAgent.h"
+
 #include "FontCharacter.h"
 #include "GLShaderFactory.h"
+#include "StaticGeometryRenderer.h"
 #include "TextureFactory.h"
-#include "Uploader.h"
 #include <FIRE/Renderable.h>
-#include <FIRE/Scene.h>
 #include <FIRE/TextOverlay.h>
 #include <array>
 #include <fstream>
@@ -40,19 +39,19 @@ std::array<GLfloat, 24> GetFontCharQuad(FontCharacter const& ch, float x, float 
 }
 } // namespace
 GLRenderer::GLRenderer(
-    std::unique_ptr<Uploader> uploader,
-    std::unique_ptr<DrawAgent> drawAgent,
+    std::unique_ptr<StaticGeometryRenderer> staticGeometryRenderer,
     std::unique_ptr<TextureFactory> texFactory)
-    : m_uploader(std::move(uploader))
-    , m_drawAgent(std::move(drawAgent))
+    : m_staticGeometryRenderer(std::move(staticGeometryRenderer))
     , m_texFactory(std::move(texFactory))
 {
+    //TODO: inject shaderfactory / material factory instead
     GLShaderFactory factory;
     FIRE::Shaders const shaders = {
         {FIRE::ShaderType::VERTEX_SHADER, GetFileContent("textVS.glsl")},
         {FIRE::ShaderType::FRAGMENT_SHADER, GetFileContent("textFS.glsl")}};
     m_texShader = factory.Create(shaders);
 
+    //TODO: Wrap in GLUploader
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glGenVertexArrays(1, &texVAO);
@@ -61,7 +60,7 @@ GLRenderer::GLRenderer(
     glBindBuffer(GL_ARRAY_BUFFER, texVBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), nullptr);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 }
@@ -80,12 +79,11 @@ void GLRenderer::Submit(TextOverlay overlay)
 
 void GLRenderer::Render(float windowWidth, float windowHeight)
 {
-    m_drawAgent->Clear();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     for(auto const& renderable : m_renderables)
     {
-        auto buffers = m_uploader->Upload(renderable.second);
-        m_drawAgent->Draw(renderable.second, buffers);
+        m_staticGeometryRenderer->Render(renderable.second);
     }
 
     for(auto const& overlay : m_overlays)
@@ -94,6 +92,7 @@ void GLRenderer::Render(float windowWidth, float windowHeight)
     }
 }
 
+//TODO Wrap in DrawAgent
 void GLRenderer::Render(TextOverlay const& overlay, float width, float height)
 {
     glm::mat4 projection = glm::ortho(0.0f, width, 0.0f, height);
@@ -131,6 +130,8 @@ void GLRenderer::Render(TextOverlay const& overlay, float width, float height)
 
 void GLRenderer::ToggleWireframe()
 {
-    m_drawAgent->ToggleWireframe();
+    static bool on = true;
+    glPolygonMode(GL_FRONT_AND_BACK, on ? GL_LINE : GL_FILL);
+    on = !on;
 }
 } // namespace FIRE

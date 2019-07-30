@@ -1,12 +1,11 @@
 
 #include "GLShaderFactory.h"
 
-#include "GLDrawAgent.h"
 #include "GLFontTextureFactory.h"
 #include "GLImageTextureFactory.h"
 #include "GLRenderContext.h"
 #include "GLRenderer.h"
-#include "GLUploader.h"
+#include "StaticGeometryRenderer.h"
 #include "TextureFactory.h"
 #include <FIRE/GLFactory.h>
 #include <FIRE/Window.h>
@@ -28,8 +27,7 @@ std::unique_ptr<RenderContext> CreateRenderContext(Window& window)
 std::unique_ptr<Renderer> CreateRenderer(MeshManager& meshManager)
 {
     return std::make_unique<GLRenderer>(
-        std::make_unique<GLUploader>(meshManager),
-        std::make_unique<GLDrawAgent>(meshManager),
+        std::make_unique<StaticGeometryRenderer>(meshManager),
         std::make_unique<TextureFactory>(
             std::make_unique<GLImageTextureFactory>(),
             std::make_unique<GLFontTextureFactory>()));

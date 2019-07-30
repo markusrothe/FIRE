@@ -32,7 +32,7 @@ private:
     uint32_t m_width;
     uint32_t m_height;
     std::vector<uint8_t> m_data;
-    uint32_t m_id;
+    uint32_t m_id{};
 };
 } // namespace FIRE
 

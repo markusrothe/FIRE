@@ -13,13 +13,13 @@ class DrawAgent;
 class Scene;
 struct Renderable;
 class TextureFactory;
+class StaticGeometryRenderer;
 
 class GLRenderer : public Renderer
 {
 public:
     explicit GLRenderer(
-        std::unique_ptr<Uploader> uploader,
-        std::unique_ptr<DrawAgent> drawAgent,
+        std::unique_ptr<StaticGeometryRenderer> staticGeometryRenderer,
         std::unique_ptr<TextureFactory> texFactory);
 
     ~GLRenderer() override;
@@ -36,8 +36,7 @@ private:
     std::map<std::string, Renderable> m_renderables;
     std::map<int, TextOverlay> m_overlays;
 
-    std::unique_ptr<Uploader> m_uploader;
-    std::unique_ptr<DrawAgent> m_drawAgent;
+    std::unique_ptr<StaticGeometryRenderer> m_staticGeometryRenderer;
 
     std::unique_ptr<TextureFactory> m_texFactory;
     uint32_t texVAO, texVBO;

@@ -31,10 +31,6 @@ add_library(FIRE STATIC
     include/FIRE/MainLoop.h
     include/FIRE/Texture.h
 
-    src/Uploader.h
-    src/DrawAgent.h
-    src/GLUploader.h
-    src/GLDrawAgent.h
     src/GLShaderFactory.h
     src/GLRenderContext.h
     src/GLRenderer.h
@@ -48,8 +44,6 @@ add_library(FIRE STATIC
     src/Renderable.cpp
     src/Mesh3D.cpp
     src/GLFactory.cpp
-    src/GLUploader.cpp
-    src/GLDrawAgent.cpp
     src/GLShaderFactory.cpp
     src/GLRenderContext.cpp
     src/GLRenderer.cpp
@@ -71,7 +65,7 @@ add_library(FIRE STATIC
     src/Noise.cpp
     src/MainLoop.cpp
     src/Texture.cpp
-    src/GLImageTextureFactory.cpp)
+    src/GLImageTextureFactory.cpp src/StaticGeometryRenderer.cpp src/StaticGeometryRenderer.h)
 
 target_include_directories(FIRE
     PUBLIC

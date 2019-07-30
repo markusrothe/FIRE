@@ -11,21 +11,10 @@ Texture::Texture(uint32_t width, uint32_t height, std::vector<uint8_t> data)
     , m_height(height)
     , m_data(std::move(data))
 {
-    GLuint texID;
-    glGenTextures(1, &texID);
-    m_id = texID;
-    Bind();
-    glTexImage2D(
-        GL_TEXTURE_2D,
-        0,
-        GL_RED,
-        width,
-        height,
-        0,
-        GL_RED,
-        GL_UNSIGNED_BYTE,
-        m_data.data());
+    glGenTextures(1, &m_id);
 
+    Bind();
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, m_data.data());
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -79,6 +68,7 @@ Texture::Texture(Texture&& other) noexcept
     std::swap(m_id, other.m_id);
     std::swap(m_data, other.m_data);
 }
+
 Texture& Texture::operator=(Texture&& other) noexcept
 {
     std::swap(m_width, other.m_width);
