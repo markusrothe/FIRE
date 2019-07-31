@@ -1,10 +1,10 @@
 #ifndef FIRE_MESHUPLOADER_H
 #define FIRE_MESHUPLOADER_H
 
+#include "VertexLayout.h"
 #include <cstdint>
 namespace FIRE
 {
-class VertexLayout;
 class Mesh3D;
 class MeshUploader
 {
