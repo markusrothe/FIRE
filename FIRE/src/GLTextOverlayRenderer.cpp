@@ -60,6 +60,9 @@ GLTextOverlayRenderer::GLTextOverlayRenderer(std::unique_ptr<TextureFactory> tex
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 }
+
+GLTextOverlayRenderer::~GLTextOverlayRenderer() = default;
+
 void GLTextOverlayRenderer::Render(TextOverlay const& overlay, float windowWidth, float windowHeight)
 {
     glm::mat4 projection = glm::ortho(0.0f, windowWidth, 0.0f, windowHeight);
@@ -94,7 +97,5 @@ void GLTextOverlayRenderer::Render(TextOverlay const& overlay, float windowWidth
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
-
-GLTextOverlayRenderer::~GLTextOverlayRenderer() = default;
 
 } // namespace FIRE
