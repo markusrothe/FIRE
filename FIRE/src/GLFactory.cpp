@@ -1,11 +1,14 @@
 
 #include "GLShaderFactory.h"
 
+#include "FIRE/Renderer.h"
+#include "GLDraw.h"
 #include "GLFontTextureFactory.h"
 #include "GLImageTextureFactory.h"
+#include "GLMaterialBinder.h"
+#include "GLMeshUploader.h"
 #include "GLRenderContext.h"
-#include "GLRenderer.h"
-#include "StaticGeometryRenderer.h"
+#include "GLVertexLayoutBinder.h"
 #include "TextureFactory.h"
 #include <FIRE/GLFactory.h>
 #include <FIRE/Window.h>
@@ -24,13 +27,23 @@ std::unique_ptr<RenderContext> CreateRenderContext(Window& window)
     return std::make_unique<GLRenderContext>(window);
 }
 
-std::unique_ptr<Renderer> CreateRenderer(MeshManager& meshManager)
+std::unique_ptr<Renderer> CreateRenderer()
 {
-    return std::make_unique<GLRenderer>(
-        std::make_unique<StaticGeometryRenderer>(meshManager),
-        std::make_unique<TextureFactory>(
-            std::make_unique<GLImageTextureFactory>(),
-            std::make_unique<GLFontTextureFactory>()));
+    auto vertexLayoutBinder = std::make_unique<GLVertexLayoutBinder>();
+    auto meshUploader = std::make_unique<GLMeshUploader>();
+    auto materialBinder = std::make_unique<GLMaterialBinder>();
+    auto draw = std::make_unique<GLDraw>();
+
+    //    auto texFactory = std::make_unique<TextureFactory>(
+    //        std::make_unique<GLImageTextureFactory>(),
+    //        std::make_unique<GLFontTextureFactory>());
+    //    auto textOverlayRenderer = std::make_unique<GLTextOverlayRenderer>(std::move(texFactory));
+
+    return std::make_unique<Renderer>(
+        std::move(draw),
+        std::move(vertexLayoutBinder),
+        std::move(materialBinder),
+        std::move(meshUploader));
 }
 
 std::unique_ptr<ShaderFactory> CreateShaderFactory()

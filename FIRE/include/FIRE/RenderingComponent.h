@@ -1,8 +1,8 @@
 #ifndef FIRE_RenderingComponent_h
 #define FIRE_RenderingComponent_h
 
+#include "Renderer.h"
 #include <FIRE/Component.h>
-#include <FIRE/Renderer.h>
 #include <FIRE/Scene.h>
 #include <FIRE/SceneObject.h>
 

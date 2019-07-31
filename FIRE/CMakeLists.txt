@@ -4,7 +4,6 @@ add_library(FIRE STATIC
     include/FIRE/MeshManager.h
     include/FIRE/Mesh3D.h
     include/FIRE/Renderable.h
-    include/FIRE/Renderer.h
     include/FIRE/VertexDeclaration.h
     include/FIRE/GLFactory.h
     include/FIRE/Component.h
@@ -33,7 +32,7 @@ add_library(FIRE STATIC
 
     src/GLShaderFactory.h
     src/GLRenderContext.h
-    src/GLRenderer.h
+    include/FIRE/Renderer.h
     src/TextureFactory.h
     src/FontTextureFactory.h
     src/GLFontTextureFactory.h
@@ -46,7 +45,7 @@ add_library(FIRE STATIC
     src/GLFactory.cpp
     src/GLShaderFactory.cpp
     src/GLRenderContext.cpp
-    src/GLRenderer.cpp
+    src/Renderer.cpp
     src/MaterialFactory.cpp
     src/VertexDeclaration.cpp
     src/Scene.cpp
@@ -65,7 +64,7 @@ add_library(FIRE STATIC
     src/Noise.cpp
     src/MainLoop.cpp
     src/Texture.cpp
-    src/GLImageTextureFactory.cpp src/StaticGeometryRenderer.cpp src/StaticGeometryRenderer.h)
+    src/GLImageTextureFactory.cpp src/TextOverlayRenderer.h src/GLTextOverlayRenderer.cpp src/GLTextOverlayRenderer.h src/VertexLayoutBinder.h src/MaterialBinder.h src/GLVertexLayoutBinder.cpp src/GLVertexLayoutBinder.h src/VertexLayout.cpp src/VertexLayout.h src/MeshUploader.h src/GLMeshUploader.cpp src/GLMeshUploader.h src/GLMaterialBinder.cpp src/GLMaterialBinder.h src/Draw.h src/GLDraw.cpp src/GLDraw.h)
 
 target_include_directories(FIRE
     PUBLIC

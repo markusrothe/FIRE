@@ -1,15 +1,13 @@
-#include "GLRenderer.h"
-
+#include "GLTextOverlayRenderer.h"
 #include "FontCharacter.h"
 #include "GLShaderFactory.h"
-#include "StaticGeometryRenderer.h"
 #include "TextureFactory.h"
-#include <FIRE/Renderable.h>
 #include <FIRE/TextOverlay.h>
 #include <array>
 #include <fstream>
 #include <glad/glad.h>
-
+#include <iterator>
+#include <string>
 namespace FIRE
 {
 namespace
@@ -38,11 +36,9 @@ std::array<GLfloat, 24> GetFontCharQuad(FontCharacter const& ch, float x, float 
         xpos + w, ypos + h, 1.0, 0.0};
 }
 } // namespace
-GLRenderer::GLRenderer(
-    std::unique_ptr<StaticGeometryRenderer> staticGeometryRenderer,
-    std::unique_ptr<TextureFactory> texFactory)
-    : m_staticGeometryRenderer(std::move(staticGeometryRenderer))
-    , m_texFactory(std::move(texFactory))
+
+GLTextOverlayRenderer::GLTextOverlayRenderer(std::unique_ptr<TextureFactory> texFactory)
+    : m_texFactory(std::move(texFactory))
 {
     //TODO: inject shaderfactory / material factory instead
     GLShaderFactory factory;
@@ -64,38 +60,9 @@ GLRenderer::GLRenderer(
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 }
-
-GLRenderer::~GLRenderer() = default;
-
-void GLRenderer::Submit(Renderable const& renderable)
+void GLTextOverlayRenderer::Render(TextOverlay const& overlay, float windowWidth, float windowHeight)
 {
-    m_renderables[renderable.name] = renderable;
-}
-
-void GLRenderer::Submit(TextOverlay overlay)
-{
-    m_overlays[overlay.id] = overlay;
-}
-
-void GLRenderer::Render(float windowWidth, float windowHeight)
-{
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    for(auto const& renderable : m_renderables)
-    {
-        m_staticGeometryRenderer->Render(renderable.second);
-    }
-
-    for(auto const& overlay : m_overlays)
-    {
-        Render(overlay.second, windowWidth, windowHeight);
-    }
-}
-
-//TODO Wrap in DrawAgent
-void GLRenderer::Render(TextOverlay const& overlay, float width, float height)
-{
-    glm::mat4 projection = glm::ortho(0.0f, width, 0.0f, height);
+    glm::mat4 projection = glm::ortho(0.0f, windowWidth, 0.0f, windowHeight);
 
     glUseProgram(m_texShader);
     glUniform3f(glGetUniformLocation(m_texShader, "textColor"), 1.0f, 0.0f, 0.0f);
@@ -104,8 +71,8 @@ void GLRenderer::Render(TextOverlay const& overlay, float width, float height)
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(texVAO);
 
-    float x = overlay.x * width;
-    float y = overlay.y * height;
+    float x = overlay.x * windowWidth;
+    float y = overlay.y * windowHeight;
 
     for(auto const& c : overlay.text)
     {
@@ -128,10 +95,6 @@ void GLRenderer::Render(TextOverlay const& overlay, float width, float height)
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void GLRenderer::ToggleWireframe()
-{
-    static bool on = true;
-    glPolygonMode(GL_FRONT_AND_BACK, on ? GL_LINE : GL_FILL);
-    on = !on;
-}
+GLTextOverlayRenderer::~GLTextOverlayRenderer() = default;
+
 } // namespace FIRE

@@ -1,0 +1,58 @@
+@startuml
+!include skin.iuml
+
+class Mesh {
+    + vertices : vector<vec3>
+    + normals : vector<vec3>
+    + colors : vector<vec3>
+    + indices : vector<int>
+    + textureCoordinates : vector<vec2>
+}
+
+class MeshFactory {
+    + Create() : Mesh
+    + CreateCube() : Mesh
+    + CreateSphere() : Mesh
+    + CreateTorus() : Mesh
+    + CreateXYZ() : Mesh
+}
+
+class VertexLayout {
+    + vertexBuffer : int
+    + indexBuffer : int
+}
+
+interface VertexLayoutBinder {
+    + VertexLayoutBinder(VertexLayout)
+    + Bind() : void
+    + BindVertexBuffer() : void
+    + BindIndexBuffer() : void
+    + Release() : void
+
+    - vertexLayout : VertexLayout
+}
+
+class GLVertexLayoutBinder {
+    + Bind() : void
+    + BindVertexBuffer() void
+    + BindIndexBuffer() void
+    + Release() : void
+}
+
+interface MeshUploader {
+    + Upload(Mesh) : VertexLayout
+}
+
+class GLMeshUploader {
+    + Upload(Mesh) : VertexLayout
+}
+
+MeshFactory ..> Mesh : create
+MeshUploader <|-- GLMeshUploader
+MeshUploader .l> Mesh : upload
+MeshUploader ..> VertexLayout : create
+
+VertexLayoutBinder <|-- GLVertexLayoutBinder
+VertexLayoutBinder ..> VertexLayout : bind/release
+
+@enduml

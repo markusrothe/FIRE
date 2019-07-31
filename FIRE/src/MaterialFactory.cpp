@@ -2,7 +2,6 @@
 #include <FIRE/MaterialFactory.h>
 #include <algorithm>
 #include <fstream>
-#include <iterator>
 #include <stdexcept>
 
 namespace FIRE

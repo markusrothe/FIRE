@@ -40,6 +40,11 @@ target_link_libraries(FIRE_tests
 include(GoogleTest)
 gtest_discover_tests(FIRE_tests)
 
+add_custom_command(
+    TARGET FIRE_tests POST_BUILD
+    COMMAND ctest --output-on-failure -C $<CONFIGURATION>
+)
+
 install(
     TARGETS FIRE_tests
     DESTINATION bin

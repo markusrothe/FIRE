@@ -4,8 +4,9 @@
 namespace FIRE
 {
 
-Mesh3D::Mesh3D(std::string name)
+Mesh3D::Mesh3D(std::string name, MeshType meshType)
     : m_name{std::move(name)}
+    , m_meshType(meshType)
 {
 }
 
@@ -90,5 +91,9 @@ VertexDeclaration& Mesh3D::GetVertexDeclaration()
 VertexDeclaration const& Mesh3D::GetVertexDeclaration() const
 {
     return m_vertexDeclaration;
+}
+MeshType Mesh3D::GetMeshType() const
+{
+    return m_meshType;
 }
 } // namespace FIRE

@@ -23,34 +23,32 @@ using TestUtil::EXPECT_VEC_EQ;
 
 TEST_F(AMeshManager, CreatesACube)
 {
-    FIRE::MeshHandle mesh = meshManager.CreateCube(NAME);
-    FIRE::Mesh3D* cube = meshManager.Lookup(mesh);
-    ASSERT_TRUE(cube);
+    auto const mesh = meshManager.CreateCube(NAME);
+    ASSERT_TRUE(mesh);
 
-    auto const positions = cube->Positions();
+    auto const positions = mesh->Positions();
     ASSERT_EQ(24u, positions.size());
 
-    auto const normals = cube->Normals();
+    auto const normals = mesh->Normals();
     ASSERT_EQ(24u, normals.size());
 
-    auto const indices = cube->Indices();
+    auto const indices = mesh->Indices();
     ASSERT_EQ(36u, indices.size());
 }
 
 TEST_F(AMeshManager, CreatesAPlane)
 {
-    FIRE::MeshHandle mesh = meshManager.CreatePlane(NAME);
-    auto planeMesh = meshManager.Lookup(mesh);
-    ASSERT_TRUE(planeMesh);
+    auto const mesh = meshManager.CreatePlane(NAME);
+    ASSERT_TRUE(mesh);
 
-    auto const positions = planeMesh->Positions();
+    auto const positions = mesh->Positions();
     ASSERT_EQ(4u, positions.size());
     EXPECT_VEC_EQ(positions[0], glm::vec3(-1.0f, 0.0f, -1.0f));
     EXPECT_VEC_EQ(positions[1], glm::vec3(-1.0f, 0.0f, 1.0f));
     EXPECT_VEC_EQ(positions[2], glm::vec3(1.0f, 0.0f, 1.0f));
     EXPECT_VEC_EQ(positions[3], glm::vec3(1.0f, 0.0f, -1.0f));
 
-    auto const normals = planeMesh->Normals();
+    auto const normals = mesh->Normals();
     ASSERT_EQ(4u, normals.size());
     for(auto i = 0u; i < 4u; ++i)
     {
@@ -58,14 +56,13 @@ TEST_F(AMeshManager, CreatesAPlane)
     }
 
     std::vector<unsigned int> const expectedIndices = {0, 1, 2, 0, 2, 3};
-    EXPECT_THAT(planeMesh->Indices(), ::testing::ContainerEq(expectedIndices));
+    EXPECT_THAT(mesh->Indices(), ::testing::ContainerEq(expectedIndices));
 }
 
 TEST_F(AMeshManager, CreatesASphere)
 {
     auto const numSegments = 4;
-    auto const meshHandle = meshManager.CreateSphere(NAME, numSegments);
-    auto const mesh = meshManager.Lookup(meshHandle);
+    auto const mesh = meshManager.CreateSphere(NAME, numSegments);
     ASSERT_TRUE(mesh);
     EXPECT_EQ(14u, mesh->Positions().size());
     EXPECT_EQ(14u, mesh->Normals().size());
@@ -74,8 +71,7 @@ TEST_F(AMeshManager, CreatesASphere)
 
 TEST_F(AMeshManager, CreatesALineGrid)
 {
-    auto const meshHandle = meshManager.CreateLineGrid(NAME, 10, 10);
-    auto const mesh = meshManager.Lookup(meshHandle);
+    auto const mesh = meshManager.CreateLineGrid(NAME, 10, 10);
     ASSERT_TRUE(mesh);
     EXPECT_EQ(40u, mesh->Positions().size());
     EXPECT_EQ(40u, mesh->Normals().size());
@@ -84,8 +80,7 @@ TEST_F(AMeshManager, CreatesALineGrid)
 
 TEST_F(AMeshManager, CreatesATriangleGrid)
 {
-    auto const meshHandle = meshManager.CreateTriangleGrid(NAME, 10, 10);
-    auto const mesh = meshManager.Lookup(meshHandle);
+    auto const mesh = meshManager.CreateTriangleGrid(NAME, 10, 10);
     ASSERT_TRUE(mesh);
     EXPECT_EQ(600u, mesh->Positions().size());
     EXPECT_EQ(600u, mesh->Normals().size());
@@ -94,13 +89,13 @@ TEST_F(AMeshManager, CreatesATriangleGrid)
 
 TEST_F(AMeshManager, ThrowsIfADifferentMeshTypeIsCreatedWithTheSameName)
 {
-    auto const mesh = meshManager.CreateCube(NAME);
+    (void)meshManager.CreateCube(NAME);
     EXPECT_THROW(meshManager.CreatePlane(NAME), std::runtime_error);
 }
 
 namespace
 {
-using MeshCreationFunc = std::function<FIRE::MeshHandle(FIRE::MeshManager&)>;
+using MeshCreationFunc = std::function<FIRE::Mesh3D*(FIRE::MeshManager&)>;
 class MeshManagerCachingTest : public testing::TestWithParam<MeshCreationFunc>
 {
 public:
@@ -124,11 +119,9 @@ SUPPRESS_Pop
 TEST_P(MeshManagerCachingTest, CachesACreatedMesh)
 {
     auto func = GetParam();
-    auto const meshHandle1 = func(meshManager);
-    auto const meshHandle2 = func(meshManager);
 
-    auto const mesh1 = meshManager.Lookup(meshHandle1);
-    auto const mesh2 = meshManager.Lookup(meshHandle2);
+    auto const mesh1 = func(meshManager);
+    auto const mesh2 = func(meshManager);
 
     EXPECT_EQ(mesh1, mesh2);
 }
@@ -147,8 +140,9 @@ INSTANTIATE_TEST_CASE_P(
         [](FIRE::MeshManager& meshManager) { return meshManager.Create(
                                                  FIRE::MeshCategory::Custom,
                                                  FIRE::MeshPrimitives::Points,
-                                                 NAME, std::vector<glm::vec3>(),
-                                                 std::vector<glm::vec3>(), 
+                                                 NAME,
+                                                 std::vector<glm::vec3>(),
+                                                 std::vector<glm::vec3>(),
                                                  std::vector<glm::vec2>(),
                                                  std::vector<unsigned int>()); }));
 

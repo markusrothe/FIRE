@@ -1,3 +1,4 @@
+@startuml
 !include skin.iuml
 
 enum Key
@@ -14,3 +15,4 @@ InputListener .u.> Key
 InputListener .u.> KeyAction
 
 Client ..> RenderContext : RegisterInputListener()
+@enduml

@@ -1,4 +1,5 @@
 
+
 #include "FPSOverlayComponent.h"
 #include "InputMappingComponent.h"
 #include "Mesh3DRenderingComponent.h"
@@ -71,7 +72,7 @@ int main(int, char**)
     FIRE::MaterialFactory materialFactory(FIRE::GLFactory::CreateShaderFactory());
     SubmitShaders(materialFactory);
 
-    auto renderer{FIRE::GLFactory::CreateRenderer(meshManager)};
+    auto renderer{FIRE::GLFactory::CreateRenderer()};
 
     FIRE::Scene scene;
     SetupScene(window, scene, *renderer, materialFactory, meshManager);

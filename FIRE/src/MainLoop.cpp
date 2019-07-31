@@ -1,5 +1,5 @@
+#include "FIRE/Renderer.h"
 #include <FIRE/MainLoop.h>
-#include <FIRE/Renderer.h>
 #include <FIRE/Scene.h>
 #include <FIRE/Window.h>
 #include <chrono>

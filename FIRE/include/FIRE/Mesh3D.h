@@ -12,7 +12,7 @@ namespace FIRE
 class Mesh3D
 {
 public:
-    explicit Mesh3D(std::string name);
+    explicit Mesh3D(std::string name, MeshType meshType);
 
     std::string Name() const;
     void AddPosition(glm::vec3 vertex);
@@ -34,6 +34,8 @@ public:
     VertexDeclaration& GetVertexDeclaration();
     VertexDeclaration const& GetVertexDeclaration() const;
 
+    [[nodiscard]] MeshType GetMeshType() const;
+
 private:
     std::string m_name;
 
@@ -43,6 +45,7 @@ private:
     std::vector<unsigned int> m_indices;
 
     VertexDeclaration m_vertexDeclaration;
+    MeshType m_meshType;
 };
 
 } // namespace FIRE

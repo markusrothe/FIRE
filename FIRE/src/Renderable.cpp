@@ -1,13 +1,11 @@
 #include <FIRE/Renderable.h>
-#include <FIRE/Transform.h>
-#include <cassert>
 #include <utility>
 namespace FIRE
 {
-Renderable::Renderable(std::string name, Material mat, MeshHandle mesh)
+Renderable::Renderable(std::string name, Material mat, Mesh3D* mesh)
     : name(std::move(name))
     , material(std::move(mat))
-    , mesh(std::move(mesh))
+    , mesh(mesh)
 {
 }
 
