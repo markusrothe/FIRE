@@ -1,7 +1,6 @@
 #include "Draw.h"
 #include "MaterialBinder.h"
-#include "MeshUploader.h"
-#include "VertexLayoutBinder.h"
+#include "VertexLayoutFactory.h"
 #include <FIRE/Message.h>
 #include <FIRE/Renderer.h>
 #include <FIRE/RenderingComponent.h>
@@ -30,7 +29,7 @@ public:
 
 TEST(ARenderingComponent, CallsItsDerivedDoUpdateFunction)
 {
-    FIRE::Renderer renderer(nullptr, nullptr, nullptr, nullptr);
+    FIRE::Renderer renderer(nullptr, nullptr, nullptr);
 
     TestRenderingComponent renderingComponent(renderer);
     EXPECT_CALL(renderingComponent, DoUpdate(_, _, _));

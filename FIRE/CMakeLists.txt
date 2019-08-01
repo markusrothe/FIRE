@@ -64,7 +64,7 @@ add_library(FIRE STATIC
     src/Noise.cpp
     src/MainLoop.cpp
     src/Texture.cpp
-    src/GLImageTextureFactory.cpp src/TextOverlayRenderer.h src/GLTextOverlayRenderer.cpp src/GLTextOverlayRenderer.h src/VertexLayoutBinder.h src/MaterialBinder.h src/GLVertexLayoutBinder.cpp src/GLVertexLayoutBinder.h src/VertexLayout.cpp src/VertexLayout.h src/MeshUploader.h src/GLMeshUploader.cpp src/GLMeshUploader.h src/GLMaterialBinder.cpp src/GLMaterialBinder.h src/Draw.h src/GLDraw.cpp src/GLDraw.h)
+    src/GLImageTextureFactory.cpp src/TextOverlayRenderer.h src/GLTextOverlayRenderer.cpp src/GLTextOverlayRenderer.h src/MaterialBinder.h src/GLVertexLayout.cpp src/GLVertexLayout.h src/VertexLayoutFactory.h src/GLVertexLayoutFactory.cpp src/GLVertexLayoutFactory.h src/GLMaterialBinder.cpp src/GLMaterialBinder.h src/Draw.h src/GLDraw.cpp src/GLDraw.h src/VertexLayout.h)
 
 target_include_directories(FIRE
     PUBLIC

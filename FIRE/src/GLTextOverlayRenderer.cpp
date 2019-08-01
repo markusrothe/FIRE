@@ -46,19 +46,6 @@ GLTextOverlayRenderer::GLTextOverlayRenderer(std::unique_ptr<TextureFactory> tex
         {FIRE::ShaderType::VERTEX_SHADER, GetFileContent("textVS.glsl")},
         {FIRE::ShaderType::FRAGMENT_SHADER, GetFileContent("textFS.glsl")}};
     m_texShader = factory.Create(shaders);
-
-    //TODO: Wrap in GLUploader
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glGenVertexArrays(1, &texVAO);
-    glGenBuffers(1, &texVBO);
-    glBindVertexArray(texVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, texVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), nullptr);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
 }
 
 GLTextOverlayRenderer::~GLTextOverlayRenderer() = default;
@@ -83,12 +70,11 @@ void GLTextOverlayRenderer::Render(TextOverlay const& overlay, float windowWidth
 
         auto vertices = GetFontCharQuad(*ch, x, y, overlay.scale);
 
-        ch->texture.Bind();
-
         glBindBuffer(GL_ARRAY_BUFFER, texVBO);
         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices.data());
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+        ch->texture.Bind();
         glDrawArrays(GL_TRIANGLES, 0, 6);
         // Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
         x += (ch->advance >> 6) * overlay.scale; // Bitshift by 6 to get value in pixels (2^6 = 64)

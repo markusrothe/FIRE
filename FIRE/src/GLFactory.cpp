@@ -6,9 +6,8 @@
 #include "GLFontTextureFactory.h"
 #include "GLImageTextureFactory.h"
 #include "GLMaterialBinder.h"
-#include "GLMeshUploader.h"
 #include "GLRenderContext.h"
-#include "GLVertexLayoutBinder.h"
+#include "GLVertexLayoutFactory.h"
 #include "TextureFactory.h"
 #include <FIRE/GLFactory.h>
 #include <FIRE/Window.h>
@@ -29,8 +28,8 @@ std::unique_ptr<RenderContext> CreateRenderContext(Window& window)
 
 std::unique_ptr<Renderer> CreateRenderer()
 {
-    auto vertexLayoutBinder = std::make_unique<GLVertexLayoutBinder>();
-    auto meshUploader = std::make_unique<GLMeshUploader>();
+
+    auto layoutFactory = std::make_unique<GLVertexLayoutFactory>();
     auto materialBinder = std::make_unique<GLMaterialBinder>();
     auto draw = std::make_unique<GLDraw>();
 
@@ -41,9 +40,8 @@ std::unique_ptr<Renderer> CreateRenderer()
 
     return std::make_unique<Renderer>(
         std::move(draw),
-        std::move(vertexLayoutBinder),
         std::move(materialBinder),
-        std::move(meshUploader));
+        std::move(layoutFactory));
 }
 
 std::unique_ptr<ShaderFactory> CreateShaderFactory()

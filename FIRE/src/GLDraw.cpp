@@ -1,4 +1,5 @@
 #include "GLDraw.h"
+#include "VertexLayout.h"
 #include <FIRE/Mesh3D.h>
 #include <glad/glad.h>
 namespace FIRE
@@ -27,6 +28,8 @@ GLDraw::GLDraw()
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 }
 
@@ -41,9 +44,16 @@ void GLDraw::ToggleWireframe()
     glPolygonMode(GL_FRONT_AND_BACK, on ? GL_LINE : GL_FILL);
     on = !on;
 }
-void GLDraw::DoDraw(Mesh3D* mesh)
+void GLDraw::DoDraw(MeshPrimitives primitives, size_t count)
 {
-    glDrawElements(MapPrimitiveType(mesh->GetMeshType().primitives), static_cast<GLsizei>(mesh->Indices().size()), GL_UNSIGNED_INT, 0);
+    glDrawArrays(MapPrimitiveType(primitives), 0, static_cast<GLsizei>(count));
+}
+
+void GLDraw::DoDrawIndexed(VertexLayout& layout, MeshPrimitives primitives, size_t count)
+{
+    layout.BindLayout();
+    glDrawElements(MapPrimitiveType(primitives), static_cast<GLsizei>(count), GL_UNSIGNED_INT, 0);
+    layout.ReleaseLayout();
 }
 
 } // namespace FIRE

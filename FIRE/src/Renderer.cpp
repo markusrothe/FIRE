@@ -1,24 +1,40 @@
 #include "FIRE/Renderer.h"
 #include "Draw.h"
+#include "FontCharacter.h"
 #include "MaterialBinder.h"
-#include "MeshUploader.h"
-#include "VertexLayout.h"
-#include "VertexLayoutBinder.h"
+#include "VertexLayoutFactory.h"
 #include <FIRE/Renderable.h>
 #include <FIRE/TextOverlay.h>
-
+#include <array>
 namespace FIRE
 {
+namespace
+{
+//TODO: Create in MeshManager?!
+std::array<float, 24> GetFontCharQuad(FontCharacter const& ch, float x, float y, float scale)
+{
+    float xpos = x + ch.bearing.x * scale;
+    float ypos = y - (ch.size.y - ch.bearing.y) * scale;
 
+    float w = (float)ch.size.x * scale;
+    float h = (float)ch.size.y * scale;
+    return {
+        xpos, ypos + h, 0.0, 0.0,
+        xpos, ypos, 0.0, 1.0,
+        xpos + w, ypos, 1.0, 1.0,
+
+        xpos, ypos + h, 0.0, 0.0,
+        xpos + w, ypos, 1.0, 1.0,
+        xpos + w, ypos + h, 1.0, 0.0};
+}
+} // namespace
 Renderer::Renderer(
     std::unique_ptr<Draw> draw,
-    std::unique_ptr<VertexLayoutBinder> vertexLayoutBinder,
     std::unique_ptr<MaterialBinder> materialBinder,
-    std::unique_ptr<MeshUploader> meshUploader)
+    std::unique_ptr<VertexLayoutFactory> vertexLayoutFactory)
     : m_draw(std::move(draw))
-    , m_vertexLayoutBinder(std::move(vertexLayoutBinder))
     , m_materialBinder(std::move(materialBinder))
-    , m_meshUploader(std::move(meshUploader))
+    , m_vertexLayoutFactory(std::move(vertexLayoutFactory))
 {
 }
 
@@ -31,10 +47,10 @@ void Renderer::Submit(Renderable const& renderable)
 
 void Renderer::Submit(TextOverlay const& overlay)
 {
-    m_overlays[overlay.id] = overlay;
+    m_overlays[overlay.name] = overlay;
 }
 
-void Renderer::Render(float, float)
+void Renderer::Render(float windowWidth, float windowHeight)
 {
     m_draw->Clear();
 
@@ -43,21 +59,46 @@ void Renderer::Render(float, float)
         Render(renderable.second);
     }
 
-    //    for(auto const& overlay : m_overlays)
-    //    {
-    //        m_textOverlayRenderer->Render(overlay.second, windowWidth, windowHeight);
-    //    }
+    for(auto const& overlay : m_overlays)
+    {
+        Render(overlay.second, windowWidth, windowHeight);
+    }
 }
 
 void Renderer::Render(Renderable const& renderable)
 {
-    auto const vertexLayout = m_meshUploader->Upload(*renderable.mesh, renderable.material.ShaderId());
-    m_vertexLayoutBinder->Bind(vertexLayout);
-    m_vertexLayoutBinder->BindIndexBuffer();
+    auto& vertexLayout = m_vertexLayoutFactory->CreateStaticIndexedLayout(renderable);
+
     m_materialBinder->Bind(renderable.material);
-    m_draw->DoDraw(renderable.mesh);
+
+    m_draw->DoDrawIndexed(vertexLayout, renderable.mesh->GetMeshType().primitives, renderable.mesh->Indices().size());
+
     m_materialBinder->Release();
-    m_vertexLayoutBinder->Release();
+}
+
+void Renderer::Render(TextOverlay const&, float, float)
+{
+    //    auto& vertexLayout = m_vertexLayoutFactory->CreateDynamicLayout(overlay);
+    //
+    //    vertexLayout.BindLayout();
+    //    m_materialBinder->Bind(overlay.material);
+    //
+    //    float x = overlay.x * width;
+    //    float y = overlay.y * height;
+    //    for(auto const& c : overlay.text)
+    //    {
+    //        FontCharacter* ch = m_texFactory->CreateFontCharTexture(c);
+    //        ch->texture.Bind();
+    //        auto vertices = GetFontCharQuad(*ch, x, y, overlay.scale);
+    //        vertexLayout.BufferSubData(0u, vertices.size(), vertices.data());
+    //        m_draw->DoDraw(MeshPrimitives::Triangles, 6u);
+    //
+    //        // Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
+    //        x += (ch->advance >> 6) * overlay.scale; // Bitshift by 6 to get value in pixels (2^6 = 64)
+    //    }
+    //
+    //    m_materialBinder->Release();
+    //    vertexLayout.ReleaseLayout();
 }
 
 void Renderer::ToggleWireframe()

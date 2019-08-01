@@ -11,12 +11,12 @@ FPSOverlayComponent::FPSOverlayComponent(FIRE::Renderer& renderer)
 {
 }
 
-void FPSOverlayComponent::DoUpdate(double deltaTime, FIRE::SceneObject&, FIRE::Scene&)
+void FPSOverlayComponent::DoUpdate(double, FIRE::SceneObject&, FIRE::Scene&)
 {
-    std::stringstream ss;
-    ss << static_cast<int>(1.0 / deltaTime);
+    //std::stringstream ss;
+    //ss << static_cast<int>(1.0 / deltaTime);
 
-    m_renderer.Submit(FIRE::TextOverlay(0, ss.str(), 0.02f, 0.02f, 0.5f));
+    //m_renderer.Submit(FIRE::TextOverlay("fpsOverlay", ss.str(), 0.02f, 0.02f, mat, 0.5f));
 }
 
 std::optional<std::any> FPSOverlayComponent::Receive(FIRE::Message, FIRE::SceneObject&)

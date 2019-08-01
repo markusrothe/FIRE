@@ -11,16 +11,15 @@ struct Renderable;
 class TextOverlay;
 class VertexLayoutBinder;
 class MaterialBinder;
-class MeshUploader;
+class VertexLayoutFactory;
 class Draw;
 class Renderer
 {
 public:
     explicit Renderer(
         std::unique_ptr<Draw> draw,
-        std::unique_ptr<VertexLayoutBinder> vertexLayoutBinder,
         std::unique_ptr<MaterialBinder> materialBinder,
-        std::unique_ptr<MeshUploader> meshUploader);
+        std::unique_ptr<VertexLayoutFactory> vertexLayoutFactory);
 
     ~Renderer();
 
@@ -33,14 +32,14 @@ public:
 
 private:
     void Render(Renderable const& renderable);
+    void Render(TextOverlay const& overlay, float width, float height);
 
     std::unique_ptr<Draw> m_draw;
-    std::unique_ptr<VertexLayoutBinder> m_vertexLayoutBinder;
     std::unique_ptr<MaterialBinder> m_materialBinder;
-    std::unique_ptr<MeshUploader> m_meshUploader;
+    std::unique_ptr<VertexLayoutFactory> m_vertexLayoutFactory;
 
     std::map<std::string, Renderable> m_renderables;
-    std::map<int, TextOverlay> m_overlays;
+    std::map<std::string, TextOverlay> m_overlays;
 };
 } // namespace FIRE
 

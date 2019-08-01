@@ -8,7 +8,8 @@ class GLDraw : public Draw
 public:
     GLDraw();
     void Clear() override;
-    void DoDraw(Mesh3D* mesh) override;
+    void DoDraw(MeshPrimitives primitives, size_t count) override;
+    void DoDrawIndexed(VertexLayout& layout, MeshPrimitives primitives, size_t count) override;
     void ToggleWireframe() override;
 };
 } // namespace FIRE
