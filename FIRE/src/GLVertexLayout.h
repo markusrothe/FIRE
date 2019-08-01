@@ -9,17 +9,12 @@ namespace FIRE
 class GLVertexLayout : public VertexLayout
 {
 public:
-    enum class BufferUsage
-    {
-        STATIC,
-        DYNAMIC
-    };
-
     explicit GLVertexLayout(DrawMode mode);
+
     ~GLVertexLayout() override;
+
     void BindLayout() override;
     void ReleaseLayout() override;
-
     void BufferData(size_t size, void* data) override;
     void BufferIndexData(size_t size, void* data) override;
     void BufferSubData(size_t offset, size_t size, void* data) override;

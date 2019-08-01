@@ -69,12 +69,7 @@ VertexLayout& GLVertexLayoutFactory::CreateDynamicLayout(TextOverlay const& over
 
     auto layout = std::make_unique<GLVertexLayout>(DrawMode::NON_INDEXED);
     layout->BufferData(sizeof(float) * 6 * 4, nullptr);
-
-    layout->BindLayout();
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), nullptr);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    layout->ReleaseLayout();
+    layout->AddVertexAttribute(0, 4, 0);
 
     auto& retVal = *layout;
     m_cache.insert(std::make_pair(overlay.name, std::move(layout)));

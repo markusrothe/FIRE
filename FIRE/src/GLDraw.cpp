@@ -44,9 +44,12 @@ void GLDraw::ToggleWireframe()
     glPolygonMode(GL_FRONT_AND_BACK, on ? GL_LINE : GL_FILL);
     on = !on;
 }
-void GLDraw::DoDraw(MeshPrimitives primitives, size_t count)
+void GLDraw::DoDraw(VertexLayout& layout, MeshPrimitives primitives, size_t count)
 {
+    glActiveTexture(GL_TEXTURE0);
+    layout.BindLayout();
     glDrawArrays(MapPrimitiveType(primitives), 0, static_cast<GLsizei>(count));
+    layout.ReleaseLayout();
 }
 
 void GLDraw::DoDrawIndexed(VertexLayout& layout, MeshPrimitives primitives, size_t count)

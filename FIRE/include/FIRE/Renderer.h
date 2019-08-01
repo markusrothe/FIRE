@@ -9,7 +9,7 @@ namespace FIRE
 {
 struct Renderable;
 class TextOverlay;
-class VertexLayoutBinder;
+class TextureFactory;
 class MaterialBinder;
 class VertexLayoutFactory;
 class Draw;
@@ -19,7 +19,8 @@ public:
     explicit Renderer(
         std::unique_ptr<Draw> draw,
         std::unique_ptr<MaterialBinder> materialBinder,
-        std::unique_ptr<VertexLayoutFactory> vertexLayoutFactory);
+        std::unique_ptr<VertexLayoutFactory> vertexLayoutFactory,
+        std::unique_ptr<TextureFactory> texFactory);
 
     ~Renderer();
 
@@ -37,6 +38,7 @@ private:
     std::unique_ptr<Draw> m_draw;
     std::unique_ptr<MaterialBinder> m_materialBinder;
     std::unique_ptr<VertexLayoutFactory> m_vertexLayoutFactory;
+    std::unique_ptr<TextureFactory> m_texFactory;
 
     std::map<std::string, Renderable> m_renderables;
     std::map<std::string, TextOverlay> m_overlays;
