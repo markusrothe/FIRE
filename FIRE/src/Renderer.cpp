@@ -72,7 +72,7 @@ void Renderer::Render(Renderable const& renderable)
 {
     auto& vertexLayout = m_vertexLayoutFactory->CreateStaticIndexedLayout(renderable);
     m_materialBinder->Bind(renderable.material);
-    m_draw->DoDrawIndexed(vertexLayout, renderable.mesh->GetMeshType().primitives, renderable.mesh->Indices().size());
+    m_draw->DoDrawIndexed(vertexLayout, renderable.mesh->GetMeshType().primitives, static_cast<uint32_t>(renderable.mesh->Indices().size()));
     m_materialBinder->Release();
 }
 
