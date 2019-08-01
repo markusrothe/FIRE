@@ -28,10 +28,10 @@ public:
     virtual void BindLayout() = 0;
     virtual void ReleaseLayout() = 0;
 
-    virtual void BufferData(size_t size, void* data) = 0;
-    virtual void BufferIndexData(size_t size, void* data) = 0;
-    virtual void BufferSubData(size_t offset, size_t size, void* data) = 0;
-    virtual void AddVertexAttribute(uint32_t attribIndex, size_t size, size_t offset) = 0;
+    virtual void BufferData(uint32_t size, void* data) = 0;
+    virtual void BufferIndexData(uint32_t size, void* data) = 0;
+    virtual void BufferSubData(uint32_t offset, uint32_t size, void* data) = 0;
+    virtual void AddVertexAttribute(uint32_t attribIndex, uint32_t size, uint32_t offset) = 0;
 
 private:
     DrawMode drawMode;

@@ -21,9 +21,9 @@ VertexLayout& GLVertexLayoutFactory::CreateStaticIndexedLayout(Renderable const&
     auto normals = mesh->Normals();
     auto uvs = mesh->UVs();
 
-    auto const positionsSize = positions.size() * sizeof(positions[0]);
-    auto const normalsSize = normals.size() * sizeof(normals[0]);
-    auto const uvsSize = uvs.size() * sizeof(uvs[0]);
+    auto const positionsSize = static_cast<uint32_t>(positions.size() * sizeof(positions[0]));
+    auto const normalsSize = static_cast<uint32_t>(normals.size() * sizeof(normals[0]));
+    auto const uvsSize = static_cast<uint32_t>(uvs.size() * sizeof(uvs[0]));
 
     layout->BufferData(positionsSize + normalsSize + uvsSize, nullptr);
 
@@ -51,7 +51,7 @@ VertexLayout& GLVertexLayoutFactory::CreateStaticIndexedLayout(Renderable const&
     }
 
     auto indices = renderable.mesh->Indices();
-    auto const indicesSize = indices.size() * sizeof(unsigned int);
+    auto const indicesSize = static_cast<uint32_t>(indices.size() * sizeof(unsigned int));
     layout->BufferIndexData(indicesSize, reinterpret_cast<void*>(&indices[0]));
 
     auto& retVal = *layout;

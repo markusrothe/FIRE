@@ -15,10 +15,10 @@ public:
 
     void BindLayout() override;
     void ReleaseLayout() override;
-    void BufferData(size_t size, void* data) override;
-    void BufferIndexData(size_t size, void* data) override;
-    void BufferSubData(size_t offset, size_t size, void* data) override;
-    void AddVertexAttribute(uint32_t attribIndex, size_t size, size_t offset) override;
+    void BufferData(uint32_t size, void* data) override;
+    void BufferIndexData(uint32_t size, void* data) override;
+    void BufferSubData(uint32_t offset, uint32_t size, void* data) override;
+    void AddVertexAttribute(uint32_t attribIndex, uint32_t size, uint32_t offset) override;
 
 private:
     uint32_t m_vao{0u};

@@ -41,22 +41,22 @@ void GLVertexLayout::ReleaseLayout()
     glBindVertexArray(0);
 }
 
-void GLVertexLayout::BufferData(size_t size, void* data)
+void GLVertexLayout::BufferData(uint32_t size, void* data)
 {
     glNamedBufferStorage(m_vbo, size, data, GL_DYNAMIC_STORAGE_BIT);
 }
 
-void GLVertexLayout::BufferIndexData(size_t size, void* data)
+void GLVertexLayout::BufferIndexData(uint32_t size, void* data)
 {
     glNamedBufferStorage(m_ibo, size, data, GL_DYNAMIC_STORAGE_BIT);
 }
 
-void GLVertexLayout::BufferSubData(size_t offset, size_t size, void* data)
+void GLVertexLayout::BufferSubData(uint32_t offset, uint32_t size, void* data)
 {
     glNamedBufferSubData(m_vbo, offset, size, data);
 }
 
-void GLVertexLayout::AddVertexAttribute(uint32_t attribIndex, size_t size, size_t offset)
+void GLVertexLayout::AddVertexAttribute(uint32_t attribIndex, uint32_t size, uint32_t offset)
 {
     auto bindingIndex = attribIndex;
     glEnableVertexArrayAttrib(m_vao, attribIndex);

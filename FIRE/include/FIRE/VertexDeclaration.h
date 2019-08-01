@@ -6,10 +6,10 @@ namespace FIRE
 {
 struct VertexDeclarationSection
 {
-    explicit VertexDeclarationSection(size_t size, size_t offset);
+    explicit VertexDeclarationSection(uint32_t size, uint32_t offset);
 
-    size_t size;
-    size_t offset;
+    uint32_t size;
+    uint32_t offset;
 };
 
 class VertexDeclaration
@@ -17,7 +17,7 @@ class VertexDeclaration
 public:
     using VertexDeclarationMap = std::unordered_map<std::string, VertexDeclarationSection>;
 
-    void AddSection(std::string name, size_t size, size_t offset);
+    void AddSection(std::string name, uint32_t size, uint32_t offset);
 
     VertexDeclarationMap GetSections() const;
 

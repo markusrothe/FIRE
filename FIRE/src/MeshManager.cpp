@@ -435,8 +435,8 @@ Mesh3D* MeshManager::DoCreate(
     auto mesh = std::make_unique<Mesh3D>(name, MeshType(meshCategory, primitives));
 
     mesh->GetVertexDeclaration().AddSection("vPos", 3u, 0u);
-    mesh->GetVertexDeclaration().AddSection("vNormal", 3u, positions.size() * sizeof(float) * 3);
-    mesh->GetVertexDeclaration().AddSection("vUV", 2u, (positions.size() + normals.size()) * sizeof(float) * 3);
+    mesh->GetVertexDeclaration().AddSection("vNormal", 3u, static_cast<uint32_t>(positions.size() * sizeof(float) * 3));
+    mesh->GetVertexDeclaration().AddSection("vUV", 2u, static_cast<uint32_t>((positions.size() + normals.size()) * sizeof(float) * 3));
 
     mesh->AddPositions(std::move(positions));
     mesh->AddNormals(std::move(normals));
