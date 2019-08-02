@@ -13,7 +13,6 @@
 #include <FIRE/RenderContext.h>
 #include <FIRE/Renderer.h>
 #include <FIRE/Scene.h>
-#include <FIRE/SceneObject.h>
 #include <FIRE/Window.h>
 
 #include <memory>

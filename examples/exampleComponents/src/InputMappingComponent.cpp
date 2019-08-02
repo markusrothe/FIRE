@@ -5,6 +5,7 @@
 #include <FIRE/Scene.h>
 #include <FIRE/SceneObject.h>
 #include <FIRE/Window.h>
+#include <FIRE/glmfwd.h>
 
 namespace examples
 {
@@ -52,7 +53,7 @@ InputMappingComponent::InputMappingComponent(
             window.CaptureCursor();
 
             bool firstCallback = true;
-            auto rotate = [&transform, firstCallback = std::move(firstCallback)](double x, double y) mutable {
+            auto rotate = [&transform, firstCallback = firstCallback](double x, double y) mutable {
                 static double oldX = 0;
                 static double oldY = 0;
 

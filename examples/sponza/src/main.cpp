@@ -12,7 +12,6 @@
 #include <FIRE/RenderContext.h>
 #include <FIRE/Renderer.h>
 #include <FIRE/Scene.h>
-#include <FIRE/SceneObject.h>
 #include <FIRE/Window.h>
 
 #include <memory>
@@ -27,6 +26,8 @@ void SubmitShaders(FIRE::MaterialFactory& materialFactory)
     materialFactory.CreateMaterialFromFiles("phong", "PhongVS.glsl", "PhongFS.glsl");
     materialFactory.CreateMaterialFromFiles("height", "HeightVS.glsl", "HeightFS.glsl");
     materialFactory.CreateMaterialFromFiles("grid", "GridVS.glsl", "GridFS.glsl");
+    materialFactory.CreateMaterialFromFiles("texCoords", "texCoordsVS.glsl", "texCoordsFS.glsl");
+    materialFactory.CreateMaterialFromFiles("text", "textVS.glsl", "textFS.glsl");
 }
 
 void SetupScene(
