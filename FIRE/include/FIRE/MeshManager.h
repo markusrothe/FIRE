@@ -1,5 +1,5 @@
-#ifndef FIRE_MeshFactory_h
-#define FIRE_MeshFactory_h
+#ifndef FIRE_MeshManager_h
+#define FIRE_MeshManager_h
 
 #include <FIRE/Mesh3D.h>
 #include <FIRE/MeshHandle.h>
@@ -51,4 +51,4 @@ private:
 
 } // namespace FIRE
 
-#endif // FIRE_MeshFactory_h
+#endif // FIRE_MeshManager_h

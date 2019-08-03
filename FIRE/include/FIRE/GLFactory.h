@@ -2,12 +2,13 @@
 #define FIRE_GLFactory_H
 #include <cstdint>
 #include <memory>
+#include <string>
 
 namespace FIRE
 {
 
 class Window;
-class RenderableRenderer;
+class Renderer;
 class RenderContext;
 class ShaderFactory;
 class MeshManager;
