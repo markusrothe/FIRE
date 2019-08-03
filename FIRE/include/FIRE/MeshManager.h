@@ -2,7 +2,6 @@
 #define FIRE_MeshManager_h
 
 #include <FIRE/Mesh3D.h>
-#include <FIRE/MeshHandle.h>
 #include <FIRE/MeshType.h>
 
 #include <cstdint>
@@ -44,7 +43,7 @@ private:
         std::vector<glm::vec2>&& uvs,
         std::vector<unsigned int>&& indices);
 
-    std::unordered_map<std::string, std::unique_ptr<Mesh3D>>::const_iterator Lookup(std::string const& name) const;
+    [[nodiscard]] std::unordered_map<std::string, std::unique_ptr<Mesh3D>>::const_iterator Lookup(std::string const& name) const;
 
     std::unordered_map<std::string, std::unique_ptr<Mesh3D>> m_cache;
 };
