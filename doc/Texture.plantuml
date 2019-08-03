@@ -1,0 +1,51 @@
+@startuml
+!include skin.iuml
+
+interface Texture2D {
+    + Texture(width: uint32_t, height: uint32_t, format: Format)
+    + Bind(slot: uint32_t)
+    + Release()
+}
+
+class GLTexture2D
+
+class TextureManager {
+    + CreateTexture(width: uint32_t, height: uint32_t, format: Format, pixels: void*) : Texture
+    + CreateFontCharTexture(c: char) : FontChar
+    - texFactory: unique_ptr<TextureFactory>
+}
+
+interface TextureFactory {
+    + Create2DTexture(width: uint32_t, height: uint32_t, format: Format, pixels: void*) : Texture
+}
+
+class GLTextureFactory
+
+class FontChar {
+    + FontChar(c: char, tex: Texture2D)
+    - c: char
+    - texture: Texture2D
+}
+
+class Material {
+    + AddTexture(tex: Texture2D): void
+    - textures: vector<Texture2D>
+}
+
+interface MaterialBinder {
+    + Bind(mat: Material)
+    + Release()
+}
+
+TextureFactory .> Texture2D : create
+TextureManager .> FontChar: create
+TextureManager o-- TextureFactory
+Texture2D <|--GLTexture2D
+GLTextureFactory .> GLTexture2D : create
+TextureFactory <|--GLTextureFactory
+FontChar o-- Texture2D
+Material o-- Texture2D
+MaterialBinder ..> Material
+
+
+@enduml

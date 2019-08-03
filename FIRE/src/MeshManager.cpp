@@ -426,7 +426,7 @@ std::vector<Mesh3D*> MeshManager::CreateFromFile(std::string name, std::string f
 Mesh3D* MeshManager::DoCreate(
     MeshCategory meshCategory,
     MeshPrimitives primitives,
-    std::string name,
+    std::string const& name,
     std::vector<glm::vec3>&& positions,
     std::vector<glm::vec3>&& normals,
     std::vector<glm::vec2>&& uvs,

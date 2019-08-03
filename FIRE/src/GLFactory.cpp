@@ -3,12 +3,11 @@
 
 #include "FIRE/Renderer.h"
 #include "GLDraw.h"
-#include "GLFontTextureFactory.h"
-#include "GLImageTextureFactory.h"
 #include "GLMaterialBinder.h"
 #include "GLRenderContext.h"
+#include "GLTextureFactory.h"
 #include "GLVertexLayoutFactory.h"
-#include "TextureFactory.h"
+#include "TextureManager.h"
 #include <FIRE/GLFactory.h>
 #include <FIRE/Window.h>
 
@@ -33,15 +32,14 @@ std::unique_ptr<Renderer> CreateRenderer()
     auto materialBinder = std::make_unique<GLMaterialBinder>();
     auto draw = std::make_unique<GLDraw>();
 
-    auto texFactory = std::make_unique<TextureFactory>(
-        std::make_unique<GLImageTextureFactory>(),
-        std::make_unique<GLFontTextureFactory>());
+    auto texManager = std::make_unique<TextureManager>(
+        std::make_unique<GLTextureFactory>());
 
     return std::make_unique<Renderer>(
         std::move(draw),
         std::move(materialBinder),
         std::move(layoutFactory),
-        std::move(texFactory));
+        std::move(texManager));
 }
 
 std::unique_ptr<ShaderFactory> CreateShaderFactory()

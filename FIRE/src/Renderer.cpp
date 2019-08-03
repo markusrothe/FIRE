@@ -2,7 +2,7 @@
 #include "Draw.h"
 #include "FontCharacter.h"
 #include "MaterialBinder.h"
-#include "TextureFactory.h"
+#include "TextureManager.h"
 #include "VertexLayoutFactory.h"
 #include <FIRE/Renderable.h>
 #include <FIRE/TextOverlay.h>
@@ -33,11 +33,11 @@ Renderer::Renderer(
     std::unique_ptr<Draw> draw,
     std::unique_ptr<MaterialBinder> materialBinder,
     std::unique_ptr<VertexLayoutFactory> vertexLayoutFactory,
-    std::unique_ptr<TextureFactory> texFactory)
+    std::unique_ptr<TextureManager> texFactory)
     : m_draw(std::move(draw))
     , m_materialBinder(std::move(materialBinder))
     , m_vertexLayoutFactory(std::move(vertexLayoutFactory))
-    , m_texFactory(std::move(texFactory))
+    , m_texManager(std::move(texFactory))
 {
 }
 
@@ -53,7 +53,7 @@ void Renderer::Submit(TextOverlay const& overlay)
     m_overlays[overlay.name] = overlay;
 }
 
-void Renderer::Render(float windowWidth, float windowHeight)
+void Renderer::Render(float, float)
 {
     m_draw->Clear();
 
@@ -62,10 +62,10 @@ void Renderer::Render(float windowWidth, float windowHeight)
         Render(renderable.second);
     }
 
-    for(auto const& overlay : m_overlays)
-    {
-        Render(overlay.second, windowWidth, windowHeight);
-    }
+    //    for(auto const& overlay : m_overlays)
+    //    {
+    //        Render(overlay.second, windowWidth, windowHeight);
+    //    }
 }
 
 void Renderer::Render(Renderable const& renderable)
@@ -85,14 +85,14 @@ void Renderer::Render(TextOverlay const& overlay, float width, float height)
     float y = overlay.y * height;
     for(auto const& c : overlay.text)
     {
-        FontCharacter* ch = m_texFactory->CreateFontCharTexture(c);
-        ch->texture.Bind();
-        auto vertices = GetFontCharQuad(*ch, x, y, overlay.scale);
+        FontCharacter ch = m_texManager->CreateFontCharTexture(c);
+        ch.texture->Bind(0);
+        auto vertices = GetFontCharQuad(ch, x, y, overlay.scale);
         vertexLayout.BufferSubData(0u, sizeof(vertices), vertices.data());
         m_draw->DoDraw(vertexLayout, MeshPrimitives::Triangles, 6u);
 
         // Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-        x += (ch->advance >> 6) * overlay.scale; // Bitshift by 6 to get value in pixels (2^6 = 64)
+        x += (ch.advance >> 6) * overlay.scale; // Bitshift by 6 to get value in pixels (2^6 = 64)
     }
 
     m_materialBinder->Release();

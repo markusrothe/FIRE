@@ -1,6 +1,6 @@
 #include "Draw.h"
 #include "MaterialBinder.h"
-#include "TextureFactory.h"
+#include "TextureManager.h"
 #include "VertexLayoutFactory.h"
 #include <FIRE/Message.h>
 #include <FIRE/Renderer.h>

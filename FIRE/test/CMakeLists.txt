@@ -3,27 +3,29 @@ if (NOT BUILD_TESTING)
 endif ()
 
 add_executable(FIRE_tests
-    ./Utilities.h
+    FIRE_tests/Utilities.h
 
-    ./CameraComponentTest.cpp
-    ./RenderingComponentTest.cpp
-    ./WindowTest.cpp
-    ./MeshTest.cpp
-    ./MaterialFactoryTest.cpp
-    ./MaterialTest.cpp
-    ./SceneTest.cpp
-    ./SceneObjectTest.cpp
-    ./TransformTest.cpp
-    ./InputListenerTest.cpp
-    ./MeshManagerTest.cpp
-    ./TextureFactoryTest.cpp
-    ./RendererTest.cpp
-    )
+    FIRE_tests/CameraComponentTest.cpp
+    FIRE_tests/RenderingComponentTest.cpp
+    FIRE_tests/WindowTest.cpp
+    FIRE_tests/MeshTest.cpp
+    FIRE_tests/MaterialFactoryTest.cpp
+    FIRE_tests/MaterialTest.cpp
+    FIRE_tests/SceneTest.cpp
+    FIRE_tests/SceneObjectTest.cpp
+    FIRE_tests/TransformTest.cpp
+    FIRE_tests/InputListenerTest.cpp
+    FIRE_tests/MeshManagerTest.cpp
+    FIRE_tests/TextureManagerTest.cpp
+    FIRE_tests/RendererTest.cpp
+    Mocks/TextureFactoryMock.h)
 
 target_include_directories(FIRE_tests
     PUBLIC
     $<TARGET_PROPERTY:FIRE,INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:FIRE,INTERFACE_INCLUDE_DIRECTORIES>
+    PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/Mocks
     )
 
 target_link_libraries(FIRE_tests
