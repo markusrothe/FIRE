@@ -1,10 +1,9 @@
 #include "FIRE/TextureManager.h"
 #include "FontLoader.h"
 #include "TextureFactory.h"
-#include <FIRE/glmfwd.h>
 #include <iostream>
 #include <stdexcept>
-#include <xutility>
+#include <utility>
 
 namespace FIRE
 {
