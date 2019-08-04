@@ -8,7 +8,7 @@ namespace FIRE
 class GLTextureFactory : public TextureFactory
 {
 public:
-    Texture2D* Create2DTexture(uint32_t width, uint32_t height, std::vector<uint8_t> const& data) override;
+    std::unique_ptr<Texture2D> Create2DTexture(uint32_t width, uint32_t height, std::vector<uint8_t> const& data) override;
 };
 } // namespace FIRE
 

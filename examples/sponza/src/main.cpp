@@ -12,6 +12,7 @@
 #include <FIRE/RenderContext.h>
 #include <FIRE/Renderer.h>
 #include <FIRE/Scene.h>
+#include <FIRE/TextureManager.h>
 #include <FIRE/Window.h>
 
 #include <memory>
@@ -76,11 +77,11 @@ int main(int, char**)
 {
     FIRE::Window window = FIRE::GLFactory::InitWindow("FIRE - cube", WINDOW_WIDTH, WINDOW_HEIGHT);
 
-    FIRE::MeshManager meshManager;
-    FIRE::MaterialFactory materialFactory(FIRE::GLFactory::CreateShaderFactory());
+    auto materialFactory = FIRE::GLFactory::CreateMaterialFactory();
     SubmitShaders(materialFactory);
-
-    auto renderer{FIRE::GLFactory::CreateRenderer()};
+    std::shared_ptr<FIRE::TextureManager> textureManager = FIRE::GLFactory::CreateTextureManager();
+    FIRE::MeshManager meshManager;
+    auto renderer{FIRE::GLFactory::CreateRenderer(textureManager)};
 
     FIRE::Scene scene;
     SetupScene(window, scene, *renderer, materialFactory, meshManager);

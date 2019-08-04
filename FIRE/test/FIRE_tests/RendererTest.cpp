@@ -1,7 +1,8 @@
 #include "Draw.h"
+#include "FIRE/TextureManager.h"
+#include "FontLoader.h"
 #include "MaterialBinder.h"
 #include "TextureFactoryMock.h"
-#include "TextureManager.h"
 #include "VertexLayout.h"
 #include "VertexLayoutFactory.h"
 #include <FIRE/Renderable.h>
@@ -27,7 +28,7 @@ public:
 class MaterialBinderMock : public FIRE::MaterialBinder
 {
 public:
-    MOCK_METHOD1(Bind, void(FIRE::Material const&));
+    MOCK_METHOD1(Bind, void(FIRE::Material&));
     MOCK_METHOD0(Release, void(void));
 };
 
@@ -72,7 +73,7 @@ public:
     std::unique_ptr<MaterialBinderMock> matBinder = std::make_unique<MaterialBinderMock>();
     std::unique_ptr<VertexLayoutFactoryMock> vertLayoutFactory = std::make_unique<VertexLayoutFactoryMock>();
     std::unique_ptr<FIRE::TextureManager> texFactory =
-        std::make_unique<FIRE::TextureManager>(std::make_unique<FIRE_tests::TextureFactoryMock>());
+        std::make_unique<FIRE::TextureManager>(std::make_unique<FIRE_tests::TextureFactoryMock>(), nullptr);
 
     VertexLayoutStub layout;
     FIRE::Mesh3D mesh{"mesh", FIRE::MeshType()};

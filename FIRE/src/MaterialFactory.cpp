@@ -15,7 +15,8 @@ std::string GetFileContent(std::string const& filePath)
     return content;
 }
 } // namespace
-MaterialFactory::MaterialFactory(std::unique_ptr<ShaderFactory> shaderFactory)
+MaterialFactory::MaterialFactory(
+    std::unique_ptr<ShaderFactory> shaderFactory)
     : m_shaderFactory(std::move(shaderFactory))
 {
 }

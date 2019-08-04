@@ -1,77 +1,73 @@
-#include "TextureManager.h"
+#include "FIRE/TextureManager.h"
+#include "FontLoader.h"
 #include "TextureFactory.h"
-#include <ft2build.h>
-#include FT_FREETYPE_H
 #include <FIRE/glmfwd.h>
 #include <iostream>
+#include <stdexcept>
+#include <xutility>
 
 namespace FIRE
 {
-TextureManager::TextureManager(std::unique_ptr<TextureFactory> texFactory)
+
+TextureManager::TextureManager(std::unique_ptr<TextureFactory> texFactory, std::unique_ptr<FontLoader> fontLoader)
     : m_texFactory(std::move(texFactory))
+    , m_fontLoader(std::move(fontLoader))
 {
-    //    FT_Library ft;
-    //    FT_Face face;
-    //
-    //    if(FT_Init_FreeType(&ft))
-    //    {
-    //        std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
-    //    }
-    //
-    //    if(FT_New_Face(ft, "RussoOne-Regular.ttf", 0, &face))
-    //    {
-    //        std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
-    //    }
-    //
-    //    FT_Set_Pixel_Sizes(face, 0, 48);
-    //
-    //    glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
-    //
-    //    for(GLubyte c = 0; c < 128; c++)
-    //    {
-    //        // Load character glyph
-    //        if(FT_Load_Char(face, c, FT_LOAD_RENDER))
-    //        {
-    //            std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
-    //            continue;
-    //        }
-    //        // Generate texture
-    //        auto const width = face->glyph->bitmap.width;
-    //        auto const height = face->glyph->bitmap.rows;
-    //        if(width > 0 && height > 0)
-    //        {
-    //            FIRE::Texture2D texture(width, height, std::vector<uint8_t>(face->glyph->bitmap.buffer, face->glyph->bitmap.buffer + width * height));
-    //
-    //            // Now store character for later use
-    //            FontCharacter character = {
-    //                std::move(texture),
-    //                glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
-    //                glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
-    //                (GLuint)face->glyph->advance.x};
-    //
-    //            m_characters.insert(std::make_pair(static_cast<GLchar>(c), std::move(character)));
-    //        }
-    //    }
-    //    FT_Done_Face(face);
-    //    FT_Done_FreeType(ft);
 }
 
 TextureManager::~TextureManager() = default;
 
-FontCharacter TextureManager::CreateFontCharTexture(char c)
+FontCharacter* TextureManager::CreateFontCharTexture(char c)
 {
     auto it = m_characters.find(c);
     if(it == m_characters.end())
     {
-        //TODO: Create FontCharTexture
-        return FontCharacter();
+        auto inserted = m_characters.insert(std::make_pair(c, CreateFontCharacter(c)));
+        return &(inserted.first->second);
     }
-    return (it->second);
+
+    return &(it->second);
 }
 
-Texture2D* TextureManager::CreateImageTexture(uint32_t width, uint32_t height, std::vector<uint8_t> const& data)
+Texture2D* TextureManager::CreateImageTexture(std::string name, uint32_t width, uint32_t height, std::vector<uint8_t> const& data)
 {
-    return m_texFactory->Create2DTexture(width, height, data);
+    if(auto it = m_textures.find(name); it != m_textures.end())
+    {
+        return it->second.get();
+    }
+
+    auto tex = m_texFactory->Create2DTexture(width, height, data);
+    auto inserted = m_textures.insert(std::make_pair(std::move(name), std::move(tex)));
+    if(!inserted.second)
+    {
+        throw std::runtime_error("Could not cache texture.");
+    }
+
+    return inserted.first->second.get();
+}
+
+FontCharacter TextureManager::CreateFontCharacter(char c)
+{
+    FontCharacter fontChar;
+
+    try
+    {
+        fontChar = m_fontLoader->LoadChar(c);
+    }
+    catch(std::exception const& e)
+    {
+        std::cerr << e.what() << std::endl;
+    }
+
+    auto width = fontChar.size.x;
+    auto height = fontChar.size.y;
+
+    if(width > 0 && height > 0)
+    {
+        fontChar.texture = m_texFactory->Create2DTexture(width, height, fontChar.data);
+    }
+
+    return fontChar;
 }
 
 } // namespace FIRE

@@ -6,7 +6,7 @@ namespace FIRE
 class GLMaterialBinder : public MaterialBinder
 {
 public:
-    void Bind(Material const& material) override;
+    void Bind(Material& material) override;
     void Release() override;
 };
 } // namespace FIRE

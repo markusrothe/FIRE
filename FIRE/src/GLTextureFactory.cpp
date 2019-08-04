@@ -1,9 +1,10 @@
 #include "GLTextureFactory.h"
+#include "GLTexture2D.h"
 
 namespace FIRE
 {
-Texture2D* GLTextureFactory::Create2DTexture(uint32_t, uint32_t, std::vector<uint8_t> const&)
+std::unique_ptr<Texture2D> GLTextureFactory::Create2DTexture(uint32_t width, uint32_t height, std::vector<uint8_t> const& data)
 {
-    return nullptr;
+    return std::make_unique<GLTexture2D>(width, height, data);
 }
 } // namespace FIRE

@@ -7,7 +7,7 @@ namespace FIRE_tests
 class TextureFactoryMock : public FIRE::TextureFactory
 {
 public:
-    MOCK_METHOD3(Create2DTexture, FIRE::Texture2D*(uint32_t width, uint32_t height, std::vector<uint8_t> const& data));
+    MOCK_METHOD3(Create2DTexture, std::unique_ptr<FIRE::Texture2D>(uint32_t width, uint32_t height, std::vector<uint8_t> const& data));
 };
 } // namespace FIRE_tests
 

@@ -11,4 +11,4 @@ TODO.txt
 run.sh
 flycheck_.dir-locals.elc
 /.idea/
-/.clangd/
+/.clangd

@@ -1,4 +1,5 @@
 #include "GLMaterialBinder.h"
+#include "GLTexture2D.h"
 #include <FIRE/Material.h>
 #include <FIRE/glmfwd.h>
 #include <glad/glad.h>
@@ -34,10 +35,14 @@ void SetShaderUniforms(GLuint shader, std::map<std::string, std::pair<ShaderPara
     }
 }
 } // namespace
-void GLMaterialBinder::Bind(Material const& material)
+void GLMaterialBinder::Bind(Material& material)
 {
     glUseProgram(material.ShaderId());
     SetShaderUniforms(material.ShaderId(), material.GetShaderParameters());
+    for(auto texIter : material.GetTextures())
+    {
+        texIter.second->Bind(texIter.first);
+    }
 }
 
 void GLMaterialBinder::Release()

@@ -1,5 +1,3 @@
-
-
 #include "FPSOverlayComponent.h"
 #include "InputMappingComponent.h"
 #include "Mesh3DRenderingComponent.h"
@@ -15,6 +13,7 @@
 #include <FIRE/Scene.h>
 #include <FIRE/Window.h>
 
+#include <FIRE/TextureManager.h>
 #include <memory>
 namespace
 {
@@ -27,6 +26,7 @@ void SubmitShaders(FIRE::MaterialFactory& materialFactory)
     materialFactory.CreateMaterialFromFiles("height", "HeightVS.glsl", "HeightFS.glsl");
     materialFactory.CreateMaterialFromFiles("grid", "GridVS.glsl", "GridFS.glsl");
     materialFactory.CreateMaterialFromFiles("texCoords", "texCoordsVS.glsl", "texCoordsFS.glsl");
+    materialFactory.CreateMaterialFromFiles("texSampling", "textureSamplingVS.glsl", "textureSamplingFS.glsl");
     materialFactory.CreateMaterialFromFiles("text", "textVS.glsl", "textFS.glsl");
 }
 
@@ -35,14 +35,20 @@ void SetupScene(
     FIRE::Scene& scene,
     FIRE::Renderer& renderer,
     FIRE::MaterialFactory& materialFactory,
-    FIRE::MeshManager& meshManager)
+    FIRE::MeshManager& meshManager,
+    FIRE::TextureManager& texManager)
 {
     auto input{std::make_shared<FIRE::InputListener>()};
     window.SetInputListener(input);
 
     auto& cubeObject = scene.CreateSceneObject("cube");
+
+    auto textureMaterial = materialFactory.GetMaterial("texSampling");
+    auto checkerBoardTexture = texManager.CreateImageTexture("checkerBoardTex", 2, 2, {0x00, 0xff, 0xff, 0x00});
+    textureMaterial.AddTexture(checkerBoardTexture, 0u);
+
     std::vector<FIRE::Renderable> renderables;
-    renderables.emplace_back("cubeRenderable", materialFactory.GetMaterial("texCoords"), meshManager.CreateCube("cubeMesh"));
+    renderables.emplace_back("cubeRenderable", textureMaterial, meshManager.CreateCube("cubeMesh"));
     cubeObject.AddComponent(std::make_unique<examples::Mesh3DRenderingComponent>(renderer, std::move(renderables)));
 
     auto& mainCamera = scene.CreateSceneObject("cam");
@@ -69,14 +75,15 @@ int main(int, char**)
 {
     FIRE::Window window = FIRE::GLFactory::InitWindow("FIRE - cube", WINDOW_WIDTH, WINDOW_HEIGHT);
 
-    FIRE::MeshManager meshManager;
-    FIRE::MaterialFactory materialFactory(FIRE::GLFactory::CreateShaderFactory());
+    auto materialFactory = FIRE::GLFactory::CreateMaterialFactory();
     SubmitShaders(materialFactory);
 
-    auto renderer{FIRE::GLFactory::CreateRenderer()};
+    std::shared_ptr<FIRE::TextureManager> textureManager = FIRE::GLFactory::CreateTextureManager();
+    FIRE::MeshManager meshManager;
+    auto renderer{FIRE::GLFactory::CreateRenderer(textureManager)};
 
     FIRE::Scene scene;
-    SetupScene(window, scene, *renderer, materialFactory, meshManager);
+    SetupScene(window, scene, *renderer, materialFactory, meshManager, *textureManager);
 
     FIRE::MainLoop(window, scene, *renderer);
 }

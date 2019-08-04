@@ -10,29 +10,17 @@ namespace FIRE
 class Texture2D
 {
 public:
-    Texture2D() = default;
-    Texture2D(uint32_t width, uint32_t height, std::vector<uint8_t> data);
+    virtual ~Texture2D() = default;
 
-    Texture2D(Texture2D const&) = delete;
-    Texture2D& operator=(Texture2D const&) = delete;
-    Texture2D(Texture2D&& other) noexcept;
-    Texture2D& operator=(Texture2D&& other) noexcept;
+    [[nodiscard]] virtual uint32_t Id() const = 0;
+    [[nodiscard]] virtual uint32_t Width() const = 0;
+    [[nodiscard]] virtual uint32_t Height() const = 0;
+    [[nodiscard]] virtual std::vector<uint8_t> const& Data() const = 0;
 
-    ~Texture2D();
-
-    [[nodiscard]] uint32_t Id() const;
-    [[nodiscard]] uint32_t Width() const;
-    [[nodiscard]] uint32_t Height() const;
-    [[nodiscard]] std::vector<uint8_t> const& Data() const;
-
-    void Bind(uint32_t unit);
-    void Release();
+    virtual void Bind(uint32_t unit) = 0;
+    virtual void Release() = 0;
 
 private:
-    uint32_t m_width;
-    uint32_t m_height;
-    std::vector<uint8_t> m_data;
-    uint32_t m_id{};
 };
 } // namespace FIRE
 

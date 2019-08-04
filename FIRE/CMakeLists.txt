@@ -29,11 +29,24 @@ add_library(FIRE STATIC
     include/FIRE/Noise.h
     include/FIRE/MainLoop.h
     include/FIRE/Texture2D.h
+    include/FIRE/Renderer.h
 
     src/GLShaderFactory.h
     src/GLRenderContext.h
-    include/FIRE/Renderer.h
-    src/TextureManager.h
+    include/FIRE/TextureManager.h
+    src/GLMaterialBinder.h
+    src/Draw.h
+    src/MaterialBinder.h
+    src/GLVertexLayout.h
+    src/VertexLayoutFactory.h
+    src/GLVertexLayoutFactory.h
+    src/GLDraw.h
+    src/VertexLayout.h
+    src/TextureFactory.h
+    src/GLTextureFactory.h
+    src/FontLoader.h
+    src/FTFontLoader.h
+    src/GLTexture2D.h
 
     src/Window.cpp
     src/Renderable.cpp
@@ -58,8 +71,14 @@ add_library(FIRE STATIC
     src/TextureManager.cpp
     src/Noise.cpp
     src/MainLoop.cpp
-    src/Texture2D.cpp
-    src/MaterialBinder.h src/GLVertexLayout.cpp src/GLVertexLayout.h src/VertexLayoutFactory.h src/GLVertexLayoutFactory.cpp src/GLVertexLayoutFactory.h src/GLMaterialBinder.cpp src/GLMaterialBinder.h src/Draw.h src/GLDraw.cpp src/GLDraw.h src/VertexLayout.h src/TextureFactory.h src/GLTextureFactory.cpp src/GLTextureFactory.h)
+    src/GLTexture2D.cpp
+    src/GLVertexLayout.cpp
+    src/GLVertexLayoutFactory.cpp
+    src/GLMaterialBinder.cpp
+    src/GLDraw.cpp
+    src/GLTextureFactory.cpp
+    src/FTFontLoader.cpp
+    )
 
 target_include_directories(FIRE
     PUBLIC

@@ -1,7 +1,17 @@
-#include "TextureManager.h"
+#include "FIRE/TextureManager.h"
+#include "FontLoader.h"
 #include "TextureFactoryMock.h"
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
+
+namespace FIRE_tests
+{
+class FontLoaderMock : public FIRE::FontLoader
+{
+public:
+    MOCK_METHOD1(LoadChar, FIRE::FontCharacter(char));
+};
+} // namespace FIRE_tests
 
 namespace
 {
@@ -13,26 +23,33 @@ class ATextureManager : public ::testing::Test
 protected:
     FIRE::TextureManager CreateTextureManager()
     {
-        return FIRE::TextureManager(std::move(texFactory));
+        return FIRE::TextureManager(std::move(texFactory), std::move(fontLoader));
     }
 
     std::unique_ptr<FIRE_tests::TextureFactoryMock> texFactory{std::make_unique<FIRE_tests::TextureFactoryMock>()};
+    std::unique_ptr<FIRE_tests::FontLoaderMock> fontLoader{std::make_unique<FIRE_tests::FontLoaderMock>()};
+    uint32_t width{10};
+    uint32_t height{10};
+    std::vector<uint8_t> data{0, 1, 2, 3};
 };
 
 } // namespace
 
-TEST_F(ATextureManager, DISABLED_CreatesFontCharacters)
+TEST_F(ATextureManager, CreatesFontCharacters)
 {
-    EXPECT_CALL(*texFactory, Create2DTexture(_, _, _));
+    EXPECT_CALL(*fontLoader, LoadChar('A'))
+        .WillOnce(Return(::testing::ByMove(FIRE::FontCharacter(nullptr, {width, height}, {10, 10}, 10, data))));
+
+    EXPECT_CALL(*texFactory, Create2DTexture(width, height, data));
+
     auto texManager = CreateTextureManager();
     texManager.CreateFontCharTexture('A');
 }
 
 TEST_F(ATextureManager, CreatesImageTextures)
 {
-    std::vector<uint8_t> data = {0, 1, 2, 3};
-    EXPECT_CALL(*texFactory, Create2DTexture(100, 120, data));
+    EXPECT_CALL(*texFactory, Create2DTexture(width, height, data));
 
     auto texManager = CreateTextureManager();
-    texManager.CreateImageTexture(100, 120, data);
+    texManager.CreateImageTexture("tex", width, height, data);
 }

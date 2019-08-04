@@ -20,7 +20,7 @@ public:
         std::unique_ptr<Draw> draw,
         std::unique_ptr<MaterialBinder> materialBinder,
         std::unique_ptr<VertexLayoutFactory> vertexLayoutFactory,
-        std::unique_ptr<TextureManager> texFactory);
+        std::shared_ptr<TextureManager> texFactory);
 
     ~Renderer();
 
@@ -32,13 +32,13 @@ public:
     void ToggleWireframe();
 
 private:
-    void Render(Renderable const& renderable);
-    void Render(TextOverlay const& overlay, float width, float height);
+    void Render(Renderable renderable);
+    void Render(TextOverlay overlay, float width, float height);
 
     std::unique_ptr<Draw> m_draw;
     std::unique_ptr<MaterialBinder> m_materialBinder;
     std::unique_ptr<VertexLayoutFactory> m_vertexLayoutFactory;
-    std::unique_ptr<TextureManager> m_texManager;
+    std::shared_ptr<TextureManager> m_texManager;
 
     std::map<std::string, Renderable> m_renderables;
     std::map<std::string, TextOverlay> m_overlays;

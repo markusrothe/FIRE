@@ -1,3 +1,4 @@
+#include "Texture2DMock.h"
 #include <FIRE/Material.h>
 #include <FIRE/ShaderType.h>
 #include <FIRE/glmfwd.h>
@@ -6,21 +7,30 @@
 #include <optional>
 #include <type_traits>
 
-TEST(AMaterial, HasAName)
+namespace
 {
-    FIRE::Material material("name", 0u);
-    EXPECT_EQ("name", material.Name());
+class AMaterial : public ::testing::Test
+{
+public:
+    std::string const NAME{"name"};
+    unsigned int SHADER_ID{42u};
+    FIRE::Material material{NAME, SHADER_ID};
+    FIRE_tests::Texture2DMock tex;
+};
+} // namespace
+
+TEST_F(AMaterial, HasAName)
+{
+    EXPECT_EQ(NAME, material.Name());
 }
 
-TEST(AMaterial, HasAnAssociatedShader)
+TEST_F(AMaterial, HasAnAssociatedShader)
 {
-    FIRE::Material material("", 42u);
-    EXPECT_EQ(42u, material.ShaderId());
+    EXPECT_EQ(SHADER_ID, material.ShaderId());
 }
 
-TEST(AMaterial, HasParametersForItsShaders)
+TEST_F(AMaterial, HasParametersForItsShaders)
 {
-    FIRE::Material material("", 0u);
     material.SetShaderParameter("Param", FIRE::ShaderParameterType::MAT4x4, glm::mat4x4(1.0f));
     auto materialParam = material.GetShaderParameter("Param");
     ASSERT_TRUE(materialParam);
@@ -31,15 +41,32 @@ TEST(AMaterial, HasParametersForItsShaders)
     EXPECT_EQ(std::any_cast<glm::mat4x4>(materialParam.value().second), glm::mat4x4(1.0f));
 }
 
-TEST(AMaterial, MayHaveNoShaderParameters)
+TEST_F(AMaterial, MayHaveNoShaderParameters)
 {
-    FIRE::Material mat;
-    EXPECT_FALSE(mat.GetShaderParameter("Param"));
+    EXPECT_FALSE(material.GetShaderParameter("Param"));
 }
 
-TEST(AMaterial, AllowsAccessToAllShaderParameters)
+TEST_F(AMaterial, AllowsAccessToAllShaderParameters)
 {
-    FIRE::Material material("", 0u);
     material.SetShaderParameter("Param", FIRE::ShaderParameterType::MAT4x4, glm::mat4x4(1.0f));
     EXPECT_EQ(1u, material.GetShaderParameters().size());
+}
+
+TEST_F(AMaterial, MayHaveTexturesAttachedToATextureSlot)
+{
+    material.AddTexture(&tex, 0u);
+    EXPECT_EQ(&tex, material.GetTexture(0u));
+}
+
+TEST_F(AMaterial, ReturnsNullptrIfNoTexturePresentForGivenSlot)
+{
+    EXPECT_EQ(nullptr, material.GetTexture(1u));
+}
+
+TEST_F(AMaterial, AllowsAccessToAllAttachedTextures)
+{
+    material.AddTexture(&tex, 0u);
+    material.AddTexture(&tex, 1u);
+
+    ASSERT_EQ(2u, material.GetTextures().size());
 }
