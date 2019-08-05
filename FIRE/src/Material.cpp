@@ -48,5 +48,23 @@ bool Material::operator!=(Material const& other) const
 {
     return !(*this == other);
 }
+void Material::AddTexture(Texture2D* tex, uint32_t slot)
+{
+    m_textures[slot] = tex;
+}
+
+Texture2D* Material::GetTexture(uint32_t slot)
+{
+    if(auto it = m_textures.find(slot); it != m_textures.end())
+    {
+        return it->second;
+    }
+
+    return nullptr;
+}
+std::unordered_map<uint32_t, Texture2D*> Material::GetTextures()
+{
+    return m_textures;
+}
 
 } // namespace FIRE

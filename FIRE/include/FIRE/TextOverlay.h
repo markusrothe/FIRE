@@ -1,6 +1,7 @@
 #ifndef FIRE_TextOverlay_h
 #define FIRE_TextOverlay_h
 
+#include <FIRE/Material.h>
 #include <string>
 namespace FIRE
 {
@@ -8,13 +9,21 @@ class TextOverlay
 {
 public:
     TextOverlay() = default;
-    TextOverlay(int id, std::string text, float x, float y, float scale = 1.0f);
 
-    int id;
+    TextOverlay(
+        std::string name,
+        std::string text,
+        float x,
+        float y,
+        Material mat,
+        float scale = 1.0f);
+
+    std::string name;
     std::string text;
     float x;
     float y;
     float scale;
+    Material material;
 };
 
 bool operator==(TextOverlay const& lhs, TextOverlay const& rhs);

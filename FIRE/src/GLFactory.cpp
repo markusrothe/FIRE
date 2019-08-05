@@ -1,19 +1,18 @@
 
 #include "GLShaderFactory.h"
 
-#include "GLDrawAgent.h"
-#include "GLFontTextureFactory.h"
+#include "FIRE/Renderer.h"
+#include "FIRE/TextureManager.h"
+#include "FTFontLoader.h"
+#include "GLDraw.h"
+#include "GLMaterialBinder.h"
 #include "GLRenderContext.h"
-#include "GLTextRenderer.h"
-#include "GLUploader.h"
-#include "GLRenderer.h"
-#include "TextureFactory.h"
+#include "GLTextureFactory.h"
+#include "GLVertexLayoutFactory.h"
 #include <FIRE/GLFactory.h>
 #include <FIRE/Window.h>
 
-namespace FIRE
-{
-namespace GLFactory
+namespace FIRE::GLFactory
 {
 Window InitWindow(std::string title, uint32_t width, uint32_t height)
 {
@@ -27,23 +26,25 @@ std::unique_ptr<RenderContext> CreateRenderContext(Window& window)
     return std::make_unique<GLRenderContext>(window);
 }
 
-std::unique_ptr<Renderer> CreateRenderer(MeshManager& meshManager)
+std::unique_ptr<Renderer> CreateRenderer(std::shared_ptr<TextureManager> texManager)
 {
-    return std::make_unique<GLRenderer>(
-        std::make_unique<GLUploader>(meshManager),
-        std::make_unique<GLDrawAgent>(meshManager));
+    return std::make_unique<Renderer>(
+        std::make_unique<GLDraw>(),
+        std::make_unique<GLMaterialBinder>(),
+        std::make_unique<GLVertexLayoutFactory>(),
+        std::move(texManager));
 }
 
-std::unique_ptr<TextRenderer> CreateTextRenderer()
+MaterialFactory CreateMaterialFactory()
 {
-    auto fontTexFactory = std::make_unique<GLFontTextureFactory>();
-    auto texFactory = std::make_unique<TextureFactory>(std::move(fontTexFactory));
-    return std::make_unique<GLTextRenderer>(std::move(texFactory));
+    return MaterialFactory(std::make_unique<GLShaderFactory>());
 }
 
-std::unique_ptr<ShaderFactory> CreateShaderFactory()
+std::unique_ptr<TextureManager> CreateTextureManager()
 {
-    return std::make_unique<GLShaderFactory>();
+    return std::make_unique<TextureManager>(
+        std::make_unique<GLTextureFactory>(),
+        std::make_unique<FTFontLoader>());
 }
-} // namespace GLFactory
-} // namespace FIRE
+
+} // namespace FIRE::GLFactory

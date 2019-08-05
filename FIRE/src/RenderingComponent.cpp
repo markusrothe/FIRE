@@ -9,6 +9,11 @@ RenderingComponent::RenderingComponent(Renderer& renderer)
 
 RenderingComponent::~RenderingComponent() = default;
 
+void RenderingComponent::Setup(SceneObject&)
+{
+    // base implementation, do nothing
+}
+
 void RenderingComponent::Update(double deltaTime, SceneObject& sceneObject, Scene& scene)
 {
     DoUpdate(deltaTime, sceneObject, scene);

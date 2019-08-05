@@ -10,6 +10,11 @@ CameraComponent::CameraComponent(float fovy, float aspect, float near, float far
 {
 }
 
+void CameraComponent::Setup(SceneObject&)
+{
+    // base implementation, do nothing
+}
+
 void CameraComponent::Update(double deltaTime, SceneObject& sceneObject, Scene& scene)
 {
     DoUpdate(deltaTime, sceneObject, scene);

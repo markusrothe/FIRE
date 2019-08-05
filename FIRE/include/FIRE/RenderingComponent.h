@@ -1,8 +1,8 @@
 #ifndef FIRE_RenderingComponent_h
 #define FIRE_RenderingComponent_h
 
+#include "Renderer.h"
 #include <FIRE/Component.h>
-#include <FIRE/Renderer.h>
 #include <FIRE/Scene.h>
 #include <FIRE/SceneObject.h>
 
@@ -14,6 +14,7 @@ public:
     explicit RenderingComponent(Renderer& renderer);
     virtual ~RenderingComponent() override;
 
+    void Setup(SceneObject& sceneObject) override;
     void Update(double deltaTime, SceneObject& sceneObject, Scene& scene) override;
 
 protected:

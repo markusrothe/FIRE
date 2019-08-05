@@ -1,4 +1,5 @@
 /build/
+/build_vs/
 /.vscode
 /.vs
 .ccls-cache/
@@ -9,3 +10,5 @@ TODO.txt
 .projectile
 run.sh
 flycheck_.dir-locals.elc
+/.idea/
+/.clangd

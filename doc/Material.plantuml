@@ -1,0 +1,44 @@
+@startuml
+!include skin.iuml
+
+class Material {
+    + GetShaderId() : int
+    + shaderParameters : pair<paramType, paramValue>
+
+}
+class Shader {
+    + id : int
+}
+
+interface MaterialBinder {
+    + MaterialBinder(Material)
+    + Bind() : void
+    + Release() : void
+    - material : Material
+}
+class GLMaterialBinder {
+    + Bind() : void
+    + Release() : void
+}
+class MaterialFactory {
+    + CreateDefaultMaterial() : Material
+    + CreateMaterial() : Material
+}
+class ShaderFactory {
+    + CreateDefaultShader() : Shader
+    + CreateShader(ShaderType, ShaderCode) : Shader
+}
+class GLShaderFactory {
+    + CreateDefaultShader() : Shader
+    + CreateShader(ShaderType, ShaderCode) : Shader
+}
+
+MaterialFactory o-- ShaderFactory
+MaterialFactory ..> Material : create
+ShaderFactory <|-- GLShaderFactory
+ShaderFactory ..> Shader : create
+Material o-- Shader
+
+MaterialBinder .> Material
+MaterialBinder <|-- GLMaterialBinder
+@enduml

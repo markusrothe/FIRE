@@ -1,22 +1,18 @@
-#ifndef FIRE_TextureFactory_h
-#define FIRE_TextureFactory_h
+#ifndef FIRE_TEXTUREFACTORY_H
+#define FIRE_TEXTUREFACTORY_H
 
+#include <cstdint>
 #include <memory>
+#include <vector>
 namespace FIRE
 {
-class FontTextureFactory;
-struct FontCharacter;
+class Texture2D;
 class TextureFactory
 {
 public:
-    explicit TextureFactory(std::unique_ptr<FontTextureFactory> fontTexFactory);
-    ~TextureFactory();
-
-    FontCharacter CreateFontCharTexture(char c);
-
-private:
-    std::unique_ptr<FontTextureFactory> m_fontTextFactory;
+    virtual ~TextureFactory() = default;
+    virtual std::unique_ptr<Texture2D> Create2DTexture(uint32_t width, uint32_t height, std::vector<uint8_t> const& data) = 0;
 };
 } // namespace FIRE
 
-#endif // FIRE_TextureFactory_h
+#endif //FIRE_TEXTUREFACTORY_H

@@ -1,0 +1,57 @@
+@startuml
+!include skin.iuml
+
+interface MaterialBinder
+interface VertexLayoutFactory {
+    + CreateStaticIndexedLayout(Renderable): VertexLayout&
+    + CreateDynamicLayout(TextOverlay): VertexLayout&
+}
+
+interface VertexLayout {
+    + BindLayout() : void
+    + ReleaseLayout() : void
+    + BufferData(size_t size, void* data) : void
+    + BufferIndexData(size_t size, void* data) : void
+    + BufferSubData(size_t offset, size_t size, void* data) : void
+    + AddVertexAttribute(uint32_t attribIndex, size_t size, size_t offset) : void
+}
+
+interface Draw {
+    + DoDraw()
+    + DoDrawIndexed()
+}
+
+class Renderer {
+    + Submit(Renderable) : void
+    + Submit(TextOverlay) : void
+    + Render() : void
+    - Render(Renderable) : void
+    - Render(TextOverlay) : void
+}
+
+class Renderable {
+    + name : string
+}
+
+class TextOverlay {
+    + screenX : int [0, 1]
+    + screenY : int [0, 1]
+    + text : string
+    + name : string
+}
+
+Renderer o-- MaterialBinder
+Renderer o-- VertexLayoutFactory
+Renderer o-- Draw
+
+Renderable o-- Mesh
+Renderable o-- Material
+Renderable o-- Texture
+
+VertexLayoutFactory ..> Renderable
+VertexLayoutFactory ..> TextOverlay
+
+VertexLayoutFactory ..> VertexLayout : create
+Draw ..> VertexLayout : draw
+
+@enduml

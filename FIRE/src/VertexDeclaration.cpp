@@ -2,13 +2,13 @@
 
 namespace FIRE
 {
-VertexDeclarationSection::VertexDeclarationSection(size_t size, size_t offset)
+VertexDeclarationSection::VertexDeclarationSection(uint32_t size, uint32_t offset)
     : size(size)
     , offset(offset)
 {
 }
 
-void VertexDeclaration::AddSection(std::string name, size_t size, size_t offset)
+void VertexDeclaration::AddSection(std::string name, uint32_t size, uint32_t offset)
 {
     m_sections.insert(std::make_pair(name, VertexDeclarationSection(size, offset)));
 }

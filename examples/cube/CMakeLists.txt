@@ -1,32 +1,25 @@
 add_executable(cube
-    GridRenderingComponent.h
-    CubeRenderingComponent.h
-    CubeCameraComponent.h
-    CubeLightComponent.h    
-    CubeOverlayComponent.h
-    CubeInputComponent.h
+    src/main.cpp
+)
 
-    GridRenderingComponent.cpp
-    CubeRenderingComponent.cpp
-    CubeCameraComponent.cpp
-    CubeLightComponent.cpp
-    CubeOverlayComponent.cpp
-    CubeInputComponent.cpp
-    main.cpp
+target_include_directories(cube
+PRIVATE
+    src
 )
 
 target_link_libraries(cube
     PRIVATE
     FIRE
-    CompileOptions
+    FIRE::exampleComponents
+    FIRE::CompileOptions
 )
 
 install(
     TARGETS cube
-    DESTINATION bin
+    DESTINATION bin/cube
 )
 
 install(
     FILES $<TARGET_PROPERTY:FIRE,RESOURCE>
-    DESTINATION bin
+    DESTINATION bin/cube
 )

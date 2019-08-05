@@ -30,6 +30,14 @@ Transform& SceneObject::GetTransform()
     return m_transform;
 }
 
+void SceneObject::Setup()
+{
+    for(auto& component : m_components)
+    {
+        component->Setup(*this);
+    }
+}
+
 void SceneObject::Update(double deltaTime, Scene& scene)
 {
     for(auto& component : m_components)
@@ -42,7 +50,7 @@ std::optional<std::any> SceneObject::Send(Message msg)
 {
     for(auto& component : m_components)
     {
-        auto response = component->Receive(msg);
+        auto response = component->Receive(msg, *this);
         if(response)
         {
             return response;

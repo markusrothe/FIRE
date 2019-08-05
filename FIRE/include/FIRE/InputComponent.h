@@ -13,6 +13,7 @@ public:
     explicit InputComponent(InputListener& inputListener);
     virtual ~InputComponent();
 
+    void Setup(SceneObject& sceneObject) override;
     void Update(double deltaTime, SceneObject& sceneObject, Scene& scene) override;
 
 protected:

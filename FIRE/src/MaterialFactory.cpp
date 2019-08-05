@@ -2,7 +2,6 @@
 #include <FIRE/MaterialFactory.h>
 #include <algorithm>
 #include <fstream>
-#include <iterator>
 #include <stdexcept>
 
 namespace FIRE
@@ -16,7 +15,8 @@ std::string GetFileContent(std::string const& filePath)
     return content;
 }
 } // namespace
-MaterialFactory::MaterialFactory(std::unique_ptr<ShaderFactory> shaderFactory)
+MaterialFactory::MaterialFactory(
+    std::unique_ptr<ShaderFactory> shaderFactory)
     : m_shaderFactory(std::move(shaderFactory))
 {
 }
@@ -41,16 +41,11 @@ Material MaterialFactory::CreateMaterial(std::string const& name, std::vector<st
     return Material(name, shaderID);
 }
 
-Material MaterialFactory::CreateMaterialFromFiles(std::string const& name, std::vector<std::pair<ShaderType, std::string>> const& shaders)
+Material MaterialFactory::CreateMaterialFromFiles(std::string const& name, std::string vertexShaderFile, std::string fragmentShaderFile)
 {
-    FIRE::Shaders shaderCode;
-    std::transform(
-        shaders.begin(),
-        shaders.end(),
-        std::back_inserter(shaderCode),
-        [](auto const& shaderDescriptor) {
-            return std::make_pair(shaderDescriptor.first, GetFileContent(shaderDescriptor.second));
-        });
+    Shaders const shaderCode = {
+        {ShaderType::VERTEX_SHADER, GetFileContent(vertexShaderFile)},
+        {ShaderType::FRAGMENT_SHADER, GetFileContent(fragmentShaderFile)}};
 
     return CreateMaterial(name, shaderCode);
 }
