@@ -12,7 +12,7 @@ class GLTexture2D
 class TextureManager {
     + CreateTexture(width: uint32_t, height: uint32_t, format: Format, pixels: void*) : Texture
     + CreateFontCharTexture(c: char) : FontChar
-    - texFactory: unique_ptr<TextureFactory>
+    - texManager: unique_ptr<TextureFactory>
 }
 
 interface TextureFactory {

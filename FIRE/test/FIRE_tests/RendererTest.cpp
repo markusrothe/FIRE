@@ -66,14 +66,26 @@ public:
     }
 };
 
+class FontLoaderMock : public FIRE::FontLoader
+{
+public:
+    MOCK_METHOD1(LoadChar, FIRE::FontCharacter(char));
+};
+
 class ARenderer : public ::testing::Test
 {
 public:
+    FIRE::Renderer CreateRenderer()
+    {
+        std::unique_ptr<FIRE::TextureManager> texManager = std::make_unique<FIRE::TextureManager>(std::move(texFactory), std::move(fontLoader));
+        return FIRE::Renderer(std::move(draw), std::move(matBinder), std::move(vertLayoutFactory), std::move(texManager));
+    }
+
     std::unique_ptr<DrawMock> draw = std::make_unique<DrawMock>();
     std::unique_ptr<MaterialBinderMock> matBinder = std::make_unique<MaterialBinderMock>();
     std::unique_ptr<VertexLayoutFactoryMock> vertLayoutFactory = std::make_unique<VertexLayoutFactoryMock>();
-    std::unique_ptr<FIRE::TextureManager> texFactory =
-        std::make_unique<FIRE::TextureManager>(std::make_unique<FIRE_tests::TextureFactoryMock>(), nullptr);
+    std::unique_ptr<FIRE_tests::TextureFactoryMock> texFactory = std::make_unique<FIRE_tests::TextureFactoryMock>();
+    std::unique_ptr<FontLoaderMock> fontLoader = std::make_unique<FontLoaderMock>();
 
     VertexLayoutStub layout;
     FIRE::Mesh3D mesh{"mesh", FIRE::MeshType()};
@@ -81,7 +93,7 @@ public:
 
 } // namespace
 
-TEST_F(ARenderer, BindsAndReleasesAMaterial)
+TEST_F(ARenderer, BindsAndReleasesAMaterialWhenDrawingRenderables)
 {
     EXPECT_CALL(*vertLayoutFactory, CreateStaticIndexedLayout(_))
         .WillOnce(ReturnRef(layout));
@@ -92,8 +104,7 @@ TEST_F(ARenderer, BindsAndReleasesAMaterial)
         EXPECT_CALL(*draw, DoDrawIndexed(_, _, _));
         EXPECT_CALL(*matBinder, Release());
     }
-
-    FIRE::Renderer renderer(std::move(draw), std::move(matBinder), std::move(vertLayoutFactory), std::move(texFactory));
+    auto renderer = CreateRenderer();
     renderer.Submit(FIRE::Renderable("renderable", FIRE::Material(), &mesh));
     renderer.Render(800.0f, 600.0f);
 }
@@ -103,7 +114,24 @@ TEST_F(ARenderer, DrawsRenderables)
     EXPECT_CALL(*vertLayoutFactory, CreateStaticIndexedLayout(_))
         .WillOnce(ReturnRef(layout));
     EXPECT_CALL(*draw, DoDrawIndexed(_, _, _));
-    FIRE::Renderer renderer(std::move(draw), std::move(matBinder), std::move(vertLayoutFactory), std::move(texFactory));
+    auto renderer = CreateRenderer();
     renderer.Submit(FIRE::Renderable("renderable", FIRE::Material(), &mesh));
     renderer.Render(800.0f, 600.0f);
+}
+
+TEST_F(ARenderer, DrawsTextOverlays)
+{
+    EXPECT_CALL(*vertLayoutFactory, CreateDynamicLayout(_)).WillOnce(ReturnRef(layout));
+    EXPECT_CALL(*fontLoader, LoadChar(_)).Times(3); // 'text' contains 't' 2 times
+    EXPECT_CALL(*draw, DoDraw(_, _, _)).Times(4);
+    auto renderer = CreateRenderer();
+    renderer.Submit(FIRE::TextOverlay("overlay", "text", 0.0f, 0.0f, FIRE::Material()));
+    renderer.Render(800.0f, 600.0f);
+}
+
+TEST_F(ARenderer, AllowsToToggleWireframeMode)
+{
+    EXPECT_CALL(*draw, ToggleWireframe());
+    auto renderer = CreateRenderer();
+    renderer.ToggleWireframe();
 }

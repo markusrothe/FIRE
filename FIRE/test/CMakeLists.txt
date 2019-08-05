@@ -1,10 +1,9 @@
-if (NOT BUILD_TESTING)
+if(NOT BUILD_TESTING)
     return()
-endif ()
+endif()
 
 add_executable(FIRE_tests
     FIRE_tests/Utilities.h
-
     FIRE_tests/CameraComponentTest.cpp
     FIRE_tests/RenderingComponentTest.cpp
     FIRE_tests/WindowTest.cpp
@@ -18,7 +17,7 @@ add_executable(FIRE_tests
     FIRE_tests/MeshManagerTest.cpp
     FIRE_tests/TextureManagerTest.cpp
     FIRE_tests/RendererTest.cpp
-    Mocks/TextureFactoryMock.h Mocks/Texture2DMock.h)
+    Mocks/TextureFactoryMock.h Mocks/Texture2DMock.h FIRE_tests/RenderableTest.cpp)
 
 target_include_directories(FIRE_tests
     PUBLIC

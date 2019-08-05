@@ -15,7 +15,7 @@ FPSOverlayComponent::FPSOverlayComponent(FIRE::Renderer& renderer, FIRE::Materia
 
 void FPSOverlayComponent::DoUpdate(double deltaTime, FIRE::SceneObject&, FIRE::Scene&)
 {
-    m_material.SetShaderParameter("textColor", FIRE::ShaderParameterType::VEC3, glm::vec3(1.0f, 0.0f, 0.0f));
+    m_material.SetShaderParameter("textColor", FIRE::ShaderParameterType::VEC3, glm::vec3(1.0f, 1.0f, 1.0f));
     m_material.SetShaderParameter("projection", FIRE::ShaderParameterType::MAT4x4, glm::ortho(0.0f, 800.0f, 0.0f, 600.0f));
 
     std::stringstream ss;
