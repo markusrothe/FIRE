@@ -44,10 +44,14 @@ VertexLayout& GLVertexLayoutFactory::CreateStaticIndexedLayout(Renderable const&
 
     for(auto const& vertexDeclSection : mesh->GetVertexDeclaration().GetSections())
     {
-        layout->AddVertexAttribute(
-            glGetAttribLocation(renderable.material.ShaderId(), vertexDeclSection.first.c_str()),
-            vertexDeclSection.second.size,
-            vertexDeclSection.second.offset);
+        auto attribLocation = glGetAttribLocation(renderable.material.ShaderId(), vertexDeclSection.first.c_str());
+        if(attribLocation != -1)
+        {
+            layout->AddVertexAttribute(
+                static_cast<uint32_t>(attribLocation),
+                vertexDeclSection.second.size,
+                vertexDeclSection.second.offset);
+        }
     }
 
     auto indices = renderable.mesh->Indices();

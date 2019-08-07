@@ -78,7 +78,7 @@ add_library(FIRE STATIC
     src/GLDraw.cpp
     src/GLTextureFactory.cpp
     src/FTFontLoader.cpp
-    )
+    src/ModelLoader.cpp include/FIRE/ModelLoader.h src/stb_image.h)
 
 target_include_directories(FIRE
     PUBLIC
@@ -102,9 +102,9 @@ target_link_libraries(FIRE
     assimp::assimp
     )
 
-if (MSVC)
+if(MSVC)
     set_target_properties(FIRE PROPERTIES COMPILE_FLAGS /D_USE_MATH_DEFINES)
-endif ()
+endif()
 
 file(GLOB_RECURSE assets ${CMAKE_CURRENT_SOURCE_DIR}/assets/*)
 set_target_properties(FIRE

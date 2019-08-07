@@ -1,6 +1,6 @@
-#include "FIRE/TextureManager.h"
 #include "FontLoader.h"
 #include "TextureFactoryMock.h"
+#include <FIRE/TextureManager.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
@@ -40,7 +40,7 @@ TEST_F(ATextureManager, CreatesFontCharacters)
     EXPECT_CALL(*fontLoader, LoadChar('A'))
         .WillOnce(Return(::testing::ByMove(FIRE::FontCharacter(nullptr, {width, height}, {10, 10}, 10, data))));
 
-    EXPECT_CALL(*texFactory, Create2DTexture(width, height, data));
+    EXPECT_CALL(*texFactory, Create2DTexture(width, height, data, _, _, _));
 
     auto texManager = CreateTextureManager();
     texManager.CreateFontCharTexture('A');
@@ -48,8 +48,13 @@ TEST_F(ATextureManager, CreatesFontCharacters)
 
 TEST_F(ATextureManager, CreatesImageTextures)
 {
-    EXPECT_CALL(*texFactory, Create2DTexture(width, height, data));
+    uint8_t numComponents = 2;
+    auto wrappingMode = FIRE::Texture2D::WrappingMode::WRAP;
+    auto filter = FIRE::Texture2D::Filter::NEAREST;
+
+    EXPECT_CALL(*texFactory, Create2DTexture(width, height, data, numComponents, wrappingMode, filter));
 
     auto texManager = CreateTextureManager();
-    texManager.CreateImageTexture("tex", width, height, data);
+
+    texManager.CreateImageTexture("tex", width, height, data, numComponents, wrappingMode, filter);
 }

@@ -10,6 +10,19 @@ namespace FIRE
 class Texture2D
 {
 public:
+    enum class WrappingMode
+    {
+        WRAP,
+        CLAMP,
+        MIRROR
+    };
+
+    enum class Filter
+    {
+        NEAREST,
+        LINEAR
+    };
+
     virtual ~Texture2D() = default;
 
     [[nodiscard]] virtual uint32_t Id() const = 0;

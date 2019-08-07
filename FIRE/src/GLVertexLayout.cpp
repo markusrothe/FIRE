@@ -8,7 +8,6 @@ namespace FIRE
 GLVertexLayout::GLVertexLayout(DrawMode drawMode)
     : VertexLayout(drawMode)
 {
-
     glCreateBuffers(1, &m_vbo);
     glCreateVertexArrays(1, &m_vao);
 
@@ -59,8 +58,9 @@ void GLVertexLayout::BufferSubData(uint32_t offset, uint32_t size, void* data)
 void GLVertexLayout::AddVertexAttribute(uint32_t attribIndex, uint32_t size, uint32_t offset)
 {
     auto bindingIndex = attribIndex;
-    glEnableVertexArrayAttrib(m_vao, attribIndex);
     glVertexArrayVertexBuffer(m_vao, bindingIndex, m_vbo, offset, (GLsizei)(size * sizeof(float)));
+    glEnableVertexArrayAttrib(m_vao, attribIndex);
+
     glVertexArrayAttribFormat(m_vao, attribIndex, static_cast<GLint>(size), GL_FLOAT, GL_FALSE, 0);
     glVertexArrayAttribBinding(m_vao, attribIndex, bindingIndex);
 }

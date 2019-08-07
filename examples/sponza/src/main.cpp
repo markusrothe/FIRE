@@ -9,6 +9,7 @@
 #include <FIRE/MainLoop.h>
 #include <FIRE/MaterialFactory.h>
 #include <FIRE/MeshManager.h>
+#include <FIRE/ModelLoader.h>
 #include <FIRE/RenderContext.h>
 #include <FIRE/Renderer.h>
 #include <FIRE/Scene.h>
@@ -19,8 +20,8 @@
 #include <sstream>
 namespace
 {
-unsigned int constexpr WINDOW_WIDTH = 800;
-unsigned int constexpr WINDOW_HEIGHT = 600;
+unsigned int constexpr WINDOW_WIDTH = 1920;
+unsigned int constexpr WINDOW_HEIGHT = 1080;
 
 void SubmitShaders(FIRE::MaterialFactory& materialFactory)
 {
@@ -28,6 +29,7 @@ void SubmitShaders(FIRE::MaterialFactory& materialFactory)
     materialFactory.CreateMaterialFromFiles("height", "HeightVS.glsl", "HeightFS.glsl");
     materialFactory.CreateMaterialFromFiles("grid", "GridVS.glsl", "GridFS.glsl");
     materialFactory.CreateMaterialFromFiles("texCoords", "texCoordsVS.glsl", "texCoordsFS.glsl");
+    materialFactory.CreateMaterialFromFiles("texSampling", "textureSamplingVS.glsl", "textureSamplingFS.glsl");
     materialFactory.CreateMaterialFromFiles("text", "textVS.glsl", "textFS.glsl");
 }
 
@@ -36,31 +38,22 @@ void SetupScene(
     FIRE::Scene& scene,
     FIRE::Renderer& renderer,
     FIRE::MaterialFactory& materialFactory,
-    FIRE::MeshManager& meshManager)
+    FIRE::MeshManager& meshManager,
+    FIRE::TextureManager& texManager)
 {
     auto input{std::make_shared<FIRE::InputListener>()};
     window.SetInputListener(input);
 
     auto& sponzaObj = scene.CreateSceneObject("sponza");
-    std::vector<FIRE::Renderable> renderables;
+    FIRE::ModelLoader loader(meshManager, texManager);
+    auto renderables = loader.LoadFromFile("sponza.obj", materialFactory.GetMaterial("texSampling"));
 
-    auto meshHandles = meshManager.CreateFromFile("sponza_mesh_", "sponza.obj");
-    auto i = 0u;
-    for(auto& handle : meshHandles)
-    {
-        std::stringstream ss;
-        ss << "sponza_renderable_" << i++;
-        renderables.emplace_back(ss.str(), materialFactory.GetMaterial("phong"), handle);
-    }
     sponzaObj.AddComponent(std::make_unique<examples::Mesh3DRenderingComponent>(renderer, std::move(renderables)));
 
     auto& mainCamera = scene.CreateSceneObject("cam");
-    mainCamera.AddComponent(
-        std::make_unique<examples::InputMappingComponent>(mainCamera, *input, window, renderer));
-
-    mainCamera.AddComponent(
-        std::make_unique<examples::PerspectiveCameraComponent>(
-            70.0f, static_cast<float>(window.GetWidth()) / static_cast<float>(window.GetHeight()), 0.1f, 3000.0f));
+    mainCamera.AddComponent(std::make_unique<examples::InputMappingComponent>(mainCamera, *input, window, renderer));
+    mainCamera.AddComponent(std::make_unique<examples::PerspectiveCameraComponent>(
+        70.0f, static_cast<float>(window.GetWidth()) / static_cast<float>(window.GetHeight()), 0.1f, 3000.0f));
 
     auto& sceneLight = scene.CreateSceneObject("light");
     sceneLight.AddComponent(std::make_unique<examples::PointLightComponent>());
@@ -84,7 +77,7 @@ int main(int, char**)
     auto renderer{FIRE::GLFactory::CreateRenderer(textureManager)};
 
     FIRE::Scene scene;
-    SetupScene(window, scene, *renderer, materialFactory, meshManager);
+    SetupScene(window, scene, *renderer, materialFactory, meshManager, *textureManager);
 
     FIRE::MainLoop(window, scene, *renderer);
 }

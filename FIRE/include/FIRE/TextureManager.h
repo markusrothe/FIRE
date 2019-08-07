@@ -2,13 +2,13 @@
 #define FIRE_TextureManager_h
 
 #include <FIRE/FontCharacter.h>
+#include <FIRE/Texture2D.h>
 #include <map>
 #include <memory>
 #include <string>
 
 namespace FIRE
 {
-class Texture2D;
 class TextureFactory;
 class FontLoader;
 class TextureManager
@@ -20,7 +20,15 @@ public:
 
     ~TextureManager();
 
-    Texture2D* CreateImageTexture(std::string name, uint32_t width, uint32_t height, std::vector<uint8_t> const& data);
+    Texture2D* CreateImageTexture(
+        std::string name,
+        uint32_t width,
+        uint32_t height,
+        std::vector<uint8_t> const& data,
+        uint8_t numComponents,
+        Texture2D::WrappingMode wrappingMode,
+        Texture2D::Filter filter);
+
     FontCharacter* CreateFontCharTexture(char c);
 
 private:

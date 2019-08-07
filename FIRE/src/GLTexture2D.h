@@ -9,7 +9,13 @@ class GLTexture2D : public Texture2D
 {
 public:
     GLTexture2D() = default;
-    GLTexture2D(uint32_t width, uint32_t height, std::vector<uint8_t> data);
+    GLTexture2D(
+        uint32_t width,
+        uint32_t height,
+        std::vector<uint8_t> data,
+        uint8_t numComponents,
+        Texture2D::WrappingMode wrappingMode,
+        Texture2D::Filter filter);
 
     ~GLTexture2D() override;
 

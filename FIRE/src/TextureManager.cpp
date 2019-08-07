@@ -28,14 +28,21 @@ FontCharacter* TextureManager::CreateFontCharTexture(char c)
     return &(it->second);
 }
 
-Texture2D* TextureManager::CreateImageTexture(std::string name, uint32_t width, uint32_t height, std::vector<uint8_t> const& data)
+Texture2D* TextureManager::CreateImageTexture(
+    std::string name,
+    uint32_t width,
+    uint32_t height,
+    std::vector<uint8_t> const& data,
+    uint8_t numComponents,
+    Texture2D::WrappingMode wrappingMode,
+    Texture2D::Filter filter)
 {
     if(auto it = m_textures.find(name); it != m_textures.end())
     {
         return it->second.get();
     }
 
-    auto tex = m_texFactory->Create2DTexture(width, height, data);
+    auto tex = m_texFactory->Create2DTexture(width, height, data, numComponents, wrappingMode, filter);
     auto inserted = m_textures.insert(std::make_pair(std::move(name), std::move(tex)));
     if(!inserted.second)
     {
@@ -63,7 +70,7 @@ FontCharacter TextureManager::CreateFontCharacter(char c)
 
     if(width > 0 && height > 0)
     {
-        fontChar.texture = m_texFactory->Create2DTexture(width, height, fontChar.data);
+        fontChar.texture = m_texFactory->Create2DTexture(width, height, fontChar.data, 1, Texture2D::WrappingMode::CLAMP, Texture2D::Filter::NEAREST);
     }
 
     return fontChar;

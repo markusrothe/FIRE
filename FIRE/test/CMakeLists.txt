@@ -17,7 +17,7 @@ add_executable(FIRE_tests
     FIRE_tests/MeshManagerTest.cpp
     FIRE_tests/TextureManagerTest.cpp
     FIRE_tests/RendererTest.cpp
-    Mocks/TextureFactoryMock.h Mocks/Texture2DMock.h FIRE_tests/RenderableTest.cpp)
+    Mocks/TextureFactoryMock.h Mocks/Texture2DMock.h FIRE_tests/RenderableTest.cpp FIRE_tests/ModelLoaderTest.cpp)
 
 target_include_directories(FIRE_tests
     PUBLIC

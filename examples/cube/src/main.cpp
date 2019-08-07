@@ -44,7 +44,7 @@ void SetupScene(
     auto& cubeObject = scene.CreateSceneObject("cube");
 
     auto textureMaterial = materialFactory.GetMaterial("texSampling");
-    auto checkerBoardTexture = texManager.CreateImageTexture("checkerBoardTex", 2, 2, {0x00, 0xff, 0xff, 0x00});
+    auto checkerBoardTexture = texManager.CreateImageTexture("checkerBoardTex", 2, 2, {0x00, 0xff, 0xff, 0x00}, 1, FIRE::Texture2D::WrappingMode::CLAMP, FIRE::Texture2D::Filter::NEAREST);
     textureMaterial.AddTexture(checkerBoardTexture, 0u);
 
     std::vector<FIRE::Renderable> renderables;
