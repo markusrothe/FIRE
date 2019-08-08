@@ -25,113 +25,6 @@ aiScene const* GetScene(Assimp::Importer& importer, ModelLoader::Source source, 
                : importer.ReadFile(str.c_str(), flags);
 }
 
-//
-//void ProcessMesh(
-//    aiMesh const* mesh,
-//    std::vector<glm::vec3>& positions,
-//    std::vector<glm::vec3>& normals,
-//    std::vector<glm::vec2>& uvs,
-//    std::vector<unsigned int>& indices)
-//{
-//    ProcessVertices(mesh, positions, normals, uvs);
-//    ProcessIndices(mesh, indices);
-//}
-//
-//std::vector<Texture2D*> ProcessTextures(aiScene const* scene, TextureManager& texManager)
-//{
-//    std::vector<Texture2D*> textures;
-//    textures.resize(scene->mNumMaterials);
-//    for(unsigned int i = 0; i < scene->mNumMaterials; i++)
-//    {
-//        const aiMaterial* pMaterial = scene->mMaterials[i];
-//        if(pMaterial->GetTextureCount(aiTextureType_DIFFUSE) > 0)
-//        {
-//            aiString Path;
-//            aiTextureMapMode mapMode;
-//            if(pMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &Path, nullptr, nullptr, nullptr, nullptr, &mapMode) == AI_SUCCESS)
-//            {
-//                // ... process data if not NULL ...
-//                // ... x = width, y = height, n = # 8-bit components per pixel ...
-//                // ... replace '0' with '1'..'4' to force that many components per pixel
-//                // ... but 'n' will always be the number that it would have been if you said 0
-//                std::string fullPath{std::string("./") + Path.data};
-//                int width, height, numComponents;
-//                unsigned char* data = stbi_load(fullPath.c_str(), &width, &height, &numComponents, 0);
-//                if(data)
-//                {
-//                    std::vector<uint8_t> pixels(data, data + (height * width * numComponents));
-//                    stbi_image_free(data);
-//                    Texture2D::WrappingMode wrapping = Texture2D::WrappingMode::WRAP;
-//                    switch(mapMode)
-//                    {
-//                    case aiTextureMapMode_Clamp:
-//                        wrapping = Texture2D::WrappingMode::CLAMP;
-//                        break;
-//                    case aiTextureMapMode_Mirror:
-//                        wrapping = Texture2D::WrappingMode::MIRROR;
-//                        break;
-//                    case aiTextureMapMode_Wrap:
-//                    case aiTextureMapMode_Decal:
-//                    case _aiTextureMapMode_Force32Bit:
-//                        wrapping = Texture2D::WrappingMode ::WRAP;
-//                        break;
-//                    }
-//
-//                    textures[i] = texManager.CreateImageTexture(Path.data, width, height, pixels, static_cast<uint8_t>(numComponents), wrapping, Texture2D::Filter::LINEAR);
-//                }
-//            }
-//        }
-//    }
-//    return textures;
-//}
-//
-//std::vector<Renderable> CreateRenderables(
-//    aiScene const* scene,
-//    FIRE::MeshManager& meshManager,
-//    TextureManager& texManager,
-//    FIRE::Material const& material)
-//{
-//    std::vector<Renderable> renderables;
-//    renderables.reserve(scene->mNumMeshes);
-//    std::vector<Texture2D*> textures = ProcessTextures(scene, texManager);
-//
-//    int c = 0;
-//    for(auto i = 0u; i < scene->mNumMeshes; ++i)
-//    {
-//        std::vector<glm::vec3> positions, normals;
-//        std::vector<glm::vec2> uvs;
-//        std::vector<unsigned int> indices;
-//        auto mesh = scene->mMeshes[i];
-//
-//        auto matIndex = mesh->mMaterialIndex;
-//        ProcessMesh(mesh, positions, normals, uvs, indices);
-//
-//        std::stringstream ss_mesh, ss_renderable;
-//        ss_mesh << "mesh_" << c;
-//        ss_renderable << "renderable_" << c;
-//        c++;
-//
-//        Renderable renderable;
-//        renderable.mesh = meshManager.Create(
-//            FIRE::MeshCategory::Custom,
-//            FIRE::MeshPrimitives::Triangles,
-//            ss_mesh.str(),
-//            std::move(positions),
-//            std::move(normals),
-//            std::move(uvs),
-//            std::move(indices));
-//        renderable.name = ss_renderable.str();
-//        renderable.material = material;
-//        if(textures[matIndex])
-//        {
-//            renderable.material.AddTexture(textures[matIndex], 0u);
-//        }
-//
-//        renderables.push_back(renderable);
-//    }
-//    return renderables;
-//}
-
 void ProcessVertices(aiMesh const* mesh, Mesh3D& target)
 {
     assert(mesh);
@@ -161,6 +54,47 @@ void ProcessIndices(aiMesh const* mesh, Mesh3D& target)
     }
 }
 
+void ProcessMaterial(aiMaterial const* material, std::pair<std::string, Texture2D::WrappingMode>& target)
+{
+    if(material->GetTextureCount(aiTextureType_DIFFUSE) > 0)
+    {
+        aiString path;
+        aiTextureMapMode mapMode;
+        if(material->GetTexture(
+               aiTextureType_DIFFUSE, 0, &path,
+               nullptr, nullptr, nullptr, nullptr, &mapMode) == AI_SUCCESS)
+        {
+            target.first = std::string(path.data);
+            switch(mapMode)
+            {
+            case aiTextureMapMode_Clamp:
+                target.second = Texture2D::WrappingMode::CLAMP;
+                break;
+            case aiTextureMapMode_Mirror:
+                target.second = Texture2D::WrappingMode::MIRROR;
+                break;
+            case aiTextureMapMode_Wrap:
+            case aiTextureMapMode_Decal:
+            case _aiTextureMapMode_Force32Bit:
+                target.second = Texture2D::WrappingMode ::WRAP;
+                break;
+            }
+
+            // ... process data if not NULL ...
+            // ... x = width, y = height, n = # 8-bit components per pixel ...
+            // ... replace '0' with '1'..'4' to force that many components per pixel
+            // ... but 'n' will always be the number that it would have been if you said 0
+            //            std::string fullPath{std::string("./") + Path.data};
+            //            int width, height, numComponents;
+            //            unsigned char* data = stbi_load(fullPath.c_str(), &width, &height, &numComponents, 0);
+            //            if(data)
+            //            {
+            //                std::vector<uint8_t> pixels(data, data + (height * width * numComponents));
+            //                stbi_image_free(data);
+            //            textures[i] = texManager.CreateImageTexture(Path.data, width, height, pixels, static_cast<uint8_t>(numComponents), wrapping, Texture2D::Filter::LINEAR);
+        }
+    }
+}
 } // namespace
 
 ModelLoader::ModelLoader(Source source, std::string const& str)
@@ -177,6 +111,14 @@ ModelLoader::ModelLoader(Source source, std::string const& str)
         ProcessVertices(scene->mMeshes[i], *mesh);
         ProcessIndices(scene->mMeshes[i], *mesh);
         m_meshes.push_back(std::move(mesh));
+    }
+
+    m_textures.resize(2u);
+    for(auto i = 0u; i < scene->mNumMaterials; ++i)
+    {
+        std::pair<std::string, Texture2D::WrappingMode> target;
+        ProcessMaterial(scene->mMaterials[i], target);
+        m_textures.push_back(target);
     }
 }
 
@@ -215,6 +157,11 @@ void ModelLoader::CheckMeshIndex(uint32_t meshIndex) const
     {
         throw std::runtime_error("Invalid meshIndex");
     }
+}
+std::string ModelLoader::GetTexture(uint32_t meshIndex) const
+{
+    CheckMeshIndex(meshIndex);
+    return m_textures[meshIndex].first;
 }
 
 } // namespace FIRE

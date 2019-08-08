@@ -88,20 +88,6 @@ public:
 
 } // namespace
 
-/*TEST_F(AModelLoader, LoadsModelsAsRenderables)
-{
-    FIRE::TextureManager texManager(nullptr, nullptr);
-    FIRE::Material mat;
-    FIRE::MeshManager meshManager;
-    FIRE::ModelLoader loader(meshManager, texManager);
-    auto renderables = loader.Load(cubeObj, mat);
-    ASSERT_TRUE(!renderables.empty());
-    ASSERT_TRUE(renderables[0].mesh);
-    EXPECT_EQ(24u, renderables[0].mesh->Positions().size());
-    EXPECT_EQ(24u, renderables[0].mesh->Normals().size());
-    EXPECT_EQ(24u, renderables[0].mesh->UVs().size());
-}*/
-
 TEST_F(AModelLoader, LoadsPositions)
 {
     ASSERT_THAT(loader.GetPositions(0u), SizeIs(24u));
@@ -141,4 +127,10 @@ TEST_F(AModelLoader, ThrowsIfAGivenMeshIndexIsNotValid)
     ASSERT_ANY_THROW((void)loader.GetNormals(2u));
     ASSERT_ANY_THROW((void)loader.GetTextureCoordinates(2u));
     ASSERT_ANY_THROW((void)loader.GetIndices(2u));
+    ASSERT_ANY_THROW((void)loader.GetTexture(2u));
+}
+
+TEST_F(AModelLoader, LoadsTextureFileNames)
+{
+    ASSERT_THAT(loader.GetTexture(0u), Eq(""));
 }

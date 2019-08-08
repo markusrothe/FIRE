@@ -2,6 +2,7 @@
 #define FIRE_MODELLOADER_H
 
 #include <FIRE/Mesh3D.h>
+#include <FIRE/Texture2D.h>
 #include <memory>
 #include <string>
 
@@ -24,18 +25,13 @@ public:
     [[nodiscard]] std::vector<glm::vec3> GetNormals(uint32_t meshIndex) const;
     [[nodiscard]] std::vector<glm::vec2> GetTextureCoordinates(uint32_t meshIndex) const;
     [[nodiscard]] std::vector<uint32_t> GetIndices(uint32_t meshIndex) const;
+    [[nodiscard]] std::string GetTexture(uint32_t meshIndex) const;
     [[nodiscard]] uint32_t GetNumMeshes() const;
-    //    explicit ModelLoader(MeshManager& meshManager, TextureManager& texManager);
-    //
-    //    std::vector<Renderable> Load(std::string const& fileContent, FIRE::Material const& material);
-    //    std::vector<Renderable> LoadFromFile(std::string const& filepath, FIRE::Material const& material);
 
 private:
     void CheckMeshIndex(uint32_t meshIndex) const;
-
     std::vector<std::unique_ptr<Mesh3D>> m_meshes;
-    //    MeshManager& m_meshManager;
-    //    TextureManager& m_texManager;
+    std::vector<std::pair<std::string, Texture2D::WrappingMode>> m_textures;
 };
 } // namespace FIRE
 
