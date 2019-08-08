@@ -1,5 +1,7 @@
+
 #include "GLTexture2D.h"
 #include <algorithm>
+#include <cmath>
 #include <glad/glad.h>
 #include <stdexcept>
 #include <utility>
@@ -84,7 +86,7 @@ GLTexture2D::GLTexture2D(
     auto const minFilter = GetMinFilter(filter);
     auto const maxFilter = GetMaxFilter(filter);
 
-    auto numMipMapLevels = static_cast<uint32_t>(1 + floor(log2(std::max(static_cast<double>(width), std::max(static_cast<double>(height), 1.0)))));
+    auto numMipMapLevels = static_cast<uint32_t>(1 + std::floor(std::log2(std::max(static_cast<double>(width), std::max(static_cast<double>(height), 1.0)))));
     glTextureStorage2D(m_id, numMipMapLevels, internalFormat.first, width, height);
     glTextureSubImage2D(m_id, 0, 0, 0, width, height, internalFormat.second, GL_UNSIGNED_BYTE, m_data.data());
     glGenerateTextureMipmap(m_id);
