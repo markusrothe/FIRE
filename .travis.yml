@@ -27,7 +27,7 @@ script:
   - mkdir build
   - cd build
   - cmake -DCOVERAGE=1 ..
-  - cmake --build . --j 4
+  - cmake --j 4 --build .
 
 after_success:
   - coveralls --root .. -E ".*CMakeFiles.*" -E ".*googletest.*" -E ".*googlemock.*" -E ".*glad.*" -E ".*glm.*" -E ".*assimp.*" -E ".stb_image.*" -E ".*freetype.*"
