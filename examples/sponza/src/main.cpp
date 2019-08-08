@@ -46,7 +46,7 @@ void SetupScene(
 
     auto& sponzaObj = scene.CreateSceneObject("sponza");
     FIRE::ModelLoader loader(meshManager, texManager);
-    auto renderables = loader.LoadFromFile("sponza.obj", materialFactory.GetMaterial("texSampling"));
+    auto renderables = loader.LoadFromFile("sponza.obj", materialFactory.GetMaterial("phong"));
 
     sponzaObj.AddComponent(std::make_unique<examples::Mesh3DRenderingComponent>(renderer, std::move(renderables)));
 

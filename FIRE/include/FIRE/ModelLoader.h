@@ -1,24 +1,41 @@
 #ifndef FIRE_MODELLOADER_H
 #define FIRE_MODELLOADER_H
 
-#include "Renderable.h"
+#include <FIRE/Mesh3D.h>
+#include <memory>
 #include <string>
+
+class aiMesh;
 namespace FIRE
 {
-class MeshManager;
 class Material;
 class TextureManager;
 class ModelLoader
 {
 public:
-    explicit ModelLoader(MeshManager& meshManager, TextureManager& texManager);
+    enum class Source
+    {
+        Memory,
+        File
+    };
+    explicit ModelLoader(Source source, std::string const& str);
 
-    std::vector<Renderable> Load(std::string const& fileContent, FIRE::Material const& material);
-    std::vector<Renderable> LoadFromFile(std::string const& filepath, FIRE::Material const& material);
+    [[nodiscard]] std::vector<glm::vec3> GetPositions(uint32_t meshIndex) const;
+    [[nodiscard]] std::vector<glm::vec3> GetNormals(uint32_t meshIndex) const;
+    [[nodiscard]] std::vector<glm::vec2> GetTextureCoordinates(uint32_t meshIndex) const;
+    [[nodiscard]] std::vector<uint32_t> GetIndices(uint32_t meshIndex) const;
+    [[nodiscard]] uint32_t GetNumMeshes() const;
+    //    explicit ModelLoader(MeshManager& meshManager, TextureManager& texManager);
+    //
+    //    std::vector<Renderable> Load(std::string const& fileContent, FIRE::Material const& material);
+    //    std::vector<Renderable> LoadFromFile(std::string const& filepath, FIRE::Material const& material);
 
 private:
-    MeshManager& m_meshManager;
-    TextureManager& m_texManager;
+    void CheckMeshIndex(uint32_t meshIndex) const;
+
+    std::vector<std::unique_ptr<Mesh3D>> m_meshes;
+    //    MeshManager& m_meshManager;
+    //    TextureManager& m_texManager;
 };
 } // namespace FIRE
 

@@ -38,11 +38,9 @@ void Mesh3D::AddIndex(unsigned int idx)
 
 void Mesh3D::AddIndices(std::vector<unsigned int> indices)
 {
-    auto const vertexCount = m_positions.size();
-
     assert(
-        std::find_if(indices.begin(), indices.end(), [vertexCount](auto index) {
-            return index >= vertexCount;
+        std::find_if(indices.begin(), indices.end(), [this](auto index) {
+            return index >= m_positions.size();
         }) == indices.end());
 
     m_indices.insert(m_indices.end(), indices.begin(), indices.end());
@@ -65,7 +63,7 @@ void Mesh3D::AddNormals(std::vector<glm::vec3> normals)
 
 void Mesh3D::AddUV(glm::vec2 uv)
 {
-    m_uvs.push_back(std::move(uv));
+    m_uvs.push_back(uv);
 }
 
 void Mesh3D::AddUVs(std::vector<glm::vec2> uvs)
