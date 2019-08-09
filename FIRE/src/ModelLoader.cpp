@@ -1,14 +1,10 @@
-#include <FIRE/MeshManager.h>
+#include <FIRE/Mesh3D.h>
 #include <FIRE/ModelLoader.h>
-#include <FIRE/TextureManager.h>
 #include <assimp/Importer.hpp>
 #include <assimp/cimport.h>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
 #include <sstream>
-
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image/stb_image.h>
 
 namespace FIRE
 {
@@ -79,19 +75,6 @@ void ProcessMaterial(aiMaterial const* material, std::pair<std::string, Texture2
                 target.second = Texture2D::WrappingMode ::WRAP;
                 break;
             }
-
-            // ... process data if not NULL ...
-            // ... x = width, y = height, n = # 8-bit components per pixel ...
-            // ... replace '0' with '1'..'4' to force that many components per pixel
-            // ... but 'n' will always be the number that it would have been if you said 0
-            //            std::string fullPath{std::string("./") + Path.data};
-            //            int width, height, numComponents;
-            //            unsigned char* data = stbi_load(fullPath.c_str(), &width, &height, &numComponents, 0);
-            //            if(data)
-            //            {
-            //                std::vector<uint8_t> pixels(data, data + (height * width * numComponents));
-            //                stbi_image_free(data);
-            //            textures[i] = texManager.CreateImageTexture(Path.data, width, height, pixels, static_cast<uint8_t>(numComponents), wrapping, Texture2D::Filter::LINEAR);
         }
     }
 }
@@ -101,6 +84,16 @@ ModelLoader::ModelLoader(Source source, std::string const& str)
 {
     Assimp::Importer importer;
     auto scene = GetScene(importer, source, str);
+
+    std::vector<std::pair<std::string, Texture2D::WrappingMode>> textures;
+    textures.resize(scene->mNumMaterials);
+    for(auto i = 0u; i < scene->mNumMaterials; ++i)
+    {
+        std::pair<std::string, Texture2D::WrappingMode> target;
+        ProcessMaterial(scene->mMaterials[i], target);
+        textures[i] = target;
+    }
+
     for(auto i = 0u; i < scene->mNumMeshes; ++i)
     {
         std::stringstream ss;
@@ -110,58 +103,42 @@ ModelLoader::ModelLoader(Source source, std::string const& str)
 
         ProcessVertices(scene->mMeshes[i], *mesh);
         ProcessIndices(scene->mMeshes[i], *mesh);
-        m_meshes.push_back(std::move(mesh));
+        auto const matIndex = scene->mMeshes[i]->mMaterialIndex;
+        m_models.push_back({std::move(mesh), textures[matIndex].first, textures[matIndex].second});
     }
+}
 
-    m_textures.resize(2u);
-    for(auto i = 0u; i < scene->mNumMaterials; ++i)
+std::pair<std::string, Texture2D::WrappingMode> ModelLoader::GetTexture(uint32_t modelIndex) const
+{
+    CheckMeshIndex(modelIndex);
+    return std::make_pair(m_models[modelIndex].texturePath, m_models[modelIndex].textureWrapping);
+}
+
+uint32_t ModelLoader::GetNumModels() const
+{
+    return static_cast<uint32_t>(m_models.size());
+}
+
+void ModelLoader::CheckMeshIndex(uint32_t modelIndex) const
+{
+    if(modelIndex >= GetNumModels())
     {
-        std::pair<std::string, Texture2D::WrappingMode> target;
-        ProcessMaterial(scene->mMaterials[i], target);
-        m_textures.push_back(target);
+        throw std::runtime_error("Invalid modelIndex");
     }
 }
 
-std::vector<glm::vec3> ModelLoader::GetPositions(uint32_t meshIndex) const
+Model const& ModelLoader::GetModel(uint32_t modelIndex) const
 {
-    CheckMeshIndex(meshIndex);
-    return m_meshes[meshIndex]->Positions();
+    CheckMeshIndex(modelIndex);
+    return m_models[modelIndex];
 }
 
-std::vector<glm::vec3> ModelLoader::GetNormals(uint32_t meshIndex) const
+Model ModelLoader::StealModel(uint32_t modelIndex)
 {
-    CheckMeshIndex(meshIndex);
-    return m_meshes[meshIndex]->Normals();
-}
-
-std::vector<glm::vec2> ModelLoader::GetTextureCoordinates(uint32_t meshIndex) const
-{
-    CheckMeshIndex(meshIndex);
-    return m_meshes[meshIndex]->UVs();
-}
-
-std::vector<uint32_t> ModelLoader::GetIndices(uint32_t meshIndex) const
-{
-    CheckMeshIndex(meshIndex);
-    return m_meshes[meshIndex]->Indices();
-}
-
-uint32_t ModelLoader::GetNumMeshes() const
-{
-    return m_meshes.size();
-}
-
-void ModelLoader::CheckMeshIndex(uint32_t meshIndex) const
-{
-    if(meshIndex >= GetNumMeshes())
-    {
-        throw std::runtime_error("Invalid meshIndex");
-    }
-}
-std::string ModelLoader::GetTexture(uint32_t meshIndex) const
-{
-    CheckMeshIndex(meshIndex);
-    return m_textures[meshIndex].first;
+    CheckMeshIndex(modelIndex);
+    auto stolenModel = std::move(m_models[modelIndex]);
+    m_models.erase(std::begin(m_models) + modelIndex);
+    return stolenModel;
 }
 
 } // namespace FIRE

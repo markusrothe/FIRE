@@ -90,47 +90,52 @@ public:
 
 TEST_F(AModelLoader, LoadsPositions)
 {
-    ASSERT_THAT(loader.GetPositions(0u), SizeIs(24u));
-    ASSERT_THAT(loader.GetPositions(0u), Contains(glm::vec3(-0.5f, -0.5f, 0.5f)));
+    auto const positions = loader.GetModel(0u).mesh->Positions();
+    ASSERT_THAT(positions, SizeIs(24u));
+    ASSERT_THAT(positions, Contains(glm::vec3(-0.5f, -0.5f, 0.5f)));
 }
 
 TEST_F(AModelLoader, LoadsNormals)
 {
-    ASSERT_THAT(loader.GetNormals(0u), SizeIs(24u));
-    ASSERT_THAT(loader.GetNormals(0u), Contains(glm::vec3(0.0f, 0.0f, 1.0f)));
+    auto const normals = loader.GetModel(0u).mesh->Normals();
+    ASSERT_THAT(normals, SizeIs(24u));
+    ASSERT_THAT(normals, Contains(glm::vec3(0.0f, 0.0f, 1.0f)));
 }
 
 TEST_F(AModelLoader, LoadsTextureCoordinates)
 {
-    ASSERT_THAT(loader.GetTextureCoordinates(0u), SizeIs(24u));
-    ASSERT_THAT(loader.GetTextureCoordinates(0u), Contains(glm::vec2(1.0f, 0.0f)));
+    auto const textureCoordinates = loader.GetModel(0u).mesh->UVs();
+    ASSERT_THAT(textureCoordinates, SizeIs(24u));
+    ASSERT_THAT(textureCoordinates, Contains(glm::vec2(1.0f, 0.0f)));
 }
 
 TEST_F(AModelLoader, LoadsIndices)
 {
-    ASSERT_THAT(loader.GetIndices(0u), SizeIs(36u));
-    ASSERT_THAT(loader.GetIndices(0u), Contains(17u));
+    auto const indices = loader.GetModel(0u).mesh->Indices();
+    ASSERT_THAT(indices, SizeIs(36u));
+    ASSERT_THAT(indices, Contains(17u));
 }
 
 TEST_F(AModelLoader, LoadsMultipleMeshes)
 {
-    ASSERT_THAT(loader.GetNumMeshes(), Eq(2u));
-    ASSERT_THAT(loader.GetPositions(1u), SizeIs(24u));
-    ASSERT_THAT(loader.GetNormals(1u), SizeIs(24u));
-    ASSERT_THAT(loader.GetTextureCoordinates(1u), SizeIs(24u));
-    ASSERT_THAT(loader.GetIndices(1u), SizeIs(36u));
+    ASSERT_THAT(loader.GetNumModels(), Eq(2u));
 }
 
-TEST_F(AModelLoader, ThrowsIfAGivenMeshIndexIsNotValid)
+TEST_F(AModelLoader, ThrowsIfAGivenModelIndexIsNotValid)
 {
-    ASSERT_ANY_THROW((void)loader.GetPositions(2u));
-    ASSERT_ANY_THROW((void)loader.GetNormals(2u));
-    ASSERT_ANY_THROW((void)loader.GetTextureCoordinates(2u));
-    ASSERT_ANY_THROW((void)loader.GetIndices(2u));
-    ASSERT_ANY_THROW((void)loader.GetTexture(2u));
+    ASSERT_ANY_THROW((void)loader.GetModel(2u));
 }
 
-TEST_F(AModelLoader, LoadsTextureFileNames)
+TEST_F(AModelLoader, LoadsTextures)
 {
-    ASSERT_THAT(loader.GetTexture(0u), Eq(""));
+    auto const& model = loader.GetModel(0u);
+    ASSERT_THAT(model.texturePath, Eq(""));
+    ASSERT_THAT(model.textureWrapping, Eq(FIRE::Texture2D::WrappingMode::WRAP));
+}
+
+TEST_F(AModelLoader, MayGetItsModelsStolen)
+{
+    auto model = loader.StealModel(0u);
+    ASSERT_THAT(model.mesh->Positions(), SizeIs(24u));
+    ASSERT_THAT(loader.GetNumModels(), Eq(1u));
 }

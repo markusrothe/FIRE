@@ -7,11 +7,12 @@
 #include <gtest/gtest.h>
 #include <stdexcept>
 
+using namespace testing;
 namespace
 {
 std::string const NAME{"mesh_name"};
 
-class AMeshManager : public ::testing::Test
+class AMeshManager : public Test
 {
 public:
     FIRE::MeshManager meshManager;
@@ -93,10 +94,18 @@ TEST_F(AMeshManager, ThrowsIfADifferentMeshTypeIsCreatedWithTheSameName)
     EXPECT_THROW(meshManager.CreatePlane(NAME), std::runtime_error);
 }
 
+TEST_F(AMeshManager, MayGetMeshesAdded)
+{
+    auto mesh = std::make_unique<FIRE::Mesh3D>(NAME, FIRE::MeshType(FIRE::MeshCategory::Custom, FIRE::MeshPrimitives::Triangles));
+    auto meshPtr = meshManager.AddMesh(std::move(mesh));
+
+    ASSERT_THAT(meshManager.Create(FIRE::MeshCategory::Custom, FIRE::MeshPrimitives::Triangles, NAME, {}, {}, {}, {}), Eq(meshPtr));
+}
+
 namespace
 {
 using MeshCreationFunc = std::function<FIRE::Mesh3D*(FIRE::MeshManager&)>;
-class MeshManagerCachingTest : public testing::TestWithParam<MeshCreationFunc>
+class MeshManagerCachingTest : public TestWithParam<MeshCreationFunc>
 {
 public:
     FIRE::MeshManager meshManager;

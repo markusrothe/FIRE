@@ -31,6 +31,8 @@ public:
     Mesh3D* CreateLineGrid(std::string name, uint32_t width, uint32_t height);
     Mesh3D* CreateTriangleGrid(std::string name, uint32_t width, uint32_t height);
 
+    Mesh3D* AddMesh(std::unique_ptr<Mesh3D> mesh);
+
 private:
     Mesh3D* DoCreate(
         MeshCategory meshType,

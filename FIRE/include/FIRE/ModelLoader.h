@@ -1,16 +1,22 @@
 #ifndef FIRE_MODELLOADER_H
 #define FIRE_MODELLOADER_H
 
-#include <FIRE/Mesh3D.h>
 #include <FIRE/Texture2D.h>
 #include <memory>
 #include <string>
 
-class aiMesh;
+struct aiMesh;
 namespace FIRE
 {
-class Material;
-class TextureManager;
+class Mesh3D;
+
+struct Model
+{
+    std::unique_ptr<Mesh3D> mesh;
+    std::string texturePath;
+    Texture2D::WrappingMode textureWrapping;
+};
+
 class ModelLoader
 {
 public:
@@ -19,19 +25,17 @@ public:
         Memory,
         File
     };
-    explicit ModelLoader(Source source, std::string const& str);
 
-    [[nodiscard]] std::vector<glm::vec3> GetPositions(uint32_t meshIndex) const;
-    [[nodiscard]] std::vector<glm::vec3> GetNormals(uint32_t meshIndex) const;
-    [[nodiscard]] std::vector<glm::vec2> GetTextureCoordinates(uint32_t meshIndex) const;
-    [[nodiscard]] std::vector<uint32_t> GetIndices(uint32_t meshIndex) const;
-    [[nodiscard]] std::string GetTexture(uint32_t meshIndex) const;
-    [[nodiscard]] uint32_t GetNumMeshes() const;
+    explicit ModelLoader(Source source, std::string const& str);
+    [[nodiscard]] Model const& GetModel(uint32_t meshIndex) const;
+    Model StealModel(uint32_t meshIndex);
+
+    [[nodiscard]] std::pair<std::string, Texture2D::WrappingMode> GetTexture(uint32_t meshIndex) const;
+    [[nodiscard]] uint32_t GetNumModels() const;
 
 private:
     void CheckMeshIndex(uint32_t meshIndex) const;
-    std::vector<std::unique_ptr<Mesh3D>> m_meshes;
-    std::vector<std::pair<std::string, Texture2D::WrappingMode>> m_textures;
+    std::vector<Model> m_models;
 };
 } // namespace FIRE
 

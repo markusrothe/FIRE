@@ -375,6 +375,17 @@ Mesh3D* MeshManager::CreateTriangleGrid(std::string name, uint32_t width, uint32
         std::move(indices));
 }
 
+Mesh3D* MeshManager::AddMesh(std::unique_ptr<Mesh3D> mesh)
+{
+    auto const name = mesh->Name();
+    auto meshPtr = mesh.get();
+    meshPtr->GetVertexDeclaration().AddSection("vPos", 3u, 0u);
+    meshPtr->GetVertexDeclaration().AddSection("vNormal", 3u, static_cast<uint32_t>(meshPtr->Positions().size() * sizeof(float) * 3));
+    meshPtr->GetVertexDeclaration().AddSection("vUV", 2u, static_cast<uint32_t>((meshPtr->Positions().size() + meshPtr->Normals().size()) * sizeof(float) * 3));
+    m_cache.insert(std::make_pair(name, std::move(mesh)));
+    return meshPtr;
+}
+
 Mesh3D* MeshManager::DoCreate(
     MeshCategory meshCategory,
     MeshPrimitives primitives,

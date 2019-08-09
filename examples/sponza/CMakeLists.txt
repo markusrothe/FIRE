@@ -12,6 +12,7 @@ target_link_libraries(sponza
     FIRE
     FIRE::CompileOptions
     FIRE::exampleComponents
+    stb_image
     )
 
 install(

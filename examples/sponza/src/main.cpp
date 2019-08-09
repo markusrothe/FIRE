@@ -18,6 +18,8 @@
 
 #include <memory>
 #include <sstream>
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image/stb_image.h>
 namespace
 {
 unsigned int constexpr WINDOW_WIDTH = 1920;
@@ -33,6 +35,41 @@ void SubmitShaders(FIRE::MaterialFactory& materialFactory)
     materialFactory.CreateMaterialFromFiles("text", "textVS.glsl", "textFS.glsl");
 }
 
+std::vector<FIRE::Renderable> LoadSponzaModel(FIRE::MeshManager& meshManager, FIRE::MaterialFactory& materialFactory, FIRE::TextureManager& texManager)
+{
+    std::vector<FIRE::Renderable> renderables;
+    FIRE::ModelLoader loader(FIRE::ModelLoader::Source::File, "sponza.obj");
+
+    renderables.reserve(loader.GetNumModels());
+    auto numModels = loader.GetNumModels();
+    for(auto i = 0u; i < numModels; ++i)
+    {
+        FIRE::Renderable renderable;
+        auto model = loader.StealModel(0u);
+        renderable.mesh = meshManager.AddMesh(std::move(model.mesh));
+        renderable.name = "renderable_" + renderable.mesh->Name();
+        renderable.material = materialFactory.GetMaterial("texSampling");
+        // ... process data if not NULL ...
+        // ... x = width, y = height, n = # 8-bit components per pixel ...
+        // ... replace '0' with '1'..'4' to force that many components per pixel
+        // ... but 'n' will always be the number that it would have been if you said 0
+        std::string fullPath{std::string("./") + model.texturePath};
+        int width, height, numComponents;
+        unsigned char* data = stbi_load(fullPath.c_str(), &width, &height, &numComponents, 0);
+        if(data)
+        {
+            std::vector<uint8_t> pixels(data, data + (height * width * numComponents));
+            stbi_image_free(data);
+            auto const texName = model.texturePath;
+            auto tex = texManager.CreateImageTexture(texName, width, height, pixels, static_cast<uint8_t>(numComponents), model.textureWrapping, FIRE::Texture2D::Filter::LINEAR);
+            renderable.material.AddTexture(tex, 0u);
+        }
+        renderables.push_back(renderable);
+    }
+
+    return renderables;
+}
+
 void SetupScene(
     FIRE::Window& window,
     FIRE::Scene& scene,
@@ -45,8 +82,8 @@ void SetupScene(
     window.SetInputListener(input);
 
     auto& sponzaObj = scene.CreateSceneObject("sponza");
-    FIRE::ModelLoader loader(meshManager, texManager);
-    auto renderables = loader.LoadFromFile("sponza.obj", materialFactory.GetMaterial("phong"));
+
+    auto renderables = LoadSponzaModel(meshManager, materialFactory, texManager);
 
     sponzaObj.AddComponent(std::make_unique<examples::Mesh3DRenderingComponent>(renderer, std::move(renderables)));
 
