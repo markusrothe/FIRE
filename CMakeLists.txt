@@ -23,6 +23,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" AND COVERAGE)
     target_link_libraries(MeasureCoverage INTERFACE --coverage)
 endif ()
 
+
 add_subdirectory(contrib)
 
 find_package(OpenGL REQUIRED)

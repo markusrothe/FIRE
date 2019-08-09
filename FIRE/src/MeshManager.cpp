@@ -1,10 +1,5 @@
 #include <FIRE/MeshManager.h>
 #include <algorithm>
-#include <assimp/Importer.hpp>
-#include <assimp/cimport.h>
-#include <assimp/matrix4x4.h>
-#include <assimp/postprocess.h>
-#include <assimp/scene.h>
 
 #include <cmath>
 #include <iostream>
@@ -26,7 +21,7 @@ void ValidateMeshCategory(MeshCategory lhs, MeshCategory rhs)
 Mesh3D* MeshManager::Create(
     MeshCategory meshCategory,
     MeshPrimitives primitives,
-    std::string name,
+    std::string const& name,
     std::vector<glm::vec3>&& positions,
     std::vector<glm::vec3>&& normals,
     std::vector<glm::vec2>&& uvs,
@@ -157,7 +152,7 @@ Mesh3D* MeshManager::CreateCube(std::string name)
     return DoCreate(
         MeshCategory::Cube,
         MeshPrimitives::Triangles,
-        std::move(name),
+        name,
         std::move(positions),
         std::move(normals),
         std::move(uvs),
@@ -189,7 +184,7 @@ Mesh3D* MeshManager::CreatePlane(std::string name)
     return DoCreate(
         MeshCategory::Plane,
         MeshPrimitives::Triangles,
-        std::move(name),
+        name,
         std::move(positions),
         std::move(normals),
         std::move(uvs),
@@ -279,7 +274,7 @@ Mesh3D* MeshManager::CreateSphere(std::string name, uint32_t segments)
     return DoCreate(
         MeshCategory::Sphere,
         MeshPrimitives::Triangles,
-        std::move(name),
+        name,
         std::move(positions),
         std::move(normals),
         std::move(uvs),
@@ -326,7 +321,7 @@ Mesh3D* MeshManager::CreateLineGrid(std::string name, uint32_t width, uint32_t h
     return DoCreate(
         MeshCategory::LineGrid,
         MeshPrimitives::Lines,
-        std::move(name),
+        name,
         std::move(positions),
         std::move(normals),
         std::move(uvs),
@@ -373,54 +368,22 @@ Mesh3D* MeshManager::CreateTriangleGrid(std::string name, uint32_t width, uint32
     return DoCreate(
         MeshCategory::TriangleGrid,
         MeshPrimitives::Triangles,
-        std::move(name),
+        name,
         std::move(positions),
         std::move(normals),
         std::move(uvs),
         std::move(indices));
 }
 
-std::vector<Mesh3D*> MeshManager::CreateFromFile(std::string name, std::string filename)
+Mesh3D* MeshManager::AddMesh(std::unique_ptr<Mesh3D> mesh)
 {
-    std::vector<Mesh3D*> meshes;
-    Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(filename.c_str(), aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices);
-    int c = 0;
-    for(auto i = 0u; i < scene->mNumMeshes; ++i)
-    {
-        const aiMesh* mesh = scene->mMeshes[i];
-        std::vector<glm::vec3> positions, normals;
-        for(auto j = 0u; j < mesh->mNumVertices; ++j)
-        {
-            auto const& pos = mesh->mVertices[j];
-            auto const& normal = mesh->mNormals[j];
-            positions.emplace_back(pos.x, pos.y, pos.z);
-            normals.emplace_back(normal.x, normal.y, normal.z);
-        }
-
-        std::vector<unsigned int> indices;
-        for(auto j = 0u; j < mesh->mNumFaces; ++j)
-        {
-            auto const& face = mesh->mFaces[j];
-            indices.push_back(face.mIndices[0]);
-            indices.push_back(face.mIndices[1]);
-            indices.push_back(face.mIndices[2]);
-        }
-
-        std::vector<glm::vec2> uvs;
-
-        std::stringstream ss;
-        ss << name << c++;
-        meshes.push_back(DoCreate(
-            FIRE::MeshCategory::Custom,
-            FIRE::MeshPrimitives::Triangles,
-            ss.str(),
-            std::move(positions),
-            std::move(normals),
-            std::move(uvs),
-            std::move(indices)));
-    }
-    return meshes;
+    auto const name = mesh->Name();
+    auto meshPtr = mesh.get();
+    meshPtr->GetVertexDeclaration().AddSection("vPos", 3u, 0u);
+    meshPtr->GetVertexDeclaration().AddSection("vNormal", 3u, static_cast<uint32_t>(meshPtr->Positions().size() * sizeof(float) * 3));
+    meshPtr->GetVertexDeclaration().AddSection("vUV", 2u, static_cast<uint32_t>((meshPtr->Positions().size() + meshPtr->Normals().size()) * sizeof(float) * 3));
+    m_cache.insert(std::make_pair(name, std::move(mesh)));
+    return meshPtr;
 }
 
 Mesh3D* MeshManager::DoCreate(

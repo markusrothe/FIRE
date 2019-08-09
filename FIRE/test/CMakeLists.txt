@@ -1,60 +1,60 @@
-if(NOT BUILD_TESTING)
+if (NOT BUILD_TESTING)
     return()
-endif()
+endif ()
 
 add_executable(FIRE_tests
-    FIRE_tests/Utilities.h
-    FIRE_tests/CameraComponentTest.cpp
-    FIRE_tests/RenderingComponentTest.cpp
-    FIRE_tests/WindowTest.cpp
-    FIRE_tests/MeshTest.cpp
-    FIRE_tests/MaterialFactoryTest.cpp
-    FIRE_tests/MaterialTest.cpp
-    FIRE_tests/SceneTest.cpp
-    FIRE_tests/SceneObjectTest.cpp
-    FIRE_tests/TransformTest.cpp
-    FIRE_tests/InputListenerTest.cpp
-    FIRE_tests/MeshManagerTest.cpp
-    FIRE_tests/TextureManagerTest.cpp
-    FIRE_tests/RendererTest.cpp
-    Mocks/TextureFactoryMock.h Mocks/Texture2DMock.h FIRE_tests/RenderableTest.cpp)
+        FIRE_tests/Utilities.h
+        FIRE_tests/CameraComponentTest.cpp
+        FIRE_tests/RenderingComponentTest.cpp
+        FIRE_tests/WindowTest.cpp
+        FIRE_tests/MeshTest.cpp
+        FIRE_tests/MaterialFactoryTest.cpp
+        FIRE_tests/MaterialTest.cpp
+        FIRE_tests/SceneTest.cpp
+        FIRE_tests/SceneObjectTest.cpp
+        FIRE_tests/TransformTest.cpp
+        FIRE_tests/InputListenerTest.cpp
+        FIRE_tests/MeshManagerTest.cpp
+        FIRE_tests/TextureManagerTest.cpp
+        FIRE_tests/RendererTest.cpp
+        Mocks/TextureFactoryMock.h Mocks/Texture2DMock.h FIRE_tests/RenderableTest.cpp FIRE_tests/ModelLoaderTest.cpp)
 
 target_include_directories(FIRE_tests
-    PUBLIC
-    $<TARGET_PROPERTY:FIRE,INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:FIRE,INTERFACE_INCLUDE_DIRECTORIES>
-    PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/Mocks
-    )
+        PUBLIC
+        $<TARGET_PROPERTY:FIRE,INCLUDE_DIRECTORIES>
+        $<TARGET_PROPERTY:FIRE,INTERFACE_INCLUDE_DIRECTORIES>
+        PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/Mocks
+        )
 
 target_link_libraries(FIRE_tests
-    PRIVATE
-    FIRE
-    gtest
-    gtest_main
-    gmock
-    CompileOptions
-    MeasureCoverage
-    assimp::assimp
-    glad
-    )
+        PRIVATE
+        FIRE
+        gtest
+        gtest_main
+        gmock
+        CompileOptions
+        MeasureCoverage
+        assimp::assimp
+        glad
+        )
 
 include(GoogleTest)
 gtest_discover_tests(FIRE_tests)
 
 add_custom_command(
-    TARGET FIRE_tests POST_BUILD
-    COMMAND ctest --output-on-failure -C $<CONFIGURATION>
+        TARGET FIRE_tests POST_BUILD
+        COMMAND ctest --output-on-failure -C $<CONFIGURATION>
 )
 
 install(
-    TARGETS FIRE_tests
-    DESTINATION bin
+        TARGETS FIRE_tests
+        DESTINATION bin
 )
 
 install(
-    FILES
-    $<TARGET_FILE:assimp::assimp>
-    DESTINATION bin
+        FILES
+        $<TARGET_FILE:assimp::assimp>
+        DESTINATION bin
 )
 
