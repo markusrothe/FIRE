@@ -128,9 +128,9 @@ TEST_F(AModelLoader, ThrowsIfAGivenModelIndexIsNotValid)
 
 TEST_F(AModelLoader, LoadsTextures)
 {
-    auto const& model = loader.GetModel(0u);
-    ASSERT_THAT(model.texturePath, Eq(""));
-    ASSERT_THAT(model.textureWrapping, Eq(FIRE::Texture2D::WrappingMode::WRAP));
+    auto const tex = loader.GetTexture(0u);
+    ASSERT_THAT(tex.first, Eq(""));
+    ASSERT_THAT(tex.second, Eq(FIRE::Texture2D::WrappingMode::WRAP));
 }
 
 TEST_F(AModelLoader, MayGetItsModelsStolen)
