@@ -1,4 +1,4 @@
-#include <FIRE/MeshManager.h>
+#include <MeshFactory.h>
 #include <algorithm>
 
 #include <cmath>
@@ -7,43 +7,11 @@
 
 namespace FIRE
 {
-namespace
+namespace MeshFactory
 {
-void ValidateMeshCategory(MeshCategory lhs, MeshCategory rhs)
+
+std::unique_ptr<Mesh3D> CreateCube(std::string name)
 {
-    if(lhs != rhs)
-    {
-        throw std::runtime_error("A different mesh with the same name exists already.");
-    }
-}
-} // namespace
-
-Mesh3D* MeshManager::Create(
-    MeshCategory meshCategory,
-    MeshPrimitives primitives,
-    std::string const& name,
-    std::vector<glm::vec3>&& positions,
-    std::vector<glm::vec3>&& normals,
-    std::vector<glm::vec2>&& uvs,
-    std::vector<unsigned int>&& indices)
-{
-    if(auto it = Lookup(name); it != m_cache.end())
-    {
-        ValidateMeshCategory(it->second->GetMeshType().category, MeshCategory::Custom);
-        return it->second.get();
-    }
-
-    return DoCreate(meshCategory, primitives, name, std::move(positions), std::move(normals), std::move(uvs), std::move(indices));
-}
-
-Mesh3D* MeshManager::CreateCube(std::string name)
-{
-    if(auto it = Lookup(name); it != m_cache.end())
-    {
-        ValidateMeshCategory(it->second->GetMeshType().category, MeshCategory::Cube);
-        return it->second.get();
-    }
-
     std::vector<glm::vec3> positions = {{-1.0f, -1.0f, -1.0f},
                                         {-1.0f, -1.0f, -1.0f},
                                         {-1.0f, -1.0f, -1.0f},
@@ -159,14 +127,8 @@ Mesh3D* MeshManager::CreateCube(std::string name)
         std::move(indices));
 }
 
-Mesh3D* MeshManager::CreatePlane(std::string name)
+std::unique_ptr<Mesh3D> CreatePlane(std::string name)
 {
-    if(auto it = Lookup(name); it != m_cache.end())
-    {
-        ValidateMeshCategory(it->second->GetMeshType().category, MeshCategory::Plane);
-        return it->second.get();
-    }
-
     std::vector<glm::vec3> positions = {{-1.0f, 0.0f, -1.0f},
                                         {-1.0f, 0.0f, 1.0f},
                                         {1.0f, 0.0f, 1.0f},
@@ -191,13 +153,8 @@ Mesh3D* MeshManager::CreatePlane(std::string name)
         std::move(indices));
 }
 
-Mesh3D* MeshManager::CreateSphere(std::string name, uint32_t segments)
+std::unique_ptr<Mesh3D> CreateSphere(std::string name, uint32_t segments)
 {
-    if(auto it = Lookup(name); it != m_cache.end())
-    {
-        ValidateMeshCategory(it->second->GetMeshType().category, MeshCategory::Sphere);
-        return it->second.get();
-    }
 
     std::vector<glm::vec3> positions;
     std::vector<glm::vec3> normals;
@@ -281,13 +238,8 @@ Mesh3D* MeshManager::CreateSphere(std::string name, uint32_t segments)
         std::move(indices));
 }
 
-Mesh3D* MeshManager::CreateLineGrid(std::string name, uint32_t width, uint32_t height)
+std::unique_ptr<Mesh3D> CreateLineGrid(std::string name, uint32_t width, uint32_t height)
 {
-    if(auto it = Lookup(name); it != m_cache.end())
-    {
-        ValidateMeshCategory(it->second->GetMeshType().category, MeshCategory::LineGrid);
-        return it->second.get();
-    }
 
     std::vector<glm::vec3> positions, normals;
     std::vector<glm::vec2> uvs;
@@ -328,13 +280,8 @@ Mesh3D* MeshManager::CreateLineGrid(std::string name, uint32_t width, uint32_t h
         std::move(indices));
 }
 
-Mesh3D* MeshManager::CreateTriangleGrid(std::string name, uint32_t width, uint32_t height)
+std::unique_ptr<Mesh3D> CreateTriangleGrid(std::string name, uint32_t width, uint32_t height)
 {
-    if(auto it = Lookup(name); it != m_cache.end())
-    {
-        ValidateMeshCategory(it->second->GetMeshType().category, MeshCategory::TriangleGrid);
-        return it->second.get();
-    }
 
     std::vector<glm::vec3> positions, normals;
     std::vector<glm::vec2> uvs;
@@ -375,18 +322,7 @@ Mesh3D* MeshManager::CreateTriangleGrid(std::string name, uint32_t width, uint32
         std::move(indices));
 }
 
-Mesh3D* MeshManager::AddMesh(std::unique_ptr<Mesh3D> mesh)
-{
-    auto const name = mesh->Name();
-    auto meshPtr = mesh.get();
-    meshPtr->GetVertexDeclaration().AddSection("vPos", 3u, 0u);
-    meshPtr->GetVertexDeclaration().AddSection("vNormal", 3u, static_cast<uint32_t>(meshPtr->Positions().size() * sizeof(float) * 3));
-    meshPtr->GetVertexDeclaration().AddSection("vUV", 2u, static_cast<uint32_t>((meshPtr->Positions().size() + meshPtr->Normals().size()) * sizeof(float) * 3));
-    m_cache.insert(std::make_pair(name, std::move(mesh)));
-    return meshPtr;
-}
-
-Mesh3D* MeshManager::DoCreate(
+std::unique_ptr<Mesh3D> DoCreate(
     MeshCategory meshCategory,
     MeshPrimitives primitives,
     std::string const& name,
@@ -406,14 +342,7 @@ Mesh3D* MeshManager::DoCreate(
     mesh->AddUVs(std::move(uvs));
     mesh->AddIndices(std::move(indices));
 
-    auto retVal = mesh.get();
-    m_cache.insert(std::make_pair(name, std::move(mesh)));
-    return retVal;
+    return mesh;
 }
-
-std::unordered_map<std::string, std::unique_ptr<Mesh3D>>::const_iterator MeshManager::Lookup(std::string const& name) const
-{
-    return m_cache.find(name);
-}
-
+} // namespace MeshFactory
 } // namespace FIRE

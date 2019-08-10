@@ -1,6 +1,5 @@
 #ifndef FIRE_GLFactory_H
 #define FIRE_GLFactory_H
-#include <FIRE/MaterialFactory.h>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -11,16 +10,13 @@ class Window;
 class Renderer;
 class RenderContext;
 class ShaderFactory;
-class MeshManager;
-class TextureManager;
 
 namespace GLFactory
 {
 Window InitWindow(std::string title, uint32_t width, uint32_t height);
+std::shared_ptr<AssetFacade> CreateAssetFacade();
 std::unique_ptr<RenderContext> CreateRenderContext(Window& window);
-std::unique_ptr<TextureManager> CreateTextureManager();
-MaterialFactory CreateMaterialFactory();
-std::unique_ptr<Renderer> CreateRenderer(std::shared_ptr<TextureManager> texManager);
+std::unique_ptr<Renderer> CreateRenderer(std::shared_ptr<AssetFacade> assets);
 
 } // namespace GLFactory
 

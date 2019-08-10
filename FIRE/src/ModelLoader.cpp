@@ -1,5 +1,5 @@
 #include <FIRE/Mesh3D.h>
-#include <FIRE/ModelLoader.h>
+#include <ModelLoader.h>
 #include <assimp/Importer.hpp>
 #include <assimp/cimport.h>
 #include <assimp/postprocess.h>

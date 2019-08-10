@@ -1,9 +1,9 @@
 #include "FIRE/Renderer.h"
 #include "Draw.h"
 #include "FIRE/FontCharacter.h"
-#include "FIRE/TextureManager.h"
 #include "MaterialBinder.h"
 #include "VertexLayoutFactory.h"
+#include <FIRE/AssetFacade.h>
 #include <FIRE/Renderable.h>
 #include <FIRE/TextOverlay.h>
 #include <array>
@@ -11,7 +11,7 @@ namespace FIRE
 {
 namespace
 {
-//TODO: Create in MeshManager?!
+//TODO: Create in MeshFactory?!
 std::array<float, 24> GetFontCharQuad(FontCharacter const& ch, float x, float y, float scale)
 {
     float xpos = x + ch.bearing.x * scale;
@@ -33,11 +33,11 @@ Renderer::Renderer(
     std::unique_ptr<Draw> draw,
     std::unique_ptr<MaterialBinder> materialBinder,
     std::unique_ptr<VertexLayoutFactory> vertexLayoutFactory,
-    std::shared_ptr<TextureManager> texFactory)
+    std::shared_ptr<AssetFacade> assets)
     : m_draw(std::move(draw))
     , m_materialBinder(std::move(materialBinder))
     , m_vertexLayoutFactory(std::move(vertexLayoutFactory))
-    , m_texManager(std::move(texFactory))
+    , m_assets(std::move(assets))
 {
 }
 
@@ -85,17 +85,17 @@ void Renderer::Render(TextOverlay overlay, float width, float height)
     float y = overlay.y * height;
     for(auto const& c : overlay.text)
     {
-        FontCharacter* ch = m_texManager->CreateFontCharTexture(c);
-        if(ch->texture)
+        FontCharacter ch = m_assets->CreateFontCharacter(c);
+        if(ch.texture)
         {
-            ch->texture->Bind(0);
+            ch.texture->Bind(0);
         }
-        auto vertices = GetFontCharQuad(*ch, x, y, overlay.scale);
+        auto vertices = GetFontCharQuad(ch, x, y, overlay.scale);
         vertexLayout.BufferSubData(0u, sizeof(vertices), vertices.data());
         m_draw->DoDraw(vertexLayout, MeshPrimitives::Triangles, 6u);
 
         // Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-        x += (ch->advance >> 6) * overlay.scale; // Bitshift by 6 to get value in pixels (2^6 = 64)
+        x += (ch.advance >> 6) * overlay.scale; // Bitshift by 6 to get value in pixels (2^6 = 64)
     }
 
     m_materialBinder->Release();

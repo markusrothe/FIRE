@@ -1,7 +1,7 @@
 #ifndef FIRE_GLShaderFactory_h
 #define FIRE_GLShaderFactory_h
 
-#include <FIRE/ShaderFactory.h>
+#include <ShaderFactory.h>
 #include <string>
 namespace FIRE
 {

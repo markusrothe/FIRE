@@ -1,7 +1,7 @@
 #include "Utilities.h"
 #include "WarningSuppressions.h"
 #include <FIRE/Mesh3D.h>
-#include <FIRE/MeshManager.h>
+#include <MeshFactory.h>
 #include <functional>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
@@ -12,19 +12,13 @@ namespace
 {
 std::string const NAME{"mesh_name"};
 
-class AMeshManager : public Test
-{
-public:
-    FIRE::MeshManager meshManager;
-};
-
 } // namespace
 
 using TestUtil::EXPECT_VEC_EQ;
 
-TEST_F(AMeshManager, CreatesACube)
+TEST(AMeshFactory, CreatesACube)
 {
-    auto const mesh = meshManager.CreateCube(NAME);
+    auto const mesh = FIRE::MeshFactory::CreateCube(NAME);
     ASSERT_TRUE(mesh);
 
     auto const positions = mesh->Positions();
@@ -37,9 +31,9 @@ TEST_F(AMeshManager, CreatesACube)
     ASSERT_EQ(36u, indices.size());
 }
 
-TEST_F(AMeshManager, CreatesAPlane)
+TEST(AMeshFactory, CreatesAPlane)
 {
-    auto const mesh = meshManager.CreatePlane(NAME);
+    auto const mesh = FIRE::MeshFactory::CreatePlane(NAME);
     ASSERT_TRUE(mesh);
 
     auto const positions = mesh->Positions();
@@ -60,99 +54,30 @@ TEST_F(AMeshManager, CreatesAPlane)
     EXPECT_THAT(mesh->Indices(), ::testing::ContainerEq(expectedIndices));
 }
 
-TEST_F(AMeshManager, CreatesASphere)
+TEST(AMeshFactory, CreatesASphere)
 {
     auto const numSegments = 4;
-    auto const mesh = meshManager.CreateSphere(NAME, numSegments);
+    auto const mesh = FIRE::MeshFactory::CreateSphere(NAME, numSegments);
     ASSERT_TRUE(mesh);
     EXPECT_EQ(14u, mesh->Positions().size());
     EXPECT_EQ(14u, mesh->Normals().size());
     EXPECT_EQ(72u, mesh->Indices().size());
 }
 
-TEST_F(AMeshManager, CreatesALineGrid)
+TEST(AMeshFactory, CreatesALineGrid)
 {
-    auto const mesh = meshManager.CreateLineGrid(NAME, 10, 10);
+    auto const mesh = FIRE::MeshFactory::CreateLineGrid(NAME, 10, 10);
     ASSERT_TRUE(mesh);
     EXPECT_EQ(40u, mesh->Positions().size());
     EXPECT_EQ(40u, mesh->Normals().size());
     EXPECT_EQ(40u, mesh->Indices().size());
 }
 
-TEST_F(AMeshManager, CreatesATriangleGrid)
+TEST(AMeshFactory, CreatesATriangleGrid)
 {
-    auto const mesh = meshManager.CreateTriangleGrid(NAME, 10, 10);
+    auto const mesh = FIRE::MeshFactory::CreateTriangleGrid(NAME, 10, 10);
     ASSERT_TRUE(mesh);
     EXPECT_EQ(600u, mesh->Positions().size());
     EXPECT_EQ(600u, mesh->Normals().size());
     EXPECT_EQ(600u, mesh->Indices().size());
 }
-
-TEST_F(AMeshManager, ThrowsIfADifferentMeshTypeIsCreatedWithTheSameName)
-{
-    (void)meshManager.CreateCube(NAME);
-    EXPECT_THROW(meshManager.CreatePlane(NAME), std::runtime_error);
-}
-
-TEST_F(AMeshManager, MayGetMeshesAdded)
-{
-    auto mesh = std::make_unique<FIRE::Mesh3D>(NAME, FIRE::MeshType(FIRE::MeshCategory::Custom, FIRE::MeshPrimitives::Triangles));
-    auto meshPtr = meshManager.AddMesh(std::move(mesh));
-
-    ASSERT_THAT(meshManager.Create(FIRE::MeshCategory::Custom, FIRE::MeshPrimitives::Triangles, NAME, {}, {}, {}, {}), Eq(meshPtr));
-}
-
-namespace
-{
-using MeshCreationFunc = std::function<FIRE::Mesh3D*(FIRE::MeshManager&)>;
-class MeshManagerCachingTest : public TestWithParam<MeshCreationFunc>
-{
-public:
-    FIRE::MeshManager meshManager;
-};
-
-// clang-format off
-SUPPRESS_UnusedFunction
-
-std::ostream& operator<<(std::ostream& os, MeshCreationFunc const&)
-{
-    static int i = 0;
-    os << i++;
-    return os;
-}
-
-SUPPRESS_Pop
-//clang-format on
-} // namespace
-
-TEST_P(MeshManagerCachingTest, CachesACreatedMesh)
-{
-    auto func = GetParam();
-
-    auto const mesh1 = func(meshManager);
-    auto const mesh2 = func(meshManager);
-
-    EXPECT_EQ(mesh1, mesh2);
-}
-
-SUPPRESS_ZeroVariadicMacroArguments
-
-INSTANTIATE_TEST_CASE_P(
-    MeshManagerCachingParamTest,
-    MeshManagerCachingTest,
-    ::testing::Values(
-        [](FIRE::MeshManager& meshManager) { return meshManager.CreateCube(NAME); },
-        [](FIRE::MeshManager& meshManager) { return meshManager.CreateSphere(NAME, 10); },
-        [](FIRE::MeshManager& meshManager) { return meshManager.CreatePlane(NAME); },
-        [](FIRE::MeshManager& meshManager) { return meshManager.CreateLineGrid(NAME, 2, 2); },
-        [](FIRE::MeshManager& meshManager) { return meshManager.CreateTriangleGrid(NAME, 2, 2); },
-        [](FIRE::MeshManager& meshManager) { return meshManager.Create(
-                                                 FIRE::MeshCategory::Custom,
-                                                 FIRE::MeshPrimitives::Points,
-                                                 NAME,
-                                                 std::vector<glm::vec3>(),
-                                                 std::vector<glm::vec3>(),
-                                                 std::vector<glm::vec2>(),
-                                                 std::vector<unsigned int>()); }));
-
-SUPPRESS_Pop
