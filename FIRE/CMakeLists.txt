@@ -71,7 +71,7 @@ add_library(FIRE STATIC
     src/GLMaterialBinder.cpp
     src/GLDraw.cpp
     src/GLTextureFactory.cpp
-    src/ModelLoader.cpp src/ModelLoader.h ../contrib/stb_image/include/stb_image/stb_image.h include/FIRE/AssetFacade.h src/AssetFacade.cpp)
+    src/ModelLoader.cpp src/ModelLoader.h ../contrib/stb_image/include/stb_image/stb_image.h include/FIRE/AssetFacade.h src/AssetFacade.cpp include/FIRE/RenderableBuilder.h src/RenderableBuilder.cpp)
 
 target_include_directories(FIRE
     PUBLIC

@@ -23,17 +23,17 @@ void SetupScene(
     FIRE::AssetFacade& assets)
 {
     assets.SubmitShadersFromFiles("phong", {{FIRE::ShaderType::VERTEX_SHADER, "PhongVS.glsl"}, {FIRE::ShaderType::FRAGMENT_SHADER, "PhongFS.glsl"}});
-    assets.CreateTexture("checkerBoardTex", 2u, 2u, {0x00, 0xff, 0xff, 0x00}, 1, FIRE::Texture2D::WrappingMode::CLAMP, FIRE::Texture2D::Filter::NEAREST);
 
     auto input{std::make_shared<FIRE::InputListener>()};
     window.SetInputListener(input);
 
-    //    auto renderables = assets.Create(
-    //        FromNewMesh(FIRE::MeshCategory::Cube, FIRE::MeshPrimitives::Triangles)
-    //            .WithMaterial("texSampling")
-    //            .WithTexture("checkerBoardTex", 0u));
-    //auto& cubeObject = scene.CreateSceneObject("cube");
-    //    cubeObject.AddComponent(std::make_unique<examples::Mesh3DRenderingComponent>(renderer, std::move(renderables)));
+    auto renderables = assets.CreateRenderables("cube", 1u)
+                           .WithMesh("cubeMesh", FIRE::MeshCategory::Cube)
+                           .WithMaterial("phong")
+                           .Build();
+
+    auto& cubeObject = scene.CreateSceneObject("cube");
+    cubeObject.AddComponent(std::make_unique<examples::Mesh3DRenderingComponent>(renderer, std::move(renderables)));
 
     auto& mainCamera = scene.CreateSceneObject("cam");
     mainCamera.AddComponent(std::make_unique<examples::InputMappingComponent>(mainCamera, *input, window, renderer));

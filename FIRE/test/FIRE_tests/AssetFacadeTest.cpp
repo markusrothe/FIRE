@@ -9,6 +9,7 @@
 #include <FIRE/ShaderType.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
+#include <string>
 
 using namespace ::testing;
 
@@ -99,6 +100,11 @@ TEST_F(AnAssetFacade, CachesFontCharacters)
     assets.CreateFontCharacter('A');
 }
 
+TEST_F(AnAssetFacade, StoresADefaultMaterial)
+{
+    ASSERT_THAT(assets.GetMaterial("Default").Name(), Eq("Default"));
+}
+
 TEST_F(AnAssetFacade, AllowsToSubmitShaders)
 {
     EXPECT_CALL(shaderFactoryMock, Create(_));
@@ -147,27 +153,201 @@ TEST_F(AnAssetFacade, CreatesNewBasicMeshes)
     ASSERT_TRUE(assets.GetMesh("lineGrid"));
 }
 
-// TEST_F(AnAssetFacade, AllowsToBuildRenderablesFromModels)
-//{
-//    auto renderables = assets.CreateRenderables("renderable_name")
-//                           .FromModel("sponza")
-//                           .WithMaterial("TexSampling")
-//                           .Finish();
-//}
+TEST_F(AnAssetFacade, CreatesRenderablesWithANamePrefix)
+{
+    auto const renderables = assets.CreateRenderables(NAME, 1u).Build();
+    ASSERT_THAT(renderables, SizeIs(1u));
+    ASSERT_THAT(renderables[0].name.substr(0, NAME.size()), Eq(NAME));
+}
 
-// TEST_F(AnAssetFacade, AllowsToBuildARenderableFromAPredefinedMesh)
-//{
-//    auto renderable = assets.CreateRenderables("renderable_name")
-//                          .FromMesh(FIRE::MeshCategory::Cube, FIRE::MeshPrimitives::Triangles)
-//                          .WithMaterial("Default")
-//                          .WithTexture("Tex")
-//                          .Finish();
-//}
+TEST_F(AnAssetFacade, CreatesMultipleRenderables)
+{
+    auto const renderables = assets.CreateRenderables(NAME, 2u).Build();
+    ASSERT_THAT(renderables, SizeIs(2u));
+    ASSERT_THAT(renderables[0].name.substr(NAME.size(), NAME.size() + 1), Eq("0"));
+    ASSERT_THAT(renderables[1].name.substr(NAME.size(), NAME.size() + 1), Eq("1"));
+}
+
+TEST_F(AnAssetFacade, CreatesRenderablesWithoutMeshesPerDefault)
+{
+    auto const renderables = assets.CreateRenderables(NAME, 1u).Build();
+    ASSERT_THAT(renderables[0].mesh, IsNull());
+}
+
+TEST_F(AnAssetFacade, CreatesRenderablesWithTheDefaultMaterialPerDefault)
+{
+    auto const renderables = assets.CreateRenderables(NAME, 1u).Build();
+    ASSERT_THAT(renderables[0].material.Name(), Eq("Default"));
+}
+
+TEST_F(AnAssetFacade, CreatesRenderablesWithAMesh)
+{
+    assets.CreateMesh(NAME, FIRE::MeshCategory::Cube);
+    auto const renderables = assets.CreateRenderables(NAME, 1u)
+                                 .WithMesh(NAME)
+                                 .Build();
+    ASSERT_TRUE(renderables[0].mesh);
+}
+
+TEST_F(AnAssetFacade, CreatesRenderablesWithAMeshAndTextures)
+{
+    assets.CreateMesh(NAME, FIRE::MeshCategory::Cube);
+    assets.SubmitTexture(NAME, std::make_unique<FIRE_tests::Texture2DStub>(42u));
+
+    auto const renderables = assets.CreateRenderables(NAME, 1u)
+                                 .WithMesh(NAME)
+                                 .WithTexture(NAME, 0u)
+                                 .Build();
+
+    ASSERT_THAT(renderables[0].material.GetTexture(0u), Eq(assets.GetTexture(NAME)));
+}
+
+TEST_F(AnAssetFacade, CreatesRenderablesWithANewMesh)
+{
+    auto const renderables = assets.CreateRenderables(NAME, 1u)
+                                 .WithMesh(NAME, FIRE::MeshCategory::Cube)
+                                 .Build();
+    ASSERT_TRUE(assets.GetMesh(NAME));
+}
+
+TEST_F(AnAssetFacade, CreatesMultipleRenderablesWithDifferentMeshes)
+{
+    auto const renderables = assets.CreateRenderables(NAME, 3u)
+                                 .WithMesh(NAME + "cube", FIRE::MeshCategory::Cube)
+                                 .WithMesh(NAME + "plane", FIRE::MeshCategory::Plane)
+                                 .WithMesh(NAME + "sphere", FIRE::MeshCategory::Sphere)
+                                 .Build();
+
+    ASSERT_THAT(renderables, SizeIs(3u));
+    ASSERT_THAT(renderables[0].mesh->Name(), Eq(NAME + "cube"));
+    ASSERT_THAT(renderables[1].mesh->Name(), Eq(NAME + "plane"));
+    ASSERT_THAT(renderables[2].mesh->Name(), Eq(NAME + "sphere"));
+    ASSERT_THAT(renderables[0].mesh->Positions(), SizeIs(24u));
+    ASSERT_THAT(renderables[1].mesh->Positions(), SizeIs(4u));
+    ASSERT_THAT(renderables[2].mesh->Positions(), SizeIs(382u));
+}
+
+TEST_F(AnAssetFacade, ThrowsIfMoreMeshesThanRenderablesHaveBeenSpecified)
+{
+    ASSERT_ANY_THROW(assets.CreateRenderables(NAME, 1u)
+                         .WithMesh(NAME)
+                         .WithMesh(NAME)
+                         .Build());
+}
+
+TEST_F(AnAssetFacade, CreatesRenderablesWithMaterials)
+{
+    EXPECT_CALL(shaderFactoryMock, Create(_))
+        .WillOnce(Return(42u))
+        .WillOnce(Return(43u));
+
+    assets.SubmitShaders("TestMaterial1", {});
+    assets.SubmitShaders("TestMaterial2", {});
+    auto const renderables = assets.CreateRenderables(NAME, 2u)
+                                 .WithMaterial("TestMaterial1")
+                                 .WithMaterial("TestMaterial2")
+                                 .Build();
+
+    ASSERT_THAT(renderables[0].material.Name(), Eq("TestMaterial1"));
+    ASSERT_THAT(renderables[0].material.ShaderId(), Eq(42u));
+
+    ASSERT_THAT(renderables[1].material.Name(), Eq("TestMaterial2"));
+    ASSERT_THAT(renderables[1].material.ShaderId(), Eq(43u));
+}
+
+TEST_F(AnAssetFacade, ThrowsIfMoreMaterialsThanRenderablesHaveBeenSpecified)
+{
+    ASSERT_ANY_THROW(assets.CreateRenderables(NAME, 1u)
+                         .WithMaterial("Default")
+                         .WithMaterial("Default")
+                         .Build());
+}
+
+TEST_F(AnAssetFacade, CreatesRenderablesWithMaterialsAndAssignedTextures)
+{
+    EXPECT_CALL(textureFactoryMock, Load(_, _))
+        .WillOnce(Return(ByMove(std::make_unique<FIRE_tests::Texture2DStub>(42u))))
+        .WillOnce(Return(ByMove(std::make_unique<FIRE_tests::Texture2DStub>(43u))));
+
+    assets.SubmitTexture("Tex1", "", FIRE::Texture2D::WrappingMode::WRAP);
+    assets.SubmitTexture("Tex2", "", FIRE::Texture2D::WrappingMode::WRAP);
+    auto const renderables = assets.CreateRenderables(NAME, 2u)
+                                 .WithMaterial("TestMaterial1")
+                                 .WithMaterial("TestMaterial2")
+                                 .WithTexture("Tex1", 0u)
+                                 .WithTexture("Tex2", 0u)
+                                 .Build();
+
+    ASSERT_THAT(renderables[0].material.GetTexture(0u)->Id(), Eq(42u));
+    ASSERT_THAT(renderables[1].material.GetTexture(0u)->Id(), Eq(43u));
+}
+
+TEST_F(AnAssetFacade, CreatesRenderablesWithNewTextures)
+{
+    EXPECT_CALL(textureFactoryMock, Load(_, _))
+        .WillOnce(Return(ByMove(std::make_unique<FIRE_tests::Texture2DStub>(42u))))
+        .WillOnce(Return(ByMove(std::make_unique<FIRE_tests::Texture2DStub>(43u))));
+    auto const renderables = assets.CreateRenderables(NAME, 2u)
+                                 .WithNewTexture("Tex1", "filepath", FIRE::Texture2D::WrappingMode::WRAP, 0u)
+                                 .WithNewTexture("Tex2", "filepath", FIRE::Texture2D::WrappingMode::WRAP, 0u)
+                                 .Build();
+    ASSERT_TRUE(assets.GetTexture("Tex1"));
+    ASSERT_TRUE(assets.GetTexture("Tex2"));
+    ASSERT_THAT(renderables[0].material.GetTexture(0u)->Id(), Eq(42u));
+    ASSERT_THAT(renderables[1].material.GetTexture(0u)->Id(), Eq(43u));
+}
+
+TEST_F(AnAssetFacade, CreatesRenderablesWithMultipleTextureAddedToOneMaterial)
+{
+    EXPECT_CALL(textureFactoryMock, Load(_, _))
+        .WillOnce(Return(ByMove(std::make_unique<FIRE_tests::Texture2DStub>(42u))))
+        .WillOnce(Return(ByMove(std::make_unique<FIRE_tests::Texture2DStub>(43u))));
+    assets.SubmitTexture("Tex1", "", FIRE::Texture2D::WrappingMode::WRAP);
+    assets.SubmitTexture("Tex2", "", FIRE::Texture2D::WrappingMode::WRAP);
+
+    auto const renderables = assets.CreateRenderables(NAME, 2u)
+                                 .WithTextures({{"Tex1", 0u}, {"Tex2", 1u}})
+                                 .Build();
+
+    ASSERT_THAT(renderables[0].material.GetTexture(0u)->Id(), Eq(42u));
+    ASSERT_THAT(renderables[0].material.GetTexture(1u)->Id(), Eq(43u));
+    ASSERT_THAT(renderables[1].material.GetTextures(), IsEmpty());
+}
+
+TEST_F(AnAssetFacade, CreatesRenderablesWithMultipleTexturesAddedToMultipleMaterials)
+{
+    EXPECT_CALL(textureFactoryMock, Load(_, _))
+        .WillOnce(Return(ByMove(std::make_unique<FIRE_tests::Texture2DStub>(42u))))
+        .WillOnce(Return(ByMove(std::make_unique<FIRE_tests::Texture2DStub>(43u))))
+        .WillOnce(Return(ByMove(std::make_unique<FIRE_tests::Texture2DStub>(44u))))
+        .WillOnce(Return(ByMove(std::make_unique<FIRE_tests::Texture2DStub>(45u))));
+    assets.SubmitTexture("Tex1", "", FIRE::Texture2D::WrappingMode::WRAP);
+    assets.SubmitTexture("Tex2", "", FIRE::Texture2D::WrappingMode::WRAP);
+    assets.SubmitTexture("Tex3", "", FIRE::Texture2D::WrappingMode::WRAP);
+    assets.SubmitTexture("Tex4", "", FIRE::Texture2D::WrappingMode::WRAP);
+
+    auto const renderables = assets.CreateRenderables(NAME, 2u)
+                                 .WithTextures({{"Tex1", 0u}, {"Tex2", 1u}})
+                                 .WithTextures({{"Tex3", 0u}, {"Tex4", 1u}})
+                                 .Build();
+
+    ASSERT_THAT(renderables[0].material.GetTexture(0u)->Id(), Eq(42u));
+    ASSERT_THAT(renderables[0].material.GetTexture(1u)->Id(), Eq(43u));
+    ASSERT_THAT(renderables[1].material.GetTexture(0u)->Id(), Eq(44u));
+    ASSERT_THAT(renderables[1].material.GetTexture(1u)->Id(), Eq(45u));
+}
+
+TEST_F(AnAssetFacade, AllowsToBuildRenderablesFromModels)
+{
+    assets.SubmitModel("cube", FIRE_tests::cubeOBJ);
+    auto renderables = assets.CreateModelRenderables(NAME, "cube", "material");
+    ASSERT_THAT(renderables, SizeIs(2u));
+}
 
 // TEST_F(AnAssetFacade, AllowsToBuildATextOverlayFromAText)
 //{
 //    auto textOverlay = assets.CreateTextOverlay("overlay_name")
 //                           .FromText("overlay_text")
 //                           .WithMaterial("Default")
-//                           .Finish();
+//                           .Build();
 //}

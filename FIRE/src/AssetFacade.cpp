@@ -4,6 +4,7 @@
 #include <FIRE/AssetFacade.h>
 #include <ShaderFactory.h>
 #include <fstream>
+#include <sstream>
 
 namespace FIRE
 {
@@ -23,6 +24,7 @@ AssetFacade::AssetFacade(
     : m_texFactory(std::move(texFactory))
     , m_shaderFactory(std::move(shaderFactory))
 {
+    m_materials["Default"] = Material("Default", m_shaderFactory->CreateDefaultShader());
 }
 
 AssetFacade::~AssetFacade() = default;
@@ -39,8 +41,7 @@ void AssetFacade::SubmitTexture(std::string const& name, std::unique_ptr<Texture
 
 Texture2D* AssetFacade::GetTexture(std::string const& name) const
 {
-    auto const textureIter = m_textures.find(name);
-    if(textureIter != m_textures.cend())
+    if(auto const textureIter = m_textures.find(name); textureIter != m_textures.cend())
     {
         return textureIter->second.get();
     }
@@ -93,8 +94,7 @@ void AssetFacade::SubmitShadersFromFiles(std::string const& name, Shaders shader
 
 Material AssetFacade::GetMaterial(std::string const& name) const
 {
-    auto it = m_materials.find(name);
-    if(it != m_materials.end())
+    if(auto it = m_materials.find(name); it != m_materials.end())
     {
         return it->second;
     }
@@ -128,8 +128,7 @@ void AssetFacade::SubmitModel(std::string const& name, std::string const& fileCo
 
 std::vector<Mesh3D*> AssetFacade::GetModelMeshes(std::string const& name) const
 {
-    auto it = m_modelAssets.find(name);
-    if(it != m_modelAssets.end())
+    if(auto it = m_modelAssets.find(name); it != m_modelAssets.end())
     {
         return it->second.first;
     }
@@ -146,8 +145,7 @@ void AssetFacade::SubmitMesh(std::string const& name, std::unique_ptr<Mesh3D> me
 
 Mesh3D* AssetFacade::GetMesh(std::string const& name) const
 {
-    auto it = m_meshes.find(name);
-    if(it != m_meshes.end())
+    if(auto it = m_meshes.find(name); it != m_meshes.end())
     {
         return it->second.get();
     }
@@ -177,6 +175,32 @@ void AssetFacade::CreateMesh(std::string const& name, MeshCategory meshCategory)
     case MeshCategory::Custom:
         break;
     }
+}
+RenderableBuilder AssetFacade::CreateRenderables(std::string const& namePrefix, uint32_t count)
+{
+    return RenderableBuilder(*this, namePrefix, count);
+}
+
+std::vector<Renderable> AssetFacade::CreateModelRenderables(std::string const& namePrefix, std::string const& modelName, std::string const& overrideMaterial)
+{
+    auto model = m_modelAssets.find(modelName);
+    if(model == m_modelAssets.end())
+    {
+        return {};
+    }
+
+    auto& meshes = model->second.first;
+    auto& textures = model->second.second;
+    auto const numMeshes = static_cast<uint32_t>(meshes.size());
+    auto builder = CreateRenderables(namePrefix, numMeshes);
+    for(auto i = 0u; i < numMeshes; ++i)
+    {
+        builder.WithMesh(meshes[i])
+            .WithMaterial(overrideMaterial)
+            .WithTexture(textures[i], 0u);
+    }
+
+    return builder.Build();
 }
 
 } // namespace FIRE

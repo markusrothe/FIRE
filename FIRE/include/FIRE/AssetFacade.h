@@ -4,6 +4,8 @@
 #include <FIRE/FontCharacter.h>
 #include <FIRE/Material.h>
 #include <FIRE/Mesh3D.h>
+#include <FIRE/Renderable.h>
+#include <FIRE/RenderableBuilder.h>
 #include <FIRE/ShaderType.h>
 #include <memory>
 #include <string>
@@ -45,6 +47,9 @@ public:
 
     void SubmitModel(std::string const& name, std::string const& fileContent);
     [[nodiscard]] std::vector<Mesh3D*> GetModelMeshes(std::string const& name) const;
+
+    RenderableBuilder CreateRenderables(std::string const& namePrefix, uint32_t count);
+    std::vector<Renderable> CreateModelRenderables(std::string const& namePrefix, std::string const& modelName, std::string const& overrideMaterial);
 
 private:
     std::unique_ptr<TextureFactory> m_texFactory;
