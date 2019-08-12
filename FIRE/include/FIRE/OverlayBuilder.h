@@ -7,6 +7,7 @@
 
 namespace FIRE
 {
+class AssetFacade;
 class OverlayBuilder
 {
 public:
