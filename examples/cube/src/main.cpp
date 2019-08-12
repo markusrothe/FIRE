@@ -22,18 +22,30 @@ void SetupScene(
     FIRE::Renderer& renderer,
     FIRE::AssetFacade& assets)
 {
-    assets.SubmitShadersFromFiles("phong", {{FIRE::ShaderType::VERTEX_SHADER, "PhongVS.glsl"}, {FIRE::ShaderType::FRAGMENT_SHADER, "PhongFS.glsl"}});
+    assets.SubmitShadersFromFiles(
+        "phong",
+        {{FIRE::ShaderType::VERTEX_SHADER, "PhongVS.glsl"}, {FIRE::ShaderType::FRAGMENT_SHADER, "PhongFS.glsl"}});
 
     auto input{std::make_shared<FIRE::InputListener>()};
     window.SetInputListener(input);
 
-    auto renderables = assets.CreateRenderables("cube", 1u)
-                           .WithMesh("cubeMesh", FIRE::MeshCategory::Cube)
-                           .WithMaterial("phong")
-                           .Build();
+    auto cubeRenderables = assets.CreateRenderables("cube", 1u)
+                               .WithMesh("cubeMesh", FIRE::MeshCategory::Cube)
+                               .WithMaterial("phong")
+                               .Build();
 
     auto& cubeObject = scene.CreateSceneObject("cube");
-    cubeObject.AddComponent(std::make_unique<examples::Mesh3DRenderingComponent>(renderer, std::move(renderables)));
+    cubeObject.AddComponent(std::make_unique<examples::Mesh3DRenderingComponent>(renderer, std::move(cubeRenderables)));
+    cubeObject.GetTransform().SetPosition({0.0f, 4.0f, 0.0f});
+
+    auto planeRenderables = assets.CreateRenderables("plane", 1u)
+                                .WithMesh("planeMesh", FIRE::MeshCategory::Plane)
+                                .WithMaterial("phong")
+                                .Build();
+
+    auto& planeObject = scene.CreateSceneObject("plane");
+    planeObject.AddComponent(std::make_unique<examples::Mesh3DRenderingComponent>(renderer, std::move(planeRenderables)));
+    planeObject.GetTransform().Scale({100.0f, 1.0f, 100.0f});
 
     auto& mainCamera = scene.CreateSceneObject("cam");
     mainCamera.AddComponent(std::make_unique<examples::InputMappingComponent>(mainCamera, *input, window, renderer));

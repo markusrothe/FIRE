@@ -16,6 +16,7 @@ namespace FIRE
 {
 class TextureFactory;
 class ShaderFactory;
+class ModelLoader;
 class AssetFacade
 {
 public:
@@ -34,7 +35,8 @@ public:
         uint8_t numComponents,
         Texture2D::WrappingMode wrappingMode,
         Texture2D::Filter filter);
-    [[nodiscard]] Texture2D* GetTexture(std::string const& name) const;
+
+    Texture2D* GetTexture(std::string const& name) const;
     FontCharacter CreateFontCharacter(char c);
 
     void SubmitShaders(std::string const& name, Shaders shaders);
@@ -46,12 +48,15 @@ public:
     void CreateMesh(std::string const& name, MeshCategory meshCategory);
 
     void SubmitModel(std::string const& name, std::string const& fileContent);
+    void SubmitModelFromFile(std::string const& name, std::string const& filePath);
     [[nodiscard]] std::vector<Mesh3D*> GetModelMeshes(std::string const& name) const;
 
     RenderableBuilder CreateRenderables(std::string const& namePrefix, uint32_t count);
     std::vector<Renderable> CreateModelRenderables(std::string const& namePrefix, std::string const& modelName, std::string const& overrideMaterial);
 
 private:
+    void ProcessModel(std::string const& name, ModelLoader& loader);
+
     std::unique_ptr<TextureFactory> m_texFactory;
     std::unique_ptr<ShaderFactory> m_shaderFactory;
 

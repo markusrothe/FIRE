@@ -3,7 +3,6 @@
 #include <FIRE/Message.h>
 #include <FIRE/Scene.h>
 #include <FIRE/SceneObject.h>
-#include <FIRE/Window.h>
 namespace examples
 {
 
@@ -18,7 +17,6 @@ Mesh3DRenderingComponent::Mesh3DRenderingComponent(
 void Mesh3DRenderingComponent::DoUpdate(double, FIRE::SceneObject& sceneObject, FIRE::Scene& scene)
 {
     auto& transform = sceneObject.GetTransform();
-    transform.Rotate({1, 1, 1}, 0.1f);
     auto viewMatrix = std::any_cast<glm::mat4x4>(scene.Send(FIRE::Message(0)).value());
     auto projMatrix = std::any_cast<glm::mat4x4>(scene.Send(FIRE::Message(1)).value());
     auto lightPos = std::any_cast<glm::vec3>(scene.Send(FIRE::Message(2)).value());

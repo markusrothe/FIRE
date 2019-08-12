@@ -31,12 +31,19 @@ AssetFacade::~AssetFacade() = default;
 
 void AssetFacade::SubmitTexture(std::string const& name, std::string const& textureFilePath, Texture2D::WrappingMode wrappingMode)
 {
-    m_textures[name] = m_texFactory->Load(textureFilePath, wrappingMode);
+    if(m_textures.find(name) == m_textures.end())
+    {
+
+        m_textures[name] = m_texFactory->Load(textureFilePath, wrappingMode);
+    }
 }
 
 void AssetFacade::SubmitTexture(std::string const& name, std::unique_ptr<Texture2D> texture)
 {
-    m_textures[name] = std::move(texture);
+    if(m_textures.find(name) == m_textures.end())
+    {
+        m_textures[name] = std::move(texture);
+    }
 }
 
 Texture2D* AssetFacade::GetTexture(std::string const& name) const
@@ -58,6 +65,11 @@ void AssetFacade::CreateTexture(
     Texture2D::WrappingMode wrappingMode,
     Texture2D::Filter filter)
 {
+    if(m_textures.find(name) != m_textures.end())
+    {
+        throw std::runtime_error("A texture with that name already exists.");
+    }
+
     m_textures[name] = m_texFactory->Create2DTexture(width, height, data, numComponents, wrappingMode, filter);
 }
 
@@ -67,6 +79,7 @@ FontCharacter AssetFacade::CreateFontCharacter(char c)
     if(fontCharIter == m_fontCharacters.end())
     {
         auto fontChar = m_texFactory->LoadFontCharacter(c);
+
         auto const textureName = std::string("fontChar_") + c;
         m_textures[textureName] = m_texFactory->Create2DTexture(
             fontChar.size.x, fontChar.size.y, fontChar.data, 1, Texture2D::WrappingMode::CLAMP,
@@ -80,7 +93,10 @@ FontCharacter AssetFacade::CreateFontCharacter(char c)
 }
 void AssetFacade::SubmitShaders(std::string const& name, Shaders shaders)
 {
-    m_materials[name] = Material(name, m_shaderFactory->Create(shaders));
+    if(m_materials.find(name) == m_materials.end())
+    {
+        m_materials[name] = Material(name, m_shaderFactory->Create(shaders));
+    }
 }
 
 void AssetFacade::SubmitShadersFromFiles(std::string const& name, Shaders shaders)
@@ -105,6 +121,17 @@ Material AssetFacade::GetMaterial(std::string const& name) const
 void AssetFacade::SubmitModel(std::string const& name, std::string const& fileContent)
 {
     ModelLoader loader(ModelLoader::Source::Memory, fileContent);
+    ProcessModel(name, loader);
+}
+
+void AssetFacade::SubmitModelFromFile(std::string const& name, std::string const& filePath)
+{
+    ModelLoader loader(ModelLoader::Source::File, filePath);
+    ProcessModel(name, loader);
+}
+
+void AssetFacade::ProcessModel(std::string const& name, ModelLoader& loader)
+{
     auto numModels = loader.GetNumModels();
     for(auto i = 0u; i < numModels; ++i)
     {
@@ -176,6 +203,7 @@ void AssetFacade::CreateMesh(std::string const& name, MeshCategory meshCategory)
         break;
     }
 }
+
 RenderableBuilder AssetFacade::CreateRenderables(std::string const& namePrefix, uint32_t count)
 {
     return RenderableBuilder(*this, namePrefix, count);
