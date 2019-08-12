@@ -54,8 +54,8 @@ void SetupScene(
     auto& sceneLight = scene.CreateSceneObject("light");
     sceneLight.AddComponent(std::make_unique<examples::PointLightComponent>());
 
-    //auto& overlay = scene.CreateSceneObject("overlay");
-    //overlay.AddComponent(std::make_unique<examples::FPSOverlayComponent>(renderer, materialFactory));
+    auto& overlay = scene.CreateSceneObject("overlay");
+    overlay.AddComponent(std::make_unique<examples::FPSOverlayComponent>(renderer, assets));
 
     scene.Setup();
 }

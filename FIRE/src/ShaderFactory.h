@@ -12,6 +12,7 @@ class ShaderFactory
 public:
     virtual ~ShaderFactory() = default;
     virtual unsigned int CreateDefaultShader() = 0;
+    virtual unsigned int CreateDefaultTextShader() = 0;
     virtual unsigned int Create(std::vector<std::pair<ShaderType, std::string>> const& shaderCode) = 0;
 };
 } // namespace FIRE

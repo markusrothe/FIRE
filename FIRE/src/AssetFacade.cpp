@@ -25,6 +25,7 @@ AssetFacade::AssetFacade(
     , m_shaderFactory(std::move(shaderFactory))
 {
     m_materials["Default"] = Material("Default", m_shaderFactory->CreateDefaultShader());
+    m_materials["TextDefault"] = Material("TextDefault", m_shaderFactory->CreateDefaultTextShader());
 }
 
 AssetFacade::~AssetFacade() = default;
@@ -236,6 +237,11 @@ std::vector<Renderable> AssetFacade::CreateModelRenderables(std::string const& n
     }
 
     return builder.Build();
+}
+
+OverlayBuilder AssetFacade::CreateTextOverlays(std::string const& namePrefix, uint32_t count)
+{
+    return OverlayBuilder(*this, namePrefix, count);
 }
 
 } // namespace FIRE

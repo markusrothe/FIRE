@@ -127,6 +127,11 @@ TEST_F(AnAssetFacade, StoresADefaultMaterial)
     ASSERT_THAT(assets.GetMaterial("Default").Name(), Eq("Default"));
 }
 
+TEST_F(AnAssetFacade, StoresADefaultTextMaterial)
+{
+    ASSERT_THAT(assets.GetMaterial("TextDefault").Name(), Eq("TextDefault"));
+}
+
 TEST_F(AnAssetFacade, AllowsToSubmitShaders)
 {
     EXPECT_CALL(shaderFactoryMock, Create(_));
@@ -382,10 +387,103 @@ TEST_F(AnAssetFacade, AllowsToBuildRenderablesFromModels)
     ASSERT_THAT(renderables, SizeIs(2u));
 }
 
-// TEST_F(AnAssetFacade, AllowsToBuildATextOverlayFromAText)
-//{
-//    auto textOverlay = assets.CreateTextOverlay("overlay_name")
-//                           .FromText("overlay_text")
-//                           .WithMaterial("Default")
-//                           .Build();
-//}
+TEST_F(AnAssetFacade, CreatesTextOverlays)
+{
+    auto const textOverlays = assets.CreateTextOverlays(NAME, 1u)
+                                  .WithText("overlay_text")
+                                  .Build();
+
+    ASSERT_THAT(textOverlays, SizeIs(1u));
+    ASSERT_THAT(textOverlays[0].name, Eq(NAME + "0"));
+    ASSERT_THAT(textOverlays[0].text, Eq("overlay_text"));
+    ASSERT_THAT(textOverlays[0].x, FloatEq(0.0f));
+    ASSERT_THAT(textOverlays[0].y, FloatEq(0.0f));
+}
+
+TEST_F(AnAssetFacade, CreatesMultipleOverlays)
+{
+    auto const textOverlays = assets.CreateTextOverlays(NAME, 2u)
+                                  .WithText("text0")
+                                  .WithText("text1")
+                                  .Build();
+
+    ASSERT_THAT(textOverlays, SizeIs(2u));
+    ASSERT_THAT(textOverlays[0].name, Eq(NAME + "0"));
+    ASSERT_THAT(textOverlays[0].text, Eq("text0"));
+    ASSERT_THAT(textOverlays[1].name, Eq(NAME + "1"));
+    ASSERT_THAT(textOverlays[1].text, Eq("text1"));
+}
+
+TEST_F(AnAssetFacade, ThrowsIfMoreTextThanOverlaysWereSpecified)
+{
+    ASSERT_ANY_THROW(assets.CreateTextOverlays(NAME, 1u)
+                         .WithText("text0")
+                         .WithText("text1")
+                         .Build());
+}
+
+TEST_F(AnAssetFacade, CreatesTextOverlaysAtSpecificPositions)
+{
+    auto const textOverlays = assets.CreateTextOverlays(NAME, 1u)
+                                  .At(0.5f, 0.7f)
+                                  .Build();
+    ASSERT_THAT(textOverlays[0].x, FloatEq(0.5f));
+    ASSERT_THAT(textOverlays[0].y, FloatEq(0.7f));
+}
+
+TEST_F(AnAssetFacade, CreatesMultipleTextOverlaysAtDifferentPositions)
+{
+    auto const textOverlays = assets.CreateTextOverlays(NAME, 2u)
+                                  .At(0.1f, 0.2f)
+                                  .At(0.3f, 0.4f)
+                                  .Build();
+
+    ASSERT_THAT(textOverlays[0].x, FloatEq(0.1f));
+    ASSERT_THAT(textOverlays[0].y, FloatEq(0.2f));
+    ASSERT_THAT(textOverlays[1].x, FloatEq(0.3f));
+    ASSERT_THAT(textOverlays[1].y, FloatEq(0.4f));
+}
+
+TEST_F(AnAssetFacade, ThrowsIfMorePositionsThanOverlaysWereSpecified)
+{
+    ASSERT_ANY_THROW(assets.CreateTextOverlays(NAME, 1u)
+                         .At(0.1f, 0.2f)
+                         .At(0.3f, 0.4f)
+                         .Build());
+}
+
+TEST_F(AnAssetFacade, CreatesTextOverlaysThatCanBeScaled)
+{
+    auto const textOverlays = assets.CreateTextOverlays(NAME, 1u)
+                                  .ScaledBy(2.0f)
+                                  .Build();
+
+    ASSERT_THAT(textOverlays[0].scale, FloatEq(2.0f));
+}
+
+TEST_F(AnAssetFacade, ThrowsIfMoreScalingsThanOverlaysWereSpecified)
+{
+    ASSERT_ANY_THROW(assets.CreateTextOverlays(NAME, 1u)
+                         .ScaledBy(0.1f)
+                         .ScaledBy(0.3f)
+                         .Build());
+}
+
+TEST_F(AnAssetFacade, CreatesMultipleTextOverlaysWithDifferentScalings)
+{
+    auto const textOverlays = assets.CreateTextOverlays(NAME, 2u)
+                                  .ScaledBy(0.1f)
+                                  .ScaledBy(0.3f)
+                                  .Build();
+
+    ASSERT_THAT(textOverlays[0].scale, FloatEq(0.1f));
+    ASSERT_THAT(textOverlays[1].scale, FloatEq(0.3f));
+}
+
+TEST_F(AnAssetFacade, CreatesTextOverlaysWithTheDefaultTextMaterial)
+{
+    auto const textOverlays = assets.CreateTextOverlays(NAME, 1u)
+                                  .Build();
+
+    ASSERT_THAT(textOverlays[0].material.Name(), Eq("TextDefault"));
+}

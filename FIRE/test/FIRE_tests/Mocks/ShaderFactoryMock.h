@@ -9,6 +9,7 @@ class ShaderFactoryMock : public FIRE::ShaderFactory
 {
 public:
     MOCK_METHOD0(CreateDefaultShader, unsigned int(void));
+    MOCK_METHOD0(CreateDefaultTextShader, unsigned int(void));
     MOCK_METHOD1(Create, unsigned int(FIRE::Shaders const&));
 };
 

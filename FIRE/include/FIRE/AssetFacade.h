@@ -4,6 +4,7 @@
 #include <FIRE/FontCharacter.h>
 #include <FIRE/Material.h>
 #include <FIRE/Mesh3D.h>
+#include <FIRE/OverlayBuilder.h>
 #include <FIRE/Renderable.h>
 #include <FIRE/RenderableBuilder.h>
 #include <FIRE/ShaderType.h>
@@ -54,6 +55,8 @@ public:
 
     RenderableBuilder CreateRenderables(std::string const& namePrefix, uint32_t count);
     std::vector<Renderable> CreateModelRenderables(std::string const& namePrefix, std::string const& modelName, std::string const& overrideMaterial);
+
+    OverlayBuilder CreateTextOverlays(std::string const& namePrefix, uint32_t count);
 
 private:
     void ProcessModel(std::string const& name, ModelLoader& loader);

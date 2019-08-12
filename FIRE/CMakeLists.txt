@@ -1,7 +1,7 @@
 add_library(FIRE STATIC
+    include/FIRE/AssetFacade.h
     include/FIRE/Window.h
     include/FIRE/RenderContext.h
-    src/MeshFactory.h
     include/FIRE/Mesh3D.h
     include/FIRE/Renderable.h
     include/FIRE/VertexDeclaration.h
@@ -18,7 +18,6 @@ add_library(FIRE STATIC
     include/FIRE/Key.h
     include/FIRE/MouseKey.h
     include/FIRE/KeyAction.h
-    src/ShaderFactory.h
     include/FIRE/ShaderType.h
     include/FIRE/Material.h
     include/FIRE/glmfwd.h
@@ -29,7 +28,10 @@ add_library(FIRE STATIC
     include/FIRE/MainLoop.h
     include/FIRE/Texture2D.h
     include/FIRE/Renderer.h
+    include/FIRE/RenderableBuilder.h
+    include/FIRE/OverlayBuilder.h
 
+    src/ShaderFactory.h
     src/GLShaderFactory.h
     src/GLRenderContext.h
     src/GLMaterialBinder.h
@@ -43,7 +45,9 @@ add_library(FIRE STATIC
     src/TextureFactory.h
     src/GLTextureFactory.h
     src/GLTexture2D.h
-
+    src/MeshFactory.h
+    src/ModelLoader.h
+    src/ModelLoader.cpp
     src/Window.cpp
     src/Renderable.cpp
     src/Mesh3D.cpp
@@ -71,11 +75,9 @@ add_library(FIRE STATIC
     src/GLMaterialBinder.cpp
     src/GLDraw.cpp
     src/GLTextureFactory.cpp
-    src/ModelLoader.cpp src/ModelLoader.h
-    include/FIRE/AssetFacade.h
     src/AssetFacade.cpp
-    include/FIRE/RenderableBuilder.h
-    src/RenderableBuilder.cpp)
+    src/RenderableBuilder.cpp
+    src/OverlayBuilder.cpp)
 
 target_include_directories(FIRE
     PUBLIC
