@@ -1,10 +1,8 @@
 #include "Mesh3DRenderingComponent.h"
 
-#include <FIRE/MaterialFactory.h>
 #include <FIRE/Message.h>
 #include <FIRE/Scene.h>
 #include <FIRE/SceneObject.h>
-#include <FIRE/Window.h>
 namespace examples
 {
 

@@ -1,5 +1,4 @@
 #include "Draw.h"
-#include "FIRE/TextureManager.h"
 #include "MaterialBinder.h"
 #include "VertexLayoutFactory.h"
 #include <FIRE/Message.h>

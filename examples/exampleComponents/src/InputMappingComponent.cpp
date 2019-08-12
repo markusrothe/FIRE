@@ -16,7 +16,7 @@ InputMappingComponent::InputMappingComponent(
     FIRE::Renderer& renderer)
     : FIRE::InputComponent(inputListener)
 {
-    auto speed = 2.0f;
+    auto speed = 0.4f;
     auto& transform = sceneObject.GetTransform();
     auto moveRight = [speed, &transform] { transform.Accelerate(speed * transform.Right()); };
     auto moveLeft = [speed, &transform] { transform.Accelerate(speed * -transform.Right()); };

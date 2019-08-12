@@ -23,8 +23,8 @@ public:
     [[nodiscard]] std::map<std::string, std::pair<ShaderParameterType, std::any>> GetShaderParameters() const;
 
     void AddTexture(Texture2D* tex, uint32_t slot);
-    [[nodiscard]] Texture2D* GetTexture(uint32_t slot);
-    [[nodiscard]] std::unordered_map<uint32_t, Texture2D*> GetTextures();
+    [[nodiscard]] Texture2D* GetTexture(uint32_t slot) const;
+    [[nodiscard]] std::unordered_map<uint32_t, Texture2D*> GetTextures() const;
 
     bool operator==(Material const& other) const;
     bool operator!=(Material const& other) const;

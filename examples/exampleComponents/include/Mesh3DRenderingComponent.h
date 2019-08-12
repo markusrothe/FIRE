@@ -8,9 +8,7 @@
 namespace FIRE
 {
 class Window;
-class MeshManager;
 class Camera;
-class MaterialFactory;
 class Message;
 } // namespace FIRE
 

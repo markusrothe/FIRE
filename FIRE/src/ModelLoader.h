@@ -1,6 +1,7 @@
 #ifndef FIRE_MODELLOADER_H
 #define FIRE_MODELLOADER_H
 
+#include <FIRE/Mesh3D.h>
 #include <FIRE/Texture2D.h>
 #include <memory>
 #include <string>
@@ -8,7 +9,6 @@
 struct aiMesh;
 namespace FIRE
 {
-class Mesh3D;
 
 struct Model
 {

@@ -32,8 +32,6 @@ public:
 
     virtual void Bind(uint32_t unit) = 0;
     virtual void Release() = 0;
-
-private:
 };
 } // namespace FIRE
 

@@ -1,0 +1,26 @@
+@startuml
+!include skin.iuml
+class AssetFacade {
+    + SubmitModel(filepath: string): void
+    + SubmitTexture(filepath: string): void
+    + SubmitTexture(tex: unique_ptr<Texture2D>): void
+    + SubmitMesh(mesh: unique_ptr<Mesh>): void
+    + SubmitShader(code: ShaderCode): void
+
+    + GetTexture(name: string) Texture2D*
+    + GetMesh(name: string) Mesh3D*
+    + GetShader(name: string) ShaderId
+}
+
+class TextureFactory
+class MeshFactory
+class MaterialFactory
+class ModelLoader
+
+AssetFacade o-- TextureFactory
+AssetFacade o-- MeshFactory
+AssetFacade o-- MaterialFactory
+AssetFacade o-- ModelLoader
+
+Client .> AssetFacade: store & retrieve\nassets
+@enduml

@@ -39,9 +39,10 @@ void GLMaterialBinder::Bind(Material& material)
 {
     glUseProgram(material.ShaderId());
     SetShaderUniforms(material.ShaderId(), material.GetShaderParameters());
-    for(auto texIter : material.GetTextures())
+    for(auto& texIter : material.GetTextures())
     {
-        texIter.second->Bind(texIter.first);
+        if(texIter.second)
+            texIter.second->Bind(texIter.first);
     }
 }
 

@@ -43,9 +43,9 @@ bool LinkError(GLuint program)
         glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength);
 
         // The maxLength includes the NULL character
-        std::vector<GLchar> infoLog(maxLength);
-        glGetProgramInfoLog(program, maxLength, &maxLength, &infoLog[0]);
-
+        GLchar* errorLog = new GLchar[maxLength + 1];
+        glGetProgramInfoLog(program, maxLength, &maxLength, &errorLog[0]);
+        std::cout << errorLog << std::endl;
         // The program is useless now. So delete it.
         glDeleteProgram(program);
 
@@ -84,21 +84,29 @@ GLenum ToGLShaderType(ShaderType shaderType)
 } // namespace
 unsigned int GLShaderFactory::CreateDefaultShader()
 {
-    std::string const vsCode =
-        "#version 440\n"
-        "layout(location = 0) in vec3 vPos;"
-        "uniform mat4 MVP;"
-        "out vec3 posVS;"
-        "void main() {"
-        "    gl_Position = MVP * vec4(vPos.xyz, 1.0);"
-        "    posVS = vPos;"
-        "}";
+    std::string const vsCode = R"(
+        #version 440
+        layout(location = 0) in vec3 vPos;
+        uniform mat4 MVP;
+        out vec3 posVS;
 
-    std::string const fsCode =
-        "#version 440\n"
-        "in vec3 posVS;"
-        "out vec4 color;"
-        "void main() { color = vec4(1.0 , 1.0 , 1.0, 1.0);}";
+        void main()
+        {
+            gl_Position = MVP * vec4(vPos.xyz, 1.0);
+            posVS = vPos;
+        }
+    )";
+
+    std::string const fsCode = R"(
+        #version 440
+        in vec3 posVS;
+        out vec4 color;
+
+        void main()
+        {
+            color = vec4(1.0 , 1.0 , 1.0, 1.0);
+        }
+    )";
 
     std::vector<std::pair<ShaderType, std::string>> shaders = {
         {ShaderType::VERTEX_SHADER, vsCode},
@@ -106,6 +114,44 @@ unsigned int GLShaderFactory::CreateDefaultShader()
 
     return Create(shaders);
 }
+
+unsigned int GLShaderFactory::CreateDefaultTextShader()
+{
+    std::string const vsCode = R"(
+        #version 440
+
+        layout(location = 0) in vec4 vertex;
+        out vec2 TexCoords;
+        uniform mat4 projection;
+
+        void main()
+        {
+            gl_Position = projection * vec4(vertex.xy, 0.0, 1.0);
+            TexCoords = vertex.zw;
+        }
+    )";
+
+    std::string const fsCode = R"(
+        #version 440
+
+        in vec2 TexCoords;
+        out vec4 color;
+        uniform sampler2D text;
+        uniform vec3 textColor;
+
+        void main()
+        {
+            vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, TexCoords).r);
+            color = vec4(textColor, 1.0) * sampled;
+        }
+    )";
+
+    std::vector<std::pair<ShaderType, std::string>> shaders = {
+        {ShaderType::VERTEX_SHADER, vsCode},
+        {ShaderType::FRAGMENT_SHADER, fsCode}};
+
+    return Create(shaders);
+} // namespace FIRE
 
 unsigned int GLShaderFactory::Create(std::vector<std::pair<ShaderType, std::string>> const& shaderCode)
 {
@@ -118,7 +164,7 @@ unsigned int GLShaderFactory::Create(std::vector<std::pair<ShaderType, std::stri
         glAttachShader(shaderProgram, CompileShader(shaderType, shaderSource.second));
     }
 
-    glBindAttribLocation(shaderProgram, 0, "vPos");
+    //glBindAttribLocation(shaderProgram, 0, "vPos");
     glLinkProgram(shaderProgram);
     if(LinkError(shaderProgram))
     {

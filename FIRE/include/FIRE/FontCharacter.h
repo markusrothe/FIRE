@@ -12,8 +12,8 @@ struct FontCharacter
 {
     FontCharacter() = default;
 
-    FontCharacter(std::unique_ptr<Texture2D> texture, glm::ivec2 size, glm::ivec2 bearing, uint32_t advance, std::vector<uint8_t> data)
-        : texture(std::move(texture))
+    FontCharacter(Texture2D* texture, glm::ivec2 size, glm::ivec2 bearing, uint32_t advance, std::vector<uint8_t> data)
+        : texture(texture)
         , size(size)
         , bearing(bearing)
         , advance(advance)
@@ -21,14 +21,11 @@ struct FontCharacter
     {
     }
 
-    FontCharacter(FontCharacter&&) = default;
-    FontCharacter& operator=(FontCharacter&&) = default;
-
-    std::unique_ptr<Texture2D> texture{}; // ID handle of the glyph texture
-    glm::ivec2 size{};                    // Size of glyph
-    glm::ivec2 bearing{};                 // Offset from baseline to left/top of glyph
-    uint32_t advance{};                   // Offset to advance to next glyph
-    std::vector<uint8_t> data{};
+    Texture2D* texture{};        // Texture for the glyph
+    glm::ivec2 size{};           // Size of glyph
+    glm::ivec2 bearing{};        // Offset from baseline to left/top of glyph
+    uint32_t advance{};          // Offset to advance to next glyph
+    std::vector<uint8_t> data{}; // Pixel data for the texture
 };
 } // namespace FIRE
 

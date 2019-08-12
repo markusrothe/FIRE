@@ -53,7 +53,7 @@ void Material::AddTexture(Texture2D* tex, uint32_t slot)
     m_textures[slot] = tex;
 }
 
-Texture2D* Material::GetTexture(uint32_t slot)
+Texture2D* Material::GetTexture(uint32_t slot) const
 {
     if(auto it = m_textures.find(slot); it != m_textures.end())
     {
@@ -62,7 +62,7 @@ Texture2D* Material::GetTexture(uint32_t slot)
 
     return nullptr;
 }
-std::unordered_map<uint32_t, Texture2D*> Material::GetTextures()
+std::unordered_map<uint32_t, Texture2D*> Material::GetTextures() const
 {
     return m_textures;
 }
