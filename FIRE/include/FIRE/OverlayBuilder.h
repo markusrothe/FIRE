@@ -7,7 +7,6 @@
 
 namespace FIRE
 {
-class AssetFacade;
 class OverlayBuilder
 {
 public:
@@ -20,7 +19,6 @@ public:
     std::vector<TextOverlay> Build();
 
 private:
-    AssetFacade& assets;
     std::vector<TextOverlay> overlays;
     uint32_t textIdx{0};
     uint32_t atIdx{0};

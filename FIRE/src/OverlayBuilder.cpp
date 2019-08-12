@@ -4,9 +4,7 @@
 
 namespace FIRE
 {
-OverlayBuilder::OverlayBuilder(
-    AssetFacade& assets, std::string const& namePrefix, uint32_t count)
-    : assets(assets)
+OverlayBuilder::OverlayBuilder(AssetFacade& assets, std::string const& namePrefix, uint32_t count)
 {
     overlays.reserve(count);
 
