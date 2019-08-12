@@ -14,6 +14,7 @@ namespace
 //TODO: Create in MeshFactory?!
 std::array<float, 24> GetFontCharQuad(FontCharacter const& ch, float x, float y, float scale)
 {
+
     float xpos = x + ch.bearing.x * scale;
     float ypos = y - static_cast<float>((ch.size.y - ch.bearing.y)) * scale;
 

@@ -23,6 +23,7 @@ public:
     explicit AssetFacade(
         std::unique_ptr<TextureFactory> texFactory,
         std::unique_ptr<ShaderFactory> shaderFactory);
+
     ~AssetFacade();
 
     void SubmitTexture(std::string const& name, std::string const& textureFilePath, Texture2D::WrappingMode wrappingMode);

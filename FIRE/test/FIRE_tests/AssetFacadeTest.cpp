@@ -1,4 +1,3 @@
-#include "MeshFactory.h"
 #include "ShaderFactoryMock.h"
 #include "Texture2DStub.h"
 #include "TextureFactoryMock.h"
@@ -64,6 +63,13 @@ TEST_F(AnAssetFacade, TakesOwnershipOfTextures)
     ASSERT_THAT(assets.GetTexture(NAME)->Id(), Eq(42u));
 }
 
+TEST_F(AnAssetFacade, DoesNotAddATextureWithTheSameNameTwice)
+{
+    assets.SubmitTexture(NAME, std::make_unique<FIRE_tests::Texture2DStub>(42u));
+    assets.SubmitTexture(NAME, std::make_unique<FIRE_tests::Texture2DStub>(44u));
+    ASSERT_THAT(assets.GetTexture(NAME)->Id(), Eq(42u));
+}
+
 TEST_F(AnAssetFacade, CreatesNewTextures)
 {
     auto const width = 2u;
@@ -75,6 +81,22 @@ TEST_F(AnAssetFacade, CreatesNewTextures)
 
     EXPECT_CALL(textureFactoryMock, Create2DTexture(width, height, data, numComponents, wrappingMode, filter));
     assets.CreateTexture(NAME, width, height, data, numComponents, wrappingMode, filter);
+}
+
+TEST_F(AnAssetFacade, ThrowsIfATextureIsCreatedThatAlreadyExists)
+{
+    auto const width = 2u;
+    auto const height = width;
+    std::vector<uint8_t> const data = {0x00, 0xff, 0xaa, 0xbb};
+    auto const numComponents = 1;
+    auto const wrappingMode = FIRE::Texture2D::WrappingMode::WRAP;
+    auto const filter = FIRE::Texture2D::Filter::NEAREST;
+
+    EXPECT_CALL(textureFactoryMock, Create2DTexture(_, _, _, _, _, _))
+        .Times(1);
+
+    assets.CreateTexture(NAME, width, height, data, numComponents, wrappingMode, filter);
+    ASSERT_ANY_THROW(assets.CreateTexture(NAME, width, height, data, numComponents, wrappingMode, filter));
 }
 
 TEST_F(AnAssetFacade, CreatesTexturesForFontCharacters)
@@ -112,6 +134,15 @@ TEST_F(AnAssetFacade, AllowsToSubmitShaders)
     assets.SubmitShaders(NAME, shaders);
 }
 
+TEST_F(AnAssetFacade, DoesNotAddTheSameMaterialTwice)
+{
+    EXPECT_CALL(shaderFactoryMock, Create(_)).Times(1);
+
+    FIRE::Shaders shaders{{FIRE::ShaderType::VERTEX_SHADER, "shaderCode"}};
+    assets.SubmitShaders(NAME, shaders);
+    assets.SubmitShaders(NAME, shaders);
+}
+
 TEST_F(AnAssetFacade, AllowsToSubmitShadersFromFiles)
 {
     EXPECT_CALL(shaderFactoryMock, Create(_));
@@ -136,6 +167,13 @@ TEST_F(AnAssetFacade, AllowsToSubmitMeshes)
 {
     assets.SubmitMesh(NAME, std::make_unique<FIRE::Mesh3D>(NAME, FIRE::MeshType(FIRE::MeshCategory::Custom, FIRE::MeshPrimitives::Triangles)));
     ASSERT_THAT(assets.GetMesh(NAME)->Name(), Eq(NAME));
+}
+
+TEST_F(AnAssetFacade, DoesNotAddAMeshWithTheSameNameTwice)
+{
+    assets.SubmitMesh(NAME, std::make_unique<FIRE::Mesh3D>(NAME, FIRE::MeshType(FIRE::MeshCategory::Custom, FIRE::MeshPrimitives::Triangles)));
+    assets.SubmitMesh(NAME, std::make_unique<FIRE::Mesh3D>(NAME, FIRE::MeshType(FIRE::MeshCategory::Plane, FIRE::MeshPrimitives::Triangles)));
+    ASSERT_THAT(assets.GetMesh(NAME)->GetMeshType().category, Eq(FIRE::MeshCategory::Custom));
 }
 
 TEST_F(AnAssetFacade, CreatesNewBasicMeshes)

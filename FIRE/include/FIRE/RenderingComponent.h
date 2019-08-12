@@ -12,7 +12,7 @@ class RenderingComponent : public Component
 {
 public:
     explicit RenderingComponent(Renderer& renderer);
-    virtual ~RenderingComponent() override;
+    ~RenderingComponent() override;
 
     void Setup(SceneObject& sceneObject) override;
     void Update(double deltaTime, SceneObject& sceneObject, Scene& scene) override;

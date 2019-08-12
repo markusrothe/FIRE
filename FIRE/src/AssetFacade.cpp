@@ -33,7 +33,6 @@ void AssetFacade::SubmitTexture(std::string const& name, std::string const& text
 {
     if(m_textures.find(name) == m_textures.end())
     {
-
         m_textures[name] = m_texFactory->Load(textureFilePath, wrappingMode);
     }
 }
@@ -163,11 +162,14 @@ std::vector<Mesh3D*> AssetFacade::GetModelMeshes(std::string const& name) const
 }
 void AssetFacade::SubmitMesh(std::string const& name, std::unique_ptr<Mesh3D> mesh)
 {
-    auto meshPtr = mesh.get();
-    m_meshes[name] = std::move(mesh);
-    meshPtr->GetVertexDeclaration().AddSection("vPos", 3u, 0u);
-    meshPtr->GetVertexDeclaration().AddSection("vNormal", 3u, static_cast<uint32_t>(meshPtr->Positions().size() * sizeof(float) * 3));
-    meshPtr->GetVertexDeclaration().AddSection("vUV", 2u, static_cast<uint32_t>((meshPtr->Positions().size() + meshPtr->Normals().size()) * sizeof(float) * 3));
+    if(m_meshes.find(name) == m_meshes.end())
+    {
+        auto meshPtr = mesh.get();
+        m_meshes[name] = std::move(mesh);
+        meshPtr->GetVertexDeclaration().AddSection("vPos", 3u, 0u);
+        meshPtr->GetVertexDeclaration().AddSection("vNormal", 3u, static_cast<uint32_t>(meshPtr->Positions().size() * sizeof(float) * 3));
+        meshPtr->GetVertexDeclaration().AddSection("vUV", 2u, static_cast<uint32_t>((meshPtr->Positions().size() + meshPtr->Normals().size()) * sizeof(float) * 3));
+    }
 }
 
 Mesh3D* AssetFacade::GetMesh(std::string const& name) const
@@ -182,6 +184,11 @@ Mesh3D* AssetFacade::GetMesh(std::string const& name) const
 
 void AssetFacade::CreateMesh(std::string const& name, MeshCategory meshCategory)
 {
+    if(m_meshes.find(name) != m_meshes.end())
+    {
+        throw std::runtime_error("A Mesh with that name already exists");
+    }
+
     switch(meshCategory)
     {
     case MeshCategory::Plane:
