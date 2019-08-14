@@ -1,6 +1,5 @@
 #include "FPSOverlayComponent.h"
 #include "InputMappingComponent.h"
-#include "Mesh3DRenderingComponent.h"
 #include "PerspectiveCameraComponent.h"
 #include "PointLightComponent.h"
 #include <FIRE/AssetFacade.h>
@@ -12,6 +11,7 @@
 #include <FIRE/Scene.h>
 #include <FIRE/Window.h>
 
+#include <FIRE/RenderingComponent.h>
 #include <memory>
 namespace
 {
@@ -35,27 +35,21 @@ void SetupScene(
                                .Build();
 
     auto& cubeObject = scene.CreateSceneObject("cube");
-    cubeObject.AddComponent(std::make_unique<examples::Mesh3DRenderingComponent>(renderer, std::move(cubeRenderables)));
+    cubeObject.AddComponent(std::make_unique<FIRE::RenderingComponent>(renderer, std::move(cubeRenderables)));
     cubeObject.GetTransform().SetPosition({0.0f, 4.0f, 0.0f});
-
-    auto planeRenderables = assets.CreateRenderables("plane", 1u)
-                                .WithMesh("planeMesh", FIRE::MeshCategory::Plane)
-                                .WithMaterial("phong")
-                                .Build();
-
-    auto& planeObject = scene.CreateSceneObject("plane");
-    planeObject.AddComponent(std::make_unique<examples::Mesh3DRenderingComponent>(renderer, std::move(planeRenderables)));
-    planeObject.GetTransform().Scale({100.0f, 1.0f, 100.0f});
+    cubeObject.GetTransform().Scale({10.0f, 10.0f, 10.0f});
 
     auto& mainCamera = scene.CreateSceneObject("cam");
     mainCamera.AddComponent(std::make_unique<examples::InputMappingComponent>(mainCamera, *input, window, renderer));
     mainCamera.AddComponent(std::make_unique<examples::PerspectiveCameraComponent>(70.0f, static_cast<float>(window.GetWidth()) / static_cast<float>(window.GetHeight()), 0.1f, 3000.0f));
+    mainCamera.GetTransform().SetPosition({20.0f, 20.0f, 20.0f});
+    mainCamera.GetTransform().SetLookAt({0.0f, 0.0f, 0.0f});
 
     auto& sceneLight = scene.CreateSceneObject("light");
     sceneLight.AddComponent(std::make_unique<examples::PointLightComponent>());
 
-    auto& overlay = scene.CreateSceneObject("overlay");
-    overlay.AddComponent(std::make_unique<examples::FPSOverlayComponent>(renderer, assets));
+    //auto& overlay = scene.CreateSceneObject("overlay");
+    //overlay.AddComponent(std::make_unique<examples::FPSOverlayComponent>(renderer, assets));
 
     scene.Setup();
 }
@@ -64,8 +58,7 @@ void SetupScene(
 
 int main(int, char**)
 {
-    FIRE::Window window = FIRE::GLFactory::InitWindow("FIRE - cube", 800, 600);
-
+    auto window{FIRE::GLFactory::CreateWindow("FIRE - cube", 800, 600)};
     auto assets{FIRE::GLFactory::CreateAssetFacade()};
     auto renderer{FIRE::GLFactory::CreateRenderer(assets)};
 

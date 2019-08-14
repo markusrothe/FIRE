@@ -22,7 +22,7 @@ void PointLightComponent::DoUpdate(double, FIRE::SceneObject& sceneObject, FIRE:
 
 std::optional<std::any> PointLightComponent::Receive(FIRE::Message msg, FIRE::SceneObject& sceneObject)
 {
-    if(msg.id == 2)
+    if(msg.id == FIRE::MessageID::GetLightPosition)
     {
         return sceneObject.GetTransform().Position();
     }

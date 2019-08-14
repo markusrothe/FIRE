@@ -77,7 +77,7 @@ add_library(FIRE STATIC
     src/GLTextureFactory.cpp
     src/AssetFacade.cpp
     src/RenderableBuilder.cpp
-    src/OverlayBuilder.cpp)
+    src/OverlayBuilder.cpp include/FIRE/RenderableSubmitter.h)
 
 target_include_directories(FIRE
     PUBLIC

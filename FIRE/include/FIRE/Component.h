@@ -1,13 +1,13 @@
 #ifndef FIRE_Component_h
 #define FIRE_Component_h
 
+#include <FIRE/Message.h>
 #include <any>
 #include <optional>
 namespace FIRE
 {
 class SceneObject;
 class Scene;
-class Message;
 class Component
 {
 public:

@@ -12,11 +12,8 @@ PerspectiveCameraComponent::PerspectiveCameraComponent(float fovy, float aspect,
 
 PerspectiveCameraComponent::~PerspectiveCameraComponent() = default;
 
-void PerspectiveCameraComponent::Setup(FIRE::SceneObject& sceneObject)
+void PerspectiveCameraComponent::Setup(FIRE::SceneObject&)
 {
-    auto& transform = sceneObject.GetTransform();
-    transform.SetPosition({0.0f, 0.0f, 2.0f});
-    transform.SetLookAt({0.0f, 0.0f, 0.0f});
 }
 
 void PerspectiveCameraComponent::DoUpdate(double, FIRE::SceneObject& sceneObject, FIRE::Scene&)
@@ -27,11 +24,11 @@ void PerspectiveCameraComponent::DoUpdate(double, FIRE::SceneObject& sceneObject
 
 std::optional<std::any> PerspectiveCameraComponent::Receive(FIRE::Message msg, FIRE::SceneObject&)
 {
-    if(msg.id == 0)
+    if(msg.id == FIRE::MessageID::GetViewMatrix)
     {
         return GetViewMatrix();
     }
-    else if(msg.id == 1)
+    else if(msg.id == FIRE::MessageID::GetProjectionMatrix)
     {
         return GetProjectionMatrix();
     }

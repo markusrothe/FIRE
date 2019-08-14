@@ -1,6 +1,7 @@
 #ifndef FIRE_Renderer_h
 #define FIRE_Renderer_h
 
+#include <FIRE/RenderableSubmitter.h>
 #include <map>
 #include <memory>
 #include <string>
@@ -13,7 +14,7 @@ class AssetFacade;
 class MaterialBinder;
 class VertexLayoutFactory;
 class Draw;
-class Renderer
+class Renderer : public RenderableSubmitter
 {
 public:
     explicit Renderer(
@@ -22,13 +23,11 @@ public:
         std::unique_ptr<VertexLayoutFactory> vertexLayoutFactory,
         std::shared_ptr<AssetFacade> assets);
 
-    ~Renderer();
+    ~Renderer() override;
 
-    void Submit(Renderable const& renderable);
+    void Submit(Renderable const& renderable) override;
     void Submit(TextOverlay const& overlay);
-
     void Render(float windowWidth, float windowHeight);
-
     void ToggleWireframe();
 
 private:

@@ -56,7 +56,7 @@ TEST_F(AScene, UpdatesSceneObjectsAndThusComponents)
 
 TEST_F(AScene, BroadcastsMessagesToSceneObjectsAndThusToComponents)
 {
-    FIRE::Message message(0);
+    FIRE::Message message(FIRE::MessageID::GetViewMatrix);
     auto& obj = scene.CreateSceneObject("obj");
 
     auto component = std::make_unique<TestComponent>();
@@ -67,7 +67,7 @@ TEST_F(AScene, BroadcastsMessagesToSceneObjectsAndThusToComponents)
 
 TEST_F(AScene, MayContainNoComponentOrSceneObjectThatCanHandleAMessage)
 {
-    auto response = scene.Send(FIRE::Message(42));
+    auto response = scene.Send(FIRE::Message(FIRE::MessageID::GetViewMatrix));
     EXPECT_FALSE(response);
 }
 

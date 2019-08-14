@@ -1,7 +1,6 @@
 
 #include "FPSOverlayComponent.h"
 #include "InputMappingComponent.h"
-#include "Mesh3DRenderingComponent.h"
 #include "PerspectiveCameraComponent.h"
 #include "PointLightComponent.h"
 #include <FIRE/AssetFacade.h>
@@ -10,6 +9,7 @@
 #include <FIRE/MainLoop.h>
 #include <FIRE/RenderContext.h>
 #include <FIRE/Renderer.h>
+#include <FIRE/RenderingComponent.h>
 #include <FIRE/Scene.h>
 #include <FIRE/Window.h>
 
@@ -36,7 +36,7 @@ void SetupScene(
     auto renderables = assets.CreateModelRenderables("sponza", "sponza", "texSampling");
 
     auto& sponzaObj = scene.CreateSceneObject("sponza");
-    sponzaObj.AddComponent(std::make_unique<examples::Mesh3DRenderingComponent>(renderer, std::move(renderables)));
+    sponzaObj.AddComponent(std::make_unique<FIRE::RenderingComponent>(renderer, std::move(renderables)));
 
     auto& mainCamera = scene.CreateSceneObject("cam");
     mainCamera.AddComponent(std::make_unique<examples::InputMappingComponent>(mainCamera, *input, window, renderer));
@@ -46,8 +46,8 @@ void SetupScene(
     auto& sceneLight = scene.CreateSceneObject("light");
     sceneLight.AddComponent(std::make_unique<examples::PointLightComponent>());
 
-    auto& overlay = scene.CreateSceneObject("overlay");
-    overlay.AddComponent(std::make_unique<examples::FPSOverlayComponent>(renderer, assets));
+    //    auto& overlay = scene.CreateSceneObject("overlay");
+    //    overlay.AddComponent(std::make_unique<examples::FPSOverlayComponent>(renderer, assets));
 
     scene.Setup();
 }
@@ -56,7 +56,7 @@ void SetupScene(
 
 int main(int, char**)
 {
-    FIRE::Window window = FIRE::GLFactory::InitWindow("FIRE - sponza", WINDOW_WIDTH, WINDOW_HEIGHT);
+    FIRE::Window window = FIRE::GLFactory::CreateWindow("FIRE - sponza", WINDOW_WIDTH, WINDOW_HEIGHT);
 
     auto assets{FIRE::GLFactory::CreateAssetFacade()};
     auto renderer{FIRE::GLFactory::CreateRenderer(assets)};

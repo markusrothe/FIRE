@@ -5,15 +5,42 @@
 namespace FIRE
 {
 
+enum class MessageID
+{
+    GetViewMatrix = 0,
+    GetProjectionMatrix = 1,
+    GetLightPosition = 2
+};
+
 class Message
 {
 public:
-    explicit Message(int id)
-        : id(std::move(id))
+    explicit Message(MessageID id)
+        : id(id)
     {
     }
 
-    int id;
+    bool operator<(Message const& rhs) const
+    {
+        return id < rhs.id;
+    }
+
+    bool operator>(Message const& rhs) const
+    {
+        return rhs < *this;
+    }
+
+    bool operator<=(Message const& rhs) const
+    {
+        return !(rhs < *this);
+    }
+
+    bool operator>=(Message const& rhs) const
+    {
+        return !(*this < rhs);
+    }
+
+    MessageID id;
 };
 
 inline bool operator==(Message const& lhs, Message const& rhs)

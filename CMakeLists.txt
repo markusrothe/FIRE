@@ -8,20 +8,20 @@ project(FIRE)
 
 add_library(CompileOptions INTERFACE)
 add_library(FIRE::CompileOptions ALIAS CompileOptions)
-if (MSVC)
+if(MSVC)
     target_compile_options(CompileOptions INTERFACE /W4 /WX /EHsc)
     #target_link_options(CompileOptions INTERFACE /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup)
-else ()
+else()
     target_compile_options(CompileOptions INTERFACE -Wall -Wextra -pedantic -Werror)
-endif ()
+endif()
 target_compile_features(CompileOptions INTERFACE cxx_std_17)
 
 add_library(MeasureCoverage INTERFACE)
 
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" AND COVERAGE)
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" AND COVERAGE)
     target_compile_options(MeasureCoverage INTERFACE --coverage)
     target_link_libraries(MeasureCoverage INTERFACE --coverage)
-endif ()
+endif()
 
 
 add_subdirectory(contrib)
