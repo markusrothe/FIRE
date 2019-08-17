@@ -11,7 +11,6 @@ target_link_libraries(sponza
     PRIVATE
     FIRE
     FIRE::CompileOptions
-    FIRE::exampleComponents
     stb_image
     )
 

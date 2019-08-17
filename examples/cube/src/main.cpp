@@ -1,4 +1,3 @@
-#include "FPSOverlayComponent.h"
 #include <FIRE/AssetFacade.h>
 #include <FIRE/GLFactory.h>
 #include <FIRE/MainLoop.h>
@@ -11,8 +10,11 @@
 #include <FIRE/CameraComponent.h>
 #include <FIRE/InputComponent.h>
 #include <FIRE/LightComponent.h>
+#include <FIRE/OverlayComponent.h>
 #include <FIRE/RenderingComponent.h>
+#include <algorithm>
 #include <memory>
+#include <sstream>
 
 void MapInput(FIRE::Window& window, FIRE::SceneObject& sceneObject, FIRE::Renderer& renderer)
 {
@@ -83,6 +85,26 @@ void MapInput(FIRE::Window& window, FIRE::SceneObject& sceneObject, FIRE::Render
         }));
 }
 
+class FPSOverlay : public FIRE::OverlayComponent
+{
+public:
+    FPSOverlay(FIRE::OverlaySubmitter& overlaySubmitter, std::vector<FIRE::TextOverlay> overlays)
+        : FIRE::OverlayComponent(overlaySubmitter, std::move(overlays))
+    {
+    }
+
+private:
+    void DoUpdate(double deltaTime, FIRE::SceneObject&, FIRE::Scene&) override
+    {
+        if(auto it = std::find_if(std::begin(overlays), std::end(overlays), [](auto const& overlay) { return overlay.name == "textoverlay0"; }); it != std::cend(overlays))
+        {
+            std::stringstream ss;
+            ss << static_cast<int>(1.0 / deltaTime);
+            it->text = ss.str();
+        }
+    }
+};
+
 int main(int, char**)
 {
     auto window{FIRE::GLFactory::CreateWindow("FIRE - cube", 800, 600)};
@@ -116,8 +138,17 @@ int main(int, char**)
     sceneLight.AddComponent(std::make_unique<FIRE::LightComponent>());
     sceneLight.GetTransform().SetPosition({0.0f, 100.0f, 0.0f});
 
-    //auto& overlay = scene.CreateSceneObject("overlay");
-    //overlay.AddComponent(std::make_unique<examples::FPSOverlayComponent>(renderer, assets));
+    auto& overlay = scene.CreateSceneObject("overlay");
+    auto overlays = assets->CreateTextOverlays("textoverlay", 2u)
+                        .WithText("")
+                        .At(0.01f, 0.01f)
+                        .ScaledBy(0.5f)
+                        .WithText("FIRE cube")
+                        .At(0.01f, 0.95f)
+                        .ScaledBy(0.5f)
+                        .Build();
+
+    overlay.AddComponent(std::make_unique<FPSOverlay>(*renderer, overlays));
 
     FIRE::MainLoop(window, scene, *renderer);
 }

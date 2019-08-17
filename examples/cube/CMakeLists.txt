@@ -1,18 +1,17 @@
 add_executable(cube
     src/main.cpp
-)
+    )
 
 target_include_directories(cube
-PRIVATE
+    PRIVATE
     src
-)
+    )
 
 target_link_libraries(cube
     PRIVATE
     FIRE
-    FIRE::exampleComponents
     FIRE::CompileOptions
-)
+    )
 
 install(
     TARGETS cube

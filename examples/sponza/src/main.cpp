@@ -1,4 +1,3 @@
-#include "FPSOverlayComponent.h"
 #include <FIRE/AssetFacade.h>
 #include <FIRE/CameraComponent.h>
 #include <FIRE/GLFactory.h>
@@ -44,9 +43,6 @@ int main(int, char**)
 
     auto& sceneLight = scene.CreateSceneObject("light");
     sceneLight.AddComponent(std::make_unique<FIRE::LightComponent>());
-
-    //    auto& overlay = scene.CreateSceneObject("overlay");
-    //    overlay.AddComponent(std::make_unique<examples::FPSOverlayComponent>(renderer, assets));
 
     FIRE::MainLoop(window, scene, *renderer);
 }

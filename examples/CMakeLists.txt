@@ -1,3 +1,2 @@
-add_subdirectory(exampleComponents)
 add_subdirectory(cube)
 add_subdirectory(sponza)
