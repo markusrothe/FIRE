@@ -27,7 +27,7 @@ void MapInput(FIRE::Window& window, FIRE::SceneObject& sceneObject, FIRE::Render
     using FIRE::MouseMoveRegisterMessage;
     using FIRE::Transform;
 
-    float constexpr speed = 0.4f;
+    float const speed = 0.4f;
     auto reset = [](Transform& transform) { transform.SetAcceleration({0.0f, 0.0f, 0.0f}); };
     auto moveRight = [speed](Transform& transform) { transform.Accelerate(speed * transform.Right()); };
     auto moveLeft = [speed](Transform& transform) { transform.Accelerate(speed * -transform.Right()); };
