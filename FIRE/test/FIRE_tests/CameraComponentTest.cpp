@@ -2,7 +2,6 @@
 #include <FIRE/Message.h>
 #include <FIRE/Scene.h>
 #include <FIRE/SceneObject.h>
-#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 namespace
@@ -25,16 +24,12 @@ private:
         sceneObject.GetTransform().SetLookAt(lookAt);
     }
 
-    std::optional<std::any> Receive(FIRE::Message, FIRE::SceneObject&) override
-    {
-        return std::nullopt;
-    }
 };
 
 class ACameraComponent : public ::testing::Test
 {
 public:
-    TestCameraComponent cameraComponent;
+    TestCameraComponent comp;
     FIRE::SceneObject sceneObject{"obj"};
     FIRE::Scene scene;
 };
@@ -43,18 +38,20 @@ public:
 
 TEST_F(ACameraComponent, CallsItsDerivedDoUpdateFunction)
 {
-    cameraComponent.Update(0.0, sceneObject, scene);
+    comp.Update(0.0, sceneObject, scene);
     EXPECT_EQ(pos, sceneObject.GetTransform().Position());
 }
 
-//TEST_F(ACameraComponent, UpdatesItsViewMatrix)
-//{
-//    cameraComponent.Update(0.0, sceneObject, scene);
-//    EXPECT_EQ(glm::lookAt(pos, lookAt, up), cameraComponent.GetViewMatrix());
-//}
-//
-//TEST_F(ACameraComponent, UpdatesItsProjectionMatrix)
-//{
-//    cameraComponent.Update(0.0, sceneObject, scene);
-//    EXPECT_EQ(glm::perspective(1.0f, 2.0f, 3.0f, 4.0f), cameraComponent.GetProjectionMatrix());
-//}
+TEST_F(ACameraComponent, UpdatesItsViewMatrix)
+{
+    comp.Update(0.0, sceneObject, scene);
+    auto const viewMatrix = comp.Receive(FIRE::Message(FIRE::MessageID::GetViewMatrix), sceneObject);
+    EXPECT_EQ(glm::lookAt(pos, lookAt, up), std::any_cast<glm::mat4x4>(viewMatrix.value()));
+}
+
+TEST_F(ACameraComponent, UpdatesItsProjectionMatrix)
+{
+    comp.Update(0.0, sceneObject, scene);
+    auto const projMatrix = comp.Receive(FIRE::Message(FIRE::MessageID::GetProjectionMatrix), sceneObject);
+    EXPECT_EQ(glm::perspective(1.0f, 2.0f, 3.0f, 4.0f), std::any_cast<glm::mat4x4>(projMatrix.value()));
+}

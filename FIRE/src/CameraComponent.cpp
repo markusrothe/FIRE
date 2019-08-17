@@ -18,9 +18,10 @@ void CameraComponent::Setup(SceneObject&)
 
 void CameraComponent::Update(double deltaTime, SceneObject& sceneObject, Scene& scene)
 {
+    DoUpdate(deltaTime, sceneObject, scene);
     auto& transform = sceneObject.GetTransform();
     m_view = glm::lookAt(transform.Position(), transform.LookAt(), transform.Up());
-    DoUpdate(deltaTime, sceneObject, scene);
+
 }
 
 std::optional<std::any> CameraComponent::Receive(FIRE::Message msg, FIRE::SceneObject&)
