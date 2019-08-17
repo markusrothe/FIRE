@@ -10,28 +10,34 @@ CameraComponent::CameraComponent(float fovy, float aspect, float near, float far
 {
 }
 
+CameraComponent::~CameraComponent() = default;
+
 void CameraComponent::Setup(SceneObject&)
 {
-    // base implementation, do nothing
 }
 
 void CameraComponent::Update(double deltaTime, SceneObject& sceneObject, Scene& scene)
 {
-    DoUpdate(deltaTime, sceneObject, scene);
     auto& transform = sceneObject.GetTransform();
     m_view = glm::lookAt(transform.Position(), transform.LookAt(), transform.Up());
+    DoUpdate(deltaTime, sceneObject, scene);
 }
 
-glm::mat4x4 CameraComponent::GetViewMatrix() const
+std::optional<std::any> CameraComponent::Receive(FIRE::Message msg, FIRE::SceneObject&)
 {
-    return m_view;
+    if(msg.id == FIRE::MessageID::GetViewMatrix)
+    {
+        return m_view;
+    }
+    else if(msg.id == FIRE::MessageID::GetProjectionMatrix)
+    {
+        return m_proj;
+    }
+
+    return std::nullopt;
 }
 
-glm::mat4x4 CameraComponent::GetProjectionMatrix() const
+void CameraComponent::DoUpdate(double, SceneObject&, Scene&)
 {
-    return m_proj;
 }
-
-CameraComponent::~CameraComponent() = default;
-
 } // namespace FIRE

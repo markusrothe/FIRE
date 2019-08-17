@@ -1,9 +1,9 @@
 
 #include "FPSOverlayComponent.h"
 #include "InputMappingComponent.h"
-#include "PerspectiveCameraComponent.h"
 #include "PointLightComponent.h"
 #include <FIRE/AssetFacade.h>
+#include <FIRE/CameraComponent.h>
 #include <FIRE/GLFactory.h>
 #include <FIRE/InputListener.h>
 #include <FIRE/MainLoop.h>
@@ -40,7 +40,7 @@ void SetupScene(
 
     auto& mainCamera = scene.CreateSceneObject("cam");
     mainCamera.AddComponent(std::make_unique<examples::InputMappingComponent>(mainCamera, *input, window, renderer));
-    mainCamera.AddComponent(std::make_unique<examples::PerspectiveCameraComponent>(
+    mainCamera.AddComponent(std::make_unique<FIRE::CameraComponent>(
         70.0f, static_cast<float>(window.GetWidth()) / static_cast<float>(window.GetHeight()), 0.1f, 3000.0f));
 
     auto& sceneLight = scene.CreateSceneObject("light");

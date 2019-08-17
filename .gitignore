@@ -13,3 +13,5 @@ run.sh
 flycheck_.dir-locals.elc
 /.idea/
 /.clangd
+/cmake-build-debug/
+/install/

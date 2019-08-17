@@ -11,18 +11,16 @@ class CameraComponent : public Component
 public:
     CameraComponent(float fovy, float aspect, float near, float far);
 
-    virtual ~CameraComponent() override;
+    ~CameraComponent() override;
 
     void Setup(SceneObject& sceneObject) override;
     void Update(double deltaTime, SceneObject& sceneObject, Scene& scene) override;
-
-    glm::mat4x4 GetViewMatrix() const;
-    glm::mat4x4 GetProjectionMatrix() const;
+    std::optional<std::any> Receive(FIRE::Message msg, FIRE::SceneObject&) override;
 
 private:
-    virtual void DoUpdate(double deltaTime, SceneObject& sceneObject, Scene& scene) = 0;
+    virtual void DoUpdate(double deltaTime, SceneObject& sceneObject, Scene& scene);
 
-    glm::mat4x4 m_view;
+    glm::mat4x4 m_view{};
     glm::mat4x4 m_proj;
 };
 } // namespace FIRE

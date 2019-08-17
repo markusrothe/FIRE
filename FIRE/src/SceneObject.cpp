@@ -40,6 +40,7 @@ void SceneObject::Setup()
 
 void SceneObject::Update(double deltaTime, Scene& scene)
 {
+    m_transform.Translate(m_transform.Acceleration());
     for(auto& component : m_components)
     {
         component->Update(deltaTime, *this, scene);

@@ -1,10 +1,8 @@
 add_library(exampleComponents STATIC
-    include/PerspectiveCameraComponent.h
     include/PointLightComponent.h
     include/FPSOverlayComponent.h
     include/InputMappingComponent.h
 
-    src/PerspectiveCameraComponent.cpp
     src/PointLightComponent.cpp
     src/FPSOverlayComponent.cpp
     src/InputMappingComponent.cpp

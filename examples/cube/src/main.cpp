@@ -1,6 +1,5 @@
 #include "FPSOverlayComponent.h"
 #include "InputMappingComponent.h"
-#include "PerspectiveCameraComponent.h"
 #include "PointLightComponent.h"
 #include <FIRE/AssetFacade.h>
 #include <FIRE/GLFactory.h>
@@ -11,6 +10,7 @@
 #include <FIRE/Scene.h>
 #include <FIRE/Window.h>
 
+#include <FIRE/CameraComponent.h>
 #include <FIRE/RenderingComponent.h>
 #include <memory>
 namespace
@@ -41,7 +41,7 @@ void SetupScene(
 
     auto& mainCamera = scene.CreateSceneObject("cam");
     mainCamera.AddComponent(std::make_unique<examples::InputMappingComponent>(mainCamera, *input, window, renderer));
-    mainCamera.AddComponent(std::make_unique<examples::PerspectiveCameraComponent>(70.0f, static_cast<float>(window.GetWidth()) / static_cast<float>(window.GetHeight()), 0.1f, 3000.0f));
+    mainCamera.AddComponent(std::make_unique<FIRE::CameraComponent>(70.0f, static_cast<float>(window.GetWidth()) / static_cast<float>(window.GetHeight()), 0.1f, 3000.0f));
     mainCamera.GetTransform().SetPosition({20.0f, 20.0f, 20.0f});
     mainCamera.GetTransform().SetLookAt({0.0f, 0.0f, 0.0f});
 

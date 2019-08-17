@@ -47,14 +47,14 @@ TEST_F(ACameraComponent, CallsItsDerivedDoUpdateFunction)
     EXPECT_EQ(pos, sceneObject.GetTransform().Position());
 }
 
-TEST_F(ACameraComponent, UpdatesItsViewMatrix)
-{
-    cameraComponent.Update(0.0, sceneObject, scene);
-    EXPECT_EQ(glm::lookAt(pos, lookAt, up), cameraComponent.GetViewMatrix());
-}
-
-TEST_F(ACameraComponent, UpdatesItsProjectionMatrix)
-{
-    cameraComponent.Update(0.0, sceneObject, scene);
-    EXPECT_EQ(glm::perspective(1.0f, 2.0f, 3.0f, 4.0f), cameraComponent.GetProjectionMatrix());
-}
+//TEST_F(ACameraComponent, UpdatesItsViewMatrix)
+//{
+//    cameraComponent.Update(0.0, sceneObject, scene);
+//    EXPECT_EQ(glm::lookAt(pos, lookAt, up), cameraComponent.GetViewMatrix());
+//}
+//
+//TEST_F(ACameraComponent, UpdatesItsProjectionMatrix)
+//{
+//    cameraComponent.Update(0.0, sceneObject, scene);
+//    EXPECT_EQ(glm::perspective(1.0f, 2.0f, 3.0f, 4.0f), cameraComponent.GetProjectionMatrix());
+//}
