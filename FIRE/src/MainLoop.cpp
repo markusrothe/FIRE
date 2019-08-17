@@ -12,6 +12,8 @@ void MainLoop(
     Scene& scene,
     Renderer& renderer)
 {
+    scene.Setup();
+
     auto const width = static_cast<float>(window.GetWidth());
     auto const height = static_cast<float>(window.GetHeight());
     auto lastTime = std::chrono::high_resolution_clock::now();

@@ -10,12 +10,13 @@ class Scene;
 class LightComponent : public Component
 {
 public:
-    virtual ~LightComponent() override;
+    ~LightComponent() override;
     void Setup(SceneObject& sceneObject) override;
     void Update(double deltaTime, SceneObject& sceneObject, Scene& scene) override;
+    std::optional<std::any> Receive(Message msg, SceneObject& sceneObject) override;
 
 private:
-    virtual void DoUpdate(double deltaTime, SceneObject& sceneObject, Scene& scene) = 0;
+    virtual void DoUpdate(double deltaTime, SceneObject& sceneObject, Scene& scene);
 };
 } // namespace FIRE
 

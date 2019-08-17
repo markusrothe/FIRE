@@ -1,9 +1,7 @@
 add_library(exampleComponents STATIC
-    include/PointLightComponent.h
     include/FPSOverlayComponent.h
     include/InputMappingComponent.h
 
-    src/PointLightComponent.cpp
     src/FPSOverlayComponent.cpp
     src/InputMappingComponent.cpp
     )

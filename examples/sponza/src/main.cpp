@@ -1,11 +1,11 @@
 
 #include "FPSOverlayComponent.h"
 #include "InputMappingComponent.h"
-#include "PointLightComponent.h"
 #include <FIRE/AssetFacade.h>
 #include <FIRE/CameraComponent.h>
 #include <FIRE/GLFactory.h>
 #include <FIRE/InputListener.h>
+#include <FIRE/LightComponent.h>
 #include <FIRE/MainLoop.h>
 #include <FIRE/RenderContext.h>
 #include <FIRE/Renderer.h>
@@ -44,7 +44,7 @@ void SetupScene(
         70.0f, static_cast<float>(window.GetWidth()) / static_cast<float>(window.GetHeight()), 0.1f, 3000.0f));
 
     auto& sceneLight = scene.CreateSceneObject("light");
-    sceneLight.AddComponent(std::make_unique<examples::PointLightComponent>());
+    sceneLight.AddComponent(std::make_unique<FIRE::LightComponent>());
 
     //    auto& overlay = scene.CreateSceneObject("overlay");
     //    overlay.AddComponent(std::make_unique<examples::FPSOverlayComponent>(renderer, assets));
