@@ -11,7 +11,7 @@ using ::testing::_;
 class ComponentMock : public FIRE::Component
 {
 public:
-    MOCK_METHOD3(Update, void(double, FIRE::SceneObject& sceneObject, FIRE::Scene& scene));
+    MOCK_METHOD3(Update, void(double, FIRE::SceneObject&, FIRE::Scene&));
 
     void Setup(FIRE::SceneObject&) override
     {

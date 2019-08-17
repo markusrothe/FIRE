@@ -1,10 +1,8 @@
-
 #include "FPSOverlayComponent.h"
 #include <FIRE/AssetFacade.h>
 #include <FIRE/CameraComponent.h>
 #include <FIRE/GLFactory.h>
 #include <FIRE/InputComponent.h>
-#include <FIRE/InputListener.h>
 #include <FIRE/LightComponent.h>
 #include <FIRE/MainLoop.h>
 #include <FIRE/RenderContext.h>

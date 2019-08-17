@@ -10,8 +10,8 @@ SceneObject::SceneObject(std::string name)
 }
 
 SceneObject::~SceneObject() = default;
-SceneObject::SceneObject(SceneObject&& other) = default;
-SceneObject& SceneObject::operator=(SceneObject&& other) = default;
+SceneObject::SceneObject(SceneObject&& other) noexcept = default;
+SceneObject& SceneObject::operator=(SceneObject&& other) noexcept = default;
 
 void SceneObject::AddComponent(std::unique_ptr<Component> component)
 {

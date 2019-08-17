@@ -1,7 +1,7 @@
 #include <FIRE/InputComponent.h>
-#include <FIRE/InputListener.h>
 #include <FIRE/SceneObject.h>
 #include <FIRE/Window.h>
+#include <InputListener.h>
 namespace FIRE
 {
 InputComponent::InputComponent(Window& window)

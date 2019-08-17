@@ -4,7 +4,7 @@
 #include <FIRE/AssetFacade.h>
 #include <ShaderFactory.h>
 #include <fstream>
-#include <sstream>
+#include <utility>
 
 namespace FIRE
 {
@@ -91,7 +91,7 @@ FontCharacter AssetFacade::CreateFontCharacter(char c)
 
     return fontCharIter->second;
 }
-void AssetFacade::SubmitShaders(std::string const& name, Shaders shaders)
+void AssetFacade::SubmitShaders(std::string const& name, Shaders const& shaders)
 {
     if(m_materials.find(name) == m_materials.end())
     {

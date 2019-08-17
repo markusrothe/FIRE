@@ -11,7 +11,6 @@ using namespace testing;
 namespace
 {
 std::string const NAME{"mesh_name"};
-
 } // namespace
 
 using TestUtil::EXPECT_VEC_EQ;

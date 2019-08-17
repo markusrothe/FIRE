@@ -3,7 +3,7 @@
 #include <cassert>
 namespace FIRE
 {
-Window::Window(std::string const title, unsigned int width, unsigned int height)
+Window::Window(std::string const& title, unsigned int width, unsigned int height)
     : m_title(title)
     , m_width(width)
     , m_height(height)

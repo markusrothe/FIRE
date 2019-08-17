@@ -14,7 +14,7 @@ add_library(FIRE STATIC
     include/FIRE/Scene.h
     include/FIRE/SceneObject.h
     include/FIRE/Transform.h
-    include/FIRE/InputListener.h
+    src/InputListener.h
     include/FIRE/Key.h
     include/FIRE/MouseKey.h
     include/FIRE/KeyAction.h

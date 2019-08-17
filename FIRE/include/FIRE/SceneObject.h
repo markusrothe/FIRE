@@ -18,8 +18,8 @@ public:
     explicit SceneObject(std::string name);
     ~SceneObject();
 
-    SceneObject(SceneObject&& other);
-    SceneObject& operator=(SceneObject&& other);
+    SceneObject(SceneObject&& other) noexcept;
+    SceneObject& operator=(SceneObject&& other) noexcept;
 
     Transform& GetTransform();
 

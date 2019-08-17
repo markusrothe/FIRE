@@ -96,7 +96,7 @@ void Renderer::Render(TextOverlay overlay, float width, float height)
         m_draw->DoDraw(vertexLayout, MeshPrimitives::Triangles, 6u);
 
         // Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-        x += (ch.advance >> 6) * overlay.scale; // Bitshift by 6 to get value in pixels (2^6 = 64)
+        x += (ch.advance >> 6u) * overlay.scale; // Bitshift by 6 to get value in pixels (2^6 = 64)
     }
 
     m_materialBinder->Release();

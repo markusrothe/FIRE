@@ -20,7 +20,7 @@ bool CompileError(GLuint shaderID)
         glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &maxLength);
 
         // The maxLength includes the NULL character
-        GLchar* errorLog = new GLchar[maxLength + 1];
+        auto errorLog = new GLchar[maxLength + 1];
         glGetShaderInfoLog(shaderID, maxLength, &maxLength, errorLog);
 
         std::cout << errorLog << std::endl;

@@ -1,8 +1,8 @@
-#include <FIRE/InputListener.h>
 #include <FIRE/Key.h>
 #include <FIRE/KeyAction.h>
 #include <FIRE/MouseKey.h>
 #include <FIRE/RenderContext.h>
+#include <InputListener.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 

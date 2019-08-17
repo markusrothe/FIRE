@@ -5,12 +5,10 @@
 #include <iostream>
 #include <sstream>
 
-namespace FIRE
-{
-namespace MeshFactory
+namespace FIRE::MeshFactory
 {
 
-std::unique_ptr<Mesh3D> CreateCube(std::string name)
+std::unique_ptr<Mesh3D> CreateCube(std::string const& name)
 {
     std::vector<glm::vec3> positions = {{-1.0f, -1.0f, -1.0f},
                                         {-1.0f, -1.0f, -1.0f},
@@ -127,7 +125,7 @@ std::unique_ptr<Mesh3D> CreateCube(std::string name)
         std::move(indices));
 }
 
-std::unique_ptr<Mesh3D> CreatePlane(std::string name)
+std::unique_ptr<Mesh3D> CreatePlane(std::string const& name)
 {
     std::vector<glm::vec3> positions = {{-1.0f, 0.0f, -1.0f},
                                         {-1.0f, 0.0f, 1.0f},
@@ -153,7 +151,7 @@ std::unique_ptr<Mesh3D> CreatePlane(std::string name)
         std::move(indices));
 }
 
-std::unique_ptr<Mesh3D> CreateSphere(std::string name, uint32_t segments)
+std::unique_ptr<Mesh3D> CreateSphere(std::string const& name, uint32_t segments)
 {
 
     std::vector<glm::vec3> positions;
@@ -238,7 +236,7 @@ std::unique_ptr<Mesh3D> CreateSphere(std::string name, uint32_t segments)
         std::move(indices));
 }
 
-std::unique_ptr<Mesh3D> CreateLineGrid(std::string name, uint32_t width, uint32_t height)
+std::unique_ptr<Mesh3D> CreateLineGrid(std::string const& name, uint32_t width, uint32_t height)
 {
 
     std::vector<glm::vec3> positions, normals;
@@ -280,7 +278,7 @@ std::unique_ptr<Mesh3D> CreateLineGrid(std::string name, uint32_t width, uint32_
         std::move(indices));
 }
 
-std::unique_ptr<Mesh3D> CreateTriangleGrid(std::string name, uint32_t width, uint32_t height)
+std::unique_ptr<Mesh3D> CreateTriangleGrid(std::string const& name, uint32_t width, uint32_t height)
 {
 
     std::vector<glm::vec3> positions, normals;
@@ -344,5 +342,4 @@ std::unique_ptr<Mesh3D> DoCreate(
 
     return mesh;
 }
-} // namespace MeshFactory
-} // namespace FIRE
+} // namespace FIRE::MeshFactory

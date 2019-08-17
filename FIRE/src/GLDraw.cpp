@@ -130,7 +130,7 @@ void GLDraw::DoDraw(VertexLayout& layout, MeshPrimitives primitives, uint32_t co
 void GLDraw::DoDrawIndexed(VertexLayout& layout, MeshPrimitives primitives, uint32_t count)
 {
     layout.BindLayout();
-    glDrawElements(MapPrimitiveType(primitives), static_cast<GLsizei>(count), GL_UNSIGNED_INT, 0);
+    glDrawElements(MapPrimitiveType(primitives), static_cast<GLsizei>(count), GL_UNSIGNED_INT, nullptr);
     layout.ReleaseLayout();
 }
 

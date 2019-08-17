@@ -1,7 +1,6 @@
 #include "FPSOverlayComponent.h"
 #include <FIRE/AssetFacade.h>
 #include <FIRE/GLFactory.h>
-#include <FIRE/InputListener.h>
 #include <FIRE/MainLoop.h>
 #include <FIRE/Message.h>
 #include <FIRE/RenderContext.h>

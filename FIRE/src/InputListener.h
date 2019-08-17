@@ -33,11 +33,11 @@ namespace FIRE
 class InputListener
 {
 public:
-    void RegisterKeyEvent(Key key, KeyAction action, std::function<void(void)> callback);
+    void RegisterKeyEvent(Key key, KeyAction action, std::function<void(void)> const& callback);
     void RegisterMouseEvent(std::function<void(double, double)> callback);
     void UnregisterMouseEvent();
 
-    void RegisterMouseButtonEvent(MouseKey key, KeyAction action, std::function<void(void)> callback);
+    void RegisterMouseButtonEvent(MouseKey key, KeyAction action, std::function<void(void)> const& callback);
 
     void KeyboardInput(Key key, KeyAction action);
     void MouseInput(double x, double y);
