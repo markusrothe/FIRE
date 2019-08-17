@@ -13,7 +13,7 @@ public:
     ~LightComponent() override;
     void Setup(SceneObject& sceneObject) override;
     void Update(double deltaTime, SceneObject& sceneObject, Scene& scene) override;
-    std::optional<std::any> Receive(Message msg, SceneObject& sceneObject) override;
+    std::optional<std::any> Receive(Message const& msg, SceneObject& sceneObject) override;
 
 private:
     virtual void DoUpdate(double deltaTime, SceneObject& sceneObject, Scene& scene);

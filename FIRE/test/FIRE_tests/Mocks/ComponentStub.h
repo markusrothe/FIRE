@@ -17,7 +17,7 @@ public:
     {
     }
 
-    std::optional<std::any> Receive(FIRE::Message msg, FIRE::SceneObject&) override
+    std::optional<std::any> Receive(FIRE::Message const& msg, FIRE::SceneObject&) override
     {
         if(auto it = m_messageHandlers.find(msg); it != m_messageHandlers.end())
         {

@@ -22,7 +22,7 @@ public:
         updated = true;
     }
 
-    std::optional<std::any> Receive(FIRE::Message, FIRE::SceneObject&) override
+    std::optional<std::any> Receive(FIRE::Message const&, FIRE::SceneObject&) override
     {
         return messageResponse;
     }

@@ -1,7 +1,5 @@
-#include <FIRE/CameraComponent.h>
-#include <FIRE/LightComponent.h>
+
 #include <FIRE/Message.h>
-#include <FIRE/RenderingComponent.h>
 #include <FIRE/SceneObject.h>
 
 namespace FIRE
@@ -47,7 +45,7 @@ void SceneObject::Update(double deltaTime, Scene& scene)
     }
 }
 
-std::optional<std::any> SceneObject::Send(Message msg)
+std::optional<std::any> SceneObject::Send(Message const& msg)
 {
     for(auto& component : m_components)
     {

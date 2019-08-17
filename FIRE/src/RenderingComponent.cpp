@@ -40,7 +40,7 @@ void RenderingComponent::DoUpdate(double, SceneObject&, Scene&)
     // base implementation, do nothing
 }
 
-std::optional<std::any> RenderingComponent::Receive(Message /*msg*/, SceneObject& /*sceneObject*/)
+std::optional<std::any> RenderingComponent::Receive(Message const& /*msg*/, SceneObject& /*sceneObject*/)
 {
     return std::nullopt;
 }

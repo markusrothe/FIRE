@@ -15,7 +15,7 @@ public:
 
     void Setup(SceneObject& sceneObject) override;
     void Update(double deltaTime, SceneObject& sceneObject, Scene& scene) override;
-    std::optional<std::any> Receive(FIRE::Message msg, FIRE::SceneObject&) override;
+    std::optional<std::any> Receive(FIRE::Message const& msg, FIRE::SceneObject&) override;
 
 private:
     virtual void DoUpdate(double deltaTime, SceneObject& sceneObject, Scene& scene);

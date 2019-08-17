@@ -28,7 +28,7 @@ public:
     void Update(double deltaTime, Scene& scene);
     void AddComponent(std::unique_ptr<Component> component);
 
-    std::optional<std::any> Send(Message msg);
+    std::optional<std::any> Send(Message const& msg);
 
 private:
     std::string m_name;

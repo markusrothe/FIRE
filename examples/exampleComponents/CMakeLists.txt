@@ -1,9 +1,7 @@
 add_library(exampleComponents STATIC
     include/FPSOverlayComponent.h
-    include/InputMappingComponent.h
 
     src/FPSOverlayComponent.cpp
-    src/InputMappingComponent.cpp
     )
 add_library(FIRE::exampleComponents ALIAS exampleComponents)
 

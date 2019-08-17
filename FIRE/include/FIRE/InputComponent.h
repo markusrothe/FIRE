@@ -2,25 +2,35 @@
 #define FIRE_InputComponent_h
 
 #include <FIRE/Component.h>
+#include <FIRE/Key.h>
+#include <FIRE/KeyAction.h>
+#include <FIRE/MouseKey.h>
+#include <functional>
+#include <memory>
+#include <vector>
 namespace FIRE
 {
-class InputListener;
 class SceneObject;
 class Scene;
+class InputListener;
+class Transform;
+class Window;
 class InputComponent : public Component
 {
 public:
-    explicit InputComponent(InputListener& inputListener);
-    virtual ~InputComponent();
+    explicit InputComponent(Window& window);
+    ~InputComponent() override;
 
     void Setup(SceneObject& sceneObject) override;
     void Update(double deltaTime, SceneObject& sceneObject, Scene& scene) override;
 
+    std::optional<std::any> Receive(FIRE::Message const& msg, FIRE::SceneObject& sceneObject) override;
+
 protected:
-    InputListener& inputListener;
+    std::shared_ptr<InputListener> inputListener;
 
 private:
-    virtual void DoUpdate(double deltaTime, SceneObject& sceneObject, Scene& scene) = 0;
+    virtual void DoUpdate(double deltaTime, SceneObject& sceneObject, Scene& scene);
 };
 } // namespace FIRE
 

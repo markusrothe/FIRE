@@ -1,6 +1,7 @@
 #ifndef FIRE_Renderable_h
 #define FIRE_Renderable_h
 
+#include "Message.h"
 #include <FIRE/Material.h>
 #include <FIRE/Mesh3D.h>
 #include <FIRE/Transform.h>

@@ -23,7 +23,7 @@ public:
     {
     }
 
-    std::optional<std::any> Receive(FIRE::Message, SceneObject&) override
+    std::optional<std::any> Receive(FIRE::Message const&, SceneObject&) override
     {
         return std::nullopt;
     }

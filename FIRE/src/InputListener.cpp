@@ -8,7 +8,7 @@ void InputListener::RegisterKeyEvent(Key key, KeyAction action, std::function<vo
     m_keyCallbacks.insert(std::make_pair(std::make_pair(key, action), callback));
 }
 
-void InputListener::RegisterMouseEvent(std::function<void(double x, double y)> mouseCallback)
+void InputListener::RegisterMouseEvent(std::function<void(double, double)> mouseCallback)
 {
     m_mouseCallback = std::move(mouseCallback);
 }
