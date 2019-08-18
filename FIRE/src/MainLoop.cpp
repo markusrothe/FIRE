@@ -12,11 +12,13 @@ void MainLoop(
     Scene& scene,
     Renderer& renderer)
 {
+    scene.Setup();
+
     auto const width = static_cast<float>(window.GetWidth());
     auto const height = static_cast<float>(window.GetHeight());
     auto lastTime = std::chrono::high_resolution_clock::now();
     std::chrono::nanoseconds lag{0ns};
-    std::chrono::nanoseconds timestep{4ms};
+    std::chrono::nanoseconds timestep{16ms};
     while(!window.ShouldClose())
     {
         auto currentTime = std::chrono::high_resolution_clock::now();

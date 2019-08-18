@@ -14,11 +14,11 @@ namespace FIRE
 
 namespace MeshFactory
 {
-std::unique_ptr<Mesh3D> CreateCube(std::string name);
-std::unique_ptr<Mesh3D> CreatePlane(std::string name);
-std::unique_ptr<Mesh3D> CreateSphere(std::string name, uint32_t segments);
-std::unique_ptr<Mesh3D> CreateLineGrid(std::string name, uint32_t width, uint32_t height);
-std::unique_ptr<Mesh3D> CreateTriangleGrid(std::string name, uint32_t width, uint32_t height);
+std::unique_ptr<Mesh3D> CreateCube(std::string const& name);
+std::unique_ptr<Mesh3D> CreatePlane(std::string const& name);
+std::unique_ptr<Mesh3D> CreateSphere(std::string const& name, uint32_t segments);
+std::unique_ptr<Mesh3D> CreateLineGrid(std::string const& name, uint32_t width, uint32_t height);
+std::unique_ptr<Mesh3D> CreateTriangleGrid(std::string const& name, uint32_t width, uint32_t height);
 std::unique_ptr<Mesh3D> DoCreate(
     MeshCategory meshType,
     MeshPrimitives primitives,

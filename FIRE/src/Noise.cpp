@@ -1,9 +1,7 @@
 #include <FIRE/Noise.h>
 #include <FastNoise/FastNoise.h>
 
-namespace FIRE
-{
-namespace Noise
+namespace FIRE::Noise
 {
 
 std::vector<std::vector<float>> CreateHeightmap(unsigned int x, unsigned int y)
@@ -36,6 +34,4 @@ float GetNoiseValue(float x, float y)
     noise.SetNoiseType(FastNoise::Simplex);
     return noise.GetNoise(x, y);
 }
-} // namespace Noise
-
-} // namespace FIRE
+} // namespace FIRE::Noise

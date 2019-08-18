@@ -19,7 +19,7 @@ add_executable(FIRE_tests
     FIRE_tests/Mocks/Texture2DMock.h
     FIRE_tests/RenderableTest.cpp
     FIRE_tests/ModelLoaderTest.cpp
-    FIRE_tests/AssetFacadeTest.cpp FIRE_tests/Stubs/Texture2DStub.h FIRE_tests/Mocks/ShaderFactoryMock.h FIRE_tests/Stubs/CubeOBJ.h FIRE_tests/Stubs/CubeOBJ.cpp)
+    FIRE_tests/AssetFacadeTest.cpp FIRE_tests/Stubs/Texture2DStub.h FIRE_tests/Mocks/ShaderFactoryMock.h FIRE_tests/Stubs/CubeOBJ.h FIRE_tests/Stubs/CubeOBJ.cpp FIRE_tests/Mocks/MaterialBinderMock.h FIRE_tests/Mocks/DrawMock.h FIRE_tests/Mocks/VertexLayoutFactoryMock.h FIRE_tests/Stubs/VertexLayoutStub.h FIRE_tests/Mocks/ComponentStub.h FIRE_tests/RenderableBuilderTest.cpp FIRE_tests/OverlayBuilderTest.cpp)
 
 target_include_directories(FIRE_tests
     PUBLIC
@@ -28,6 +28,7 @@ target_include_directories(FIRE_tests
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/FIRE_tests/Mocks
     ${CMAKE_CURRENT_SOURCE_DIR}/FIRE_tests/Stubs
+
     )
 
 target_link_libraries(FIRE_tests

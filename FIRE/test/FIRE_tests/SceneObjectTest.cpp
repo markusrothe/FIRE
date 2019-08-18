@@ -11,13 +11,13 @@ using ::testing::_;
 class ComponentMock : public FIRE::Component
 {
 public:
-    MOCK_METHOD3(Update, void(double, FIRE::SceneObject& sceneObject, FIRE::Scene& scene));
+    MOCK_METHOD3(Update, void(double, FIRE::SceneObject&, FIRE::Scene&));
 
     void Setup(FIRE::SceneObject&) override
     {
     }
 
-    std::optional<std::any> Receive(FIRE::Message, FIRE::SceneObject&) override
+    std::optional<std::any> Receive(FIRE::Message const&, FIRE::SceneObject&) override
     {
         return std::nullopt;
     }

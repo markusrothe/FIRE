@@ -96,7 +96,7 @@ GLDraw::GLDraw()
     glDepthFunc(GL_LESS);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glClearColor(0.5f, 0.7f, 0.9f, 1.0f);
+    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
 
@@ -130,7 +130,7 @@ void GLDraw::DoDraw(VertexLayout& layout, MeshPrimitives primitives, uint32_t co
 void GLDraw::DoDrawIndexed(VertexLayout& layout, MeshPrimitives primitives, uint32_t count)
 {
     layout.BindLayout();
-    glDrawElements(MapPrimitiveType(primitives), static_cast<GLsizei>(count), GL_UNSIGNED_INT, 0);
+    glDrawElements(MapPrimitiveType(primitives), static_cast<GLsizei>(count), GL_UNSIGNED_INT, nullptr);
     layout.ReleaseLayout();
 }
 

@@ -1,8 +1,8 @@
 #include "GLRenderContext.h"
-#include <FIRE/InputListener.h>
 #include <FIRE/Key.h>
 #include <FIRE/KeyAction.h>
 #include <FIRE/Window.h>
+#include <InputListener.h>
 
 #include <glad/glad.h>
 
@@ -25,7 +25,7 @@ FIRE::KeyAction ToFIREKeyAction(int action)
     default:
         assert(false);
         return FIRE::KeyAction::INVALID;
-    };
+    }
 }
 
 FIRE::MouseKey ToFIREMouseKey(int key)
@@ -133,7 +133,7 @@ static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int acti
     void* windowUserPointer = glfwGetWindowUserPointer(window);
     if(windowUserPointer)
     {
-        InputListener* inputListener = reinterpret_cast<InputListener*>(windowUserPointer);
+        auto inputListener = reinterpret_cast<InputListener*>(windowUserPointer);
         inputListener->KeyboardInput(ToFIREKey(key), ToFIREKeyAction(action));
     }
 }
@@ -143,7 +143,7 @@ static void mouse_callback(GLFWwindow* window, double x, double y)
     void* windowUserPointer = glfwGetWindowUserPointer(window);
     if(windowUserPointer)
     {
-        InputListener* inputListener = reinterpret_cast<InputListener*>(windowUserPointer);
+        auto inputListener = reinterpret_cast<InputListener*>(windowUserPointer);
         inputListener->MouseInput(x, y);
     }
 }
@@ -154,7 +154,7 @@ static void mouse_button_callback(GLFWwindow* window, int button, int action, in
 
     if(windowUserPointer)
     {
-        InputListener* inputListener = reinterpret_cast<InputListener*>(windowUserPointer);
+        auto inputListener = reinterpret_cast<InputListener*>(windowUserPointer);
         inputListener->MouseKeyInput(ToFIREMouseKey(button), ToFIREKeyAction(action));
     }
 }
@@ -167,7 +167,7 @@ public:
     ~Impl();
 
     void SwapBuffers();
-    void PollEvents();
+    static void PollEvents();
     bool ShouldClose();
     void Close();
     void Resize(unsigned int width, unsigned int height);
@@ -193,8 +193,8 @@ GLRenderContext::Impl::Impl(Window& window)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 
     m_window = glfwCreateWindow(
-        window.GetWidth(), window.GetHeight(), window.GetTitle().c_str(), NULL,
-        NULL);
+        static_cast<int>(window.GetWidth()), static_cast<int>(window.GetHeight()), window.GetTitle().c_str(), nullptr,
+        nullptr);
 
     if(!m_window)
     {
@@ -241,7 +241,7 @@ void GLRenderContext::Impl::Close()
 
 void GLRenderContext::Impl::Resize(unsigned int width, unsigned int height)
 {
-    glfwSetWindowSize(m_window, width, height);
+    glfwSetWindowSize(m_window, static_cast<int>(width), static_cast<int>(height));
 }
 
 void GLRenderContext::Impl::RegisterInputListener(InputListener* inputListener)

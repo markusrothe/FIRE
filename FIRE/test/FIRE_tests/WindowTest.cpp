@@ -1,6 +1,6 @@
-#include <FIRE/InputListener.h>
 #include <FIRE/RenderContext.h>
 #include <FIRE/Window.h>
+#include <InputListener.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <memory>
@@ -17,7 +17,7 @@ public:
     MOCK_METHOD0(PollEvents, void(void));
     MOCK_METHOD0(ShouldClose, bool());
     MOCK_METHOD0(Close, void(void));
-    MOCK_METHOD2(Resize, void(unsigned int width, unsigned int height));
+    MOCK_METHOD2(Resize, void(unsigned int, unsigned int));
     MOCK_METHOD1(RegisterInputListener, void(InputListener*));
     MOCK_METHOD0(CaptureCursor, void(void));
     MOCK_METHOD0(ReleaseCursor, void(void));
@@ -28,7 +28,7 @@ namespace
 {
 using ::testing::_;
 using ::testing::Return;
-constexpr auto title{"WindowTitle"};
+const std::string title{"WindowTitle"};
 constexpr auto width{200u};
 constexpr auto height{400u};
 

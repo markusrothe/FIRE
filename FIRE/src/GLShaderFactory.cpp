@@ -20,7 +20,7 @@ bool CompileError(GLuint shaderID)
         glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &maxLength);
 
         // The maxLength includes the NULL character
-        GLchar* errorLog = new GLchar[maxLength + 1];
+        auto errorLog = new GLchar[maxLength + 1];
         glGetShaderInfoLog(shaderID, maxLength, &maxLength, errorLog);
 
         std::cout << errorLog << std::endl;
@@ -87,12 +87,13 @@ unsigned int GLShaderFactory::CreateDefaultShader()
     std::string const vsCode = R"(
         #version 440
         layout(location = 0) in vec3 vPos;
-        uniform mat4 MVP;
+        uniform mat4 M;
+        uniform mat4 VP;
         out vec3 posVS;
 
         void main()
         {
-            gl_Position = MVP * vec4(vPos.xyz, 1.0);
+            gl_Position =  VP * M * vec4(vPos.xyz, 1.0);
             posVS = vPos;
         }
     )";

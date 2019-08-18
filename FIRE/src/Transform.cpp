@@ -54,12 +54,12 @@ void Transform::SetPosition(glm::vec3 pos)
 
 void Transform::SetAcceleration(glm::vec3 acceleration)
 {
-    m_acceleration = std::move(acceleration);
+    m_acceleration = acceleration;
 }
 
 void Transform::SetLookAt(glm::vec3 lookAt)
 {
-    m_lookAt = std::move(lookAt);
+    m_lookAt = lookAt;
 }
 
 void Transform::Translate(float x, float y, float z)

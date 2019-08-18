@@ -17,7 +17,7 @@ std::string Mesh3D::Name() const
 
 void Mesh3D::AddPosition(glm::vec3 vertex)
 {
-    m_positions.push_back(std::move(vertex));
+    m_positions.push_back(vertex);
 }
 
 void Mesh3D::AddPositions(std::vector<glm::vec3> vertices)
@@ -53,7 +53,7 @@ std::vector<unsigned int> Mesh3D::Indices() const
 
 void Mesh3D::AddNormal(glm::vec3 normal)
 {
-    m_normals.push_back(std::move(normal));
+    m_normals.push_back(normal);
 }
 
 void Mesh3D::AddNormals(std::vector<glm::vec3> normals)

@@ -12,7 +12,7 @@ class Window
 {
 public:
     explicit Window(
-        std::string const title, unsigned int width, unsigned int height);
+        std::string const& title, unsigned int width, unsigned int height);
 
     Window(Window&& other) = default;
     Window& operator=(Window&& other) = default;

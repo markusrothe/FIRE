@@ -17,4 +17,18 @@ void LightComponent::Update(double deltaTime, SceneObject& sceneObject, Scene& s
     DoUpdate(deltaTime, sceneObject, scene);
 }
 
+std::optional<std::any> LightComponent::Receive(Message const& msg, SceneObject& sceneObject)
+{
+    if(msg.id == FIRE::MessageID::GetLightPosition)
+    {
+        return sceneObject.GetTransform().Position();
+    }
+
+    return std::optional<std::any>();
+}
+void LightComponent::DoUpdate(double, SceneObject&, Scene&)
+{
+    // base implementation, Do nothing.
+}
+
 } // namespace FIRE

@@ -17,7 +17,7 @@ class VertexDeclaration
 public:
     using VertexDeclarationMap = std::unordered_map<std::string, VertexDeclarationSection>;
 
-    void AddSection(std::string name, uint32_t size, uint32_t offset);
+    void AddSection(std::string const& name, uint32_t size, uint32_t offset);
 
     VertexDeclarationMap GetSections() const;
 

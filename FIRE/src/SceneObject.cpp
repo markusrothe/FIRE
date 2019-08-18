@@ -1,7 +1,5 @@
-#include <FIRE/CameraComponent.h>
-#include <FIRE/LightComponent.h>
+
 #include <FIRE/Message.h>
-#include <FIRE/RenderingComponent.h>
 #include <FIRE/SceneObject.h>
 
 namespace FIRE
@@ -12,8 +10,8 @@ SceneObject::SceneObject(std::string name)
 }
 
 SceneObject::~SceneObject() = default;
-SceneObject::SceneObject(SceneObject&& other) = default;
-SceneObject& SceneObject::operator=(SceneObject&& other) = default;
+SceneObject::SceneObject(SceneObject&& other) noexcept = default;
+SceneObject& SceneObject::operator=(SceneObject&& other) noexcept = default;
 
 void SceneObject::AddComponent(std::unique_ptr<Component> component)
 {
@@ -40,13 +38,14 @@ void SceneObject::Setup()
 
 void SceneObject::Update(double deltaTime, Scene& scene)
 {
+    m_transform.Translate(m_transform.Acceleration());
     for(auto& component : m_components)
     {
         component->Update(deltaTime, *this, scene);
     }
 }
 
-std::optional<std::any> SceneObject::Send(Message msg)
+std::optional<std::any> SceneObject::Send(Message const& msg)
 {
     for(auto& component : m_components)
     {

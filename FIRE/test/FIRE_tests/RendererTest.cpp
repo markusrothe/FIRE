@@ -1,9 +1,10 @@
-#include "Draw.h"
-#include "MaterialBinder.h"
+#include "DrawMock.h"
+#include "MaterialBinderMock.h"
 #include "ShaderFactoryMock.h"
 #include "TextureFactoryMock.h"
 #include "VertexLayout.h"
-#include "VertexLayoutFactory.h"
+#include "VertexLayoutFactoryMock.h"
+#include "VertexLayoutStub.h"
 #include <FIRE/AssetFacade.h>
 #include <FIRE/Renderable.h>
 #include <FIRE/Renderer.h>
@@ -16,56 +17,6 @@ namespace
 using ::testing::_;
 using ::testing::ReturnRef;
 
-class DrawMock : public FIRE::Draw
-{
-public:
-    MOCK_METHOD0(Clear, void(void));
-    MOCK_METHOD3(DoDraw, void(FIRE::VertexLayout&, FIRE::MeshPrimitives, uint32_t));
-    MOCK_METHOD3(DoDrawIndexed, void(FIRE::VertexLayout&, FIRE::MeshPrimitives, uint32_t));
-    MOCK_METHOD0(ToggleWireframe, void(void));
-};
-
-class MaterialBinderMock : public FIRE::MaterialBinder
-{
-public:
-    MOCK_METHOD1(Bind, void(FIRE::Material&));
-    MOCK_METHOD0(Release, void(void));
-};
-
-class VertexLayoutFactoryMock : public FIRE::VertexLayoutFactory
-{
-public:
-    MOCK_METHOD1(CreateStaticIndexedLayout, FIRE::VertexLayout&(FIRE::Renderable const&));
-    MOCK_METHOD1(CreateDynamicLayout, FIRE::VertexLayout&(FIRE::TextOverlay const&));
-};
-
-class VertexLayoutStub : public FIRE::VertexLayout
-{
-public:
-    VertexLayoutStub()
-        : FIRE::VertexLayout(FIRE::DrawMode::INDEXED)
-    {
-    }
-    void BindLayout() override
-    {
-    }
-    void ReleaseLayout() override
-    {
-    }
-    void BufferData(uint32_t, void*) override
-    {
-    }
-    void BufferIndexData(uint32_t, void*) override
-    {
-    }
-    void BufferSubData(uint32_t, uint32_t, void*) override
-    {
-    }
-    void AddVertexAttribute(uint32_t, uint32_t, uint32_t) override
-    {
-    }
-};
-
 class ARenderer : public ::testing::Test
 {
 public:
@@ -75,13 +26,13 @@ public:
         return FIRE::Renderer(std::move(draw), std::move(matBinder), std::move(vertLayoutFactory), std::move(assets));
     }
 
-    std::unique_ptr<DrawMock> draw = std::make_unique<DrawMock>();
-    std::unique_ptr<MaterialBinderMock> matBinder = std::make_unique<MaterialBinderMock>();
-    std::unique_ptr<VertexLayoutFactoryMock> vertLayoutFactory = std::make_unique<VertexLayoutFactoryMock>();
+    std::unique_ptr<FIRE_tests::DrawMock> draw = std::make_unique<FIRE_tests::DrawMock>();
+    std::unique_ptr<FIRE_tests::MaterialBinderMock> matBinder = std::make_unique<FIRE_tests::MaterialBinderMock>();
+    std::unique_ptr<FIRE_tests::VertexLayoutFactoryMock> vertLayoutFactory = std::make_unique<FIRE_tests::VertexLayoutFactoryMock>();
     std::unique_ptr<FIRE_tests::TextureFactoryMock> texFactory = std::make_unique<FIRE_tests::TextureFactoryMock>();
     std::unique_ptr<FIRE_tests::ShaderFactoryMock> shaderFactory = std::make_unique<FIRE_tests::ShaderFactoryMock>();
     std::shared_ptr<FIRE::AssetFacade> assets = std::make_shared<FIRE::AssetFacade>(std::move(texFactory), std::move(shaderFactory));
-    VertexLayoutStub layout;
+    FIRE_tests::VertexLayoutStub layout;
     FIRE::Mesh3D mesh{"mesh", FIRE::MeshType()};
 };
 

@@ -1,3 +1,4 @@
+#include <FIRE/Message.h>
 #include <FIRE/Renderable.h>
 #include <utility>
 namespace FIRE

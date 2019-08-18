@@ -14,7 +14,7 @@ add_library(FIRE STATIC
     include/FIRE/Scene.h
     include/FIRE/SceneObject.h
     include/FIRE/Transform.h
-    include/FIRE/InputListener.h
+    src/InputListener.h
     include/FIRE/Key.h
     include/FIRE/MouseKey.h
     include/FIRE/KeyAction.h
@@ -77,7 +77,9 @@ add_library(FIRE STATIC
     src/GLTextureFactory.cpp
     src/AssetFacade.cpp
     src/RenderableBuilder.cpp
-    src/OverlayBuilder.cpp)
+    src/OverlayBuilder.cpp include/FIRE/RenderableSubmitter.h include/FIRE/OverlayComponent.h src/OverlayComponent.cpp include/FIRE/OverlaySubmitter.h include/FIRE/FIRE.h)
+
+add_library(FIRE::FIRE ALIAS FIRE)
 
 target_include_directories(FIRE
     PUBLIC

@@ -9,9 +9,9 @@ target_include_directories(sponza
 
 target_link_libraries(sponza
     PRIVATE
-    FIRE
+    FIRE::FIRE
     FIRE::CompileOptions
-    FIRE::exampleComponents
+    util
     stb_image
     )
 

@@ -41,7 +41,7 @@ public:
     Texture2D* GetTexture(std::string const& name) const;
     FontCharacter CreateFontCharacter(char c);
 
-    void SubmitShaders(std::string const& name, Shaders shaders);
+    void SubmitShaders(std::string const& name, Shaders const& shaders);
     void SubmitShadersFromFiles(std::string const& name, Shaders shaders);
     [[nodiscard]] Material GetMaterial(std::string const& name) const;
 

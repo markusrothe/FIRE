@@ -12,7 +12,7 @@
 
 namespace FIRE::GLFactory
 {
-Window InitWindow(std::string title, uint32_t width, uint32_t height)
+Window CreateWindow(std::string title, uint32_t width, uint32_t height)
 {
     Window window(std::move(title), width, height);
     window.SetRenderContext(CreateRenderContext(window));

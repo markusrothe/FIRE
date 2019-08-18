@@ -1,23 +1,24 @@
-#ifndef FIRE_LightComponent_h
-#define FIRE_LightComponent_h
+#ifndef FIRE_OVERLAYCOMPONENT_H
+#define FIRE_OVERLAYCOMPONENT_H
 #include <FIRE/Component.h>
-#include <FIRE/glmfwd.h>
-
+#include <FIRE/TextOverlay.h>
 namespace FIRE
 {
-class SceneObject;
-class Scene;
-class LightComponent : public Component
+class OverlaySubmitter;
+class OverlayComponent : public Component
 {
 public:
-    ~LightComponent() override;
+    explicit OverlayComponent(OverlaySubmitter& overlaySubmitter, std::vector<TextOverlay> overlays);
     void Setup(SceneObject& sceneObject) override;
     void Update(double deltaTime, SceneObject& sceneObject, Scene& scene) override;
     std::optional<std::any> Receive(Message const& msg, SceneObject& sceneObject) override;
+
+protected:
+    OverlaySubmitter& overlaySubmitter;
+    std::vector<TextOverlay> overlays;
 
 private:
     virtual void DoUpdate(double deltaTime, SceneObject& sceneObject, Scene& scene);
 };
 } // namespace FIRE
-
-#endif // FIRE_LightComponent_h
+#endif //FIRE_OVERLAYCOMPONENT_H
