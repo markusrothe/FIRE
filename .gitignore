@@ -15,3 +15,4 @@ flycheck_.dir-locals.elc
 /.clangd
 /cmake-build-debug/
 /install/
+/cmake-build-release/
