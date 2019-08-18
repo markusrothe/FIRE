@@ -9,8 +9,9 @@ target_include_directories(cube
 
 target_link_libraries(cube
     PRIVATE
-    FIRE
+    FIRE::FIRE
     FIRE::CompileOptions
+    util
     )
 
 install(
