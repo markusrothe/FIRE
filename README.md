@@ -1,4 +1,4 @@
-# FIRE - FIRE is (yet another) Rendering Engine
+# FIRE - FIRE is a Rendering Engine
 
 [![Build Status](https://travis-ci.org/markusrothe/FIRE.svg?branch=master)](https://travis-ci.org/markusrothe/FIRE)
 [![Coverage Status](https://coveralls.io/repos/github/markusrothe/FIRE/badge.svg?branch=master)](https://coveralls.io/github/markusrothe/FIRE?branch=master) 
