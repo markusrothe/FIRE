@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/markusrothe/FIRE/badge.svg?branch=master)](https://coveralls.io/github/markusrothe/FIRE?branch=master) 
 
 ## Introduction ##
-FIRE is (yet another) rendering engine to create 2D/3D games.
+FIRE is (yet another) 3D rendering engine.
 It is still a work in progress and by no means ready for meaningful usage, yet.
 
 ## Required ##
