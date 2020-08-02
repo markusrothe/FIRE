@@ -9,6 +9,12 @@ class SceneObject;
 class CameraComponent : public Component
 {
 public:
+    enum bla
+    {
+        a,
+        b,
+        c,
+    };
     CameraComponent(float fovy, float aspect, float near, float far);
 
     ~CameraComponent() override;

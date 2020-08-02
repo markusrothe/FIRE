@@ -8,8 +8,9 @@ namespace
 {
 void CreateCube(FIRE::Scene& scene, FIRE::AssetFacade& assets, FIRE::Renderer& renderer)
 {
+    assets.CreateMesh("cubeMesh", FIRE::MeshCategory::Cube);
     auto cubeRenderables = assets.CreateRenderables("cube", 1u)
-                               .WithMesh("cubeMesh", FIRE::MeshCategory::Cube)
+                               .WithMesh("cubeMesh")
                                .WithMaterial("phong")
                                .Build();
 
@@ -62,9 +63,12 @@ int main(int, char**)
     auto renderer{FIRE::GLFactory::CreateRenderer(assets)};
 
     FIRE::Scene scene;
-    assets->SubmitShadersFromFiles(
-        "phong",
-        {{FIRE::ShaderType::VERTEX_SHADER, "PhongVS.glsl"}, {FIRE::ShaderType::FRAGMENT_SHADER, "PhongFS.glsl"}});
+
+    FIRE::Shaders shaders = {
+        FIRE::ShaderDescriptor{FIRE::ShaderType::VERTEX_SHADER, std::filesystem::path("./PhongVS.glsl")},
+        FIRE::ShaderDescriptor{FIRE::ShaderType::FRAGMENT_SHADER, std::filesystem::path("./PhongFS.glsl")}};
+
+    assets->SubmitShadersFromFiles("phong", shaders);
 
     CreateCube(scene, *assets, *renderer);
     CreateCamera(window, scene, *renderer);

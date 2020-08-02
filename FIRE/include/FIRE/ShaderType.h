@@ -1,6 +1,7 @@
 #ifndef FIRE_ShaderType_h
 #define FIRE_ShaderType_h
 
+#include <filesystem>
 #include <string>
 #include <utility>
 #include <vector>
@@ -13,13 +14,31 @@ enum class ShaderType
     FRAGMENT_SHADER
 };
 
-using Shaders = std::vector<std::pair<ShaderType, std::string>>;
+struct ShaderDescriptor
+{
+    ShaderDescriptor(ShaderType type, std::string code)
+        : shaderType(type)
+        , shaderCode(std::move(code))
+    {
+    }
+
+    ShaderDescriptor(ShaderType type, std::filesystem::path path)
+        : shaderType(type)
+        , filePath(std::move(path))
+    {
+    }
+
+    ShaderType shaderType;
+    std::string shaderCode;
+    std::filesystem::path filePath;
+};
+
+using Shaders = std::vector<ShaderDescriptor>;
 
 enum class ShaderParameterType
 {
     MAT4x4,
     VEC3
-
 };
 } // namespace FIRE
 

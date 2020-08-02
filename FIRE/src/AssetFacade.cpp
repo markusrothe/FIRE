@@ -10,11 +10,10 @@ namespace FIRE
 {
 namespace
 {
-std::string GetFileContent(std::string const& filePath)
+std::string GetFileContent(std::filesystem::path const& filePath)
 {
     std::ifstream file(filePath);
-    std::string const content{(std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>()};
-    return content;
+    return std::string{(std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>()};
 }
 } // namespace
 
@@ -56,7 +55,7 @@ Texture2D* AssetFacade::GetTexture(std::string const& name) const
     return nullptr;
 }
 
-void AssetFacade::CreateTexture(
+void AssetFacade::SubmitTexture(
     std::string const& name,
     uint32_t width,
     uint32_t height,
@@ -99,13 +98,14 @@ void AssetFacade::SubmitShaders(std::string const& name, Shaders const& shaders)
     }
 }
 
-void AssetFacade::SubmitShadersFromFiles(std::string const& name, Shaders shaders)
+void AssetFacade::SubmitShadersFromFiles(std::string const& name, Shaders const& shaders)
 {
-    for(auto& shader : shaders)
+    Shaders cpy = shaders;
+    for(auto& shader : cpy)
     {
-        shader.second = GetFileContent(shader.second);
+        shader.shaderCode = GetFileContent(shader.filePath);
     }
-    SubmitShaders(name, shaders);
+    SubmitShaders(name, cpy);
 }
 
 Material AssetFacade::GetMaterial(std::string const& name) const
@@ -132,35 +132,50 @@ void AssetFacade::SubmitModelFromFile(std::string const& name, std::string const
 
 void AssetFacade::ProcessModel(std::string const& name, ModelLoader& loader)
 {
+    Foo foo;
+    foo.name = name;
+
     auto numModels = loader.GetNumModels();
     for(auto i = 0u; i < numModels; ++i)
     {
         auto model = loader.StealModel(0u); // always take the first index as numModels shrinks with every iteration.
         auto const meshName = model.mesh->Name();
         SubmitMesh(meshName, std::move(model.mesh));
-        m_modelAssets[name].first.push_back(GetMesh(meshName));
-        std::string fullPath{std::string("./") + model.texturePath};
+        foo.meshes.push_back(meshName);
 
         if(!model.texturePath.empty())
         {
+            std::string fullPath{std::string("./") + model.texturePath};
             SubmitTexture(model.texturePath, fullPath, model.textureWrapping);
-            m_modelAssets[name].second.push_back(GetTexture(model.texturePath));
+            foo.textures.push_back(model.texturePath);
         }
         else
         {
-            m_modelAssets[name].second.push_back(nullptr);
+            foo.textures.emplace_back("");
         }
     }
+
+    m_models[foo.name] = foo;
 }
 
 std::vector<Mesh3D*> AssetFacade::GetModelMeshes(std::string const& name) const
 {
-    if(auto it = m_modelAssets.find(name); it != m_modelAssets.end())
+    std::vector<Mesh3D*> meshes;
+    if(auto it = m_models.find(name); it != m_models.end())
     {
-        return it->second.first;
+        for(auto& meshName : it->second.meshes)
+        {
+            auto meshIt = m_meshes.find(meshName);
+            if(meshIt != std::end(m_meshes))
+            {
+                meshes.push_back(meshIt->second.get());
+            }
+        }
     }
-    return {};
+
+    return meshes;
 }
+
 void AssetFacade::SubmitMesh(std::string const& name, std::unique_ptr<Mesh3D> mesh)
 {
     if(m_meshes.find(name) == m_meshes.end())
@@ -219,15 +234,15 @@ RenderableBuilder AssetFacade::CreateRenderables(std::string const& namePrefix, 
 
 std::vector<Renderable> AssetFacade::CreateModelRenderables(std::string const& namePrefix, std::string const& modelName, std::string const& overrideMaterial)
 {
-    auto model = m_modelAssets.find(modelName);
-    if(model == m_modelAssets.end())
+    auto model = m_models.find(modelName);
+    if(model == m_models.end())
     {
         return {};
     }
 
-    auto& meshes = model->second.first;
-    auto& textures = model->second.second;
-    auto const numMeshes = static_cast<uint32_t>(meshes.size());
+    auto& meshes = model->second.meshes;
+    auto& textures = model->second.textures;
+    auto const numMeshes = static_cast<uint32_t>(model->second.meshes.size());
     auto builder = CreateRenderables(namePrefix, numMeshes);
     for(auto i = 0u; i < numMeshes; ++i)
     {

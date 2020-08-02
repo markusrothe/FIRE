@@ -38,9 +38,11 @@ int main(int, char**)
     auto assets{FIRE::GLFactory::CreateAssetFacade()};
     auto renderer{FIRE::GLFactory::CreateRenderer(assets)};
 
-    assets->SubmitShadersFromFiles(
-        "texSampling",
-        {{FIRE::ShaderType::VERTEX_SHADER, "textureSamplingVS.glsl"}, {FIRE::ShaderType::FRAGMENT_SHADER, "textureSamplingFS.glsl"}});
+    FIRE::Shaders shaders = {
+        FIRE::ShaderDescriptor{FIRE::ShaderType::VERTEX_SHADER, std::filesystem::path("textureSamplingVS.glsl")},
+        FIRE::ShaderDescriptor{FIRE::ShaderType::FRAGMENT_SHADER, std::filesystem::path("textureSamplingFS.glsl")},
+    };
+    assets->SubmitShadersFromFiles("texSampling", shaders);
 
     FIRE::Scene scene;
     CreateRenderables(scene, *assets, *renderer);

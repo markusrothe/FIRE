@@ -22,6 +22,7 @@ GLenum MapPrimitiveType(MeshPrimitives primitives)
         return GL_POINTS;
     }
 }
+
 void message_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei, GLchar const* message, void const*)
 {
     auto const src_str = [source]() {

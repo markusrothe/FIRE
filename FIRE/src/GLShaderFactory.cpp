@@ -109,7 +109,7 @@ unsigned int GLShaderFactory::CreateDefaultShader()
         }
     )";
 
-    std::vector<std::pair<ShaderType, std::string>> shaders = {
+    std::vector<ShaderDescriptor> shaders = {
         {ShaderType::VERTEX_SHADER, vsCode},
         {ShaderType::FRAGMENT_SHADER, fsCode}};
 
@@ -147,25 +147,23 @@ unsigned int GLShaderFactory::CreateDefaultTextShader()
         }
     )";
 
-    std::vector<std::pair<ShaderType, std::string>> shaders = {
-        {ShaderType::VERTEX_SHADER, vsCode},
-        {ShaderType::FRAGMENT_SHADER, fsCode}};
+    std::vector<ShaderDescriptor> shaders = {
+        ShaderDescriptor{ShaderType::VERTEX_SHADER, vsCode},
+        ShaderDescriptor{ShaderType::FRAGMENT_SHADER, fsCode}};
 
     return Create(shaders);
 } // namespace FIRE
 
-unsigned int GLShaderFactory::Create(std::vector<std::pair<ShaderType, std::string>> const& shaderCode)
+unsigned int GLShaderFactory::Create(std::vector<ShaderDescriptor> const& shaderDescriptors)
 {
     auto shaderProgram = glCreateProgram();
 
-    for(auto const& shaderSource : shaderCode)
+    for(auto const& descriptor : shaderDescriptors)
     {
-        auto const shaderType = ToGLShaderType(shaderSource.first);
-
-        glAttachShader(shaderProgram, CompileShader(shaderType, shaderSource.second));
+        auto const shaderType = ToGLShaderType(descriptor.shaderType);
+        glAttachShader(shaderProgram, CompileShader(shaderType, descriptor.shaderCode));
     }
 
-    //glBindAttribLocation(shaderProgram, 0, "vPos");
     glLinkProgram(shaderProgram);
     if(LinkError(shaderProgram))
     {

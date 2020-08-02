@@ -21,28 +21,18 @@ class ModelLoader;
 class AssetFacade
 {
 public:
-    explicit AssetFacade(
-        std::unique_ptr<TextureFactory> texFactory,
-        std::unique_ptr<ShaderFactory> shaderFactory);
-
+    AssetFacade(std::unique_ptr<TextureFactory> texFactory, std::unique_ptr<ShaderFactory> shaderFactory);
     ~AssetFacade();
 
     void SubmitTexture(std::string const& name, std::string const& textureFilePath, Texture2D::WrappingMode wrappingMode);
     void SubmitTexture(std::string const& name, std::unique_ptr<Texture2D> texture);
-    void CreateTexture(
-        std::string const& name,
-        uint32_t width,
-        uint32_t height,
-        std::vector<uint8_t> const& data,
-        uint8_t numComponents,
-        Texture2D::WrappingMode wrappingMode,
-        Texture2D::Filter filter);
-
+    void SubmitTexture(std::string const& name, uint32_t width, uint32_t height, std::vector<uint8_t> const& data, uint8_t numComponents, Texture2D::WrappingMode wrappingMode, Texture2D::Filter filter);
     Texture2D* GetTexture(std::string const& name) const;
+
     FontCharacter CreateFontCharacter(char c);
 
     void SubmitShaders(std::string const& name, Shaders const& shaders);
-    void SubmitShadersFromFiles(std::string const& name, Shaders shaders);
+    void SubmitShadersFromFiles(std::string const& name, Shaders const& shaders);
     [[nodiscard]] Material GetMaterial(std::string const& name) const;
 
     void SubmitMesh(std::string const& name, std::unique_ptr<Mesh3D> mesh);
@@ -58,6 +48,13 @@ public:
 
     OverlayBuilder CreateTextOverlays(std::string const& namePrefix, uint32_t count);
 
+    struct Foo
+    {
+        std::string name;
+        std::vector<std::string> meshes;
+        std::vector<std::string> textures;
+    };
+
 private:
     void ProcessModel(std::string const& name, ModelLoader& loader);
 
@@ -68,7 +65,8 @@ private:
     std::unordered_map<char, FontCharacter> m_fontCharacters;
     std::unordered_map<std::string, Material> m_materials;
     std::unordered_map<std::string, std::unique_ptr<Mesh3D>> m_meshes;
-    std::unordered_map<std::string, std::pair<std::vector<Mesh3D*>, std::vector<Texture2D*>>> m_modelAssets;
+
+    std::unordered_map<std::string, Foo> m_models;
 };
 } // namespace FIRE
 

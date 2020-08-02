@@ -10,7 +10,7 @@ class GLShaderFactory : public ShaderFactory
 public:
     unsigned int CreateDefaultShader() override;
     unsigned int CreateDefaultTextShader() override;
-    unsigned int Create(std::vector<std::pair<ShaderType, std::string>> const& shaderCode) override;
+    unsigned int Create(std::vector<ShaderDescriptor> const& shaderDescriptors) override;
 };
 
 } // namespace FIRE

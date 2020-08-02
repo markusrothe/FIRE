@@ -13,11 +13,7 @@ public:
     std::vector<Renderable> Build();
 
     RenderableBuilder& WithMesh(std::string const& name);
-    RenderableBuilder& WithMesh(std::string const& name, MeshCategory category);
-    RenderableBuilder& WithMesh(Mesh3D* mesh);
     RenderableBuilder& WithTexture(std::string const& name, uint32_t slot);
-    RenderableBuilder& WithTexture(Texture2D* texture, uint32_t slot);
-    RenderableBuilder& WithNewTexture(std::string const& name, std::string const& filepath, Texture2D::WrappingMode wrapping, uint32_t slot);
     RenderableBuilder& WithTextures(std::vector<std::pair<std::string, uint32_t>> const& textureNamesAndSlots);
     RenderableBuilder& WithMaterial(std::string const& name);
 
